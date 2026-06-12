@@ -1,0 +1,149 @@
+import { MONO } from '../data.js';
+import { UserIcon, GearIcon, LogoutIcon } from './icons.jsx';
+
+const SCREEN_CHIPS = { kiosk: 'STATION READY', pack: 'PACK & RECORD', recv: 'STORE RECEIVING', ret: 'RETURN INSPECTION' };
+
+const barStyle = {
+  height: 58,
+  flex: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 12,
+  padding: '0 20px',
+  margin: '14px 16px 0',
+  borderRadius: 999,
+  border: '1px solid rgba(255,255,255,0.7)',
+  background: 'rgba(255,255,255,0.5)',
+  backdropFilter: 'blur(26px) saturate(1.6)',
+  WebkitBackdropFilter: 'blur(26px) saturate(1.6)',
+  boxShadow: '0 12px 36px rgba(60,30,40,0.16), inset 0 1px 0 rgba(255,255,255,0.85)',
+  // the backdrop-filter creates a stacking context; without an explicit
+  // z-index the profile dropdown would paint under the screen content
+  position: 'relative',
+  zIndex: 10,
+};
+
+function StatusChip({ label }) {
+  return (
+    <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.55)', padding: '5px 11px', background: 'rgba(255,255,255,0.45)', borderRadius: 999 }}>
+      <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#17A35F' }} />
+      {label}
+    </span>
+  );
+}
+
+function ProfileMenu({ ctx, roleChip, roleLine }) {
+  const { s, set, showToast, signOut } = ctx;
+
+  const goProfile = () => {
+    set({ profileMenuOpen: false });
+    showToast('My profile — name, PIN and shift details (prototype).');
+  };
+  const goSettings = () => {
+    if (s.role === 'admin') set({ profileMenuOpen: false, screen: 'config' });
+    else {
+      set({ profileMenuOpen: false });
+      showToast('Station settings are managed by an admin.');
+    }
+  };
+
+  const userLabel = s.userLabel || 'Mira';
+  const userInitial = userLabel.charAt(0).toUpperCase();
+  const itemStyle = { display: 'flex', alignItems: 'center', gap: 10, textAlign: 'left', border: 'none', background: 'transparent', borderRadius: 11, padding: '10px 12px', fontSize: 14, fontWeight: 600, color: '#1B1D21', cursor: 'pointer' };
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <button
+        className="hv-white85"
+        onClick={() => set({ profileMenuOpen: !s.profileMenuOpen })}
+        style={{ display: 'flex', alignItems: 'center', gap: 9, height: 42, padding: '3px 14px 3px 5px', background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.75)', borderRadius: 999, cursor: 'pointer' }}
+      >
+        <span style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(142,14,34,0.14)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700 }}>{userInitial}</span>
+        <span style={{ fontSize: 14, fontWeight: 700, color: '#1B1D21' }}>{userLabel}</span>
+        <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', padding: '3px 8px', borderRadius: 999, background: 'rgba(142,14,34,0.14)', color: '#8E0E22' }}>{roleChip}</span>
+        <span style={{ fontSize: 9, color: 'rgba(40,32,38,0.55)' }}>{s.profileMenuOpen ? '▲' : '▼'}</span>
+      </button>
+      {s.profileMenuOpen && (
+        <div style={{ position: 'absolute', right: 0, top: 50, width: 238, borderRadius: 18, padding: 8, background: 'rgba(255,255,255,0.94)', backdropFilter: 'blur(30px) saturate(1.7)', WebkitBackdropFilter: 'blur(30px) saturate(1.7)', border: '1px solid rgba(255,255,255,0.78)', boxShadow: '0 16px 48px rgba(60,30,40,0.24)', display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '8px 12px 10px', borderBottom: '1px solid rgba(40,32,38,0.08)', marginBottom: 4 }}>
+            <span style={{ fontSize: 14, fontWeight: 700 }}>{userLabel}</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: '#8E0E22' }}>{roleLine}</span>
+          </div>
+          <button className="hv-white7" onClick={goProfile} style={itemStyle}>
+            <UserIcon />
+            My profile
+          </button>
+          <button className="hv-white7" onClick={goSettings} style={itemStyle}>
+            <GearIcon />
+            Settings
+          </button>
+          <div style={{ height: 1, background: 'rgba(40,32,38,0.08)', margin: '4px 6px' }} />
+          <button className="hv-red08" onClick={signOut} style={{ ...itemStyle, fontWeight: 700, color: '#C62B22' }}>
+            <LogoutIcon />
+            Sign out
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TourButton({ onClick }) {
+  return (
+    <button
+      className="hv-white85"
+      onClick={onClick}
+      title="App guide"
+      style={{ display: 'flex', alignItems: 'center', gap: 7, height: 38, padding: '0 16px', background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.75)', color: '#8E0E22', borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+    >
+      <img src="/assets/app-guide.svg" alt="App guide" style={{ width: 18, height: 18 }} />
+      Tour
+    </button>
+  );
+}
+
+export default function TopBar({ ctx, variant }) {
+  const { s, set, openTour } = ctx;
+  const isSession = ['pack', 'recv', 'ret'].includes(s.screen);
+
+  if (variant === 'admin') {
+    return (
+      <div className="topbar" style={barStyle}>
+        <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 40 }} />
+        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: 'rgba(40,32,38,0.55)' }}>ADMIN CONSOLE</span>
+        <div style={{ flex: 1 }} />
+        <TourButton onClick={openTour} />
+        <ProfileMenu ctx={ctx} roleChip="ADMIN" roleLine="ADMIN · ALL ACCESS" />
+      </div>
+    );
+  }
+
+  return (
+    <div data-tour="topbar" className="topbar" style={{ ...barStyle, justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 40 }} />
+        {isSession && (
+          <button
+            className="hv-white75"
+            onClick={() => set({ backConfirm: true })}
+            style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', color: '#1B1D21', borderRadius: 999, padding: '7px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+          >
+            ← Back
+          </button>
+        )}
+        <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.1)' }} />
+        <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.7)', letterSpacing: '0.06em' }}>AUDIT-BENCH-1</span>
+        <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.1em', padding: '4px 11px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{SCREEN_CHIPS[s.screen] || ''}</span>
+      </div>
+      <div className="status-chips" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <StatusChip label="Camera OK" />
+        <StatusChip label="Uploads · 0 pending" />
+        <StatusChip label="Online" />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <TourButton onClick={openTour} />
+        <ProfileMenu ctx={ctx} roleChip="OPERATOR" roleLine="OPERATOR · PACK · RECEIVE · RETURNS" />
+      </div>
+    </div>
+  );
+}

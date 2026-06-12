@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<template id="__bundler_thumbnail" data-bg-color="#EFE9EE">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bgg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#F4EEF1"></stop>
+        <stop offset="1" stop-color="#E9EAF3"></stop>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="800" fill="url(#bgg)"></rect>
+    <circle cx="980" cy="120" r="260" fill="#D32B47" opacity="0.12"></circle>
+    <circle cx="150" cy="620" r="220" fill="#406EDC" opacity="0.10"></circle>
+    <rect x="360" y="250" width="480" height="300" rx="36" fill="#FFFFFF" opacity="0.85"></rect>
+    <path d="M600 310 L520 355 L520 445 L600 490 L680 445 L680 355 Z" fill="none" stroke="#8E0E22" stroke-width="16" stroke-linejoin="round"></path>
+    <path d="M520 355 L600 400 L680 355 M600 400 L600 490" fill="none" stroke="#8E0E22" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"></path>
+    <rect x="430" y="600" width="340" height="56" rx="28" fill="#FFFFFF" opacity="0.9"></rect>
+    <rect x="446" y="612" width="100" height="32" rx="16" fill="#8E0E22"></rect>
+  </svg>
+</template>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:radial-gradient(900px 600px at 85% -10%, rgba(211,43,71,0.16), transparent 60%),radial-gradient(800px 600px at -10% 30%, rgba(64,110,220,0.13), transparent 55%),radial-gradient(700px 500px at 60% 110%, rgba(240,165,46,0.14), transparent 55%),linear-gradient(160deg,#F4EEF1,#E9EAF3);background-attachment:fixed;}
+*{box-sizing:border-box;}
+input::placeholder{color:rgba(27,29,33,0.35);}
+button,input{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.16);border-radius:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.15;}}
+@keyframes ringPulse{0%{box-shadow:0 0 0 0 rgba(142,14,34,0.25);}70%{box-shadow:0 0 0 26px rgba(142,14,34,0);}100%{box-shadow:0 0 0 0 rgba(142,14,34,0);}}
+@keyframes feedDrift{0%{background-position:0 0;}100%{background-position:56px 56px;}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,10px);}to{opacity:1;transform:translate(-50%,0);}}
+</style>
+</helmet>
+<div style="min-height:100vh;background:transparent;color:#1B1D21;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;position:relative;">
+
+  <!-- ============ 01 LOGIN ============ -->
+  <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+    <div data-screen-label="01 Login" style="min-height:100vh;display:grid;grid-template-columns:1.05fr 1fr;">
+      <div style="background:radial-gradient(900px 600px at 80% 20%, #A81330, #7C0A1A 70%);color:#FFFFFF;padding:44px 48px;display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;gap:11px;">
+          <span style="width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          </span>
+          <span style="font-size:21px;font-weight:700;letter-spacing:-0.01em;">Packaging Audit</span>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="font-size:42px;font-weight:800;line-height:1.18;letter-spacing:-0.01em;max-width:480px;text-wrap:pretty;">One ID. Every checkpoint. Video proof you can pull up in seconds.</div>
+        <div style="margin-top:30px;width:430px;max-width:100%;background:#FFFFFF;color:#1B1D21;border-radius:16px;padding:18px;box-shadow:0 24px 60px rgba(0,0,0,0.3);display:flex;flex-direction:column;gap:13px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;">DC-2026-00417</span>
+            <span style="display:flex;align-items:center;gap:6px;background:#FBE5E8;color:#C8102E;border-radius:999px;padding:4px 12px;font-size:11px;font-weight:800;letter-spacing:0.08em;"><span style="width:7px;height:7px;border-radius:50%;background:#C8102E;animation:pulse 1.4s ease-in-out infinite;"></span>REC</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="width:44px;height:44px;border-radius:11px;background:#FBE5E8;display:flex;align-items:center;justify-content:center;flex:none;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8E0E22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            </span>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <span style="font-size:16px;font-weight:700;color:#8E0E22;">Order ORD-2026-4471</span>
+              <span style="font-size:13px;color:#6B7280;">3 items · Top + Front cameras</span>
+            </div>
+          </div>
+          <div style="height:1px;background:#F0F1F3;"></div>
+          <div style="display:flex;flex-direction:column;gap:11px;">
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:20px;height:20px;border-radius:50%;background:#16A34A;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:11px;flex:none;">✓</span><span style="font-size:14px;font-weight:700;">Packed · Warehouse</span><span style="margin-left:auto;font-size:13px;color:#6B7280;">09:14</span></div>
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:20px;height:20px;border-radius:50%;background:#16A34A;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:11px;flex:none;">✓</span><span style="font-size:14px;font-weight:700;">Received · Store</span><span style="margin-left:auto;font-size:13px;color:#6B7280;">11:42</span></div>
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:20px;height:20px;border-radius:50%;border:3px solid #F0A52E;background:#FFFFFF;flex:none;"></span><span style="font-size:14px;font-weight:700;">Out for delivery</span><span style="margin-left:auto;font-size:13px;font-weight:700;color:#C8102E;">live</span></div>
+          </div>
+          <div style="background:#E3F5EC;color:#11704B;border-radius:10px;padding:10px 14px;font-size:13.5px;font-weight:600;">✓ Detected 3 / 3 SKUs — matches challan</div>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.04em;color:rgba(255,255,255,0.75);">SOC-2 governance · RBAC · configurable retention</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;padding:40px;">
+        <div style="width:420px;max-width:100%;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <span style="font-size:30px;font-weight:800;color:#8E0E22;letter-spacing:-0.01em;">Sign in</span>
+            <span style="font-size:15px;color:#4B5563;">Enter your credentials to access the console.</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <label style="font-size:14px;font-weight:700;">Username</label>
+            <input value="{{ username }}" onChange="{{ onUsername }}" onKeyDown="{{ onLoginKey }}" placeholder="operator" style="background:#FFFFFF;border:1px solid rgba(110,100,108,0.35);border-radius:10px;padding:13px 15px;font-size:15px;outline:none;color:#1B1D21;" style-focus="border-color:#8E0E22">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <label style="font-size:14px;font-weight:700;">Password</label>
+            <input type="password" value="{{ password }}" onChange="{{ onPassword }}" onKeyDown="{{ onLoginKey }}" placeholder="••••••••" style="background:#FFFFFF;border:1px solid rgba(110,100,108,0.35);border-radius:10px;padding:13px 15px;font-size:15px;outline:none;color:#1B1D21;" style-focus="border-color:#8E0E22">
+          </div>
+          <button data-tour="login" onClick="{{ doLogin }}" style="background:#8E0E22;color:#FFFFFF;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px;" style-hover="background:#7A0B1C">Sign in</button>
+          <div style="height:1px;background:#E5E7EB;margin-top:8px;"></div>
+          <div style="text-align:center;font-size:13.5px;color:#6B7280;line-height:1.6;">Demo accounts (change before real use):<br><b>admin / admin123</b> · console &nbsp;·&nbsp; <b>operator / operator123</b> · kiosk<br>manager / manager123 · auditor / auditor123</div>
+          <button onClick="{{ openTour }}" style="background:none;border:none;color:#8E0E22;font-size:14px;font-weight:700;cursor:pointer;text-decoration:underline;align-self:center;">Take a quick tour</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ============ OPERATOR KIOSK SURFACE ============ -->
+  <sc-if value="{{ isOpSurface }}" hint-placeholder-val="{{ false }}">
+    <div style="height:100vh;display:flex;flex-direction:column;">
+      <div data-tour="topbar" style="height:58px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;margin:14px 16px 0;border-radius:999px;border:1px solid rgba(255,255,255,0.7);background:rgba(255,255,255,0.5);backdrop-filter:blur(26px) saturate(1.6);-webkit-backdrop-filter:blur(26px) saturate(1.6);box-shadow:0 12px 36px rgba(60,30,40,0.16), inset 0 1px 0 rgba(255,255,255,0.85);">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <img src="assets/mayave-logo.png" alt="Mayavé" style="height:40px;">
+          <sc-if value="{{ isSession }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ goBack }}" style="display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.45);border:1px solid rgba(0,0,0,0.06);color:#1B1D21;border-radius:999px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;" style-hover="background: rgba(255,255,255,0.75)">← Back</button>
+          </sc-if>
+          <div style="width:1px;height:20px;background:rgba(0,0,0,0.1);"></div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(27,29,33,0.7);letter-spacing:0.06em;">AUDIT-BENCH-1</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;padding:4px 11px;border-radius:999px;background:rgba(142,14,34,0.08);color:#8E0E22;">{{ screenChip }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.55);padding:5px 11px;background:rgba(255,255,255,0.45);border-radius:999px;"><span style="width:7px;height:7px;border-radius:50%;background:#17A35F;"></span>Camera OK</span>
+          <span style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.55);padding:5px 11px;background:rgba(255,255,255,0.45);border-radius:999px;"><span style="width:7px;height:7px;border-radius:50%;background:#17A35F;"></span>Uploads · 0 pending</span>
+          <span style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.55);padding:5px 11px;background:rgba(255,255,255,0.45);border-radius:999px;"><span style="width:7px;height:7px;border-radius:50%;background:#17A35F;"></span>Online</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button onClick="{{ openTour }}" title="App guide" style="display:flex;align-items:center;gap:7px;height:38px;padding:0 16px;background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.75);color:#8E0E22;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;" style-hover="background: rgba(255,255,255,0.85)"><img src="assets/app-guide.svg" alt="App guide" style="width:18px;height:18px;">Tour</button>
+          <div style="position:relative;">
+            <button onClick="{{ toggleProfile }}" style="display:flex;align-items:center;gap:9px;height:42px;padding:3px 14px 3px 5px;background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.75);border-radius:999px;cursor:pointer;" style-hover="background: rgba(255,255,255,0.85)">
+              <span style="width:32px;height:32px;border-radius:50%;background:rgba(142,14,34,0.14);color:#8E0E22;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">{{ userInitial }}</span>
+              <span style="font-size:14px;font-weight:700;color:#1B1D21;">{{ userLabel }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;padding:3px 8px;border-radius:999px;background:rgba(142,14,34,0.14);color:#8E0E22;">OPERATOR</span>
+              <span style="font-size:9px;color:rgba(40,32,38,0.55);">{{ profileCaret }}</span>
+            </button>
+            <sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute;right:0;top:50px;width:238px;border-radius:18px;padding:8px;background:rgba(255,255,255,0.94);backdrop-filter:blur(30px) saturate(1.7);-webkit-backdrop-filter:blur(30px) saturate(1.7);border:1px solid rgba(255,255,255,0.78);box-shadow:0 16px 48px rgba(60,30,40,0.24);display:flex;flex-direction:column;gap:2px;z-index:60;">
+                <div style="display:flex;flex-direction:column;gap:1px;padding:8px 12px 10px;border-bottom:1px solid rgba(40,32,38,0.08);margin-bottom:4px;">
+                  <span style="font-size:14px;font-weight:700;">{{ userLabel }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#8E0E22;">OPERATOR · PACK · RECEIVE · RETURNS</span>
+                </div>
+                <button onClick="{{ goProfile }}" style="display:flex;align-items:center;gap:10px;text-align:left;border:none;background:transparent;border-radius:11px;padding:10px 12px;font-size:14px;font-weight:600;color:#1B1D21;cursor:pointer;" style-hover="background: rgba(255,255,255,0.7)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>My profile</button>
+                <button onClick="{{ goSettings }}" style="display:flex;align-items:center;gap:10px;text-align:left;border:none;background:transparent;border-radius:11px;padding:10px 12px;font-size:14px;font-weight:600;color:#1B1D21;cursor:pointer;" style-hover="background: rgba(255,255,255,0.7)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Settings</button>
+                <div style="height:1px;background:rgba(40,32,38,0.08);margin:4px 6px;"></div>
+                <button onClick="{{ signOut }}" style="display:flex;align-items:center;gap:10px;text-align:left;border:none;background:transparent;border-radius:11px;padding:10px 12px;font-size:14px;font-weight:700;color:#C62B22;cursor:pointer;" style-hover="background: rgba(229,62,62,0.08)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Sign out</button>
+              </div>
+            </sc-if>
+          </div>
+          
+        </div>
+      </div>
+      <div style="flex:1;min-height:0;position:relative;padding-bottom:74px;">
+
+        <!-- ===== 02 KIOSK HOME ===== -->
+        <sc-if value="{{ isKiosk }}" hint-placeholder-val="{{ true }}">
+          
+        </sc-if>
+
+        <!-- ===== 03 PACK & RECORD ===== -->
+        <sc-if value="{{ isPack }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="03 Pack and Record" style="height:100%;display:grid;grid-template-columns:1.45fr 1fr;gap:16px;padding:16px;">
+            <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;min-height:0;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+              <div style="display:flex;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid rgba(0,0,0,0.05);">
+                <span style="width:10px;height:10px;border-radius:50%;background:#E53E3E;animation:pulse 1.4s ease-in-out infinite;"></span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#C62B22;letter-spacing:0.18em;">REC</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1B1D21;">Session {{ packId }}</span>
+                <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:17px;color:#1B1D21;">{{ recTime }}</span>
+              </div>
+              <div style="flex:1;margin:13px;border-radius:16px;position:relative;background:repeating-linear-gradient(135deg,#17171D 0px,#17171D 14px,#121217 14px,#121217 28px);animation:feedDrift 6s linear infinite;display:flex;align-items:center;justify-content:center;min-height:0;">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,0.4);">[ live feed — top-view · pack bench ]</span>
+                <span style="position:absolute;top:12px;left:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;padding:4px 9px;border-radius:6px;background:rgba(0,0,0,0.55);color:rgba(255,255,255,0.75);">CAM-01 · 1080p · top view</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;padding:0 13px 13px;">
+                <button onClick="{{ capturePackStill }}" style="background:rgba(255,255,255,0.45);border:1px solid rgba(0,0,0,0.06);color:#1B1D21;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;" style-hover="border-color: rgba(142,14,34,0.5)">📷 Capture still</button>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(27,29,33,0.55);">stills: {{ packStills }}</span>
+                <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.4);">chunks hashed at capture · uploading</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;min-height:0;">
+              <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px;flex:1;min-height:0;overflow:auto;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                  <span data-tour="packlist" style="font-size:17px;font-weight:700;">Expected vs scanned</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.45);color:rgba(27,29,33,0.55);">GATI · LIVE</span>
+                </div>
+                <sc-for list="{{ packRows }}" as="row" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.55);border-radius:14px;">
+                    <span style="width:26px;height:26px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;border:1px solid {{ row.dotBorder }};color: {{ row.dotColor }};background: {{ row.dotBg }};">{{ row.dot }}</span>
+                    <div style="display:flex;flex-direction:column;gap:1px;min-width:0;">
+                      <span style="font-size:15px;font-weight:600;">{{ row.name }}</span>
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.5);">{{ row.sku }}</span>
+                    </div>
+                    <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:13px;color: {{ row.dotColor }};">{{ row.count }}</span>
+                  </div>
+                </sc-for>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <button onClick="{{ scanPackItem }}" disabled="{{ packScanDone }}" style="background:rgba(142,14,34,0.07);border:1px dashed rgba(142,14,34,0.45);color:#8E0E22;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;opacity: {{ packScanOpacity }};">Scan item RFID (demo)</button>
+                  <button onClick="{{ scanPackUnknown }}" style="background:rgba(229,62,62,0.05);border:1px dashed rgba(229,62,62,0.45);color:#C62B22;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;">Scan wrong item (demo)</button>
+                  <sc-if value="{{ packUnknown }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ resolveUnknown }}" style="background:rgba(255,255,255,0.45);border:1px solid rgba(0,0,0,0.1);color:#1B1D21;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;">Remove unknown — resolve</button>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ packCondPhase }}" hint-placeholder-val="{{ false }}">
+                  <div style="border:1px solid rgba(217,142,4,0.35);background:rgba(217,142,4,0.06);border-radius:16px;padding:13px;display:flex;flex-direction:column;gap:8px;">
+                    <span style="font-size:14px;color:#9A6A00;font-weight:700;">Condition check</span>
+                    <span style="font-size:14px;color:rgba(27,29,33,0.7);line-height:1.45;text-wrap:pretty;">Show each piece to the camera, capture a close-up still (stone · hallmark · certificate), then confirm. YOLO count: 3 in frame ✓</span>
+                    <button onClick="{{ confirmCondition }}" style="background:#D98E04;color:#FFFFFF;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;align-self:flex-start;" style-hover="filter: brightness(1.06)">Confirm condition OK</button>
+                  </div>
+                </sc-if>
+              </div>
+              <div style="border-radius:16px;padding:13px 16px;font-size:14px;font-weight:600;line-height:1.45;border:1px solid {{ packBannerBorder }};background: {{ packBannerBg }};color: {{ packBannerColor }};">{{ packBannerMsg }}</div>
+              <div style="display:flex;gap:12px;">
+                <button data-tour="packactions" onClick="{{ flagPack }}" style="flex:1;background:#FFFFFF;border:1px solid rgba(229,62,62,0.45);color:#C62B22;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;" style-hover="background: rgba(229,62,62,0.05)">Flag with evidence</button>
+                <button onClick="{{ closePack }}" disabled="{{ packCloseDisabled }}" style="flex:1;background:#8E0E22;color:#FFFFFF;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;opacity: {{ packCloseOpacity }};box-shadow:0 4px 14px rgba(142,14,34,0.25);" style-hover="filter: brightness(1.06)">Close session</button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== 04 STORE RECEIVING ===== -->
+        <sc-if value="{{ isRecv }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="04 Store receiving" style="height:100%;display:grid;grid-template-columns:1.1fr 1fr;gap:16px;padding:16px;">
+            <div style="display:flex;flex-direction:column;gap:12px;min-height:0;">
+              <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px;flex:1;min-height:0;overflow:auto;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                  <div style="display:flex;flex-direction:column;gap:2px;">
+                    <span style="font-size:17px;font-weight:700;">Expected items — scan each RFID to tick</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(27,29,33,0.5);">Challan {{ recvChallan }}</span>
+                  </div>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.45);color:rgba(27,29,33,0.55);">GATI · CHALLAN</span>
+                </div>
+                <sc-for list="{{ recvRows }}" as="row" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.55);border-radius:14px;">
+                    <span style="width:26px;height:26px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;border:1px solid {{ row.dotBorder }};color: {{ row.dotColor }};background: {{ row.dotBg }};">{{ row.dot }}</span>
+                    <div style="display:flex;flex-direction:column;gap:1px;">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;">{{ row.rfid }}</span>
+                      <span style="font-size:13px;color:rgba(27,29,33,0.55);">{{ row.name }}</span>
+                    </div>
+                    <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.06em;color: {{ row.dotColor }};">{{ row.stateLabel }}</span>
+                  </div>
+                </sc-for>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <button onClick="{{ scanRecvItem }}" disabled="{{ recvScanDone }}" style="background:rgba(142,14,34,0.07);border:1px dashed rgba(142,14,34,0.45);color:#8E0E22;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;opacity: {{ recvScanOpacity }};">Scan item RFID (demo)</button>
+                  <button onClick="{{ scanRecvUnknown }}" style="background:rgba(229,62,62,0.05);border:1px dashed rgba(229,62,62,0.45);color:#C62B22;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;">Scan unknown RFID (demo)</button>
+                </div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(27,29,33,0.7);padding:10px 14px;background:rgba(255,255,255,0.45);border-radius:12px;border:1px solid rgba(255,255,255,0.55);">{{ recvSummary }}</div>
+              </div>
+              <div style="border-radius:16px;padding:13px 16px;font-size:14px;font-weight:600;line-height:1.45;border:1px solid {{ recvBannerBorder }};background: {{ recvBannerBg }};color: {{ recvBannerColor }};">{{ recvBannerMsg }}</div>
+              <div style="display:flex;gap:12px;">
+                <button onClick="{{ flagRecv }}" style="flex:1;background:#FFFFFF;border:1px solid rgba(229,62,62,0.45);color:#C62B22;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;" style-hover="background: rgba(229,62,62,0.05)">Flag short / extra</button>
+                <button onClick="{{ confirmRecv }}" disabled="{{ recvConfirmDisabled }}" style="flex:1;background:#8E0E22;color:#FFFFFF;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;opacity: {{ recvConfirmOpacity }};box-shadow:0 4px 14px rgba(142,14,34,0.25);" style-hover="filter: brightness(1.06)">Confirm received</button>
+              </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;min-height:0;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+              <div style="display:flex;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid rgba(0,0,0,0.05);">
+                <span style="width:10px;height:10px;border-radius:50%;background:#E53E3E;animation:pulse 1.4s ease-in-out infinite;"></span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#C62B22;letter-spacing:0.18em;">REC</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1B1D21;">Arrival · {{ recvChallan }}</span>
+                <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:17px;color:#1B1D21;">{{ recTime }}</span>
+              </div>
+              <div style="flex:1;margin:13px;border-radius:16px;position:relative;background:repeating-linear-gradient(135deg,#17171D 0px,#17171D 14px,#121217 14px,#121217 28px);animation:feedDrift 6s linear infinite;display:flex;align-items:center;justify-content:center;min-height:0;">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,0.4);">[ live feed — arrival · store webcam ]</span>
+                <span style="position:absolute;top:12px;left:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;padding:4px 9px;border-radius:6px;background:rgba(0,0,0,0.55);color:rgba(255,255,255,0.75);">CAM-02 · receiving point</span>
+              </div>
+              <div style="display:flex;align-items:center;padding:0 13px 13px;">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.4);">arrival video retained with the pack video · both attach to any flag</span>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== 05 RETURN INSPECTION ===== -->
+        <sc-if value="{{ isRet }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="05 Return inspection" style="height:100%;display:flex;flex-direction:column;gap:13px;padding:16px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="width:10px;height:10px;border-radius:50%;background:#E53E3E;animation:pulse 1.4s ease-in-out infinite;"></span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#C62B22;letter-spacing:0.18em;">REC</span>
+              <span style="font-size:18px;font-weight:700;">Return inspection · <span style="font-family:'IBM Plex Mono',monospace;font-weight:500;">{{ retId }}</span></span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:16px;color:#1B1D21;margin-left:8px;">{{ recTime }}</span>
+              <button onClick="{{ openSbsRet }}" style="margin-left:auto;background:rgba(142,14,34,0.08);border:none;color:#8E0E22;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background: rgba(142,14,34,0.14)">Open side-by-side</button>
+            </div>
+            <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:13px;min-height:0;">
+              <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;min-height:0;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+                <div style="display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(0,0,0,0.05);">
+                  <span style="width:8px;height:8px;border-radius:50%;background:#E53E3E;animation:pulse 1.4s ease-in-out infinite;"></span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#C62B22;">LIVE · UNBOXING — RETURNS DESK</span>
+                </div>
+                <div style="flex:1;margin:12px;border-radius:14px;background:repeating-linear-gradient(135deg,#17171D 0px,#17171D 14px,#121217 14px,#121217 28px);animation:feedDrift 6s linear infinite;display:flex;align-items:center;justify-content:center;min-height:0;">
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,0.4);">[ live feed — unboxing · returns desk ]</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:14px;padding:0 12px 12px;">
+                  <button onClick="{{ captureRetStill }}" style="background:rgba(255,255,255,0.45);border:1px solid rgba(0,0,0,0.06);color:#1B1D21;border-radius:999px;padding:9px 18px;font-size:14px;font-weight:600;cursor:pointer;" style-hover="border-color: rgba(142,14,34,0.5)">📷 Capture still</button>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(27,29,33,0.55);">stills: {{ retStills }} · stone / hallmark / cert</span>
+                </div>
+              </div>
+              <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;min-height:0;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+                <div style="display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(0,0,0,0.05);">
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;color:rgba(27,29,33,0.55);">ORIGINAL PACK CLIP — AUTO-PULLED</span>
+                  <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,0.45);color:rgba(27,29,33,0.5);">packed 12 Jun · PACK-BENCH-1</span>
+                </div>
+                <div style="flex:1;margin:12px;border-radius:14px;background:repeating-linear-gradient(135deg,#17171D 0px,#17171D 14px,#121217 14px,#121217 28px);display:flex;align-items:center;justify-content:center;min-height:0;position:relative;">
+                  <span style="width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:18px;background:rgba(142,14,34,0.9);">▶</span>
+                  <span style="position:absolute;bottom:10px;left:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);">[ pack video — same order ID ]</span>
+                </div>
+                <div style="display:flex;align-items:center;padding:0 12px 12px;">
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.4);">the decisive evidence in a 'not genuine' claim</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;padding:13px 16px;flex-wrap:wrap;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+              <span style="font-size:15px;font-weight:700;">Outcome · reason</span>
+              <sc-for list="{{ retReasons }}" as="r" hint-placeholder-count="4">
+                <button onClick="{{ r.pick }}" style="cursor:pointer;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;border:1px solid {{ r.border }};background: {{ r.bg }};color: {{ r.color }};">{{ r.label }}</button>
+              </sc-for>
+              <sc-if value="{{ retNeedReason }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:13px;font-weight:600;color:#C62B22;">← pick a reason to flag</span>
+              </sc-if>
+              <div style="flex:1;"></div>
+              <button onClick="{{ flagRet }}" style="background:#FFFFFF;border:1px solid rgba(229,62,62,0.45);color:#C62B22;border-radius:10px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;" style-hover="background: rgba(229,62,62,0.05)">Flag → hold refund</button>
+              <button onClick="{{ acceptRet }}" style="background:#8E0E22;color:#FFFFFF;border:none;border-radius:10px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(142,14,34,0.25);" style-hover="filter: brightness(1.06)">Accept → restock</button>
+            </div>
+          </div>
+        </sc-if>
+
+      <div data-screen-label="02 Kiosk home" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:28px;overflow:auto;">
+            <div style="width:100px;height:100px;flex:none;border-radius:50%;background:rgba(255,255,255,0.5);backdrop-filter:blur(14px);border:1px solid rgba(142,14,34,0.35);display:flex;align-items:center;justify-content:center;animation:ringPulse 2.6s ease-out infinite;">
+              <div style="display:flex;align-items:center;gap:3px;height:30px;">
+                <div style="width:3px;height:100%;background:#8E0E22;"></div>
+                <div style="width:2px;height:68%;background:#8E0E22;"></div>
+                <div style="width:5px;height:100%;background:#8E0E22;"></div>
+                <div style="width:2px;height:80%;background:#8E0E22;"></div>
+                <div style="width:3px;height:58%;background:#8E0E22;"></div>
+                <div style="width:5px;height:100%;background:#8E0E22;"></div>
+                <div style="width:2px;height:72%;background:#8E0E22;"></div>
+              </div>
+            </div>
+            <div style="text-align:center;display:flex;flex-direction:column;gap:8px;max-width:760px;">
+              <div style="font-size:32px;font-weight:700;letter-spacing:-0.01em;text-wrap:pretty;">Ready — scan an order ID, RFID, or challan</div>
+              <div style="font-size:16px;color:rgba(27,29,33,0.55);text-wrap:pretty;">Pick a task — Pack, Receive or Returns — then scan. The session opens and recording starts.</div>
+            </div>
+            
+            <div data-tour="scanner" style="width:700px;max-width:94%;background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 4px 18px rgba(15,30,60,0.06);">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.22em;color:#8E0E22;">DEMO SCANNER — TAP TO SIMULATE A HID SCAN</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+                <sc-for list="{{ demoChips }}" as="d" hint-placeholder-count="3">
+                  <button onClick="{{ d.go }}" style="text-align:left;background:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.55);border-radius:16px;padding:13px 14px;cursor:pointer;display:flex;flex-direction:column;gap:4px;" style-hover="border-color: rgba(142,14,34,0.5); background:#EFF5FE">
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:#1B1D21;">{{ d.label }}</span>
+                    <span style="font-size:12px;color:rgba(27,29,33,0.5);">{{ d.sub }}</span>
+                  </button>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <input value="{{ scanInput }}" onChange="{{ onScanInput }}" onKeyDown="{{ onScanKey }}" placeholder="…or type any ID and press Enter (ORD-… / RFID-… / DC-…)" style="flex:1;background:rgba(255,255,255,0.45);border:1px solid rgba(0,0,0,0.06);border-radius:10px;padding:11px 18px;color:#1B1D21;font-size:13px;outline:none;font-family:'IBM Plex Mono',monospace;" style-focus="border-color:#8E0E22; background:#FFFFFF">
+                <button onClick="{{ doScan }}" style="background:#8E0E22;border:none;color:#FFFFFF;border-radius:10px;padding:11px 26px;font-size:14px;font-weight:700;cursor:pointer;" style-hover="filter: brightness(1.06)">Scan</button>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(27,29,33,0.5);">Last session: {{ lastSession }}</div>
+              <button onClick="{{ signOut }}" style="background:none;border:none;color:rgba(27,29,33,0.35);font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;letter-spacing:0.08em;" style-hover="color: rgba(27,29,33,0.65)">ADMIN EXIT (PIN)</button>
+            </div>
+          </div></div>
+    </div>
+  </sc-if>
+
+  <!-- ============ ADMIN WEB SHELL ============ -->
+  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+    <div style="height:100vh;display:flex;flex-direction:column;">
+      <div style="height:58px;flex:none;display:flex;align-items:center;gap:12px;padding:0 20px;margin:14px 16px 0;border-radius:999px;border:1px solid rgba(255,255,255,0.7);background:rgba(255,255,255,0.5);backdrop-filter:blur(26px) saturate(1.6);-webkit-backdrop-filter:blur(26px) saturate(1.6);box-shadow:0 12px 36px rgba(60,30,40,0.16), inset 0 1px 0 rgba(255,255,255,0.85);position:relative;z-index:10;">
+        <img src="assets/mayave-logo.png" alt="Mayavé" style="height:40px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.22em;color:rgba(40,32,38,0.55);">ADMIN CONSOLE</span>
+        <div style="flex:1;"></div>
+        <button onClick="{{ openTour }}" title="App guide" style="display:flex;align-items:center;gap:7px;height:38px;padding:0 16px;background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.75);color:#8E0E22;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;" style-hover="background: rgba(255,255,255,0.85)"><img src="assets/app-guide.svg" alt="App guide" style="width:18px;height:18px;">Tour</button>
+        <div style="position:relative;">
+          <button onClick="{{ toggleProfile }}" style="display:flex;align-items:center;gap:9px;height:42px;padding:3px 14px 3px 5px;background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.75);border-radius:999px;cursor:pointer;" style-hover="background: rgba(255,255,255,0.85)">
+            <span style="width:32px;height:32px;border-radius:50%;background:rgba(142,14,34,0.14);color:#8E0E22;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">{{ userInitial }}</span>
+            <span style="font-size:14px;font-weight:700;color:#1B1D21;">{{ userLabel }}</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;padding:3px 8px;border-radius:999px;background:rgba(142,14,34,0.14);color:#8E0E22;">ADMIN</span>
+            <span style="font-size:9px;color:rgba(40,32,38,0.55);">{{ profileCaret }}</span>
+          </button>
+          <sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;right:0;top:50px;width:238px;border-radius:18px;padding:8px;background:rgba(255,255,255,0.94);backdrop-filter:blur(30px) saturate(1.7);-webkit-backdrop-filter:blur(30px) saturate(1.7);border:1px solid rgba(255,255,255,0.78);box-shadow:0 16px 48px rgba(60,30,40,0.24);display:flex;flex-direction:column;gap:2px;z-index:60;">
+              <div style="display:flex;flex-direction:column;gap:1px;padding:8px 12px 10px;border-bottom:1px solid rgba(40,32,38,0.08);margin-bottom:4px;">
+                <span style="font-size:14px;font-weight:700;">{{ userLabel }}</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#8E0E22;">ADMIN · ALL ACCESS</span>
+              </div>
+              <button onClick="{{ goProfile }}" style="display:flex;align-items:center;gap:10px;text-align:left;border:none;background:transparent;border-radius:11px;padding:10px 12px;font-size:14px;font-weight:600;color:#1B1D21;cursor:pointer;" style-hover="background: rgba(255,255,255,0.7)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>My profile</button>
+              <button onClick="{{ goSettings }}" style="display:flex;align-items:center;gap:10px;text-align:left;border:none;background:transparent;border-radius:11px;padding:10px 12px;font-size:14px;font-weight:600;color:#1B1D21;cursor:pointer;" style-hover="background: rgba(255,255,255,0.7)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Settings</button>
+              <div style="height:1px;background:rgba(40,32,38,0.08);margin:4px 6px;"></div>
+              <button onClick="{{ signOut }}" style="display:flex;align-items:center;gap:10px;text-align:left;border:none;background:transparent;border-radius:11px;padding:10px 12px;font-size:14px;font-weight:700;color:#C62B22;cursor:pointer;" style-hover="background: rgba(229,62,62,0.08)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Sign out</button>
+            </div>
+          </sc-if>
+        </div>
+        
+      </div>
+      <div style="flex:1;min-height:0;overflow:auto;padding-bottom:120px;">
+
+        <!-- ===== 06 SEARCH & PLAYBACK ===== -->
+        <sc-if value="{{ isSearch }}" hint-placeholder-val="{{ true }}">
+          <div data-screen-label="06 Search and playback" style="padding:24px;display:flex;flex-direction:column;gap:16px;min-height:100%;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <h1 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.01em;">Search &amp; playback</h1>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.5);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.65);color:rgba(27,29,33,0.55);">READ-ONLY AUDIT</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <input data-tour="search" value="{{ q }}" onChange="{{ onQuery }}" placeholder="🔍  order ID / RFID / challan…" style="flex:1;max-width:520px;background:rgba(255,255,255,0.5);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.65);border-radius:10px;padding:12px 20px;color:#1B1D21;font-size:15px;outline:none;box-shadow:0 2px 10px rgba(15,30,60,0.04);" style-focus="border-color:#8E0E22">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.45);">Filter: date / station / outcome</span>
+            </div>
+            <div style="display:grid;grid-template-columns:400px 1fr;gap:16px;flex:1;min-height:0;align-items:start;">
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <sc-for list="{{ results }}" as="r" hint-placeholder-count="4">
+                  <button onClick="{{ r.pick }}" style="display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;background:rgba(255,255,255,0.65);backdrop-filter:blur(22px) saturate(1.4);border-radius:18px;padding:13px 15px;border:1px solid {{ r.cardBorder }};box-shadow:0 2px 8px rgba(15,30,60,0.04);" style-hover="border-color: rgba(142,14,34,0.5)">
+                    <div style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1B1D21;">{{ r.id }}</span>
+                      <span style="font-size:13px;color:rgba(27,29,33,0.55);">{{ r.kinds }}</span>
+                    </div>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;padding:4px 11px;border-radius:999px;border:1px solid {{ r.badgeBorder }};color: {{ r.badgeColor }};">{{ r.outcome }}</span>
+                  </button>
+                </sc-for>
+                <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:24px;text-align:center;color:rgba(27,29,33,0.45);font-size:14px;border:1px dashed rgba(0,0,0,0.15);border-radius:16px;">No records match — try ORD-10293, RFID-1021 or DC-2026-00417</div>
+                </sc-if>
+              </div>
+              <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ true }}">
+                <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+                  <div style="height:280px;position:relative;background:repeating-linear-gradient(135deg,#17171D 0px,#17171D 14px,#121217 14px,#121217 28px);display:flex;align-items:center;justify-content:center;">
+                    <span style="width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:20px;background:rgba(142,14,34,0.9);cursor:pointer;">▶</span>
+                    <span style="position:absolute;top:12px;left:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,0.55);">selected record · streamed from S3 via signed URL</span>
+                  </div>
+                  <div style="padding:18px;display:flex;flex-direction:column;gap:14px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:18px;">{{ selId }}</span>
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;padding:4px 11px;border-radius:999px;border:1px solid {{ selBadgeBorder }};color: {{ selBadgeColor }};">{{ selOutcome }}</span>
+                      <sc-if value="{{ selPair }}" hint-placeholder-val="{{ true }}">
+                        <button onClick="{{ openSbsSel }}" style="margin-left:auto;background:rgba(142,14,34,0.08);border:none;color:#8E0E22;border-radius:999px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;" style-hover="background: rgba(142,14,34,0.14)">Open side-by-side ▸</button>
+                      </sc-if>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+                      <div style="display:flex;flex-direction:column;gap:3px;"><span style="font-size:12px;color:rgba(27,29,33,0.45);">Operator</span><span style="font-size:14px;font-weight:600;">{{ selOperator }}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:3px;"><span style="font-size:12px;color:rgba(27,29,33,0.45);">Station</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">{{ selStation }}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:3px;"><span style="font-size:12px;color:rgba(27,29,33,0.45);">Timestamp</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">{{ selTs }}</span></div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:4px;background:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.55);border-radius:12px;padding:11px 14px;">
+                      <span style="font-size:12px;color:rgba(27,29,33,0.45);">File hash — tamper evidence (re-verified on arrival)</span>
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#0E8A50;">sha-256 · {{ selHash }} ✓ verified</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== 08-12 DASHBOARDS (generic) ===== -->
+        <sc-if value="{{ isDash }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="{{ dashLabel }}" style="padding:24px;display:flex;flex-direction:column;gap:16px;min-height:100%;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <h1 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.01em;">{{ dashTitle }}</h1>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.5);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.65);color:rgba(27,29,33,0.55);">{{ dashChip }}</span>
+            </div>
+            <sc-if value="{{ dashHasKpis }}" hint-placeholder-val="{{ true }}">
+              <div data-tour="dashkpis" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+                <sc-for list="{{ dashKpis }}" as="k" hint-placeholder-count="4">
+                  <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:4px;box-shadow:0 2px 10px rgba(15,30,60,0.04);">
+                    <span style="font-size:36px;font-weight:700;letter-spacing:-0.02em;color: {{ k.color }};">{{ k.num }}</span>
+                    <span style="font-size:13px;font-weight:500;color:rgba(27,29,33,0.55);">{{ k.label }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ dashHasBanner }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1px solid rgba(217,142,4,0.35);background:rgba(217,142,4,0.07);color:#9A6A00;border-radius:16px;padding:13px 16px;font-size:14px;font-weight:600;">{{ dashBanner }}</div>
+            </sc-if>
+            <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+              <span style="font-size:15px;font-weight:700;color:rgba(27,29,33,0.75);">{{ dashListTitle }}</span>
+              <sc-for list="{{ dashRows }}" as="r" hint-placeholder-count="3">
+                <button onClick="{{ r.go }}" style="display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;background:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.55);border-radius:14px;padding:12px 15px;" style-hover="border-color: rgba(142,14,34,0.5); background:#EFF5FE">
+                  <div style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;">
+                    <span style="font-size:15px;font-weight:600;color:#1B1D21;">{{ r.title }}</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.5);">{{ r.sub }}</span>
+                  </div>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color: {{ r.rightColor }};">{{ r.right }}</span>
+                  <span style="font-size:13px;font-weight:700;color:#8E0E22;">{{ r.action }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.35);">{{ dashFoot }}</div>
+          </div>
+        </sc-if>
+
+        <!-- ===== 13 ADMIN · USERS & CONFIG ===== -->
+        <sc-if value="{{ isConfig }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="13 Admin users and config" style="padding:24px;display:flex;flex-direction:column;gap:16px;min-height:100%;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <h1 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.01em;">Users &amp; configuration</h1>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.5);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.65);color:rgba(27,29,33,0.55);">ADMIN ONLY</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+              <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+                <span style="font-size:16px;font-weight:700;">Users &amp; roles</span>
+                <sc-for list="{{ userRows }}" as="u" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.55);border-radius:14px;padding:11px 14px;">
+                    <span style="width:28px;height:28px;flex:none;border-radius:50%;background:rgba(142,14,34,0.1);color:#8E0E22;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">{{ u.initial }}</span>
+                    <span style="font-size:15px;font-weight:600;flex:1;">{{ u.name }}</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;padding:4px 10px;border-radius:999px;border:1px solid {{ u.border }};color: {{ u.color }};">{{ u.role }}</span>
+                  </div>
+                </sc-for>
+                <div style="display:flex;gap:9px;margin-top:4px;">
+                  <input value="{{ newUser }}" onChange="{{ onNewUser }}" placeholder="name…" style="flex:1;background:rgba(255,255,255,0.45);border:1px solid rgba(0,0,0,0.06);border-radius:10px;padding:10px 16px;color:#1B1D21;font-size:14px;outline:none;" style-focus="border-color:#8E0E22; background:#FFFFFF">
+                  <button onClick="{{ addUser }}" style="background:rgba(142,14,34,0.08);border:none;color:#8E0E22;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background: rgba(142,14,34,0.14)">+ Add operator</button>
+                </div>
+                <span style="font-size:12px;color:rgba(27,29,33,0.45);">One Operator role covers Pack · Receive · Returns. Finer roles split out as the team grows.</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:16px;">
+                <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+                  <span style="font-size:16px;font-weight:700;">Retention &amp; tiering</span>
+                  <div style="display:flex;align-items:center;gap:12px;">
+                    <span style="font-size:14px;color:rgba(27,29,33,0.6);flex:1;">Retention window</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;">365 days</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;">
+                    <span style="font-size:14px;color:rgba(27,29,33,0.6);flex:1;">S3 tiering (hot → archive)</span>
+                    <button onClick="{{ toggleTiering }}" style="cursor:pointer;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;letter-spacing:0.06em;border:1px solid {{ tierBorder }};background: {{ tierBg }};color: {{ tierColor }};">{{ tierLabel }}</button>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:7px;">
+                    <span style="font-size:12px;color:rgba(27,29,33,0.45);">Storage by tier · monthly growth +38 GB</span>
+                    <div style="display:flex;height:10px;border-radius:999px;overflow:hidden;gap:2px;">
+                      <div style="width:22%;background:#8E0E22;"></div>
+                      <div style="width:33%;background:rgba(142,14,34,0.45);"></div>
+                      <div style="width:45%;background:rgba(142,14,34,0.15);"></div>
+                    </div>
+                    <div style="display:flex;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.5);">
+                      <span>hot 96 GB</span><span>infrequent 144 GB</span><span>archive 198 GB</span>
+                    </div>
+                  </div>
+                  <span style="font-size:12px;color:rgba(27,29,33,0.45);">Footage past retention is auto-deleted.</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 2px 12px rgba(15,30,60,0.05);">
+                  <span style="font-size:16px;font-weight:700;">Alert thresholds</span>
+                  <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.55);border-radius:14px;padding:11px 14px;">
+                    <span style="font-size:14px;font-weight:600;flex:1;">Coverage gap</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#8E0E22;">alert &lt; 95%</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.55);border-radius:14px;padding:11px 14px;">
+                    <span style="font-size:14px;font-weight:600;flex:1;">Station down / queue backing up</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#8E0E22;">alert &gt; 30 min</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.55);border-radius:14px;padding:11px 14px;">
+                    <span style="font-size:14px;font-weight:600;flex:1;">Flag ageing</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#8E0E22;">escalate &gt; 24 h</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- floating tab bar (operator + admin) -->
+  <sc-if value="{{ showTabBar }}" hint-placeholder-val="{{ false }}">
+    <div data-tour="nav" style="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:40;display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <sc-if value="{{ adminMenuOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="width:280px;border-radius:18px;padding:8px;background:rgba(255,255,255,0.92);backdrop-filter:blur(30px) saturate(1.7);-webkit-backdrop-filter:blur(30px) saturate(1.7);border:1px solid rgba(255,255,255,0.72);box-shadow:0 16px 48px rgba(60,30,40,0.24);display:flex;flex-direction:column;gap:2px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;color:rgba(40,32,38,0.55);padding:8px 12px 6px;">ADMIN TOOLS</div>
+          <sc-for list="{{ adminMenuItems }}" as="n" hint-placeholder-count="8">
+            <button onClick="{{ n.go }}" style="display:flex;align-items:center;gap:8px;text-align:left;border:none;cursor:pointer;border-radius:11px;padding:10px 12px;font-size:14px;font-weight:600;background: {{ n.bg }};color: {{ n.color }};" style-hover="background: rgba(255,255,255,0.65)">
+              <span style="flex:1;">{{ n.label }}</span>
+              <sc-if value="{{ n.hasBadge }}" hint-placeholder-val="{{ false }}">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:1px 8px;border-radius:999px;background:rgba(142,14,34,0.14);color:#8E0E22;">{{ n.badge }}</span>
+              </sc-if>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <div style="display:flex;gap:4px;align-items:center;padding:6px;border-radius:999px;background:rgba(255,255,255,0.5);backdrop-filter:blur(30px) saturate(1.7);-webkit-backdrop-filter:blur(30px) saturate(1.7);border:1px solid rgba(255,255,255,0.7);box-shadow:0 16px 48px rgba(60,30,40,0.22), inset 0 1px 0 rgba(255,255,255,0.85);">
+        <sc-for list="{{ taskTabs }}" as="t" hint-placeholder-count="3">
+          <button onClick="{{ t.pick }}" style="border:none;cursor:pointer;border-radius:999px;padding:10px 18px;font-size:13.5px;font-weight:700;background: {{ t.bg }};color: {{ t.color }};">{{ t.label }}</button>
+        </sc-for>
+        <sc-if value="{{ isAdminUser }}" hint-placeholder-val="{{ true }}">
+          <div style="width:1px;height:22px;background:rgba(40,32,38,0.15);margin:0 2px;"></div>
+          <button onClick="{{ toggleAdminMenu }}" style="display:flex;align-items:center;gap:7px;border:none;cursor:pointer;border-radius:999px;padding:10px 18px;font-size:13.5px;font-weight:700;background: {{ adminTabBg }};color: {{ adminTabColor }};">
+            <span>Admin</span>
+            <span style="font-size:10px;">{{ adminCaret }}</span>
+          </button>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ============ 07 SIDE-BY-SIDE PLAYER (overlay) ============ -->
+  <sc-if value="{{ playerOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="07 Side-by-side player" style="position:fixed;inset:0;z-index:60;background:rgba(35,42,55,0.4);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:30px;">
+      <div style="width:1040px;max-width:96%;max-height:94vh;overflow:auto;background:rgba(255,255,255,0.55);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid rgba(255,255,255,0.65);border-radius:16px;box-shadow:0 30px 80px rgba(15,30,60,0.25);display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.05);">
+          <span style="font-size:18px;font-weight:700;">Side-by-side · <span style="font-family:'IBM Plex Mono',monospace;font-weight:500;">{{ playerId }}</span></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;padding:4px 10px;border-radius:999px;background:rgba(142,14,34,0.08);color:#8E0E22;">SAME ITEM? — ANSWERED VISUALLY</span>
+          <button onClick="{{ closePlayer }}" style="margin-left:auto;background:rgba(255,255,255,0.45);border:none;color:rgba(27,29,33,0.7);border-radius:50%;width:34px;height:34px;font-size:15px;cursor:pointer;" style-hover="background: rgba(255,255,255,0.75)">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;padding:16px 20px 0;">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.55);"><span style="color:#8E0E22;">PACK CLIP</span><span>· packed 12 Jun · PACK-BENCH-1</span></div>
+            <div style="height:230px;border-radius:16px;position:relative;background:repeating-linear-gradient(135deg,#17171D 0px,#17171D 14px,#121217 14px,#121217 28px);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,0.4);">[ pack video ]</span>
+              <div style="position:absolute;left:0;bottom:0;height:4px;background:#8E0E22;width: {{ playerPct }};"></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.55);"><span style="color:#8E0E22;">RETURN CLIP</span><span>· returned 24 Jun · RETURNS-1</span></div>
+            <div style="height:230px;border-radius:16px;position:relative;background:repeating-linear-gradient(135deg,#17171D 0px,#17171D 14px,#121217 14px,#121217 28px);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,0.4);">[ return video ]</span>
+              <div style="position:absolute;left:0;bottom:0;height:4px;background:#8E0E22;width: {{ playerPct }};"></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 20px;">
+          <button onClick="{{ stepBack }}" style="background:rgba(255,255,255,0.45);border:none;color:#1B1D21;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;" style-hover="background: rgba(255,255,255,0.75)">◀◀</button>
+          <button onClick="{{ togglePlay }}" style="background:#8E0E22;color:#FFFFFF;border:none;border-radius:999px;padding:9px 20px;font-size:14px;font-weight:700;cursor:pointer;min-width:110px;" style-hover="filter: brightness(1.06)">{{ playLabel }}</button>
+          <button onClick="{{ stepFwd }}" style="background:rgba(255,255,255,0.45);border:none;color:#1B1D21;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;" style-hover="background: rgba(255,255,255,0.75)">▶▶</button>
+          <input type="range" min="0" max="100" value="{{ playerT }}" onChange="{{ onScrub }}" style="flex:1;accent-color:#8E0E22;cursor:pointer;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(27,29,33,0.6);">{{ playerTime }} / 01:24</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px;padding:0 20px 14px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.5);">STILLS</span>
+          <sc-for list="{{ playerStills }}" as="s" hint-placeholder-count="3">
+            <button onClick="{{ s.pick }}" style="cursor:pointer;border-radius:999px;padding:9px 16px;font-size:13px;font-weight:600;background:rgba(255,255,255,0.45);border:1px solid {{ s.border }};color: {{ s.color }};">{{ s.label }}</button>
+          </sc-for>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(27,29,33,0.35);">click a still to enlarge</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 20px;border-top:1px solid rgba(0,0,0,0.05);">
+          <span style="font-size:14px;color:rgba(27,29,33,0.6);">{{ verdictHint }}</span>
+          <div style="flex:1;"></div>
+          <button onClick="{{ verdictNeg }}" style="background:#FFFFFF;border:1px solid rgba(229,62,62,0.45);color:#C62B22;border-radius:10px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background: rgba(229,62,62,0.05)">{{ verdictNegLabel }}</button>
+          <button onClick="{{ verdictPos }}" style="background:#8E0E22;color:#FFFFFF;border:none;border-radius:10px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(142,14,34,0.25);" style-hover="filter: brightness(1.06)">{{ verdictPosLabel }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- back confirm popup -->
+  <sc-if value="{{ backConfirmOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:90;background:rgba(35,42,55,0.4);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div style="width:430px;max-width:94%;background:rgba(255,255,255,0.65);backdrop-filter:blur(22px) saturate(1.4);border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:14px;box-shadow:0 24px 70px rgba(15,30,60,0.25);">
+        <span style="font-size:20px;font-weight:700;letter-spacing:-0.01em;">Leave this session?</span>
+        <span style="font-size:14px;color:rgba(27,29,33,0.6);line-height:1.5;text-wrap:pretty;">Recording will stop. Save your progress as a draft to resume later, or discard the session — no video will be filed.</span>
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button onClick="{{ backCancel }}" style="background:rgba(255,255,255,0.45);border:1px solid rgba(0,0,0,0.06);color:rgba(27,29,33,0.7);border-radius:10px;padding:12px 18px;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background: rgba(255,255,255,0.75)">Cancel</button>
+          <div style="flex:1;"></div>
+          <button onClick="{{ backDiscard }}" style="background:#FFFFFF;border:1px solid rgba(229,62,62,0.45);color:#C62B22;border-radius:10px;padding:12px 18px;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background: rgba(229,62,62,0.05)">Discard</button>
+          <button onClick="{{ backSave }}" style="background:#8E0E22;color:#FFFFFF;border:none;border-radius:10px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(142,14,34,0.25);" style-hover="filter: brightness(1.06)">Save &amp; exit</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- feature-wise tour -->
+  <sc-if value="{{ tourOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:95;">
+      <sc-if value="{{ hasSpot }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;border-radius:14px;border:3px solid #FFFFFF;box-shadow:0 0 0 9999px rgba(25,12,15,0.55), 0 4px 30px rgba(0,0,0,0.35);transition:all 0.35s ease;pointer-events:none;top: {{ spotTop }};left: {{ spotLeft }};width: {{ spotW }};height: {{ spotH }};"></div>
+      </sc-if>
+      <sc-if value="{{ noSpot }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background:rgba(25,12,15,0.55);"></div>
+      </sc-if>
+      <div style="position:absolute;width:390px;max-width:92vw;background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(1.4);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:11px;box-shadow:0 24px 70px rgba(0,0,0,0.4);transition:all 0.35s ease;top: {{ cardTop }};left: {{ cardLeft }};transform: {{ cardTransform }};">
+        <div style="display:flex;align-items:center;gap:11px;">
+          <span style="width:36px;height:36px;flex:none;border-radius:50%;background:#FBE5E8;color:#8E0E22;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;">{{ tourStepNum }}</span>
+          <span style="font-size:19px;font-weight:800;color:#8E0E22;letter-spacing:-0.01em;flex:1;">{{ tourTitle }}</span>
+          <button onClick="{{ closeTour }}" style="background:none;border:none;color:#9CA3AF;font-size:16px;cursor:pointer;padding:2px;" style-hover="color:#1B1D21">✕</button>
+        </div>
+        <span style="font-size:14.5px;color:#374151;line-height:1.6;text-wrap:pretty;">{{ tourBody }}</span>
+        <div style="height:1px;background:#F0F1F3;"></div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <sc-for list="{{ tourDots }}" as="d" hint-placeholder-count="9">
+            <span style="width:7px;height:7px;border-radius:50%;background: {{ d.bg }};"></span>
+          </sc-for>
+          <div style="flex:1;"></div>
+          <sc-if value="{{ tourHasBack }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ tourBack }}" style="background:#FFFFFF;border:1px solid rgba(110,100,108,0.35);color:#374151;border-radius:10px;padding:10px 16px;font-size:13.5px;font-weight:700;cursor:pointer;" style-hover="border-color:#8E0E22">Back</button>
+          </sc-if>
+          <button onClick="{{ closeTour }}" style="background:#FFFFFF;border:1px solid rgba(110,100,108,0.35);color:#374151;border-radius:10px;padding:10px 16px;font-size:13.5px;font-weight:700;cursor:pointer;" style-hover="border-color:#8E0E22">Skip</button>
+          <button onClick="{{ tourNext }}" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#8E0E22;color:#FFFFFF;border:none;border-radius:10px;padding:8px 18px;font-size:13.5px;font-weight:700;cursor:pointer;" style-hover="background:#7A0B1C"><span>{{ tourNextLabel }}</span><span style="font-size:10.5px;font-weight:600;opacity:0.8;">{{ tourCount }}</span></button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- toast -->
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:80;background:#2A2D32;color:#FFFFFF;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:500;box-shadow:0 12px 32px rgba(15,30,60,0.3);animation:toastIn 0.25s ease;">{{ toast }}</div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    screen: 'login',
+    tab: 'operator', username: '', password: '',
+    userLabel: '',
+    mode: 'pack', scanInput: '', backConfirm: false, lastSession: 'ORD-10287 · sealed · 14:02',
+    recSec: 0,
+    // pack
+    packId: '', packItems: [], packUnknown: false, packCond: 'pending', packStills: 0,
+    // receiving
+    recvChallan: '', recvRows: [],
+    // returns
+    retId: '', retStills: 0, retReason: null, retNeedReason: false,
+    // player overlay
+    playerOpen: false, playerId: '', playerFlagIdx: -1, playing: false, t: 22, still: -1, playerBackTo: null,
+    // search
+    q: '', selId: 'ORD-10293',
+    // data
+    flags: [
+      { id: 'ORD-10311', reason: 'not genuine', age: '6h', amt: '\u20B91.4L' },
+      { id: 'DC-2026-00411', reason: 'short 1', age: '1d', amt: '\u2014' },
+      { id: 'ORD-10288', reason: 'damaged', age: '3h', amt: '\u20B90.9L' },
+    ],
+    records: [
+      { id: 'ORD-10293', kinds: 'pack + return', outcome: 'PASS', tone: 'green', operator: 'Mira', station: 'PACK-BENCH-1', ts: '12 Jun 2026 \u00B7 14:02', hash: '9f2c41aa\u20266b7a1', pair: true },
+      { id: 'RFID-1021', kinds: 'pack + receive', outcome: 'received', tone: 'green', operator: 'Devang', station: 'STORE-RECV-1', ts: '11 Jun 2026 \u00B7 11:40', hash: '77d0e3c2\u2026804fe', pair: false },
+      { id: 'ORD-10311', kinds: 'return', outcome: 'flagged', tone: 'red', operator: 'Sana', station: 'RETURNS-1', ts: '10 Jun 2026 \u00B7 16:21', hash: 'c4a19b77\u20264e2d9', pair: true },
+      { id: 'DC-2026-00417', kinds: 'challan', outcome: 'short', tone: 'amber', operator: 'Devang', station: 'STORE-RECV-1', ts: '09 Jun 2026 \u00B7 10:05', hash: '5b8fd210\u20269c33', pair: false },
+    ],
+    users: [
+      { name: 'Mira', role: 'operator' },
+      { name: 'Sana', role: 'operator' },
+      { name: 'Devang', role: 'operator' },
+      { name: 'Arjun', role: 'admin' },
+    ],
+    newUser: '', tiering: true,
+    tourOpen: false, tourStep: 0, tourRect: null, tourReturn: 'login',
+    adminMenuOpen: false, role: 'operator', profileMenuOpen: false,
+    toast: '',
+  };
+
+  componentDidMount() {
+    try { if (!localStorage.getItem('pa_tour_seen')) { this._tourT = setTimeout(() => this.tourGo(0), 700); } } catch (e) {}
+    this._iv = setInterval(() => {
+      const s = this.state;
+      const upd = {};
+      if (s.screen === 'pack' || s.screen === 'recv' || s.screen === 'ret') upd.recSec = s.recSec + 1;
+      if (s.playerOpen && s.playing) upd.t = s.t >= 100 ? 0 : Math.min(100, s.t + 2);
+      if (Object.keys(upd).length) this.setState(upd);
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this._iv); clearTimeout(this._toastT); }
+
+  showToast(msg) {
+    clearTimeout(this._toastT);
+    this.setState({ toast: msg });
+    this._toastT = setTimeout(() => this.setState({ toast: '' }), 3200);
+  }
+
+  tourSteps() {
+    return [
+      { t: 'Welcome to Packaging Audit', b: 'This interactive demo shows video proof at the three moments that matter \u2014 packing, store receiving, and returns \u2014 all linked to one ID (order ID / RFID / challan). Tap Next for a 1-minute guide.' },
+      { t: 'Sign in by role', b: 'One login for everyone. Username \u201Cadmin\u201D opens the management console; any other name (e.g. \u201Coperator\u201D) boots straight to the station kiosk. In this demo, any password works.' },
+      { t: 'The operator kiosk', b: 'Pick a task \u2014 Pack, Receive or Returns \u2014 then scan an order ID, RFID or challan. The session opens and recording starts automatically. Use the demo scanner chips to simulate a real scan.' },
+      { t: 'Run a session', b: 'Scan each item to tick it off the list. Wrong or missing items lock the session until resolved \u2014 flag with evidence, or fix and close. The \u2190 Back button asks whether to save your progress as a draft.' },
+      { t: 'The admin console', b: 'Sign in as admin to search any ID and replay its videos, compare pack vs return side-by-side, approve or hold refunds in the flagged queue, and watch coverage on the dashboards.' },
+    ];
+  }
+
+  tourDefs() {
+    return [
+      { k: 'login', t: 'Sign in by role', b: 'One login for everyone. An admin username opens the management console; any other name boots straight to the station kiosk. In this demo, any password works.', s: 'login' },
+      { k: 'topbar', t: 'Station status at a glance', b: 'The top bar shows which station and task you are on, plus live health \u2014 camera, upload queue, connectivity \u2014 and who is signed in.', s: 'kiosk' },
+      { k: 'modes', t: 'Pick a task', b: 'One station covers every job. Choose Pack, Receive, or Returns \u2014 the screen that opens is tailored to that task.', s: 'kiosk' },
+      { k: 'scanner', t: 'Scan to start', b: 'Scan an order ID, RFID, or challan \u2014 or tap a demo scanner chip to simulate it. The session opens and recording starts automatically.', s: 'kiosk' },
+      { k: 'packlist', t: 'Expected vs scanned', b: 'Every expected item is listed. Scan each RFID to tick it off \u2014 wrong or missing items lock the session until they are resolved.', s: 'pack', up: 2 },
+      { k: 'packactions', t: 'Flag or close', b: 'If something is off, flag it \u2014 the video attaches as evidence and a supervisor is notified. When item, quantity, and condition all pass, close the session to seal the box.', s: 'pack', up: 1 },
+      { k: 'nav', t: 'The admin console', b: 'Admins get search & playback, the side-by-side player, dashboards, the flagged queue, and user management \u2014 all one click away.', s: 'dash-coverage' },
+      { k: 'search', t: 'Find any video in seconds', b: 'Type an order ID, RFID, or challan to pull up its full history \u2014 operator, station, timestamp, and a tamper-evident file hash.', s: 'search' },
+      { k: 'dashkpis', t: 'Dashboards that drill to video', b: 'Coverage, consignments, returns, and the flagged queue \u2014 every number clicks through to the underlying recording.', s: 'dash-flagged' },
+    ];
+  }
+
+  tourGo(i) {
+    const defs = this.tourDefs();
+    if (i < 0) i = 0;
+    if (i >= defs.length) { this.endTour(); return; }
+    const d = defs[i];
+    if (d.s === 'pack') { if (this.state.screen !== 'pack') this.openSession('pack', 'ORD-10293'); }
+    else if (this.state.screen !== d.s) this.setState({ screen: d.s });
+    this.setState({ tourOpen: true, tourStep: i, tourRect: null });
+    clearTimeout(this._tourMeasureT);
+    this._tourMeasureT = setTimeout(() => this.measureTour(), 420);
+  }
+
+  measureTour() {
+    const d = this.tourDefs()[this.state.tourStep];
+    let el = document.querySelector('[data-tour="' + d.k + '"]');
+    for (let i = 0; el && i < (d.up || 0); i++) el = el.parentElement;
+    if (!el) { this.setState({ tourRect: null }); return; }
+    const r = el.getBoundingClientRect();
+    this.setState({ tourRect: { t: r.top, l: r.left, w: r.width, h: r.height } });
+  }
+
+  endTour() {
+    try { localStorage.setItem('pa_tour_seen', '1'); } catch (e) {}
+    this.setState({ tourOpen: false, tourStep: 0, tourRect: null, screen: this.state.tourReturn || 'login' });
+  }
+
+  fmt(sec) {
+    const m = Math.floor(sec / 60), s = sec % 60;
+    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+
+  tone(t) {
+    if (t === 'green') return { border: 'rgba(23,163,95,0.5)', color: '#0E8A50' };
+    if (t === 'red') return { border: 'rgba(229,62,62,0.5)', color: '#C62B22' };
+    if (t === 'amber') return { border: 'rgba(217,142,4,0.5)', color: '#9A6A00' };
+    return { border: 'rgba(0,0,0,0.2)', color: 'rgba(27,29,33,0.6)' };
+  }
+
+  // ---------- session routing ----------
+  openSession(kind, id) {
+    if (!id) return;
+    if (kind === 'pack') {
+      this.setState({
+        screen: 'pack', packId: id, recSec: 0, packStills: 0, packUnknown: false, packCond: 'pending',
+        packItems: [
+          { name: 'RING', sku: 'SKU 4471', need: 1, got: 0 },
+          { name: 'PENDANT', sku: 'SKU 4472', need: 1, got: 0 },
+          { name: 'BANGLE', sku: 'SKU 4480', need: 1, got: 0 },
+        ], scanInput: '',
+      });
+    } else if (kind === 'recv') {
+      this.setState({
+        screen: 'recv', recvChallan: id, recSec: 0,
+        recvRows: [
+          { rfid: 'RFID-1021', name: 'ring \u00B7 SKU 4471', state: 'awaiting' },
+          { rfid: 'RFID-1022', name: 'pendant \u00B7 SKU 4472', state: 'awaiting' },
+          { rfid: 'RFID-1044', name: 'bangle \u00B7 SKU 4480', state: 'awaiting' },
+        ], scanInput: '',
+      });
+    } else {
+      this.setState({ screen: 'ret', retId: id, recSec: 0, retStills: 0, retReason: null, retNeedReason: false, scanInput: '' });
+    }
+  }
+
+  autoKind(id) {
+    return this.state.mode;
+  }
+
+  // ---------- pack derived ----------
+  packDerived() {
+    const items = this.state.packItems;
+    const allScanned = items.length > 0 && items.every(i => i.got >= i.need);
+    const unknown = this.state.packUnknown;
+    const condOk = this.state.packCond === 'confirmed';
+    const pass = allScanned && !unknown && condOk;
+    const missing = items.reduce((n, i) => n + Math.max(0, i.need - i.got), 0);
+    let banner;
+    if (unknown) banner = { msg: '\u26A0 HOLD \u2014 unknown item on the bench. Remove it or flag with evidence. Session locked.', tone: 'red' };
+    else if (!allScanned) banner = { msg: '\u26A0 HOLD \u2014 ' + missing + ' item' + (missing === 1 ? '' : 's') + ' not yet scanned. Session locked until item + qty + condition pass.', tone: 'red' };
+    else if (!condOk) banner = { msg: 'Items match \u2713 \u2014 verify condition to unlock Close. Show each piece to the camera.', tone: 'amber' };
+    else banner = { msg: 'PASS \u2014 item, quantity and condition verified. Seal the box and close the session.', tone: 'green' };
+    return { allScanned, unknown, pass, banner };
+  }
+
+  // ---------- player ----------
+  openPlayer(id, flagIdx, backTo) {
+    this.setState({ playerOpen: true, playerId: id, playerFlagIdx: flagIdx == null ? -1 : flagIdx, playing: false, t: 22, still: -1, playerBackTo: backTo || null });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const screen = s.screen;
+    const set = (k) => (e) => this.setState({ [k]: e.target.value });
+
+    // ----- login -----
+    const isLogin = screen === 'login';
+    const activeTabBg = '#8E0E22', activeTabColor = '#FFFFFF', idleTabBg = 'transparent', idleTabColor = 'rgba(27,29,33,0.55)';
+    const doLogin = () => {
+      const uname = (s.username || 'admin').trim().toLowerCase();
+      const isAd = uname === 'admin' || uname === 'manager' || uname === 'auditor';
+      const label = uname === 'admin' ? 'System Admin' : uname.charAt(0).toUpperCase() + uname.slice(1);
+      this.setState({ screen: isAd ? 'dash-coverage' : 'kiosk', userLabel: label, role: isAd ? 'admin' : 'operator' });
+    };
+
+    // ----- kiosk -----
+    const modes = [
+      { id: 'pack', label: 'Pack' },
+      { id: 'recv', label: 'Receive' },
+      { id: 'ret', label: 'Returns' },
+    ];
+    const modeChips = modes.map(m => ({
+      label: m.label,
+      bg: s.mode === m.id ? '#8E0E22' : 'transparent',
+      color: s.mode === m.id ? '#FFFFFF' : 'rgba(27,29,33,0.55)',
+      pick: () => this.setState({ mode: m.id }),
+    }));
+    const demoChips = [
+      { label: 'ORD-10293', sub: 'online order \u2192 Pack & Record', kind: 'pack', id: 'ORD-10293' },
+      { label: 'DC-2026-00417', sub: 'challan \u2192 Store receiving', kind: 'recv', id: 'DC-2026-00417' },
+      { label: 'ORD-10311', sub: 'customer return \u2192 Inspection', kind: 'ret', id: 'ORD-10311' },
+    ].map(d => ({ label: d.label, sub: d.sub, go: () => this.openSession(d.kind, d.id) }));
+    const doScan = () => {
+      const id = s.scanInput.trim();
+      if (!id) return;
+      this.openSession(this.autoKind(id), id.toUpperCase());
+    };
+
+    // ----- pack -----
+    const pd = this.packDerived();
+    const dotFor = (st) => {
+      if (st === 'ok') return { dot: '\u2713', dotColor: '#0E8A50', dotBorder: 'rgba(23,163,95,0.5)', dotBg: 'rgba(23,163,95,0.08)' };
+      if (st === 'bad') return { dot: '!', dotColor: '#C62B22', dotBorder: 'rgba(229,62,62,0.5)', dotBg: 'rgba(229,62,62,0.06)' };
+      return { dot: '\u00B7\u00B7\u00B7', dotColor: 'rgba(27,29,33,0.45)', dotBorder: 'rgba(0,0,0,0.15)', dotBg: 'transparent' };
+    };
+    const packRows = s.packItems.map(i => {
+      const d = dotFor(i.got >= i.need ? 'ok' : 'wait');
+      return { ...d, name: i.name, sku: i.sku, count: i.got + '/' + i.need + (i.got >= i.need ? ' \u2713' : ' \u00B7\u00B7\u00B7') };
+    });
+    if (s.packUnknown) {
+      const d = dotFor('bad');
+      packRows.push({ ...d, name: 'UNKNOWN ITEM', sku: 'RFID-9920 \u00B7 not on this order', count: 'extra !' });
+    }
+    const bannerTones = {
+      red: { border: 'rgba(229,62,62,0.4)', bg: 'rgba(229,62,62,0.06)', color: '#C62B22' },
+      amber: { border: 'rgba(217,142,4,0.4)', bg: 'rgba(217,142,4,0.06)', color: '#9A6A00' },
+      green: { border: 'rgba(23,163,95,0.4)', bg: 'rgba(23,163,95,0.07)', color: '#0E8A50' },
+    };
+    const pb = bannerTones[pd.banner.tone];
+    const scanPackItem = () => {
+      const items = s.packItems.map(i => ({ ...i }));
+      const next = items.find(i => i.got < i.need);
+      if (next) { next.got += 1; this.setState({ packItems: items }); }
+    };
+    const closePack = () => {
+      if (!pd.pass) return;
+      const rec = { id: s.packId, kinds: 'pack', outcome: 'PASS', tone: 'green', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today \u00B7 ' + this.fmt(s.recSec) + ' session', hash: 'a1' + Math.random().toString(16).slice(2, 8) + '\u2026e4f2', pair: false };
+      this.setState({ screen: 'kiosk', lastSession: s.packId + ' \u00B7 sealed \u00B7 PASS', records: [rec, ...s.records] });
+      this.showToast('Pack video filed under ' + s.packId + ' \u2014 dispatch confirmed \u2192 Gati');
+    };
+    const flagPack = () => {
+      const flag = { id: s.packId, reason: 'pack mismatch', age: 'now', amt: '\u2014' };
+      const rec = { id: s.packId, kinds: 'pack', outcome: 'HOLD', tone: 'red', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'b3' + Math.random().toString(16).slice(2, 8) + '\u20267c01', pair: false };
+      this.setState({ screen: 'kiosk', lastSession: s.packId + ' \u00B7 HOLD \u00B7 flagged', flags: [flag, ...s.flags], records: [rec, ...s.records] });
+      this.showToast('Session held \u2014 flag raised with video evidence. Supervisor notified.');
+    };
+
+    // ----- receiving -----
+    const recvRows = s.recvRows.map(r => {
+      const st = r.state === 'received' ? 'ok' : (r.state === 'extra' ? 'bad' : 'wait');
+      const d = dotFor(st);
+      return { ...d, rfid: r.rfid, name: r.name, stateLabel: r.state };
+    });
+    const matched = s.recvRows.filter(r => r.state === 'received').length;
+    const expected = s.recvRows.filter(r => r.state !== 'extra').length;
+    const extras = s.recvRows.filter(r => r.state === 'extra').length;
+    const short = expected - matched;
+    const recvSummary = 'Matched ' + matched + ' / ' + expected + ' \u00B7 ' + short + ' awaiting' + (extras ? ' \u00B7 ' + extras + ' extra' : '');
+    let recvBanner;
+    if (extras > 0) recvBanner = { msg: '\u26A0 Unknown RFID scanned \u2014 not on this challan. Flag it as extra with the arrival video as proof.', tone: 'red' };
+    else if (matched === 0) recvBanner = { msg: 'Scan each RFID as you unpack \u2014 every scan ticks a line. Unscanned items are flagged short at close.', tone: 'amber' };
+    else if (short > 0) recvBanner = { msg: short + ' item' + (short === 1 ? '' : 's') + ' still awaiting \u2014 confirm now for a partial receive, or keep scanning.', tone: 'amber' };
+    else recvBanner = { msg: 'ALL MATCH \u2014 every expected RFID scanned. Confirm to move stock to shelf.', tone: 'green' };
+    const rb = bannerTones[recvBanner.tone];
+    const scanRecvItem = () => {
+      const rows = s.recvRows.map(r => ({ ...r }));
+      const next = rows.find(r => r.state === 'awaiting');
+      if (next) { next.state = 'received'; this.setState({ recvRows: rows }); }
+    };
+    const scanRecvUnknown = () => {
+      if (s.recvRows.some(r => r.rfid === 'RFID-1099')) return;
+      this.setState({ recvRows: [...s.recvRows, { rfid: 'RFID-1099', name: 'not on challan', state: 'extra' }] });
+    };
+    const confirmRecv = () => {
+      if (matched === 0) return;
+      const out = (short === 0 && extras === 0) ? 'received' : 'partial';
+      const rec = { id: s.recvChallan, kinds: 'challan \u00B7 receive', outcome: out, tone: out === 'received' ? 'green' : 'amber', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'c7' + Math.random().toString(16).slice(2, 8) + '\u20261b22', pair: false };
+      this.setState({ screen: 'kiosk', lastSession: s.recvChallan + ' \u00B7 ' + out, records: [rec, ...s.records] });
+      this.showToast('Reconcile result (' + out + ') pushed to Gati \u2014 arrival video retained.');
+    };
+    const flagRecv = () => {
+      const flag = { id: s.recvChallan, reason: short > 0 ? 'short ' + short : 'extra ' + extras, age: 'now', amt: '\u2014' };
+      this.setState({ screen: 'kiosk', lastSession: s.recvChallan + ' \u00B7 flagged', flags: [flag, ...s.flags] });
+      this.showToast('Consignment flagged \u2014 both videos attached as proof.');
+    };
+
+    // ----- returns -----
+    const reasons = ['wrong item', 'not genuine', 'damaged', 'empty box'];
+    const retReasons = reasons.map(r => ({
+      label: r,
+      border: s.retReason === r ? 'rgba(142,14,34,0.7)' : 'rgba(0,0,0,0.14)',
+      bg: s.retReason === r ? 'rgba(142,14,34,0.1)' : 'transparent',
+      color: s.retReason === r ? '#8E0E22' : 'rgba(27,29,33,0.6)',
+      pick: () => this.setState({ retReason: r, retNeedReason: false }),
+    }));
+    const acceptRet = () => {
+      const rec = { id: s.retId, kinds: 'return', outcome: 'accepted', tone: 'green', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'd9' + Math.random().toString(16).slice(2, 8) + '\u20265a10', pair: true };
+      this.setState({ screen: 'kiosk', lastSession: s.retId + ' \u00B7 return accepted \u00B7 restock', records: [rec, ...s.records] });
+      this.showToast('Return accepted \u2192 restock. Outcome written back with video reference.');
+    };
+    const flagRet = () => {
+      if (!s.retReason) { this.setState({ retNeedReason: true }); return; }
+      const flag = { id: s.retId, reason: s.retReason, age: 'now', amt: '\u20B91.2L' };
+      const rec = { id: s.retId, kinds: 'return', outcome: 'flagged', tone: 'red', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'e2' + Math.random().toString(16).slice(2, 8) + '\u20263f77', pair: true };
+      this.setState({ screen: 'kiosk', lastSession: s.retId + ' \u00B7 flagged \u00B7 refund held', flags: [flag, ...s.flags], records: [rec, ...s.records] });
+      this.showToast('Refund held \u2014 flag (' + s.retReason + ') awaits supervisor approval.');
+    };
+
+    // ----- admin nav -----
+    const navDefs = [
+      { id: 'search', label: 'Search & playback' },
+      { id: 'player', label: 'Side-by-side player' },
+      { id: 'dash-coverage', label: 'Coverage' },
+      { id: 'dash-consignment', label: 'Consignment' },
+      { id: 'dash-returns', label: 'Returns' },
+      { id: 'dash-flagged', label: 'Flagged queue', badge: String(s.flags.length) },
+      { id: 'dash-stations', label: 'Station health' },
+      { id: 'config', label: 'Users & config' },
+    ];
+    const navItems = navDefs.map(n => ({
+      label: n.label,
+      hasBadge: !!n.badge,
+      badge: n.badge || '',
+      bg: screen === n.id ? '#8E0E22' : 'transparent',
+      color: screen === n.id ? '#FFFFFF' : 'rgba(40,32,38,0.7)',
+      go: () => {
+        if (n.id === 'player') this.openPlayer('ORD-10293', -1, null);
+        else this.setState({ screen: n.id });
+      },
+    }));
+
+    // ----- search -----
+    const ql = s.q.trim().toLowerCase();
+    const results0 = s.records.filter(r => !ql || r.id.toLowerCase().includes(ql) || r.kinds.toLowerCase().includes(ql) || r.outcome.toLowerCase().includes(ql));
+    const sel = results0.find(r => r.id === s.selId) || results0[0] || null;
+    const results = results0.map(r => {
+      const t = this.tone(r.tone);
+      return {
+        id: r.id, kinds: r.kinds, outcome: r.outcome,
+        badgeBorder: t.border, badgeColor: t.color,
+        cardBorder: sel && r.id === sel.id ? 'rgba(142,14,34,0.6)' : 'rgba(0,0,0,0.05)',
+        pick: () => this.setState({ selId: r.id }),
+      };
+    });
+    const selTone = sel ? this.tone(sel.tone) : this.tone('');
+
+    // ----- dashboards -----
+    const drill = (id) => this.setState({ screen: 'search', q: id, selId: id });
+    const blue = '#8E0E22', red = '#C62B22', green = '#0E8A50', plain = '#1B1D21';
+    let dash = null;
+    if (screen === 'dash-coverage') dash = {
+      label: '08 Dashboard coverage', title: 'Dashboard \u00B7 Packing coverage', chip: 'DRILLS TO VIDEO',
+      kpis: [{ num: '418', label: 'packed today', color: plain }, { num: '405', label: 'with video', color: plain }, { num: '96.9%', label: 'coverage', color: blue }, { num: '13', label: 'missing video', color: red }],
+      listTitle: 'Missing-video list \u2014 by day / station / operator',
+      rows: [
+        { title: 'PACK-BENCH-2 \u00B7 op. Rahul', sub: 'today \u00B7 camera offline 41 min', right: '7 missing', rightColor: red, action: '\u2192', go: () => drill('ORD-10293') },
+        { title: 'PACK-BENCH-1 \u00B7 op. Mira', sub: 'today \u00B7 sessions closed early', right: '4 missing', rightColor: red, action: '\u2192', go: () => drill('ORD-10293') },
+        { title: 'RETURNS-1 \u00B7 op. Sana', sub: 'yesterday \u00B7 upload retry pending', right: '2 missing', rightColor: 'rgba(27,29,33,0.6)', action: '\u2192', go: () => drill('ORD-10311') },
+      ],
+      foot: 'coverage_rate = packed-with-video vs total \u00B7 threshold alert fires on a coverage gap < 95%',
+    };
+    if (screen === 'dash-consignment') dash = {
+      label: '09 Dashboard consignment', title: 'Dashboard \u00B7 Consignment / challan', chip: 'DRILLS TO VIDEO',
+      kpis: [{ num: '36', label: 'dispatched', color: plain }, { num: '31', label: 'received', color: plain }, { num: '28', label: 'reconciled', color: green }, { num: '3', label: 'short', color: red }],
+      listTitle: 'In-transit & short consignments \u00B7 days-in-transit',
+      rows: [
+        { title: 'DC-2026-00417 \u00B7 MG Road', sub: 'dispatched 10 Jun \u00B7 3 items', right: 'in transit \u00B7 2d', rightColor: blue, action: '\u2192', go: () => drill('DC-2026-00417') },
+        { title: 'DC-2026-00411 \u00B7 Surat', sub: 'received 09 Jun \u00B7 reconcile open', right: 'short 1', rightColor: red, action: '\u2192', go: () => drill('DC-2026-00417') },
+        { title: 'DC-2026-00409 \u00B7 Mumbai', sub: 'received 08 Jun \u00B7 all RFIDs ticked', right: 'reconciled', rightColor: green, action: '\u2192', go: () => drill('DC-2026-00417') },
+      ],
+      foot: 'in_transit & short consignments derived from reconcile + challan status \u00B7 alert on a challan overdue or short',
+    };
+    if (screen === 'dash-returns') dash = {
+      label: '10 Dashboard returns', title: 'Dashboard \u00B7 Returns summary', chip: 'DRILLS TO VIDEO',
+      kpis: [{ num: '52', label: 'received', color: plain }, { num: '44', label: 'accepted', color: green }, { num: '8', label: 'flagged', color: red }, { num: '84.6%', label: 'accept rate', color: blue }],
+      listTitle: 'Flag reasons \u00B7 acceptance rate by channel',
+      rows: [
+        { title: 'Not genuine', sub: 'highest-risk reason \u00B7 trend +1 this week', right: '3', rightColor: red, action: '\u2192', go: () => this.setState({ screen: 'dash-flagged' }) },
+        { title: 'Damaged', sub: 'transit damage \u00B7 2 channels', right: '2', rightColor: red, action: '\u2192', go: () => this.setState({ screen: 'dash-flagged' }) },
+        { title: 'Wrong item', sub: 'pick error suspected', right: '2', rightColor: red, action: '\u2192', go: () => this.setState({ screen: 'dash-flagged' }) },
+        { title: 'Empty box', sub: 'fraud pattern watch', right: '1', rightColor: red, action: '\u2192', go: () => this.setState({ screen: 'dash-flagged' }) },
+      ],
+      foot: 'return_flag_rate derived from return outcomes \u00B7 every number clicks through to its video',
+    };
+    if (screen === 'dash-flagged') {
+      const over24 = s.flags.filter(f => f.age.includes('d')).length;
+      dash = {
+        label: '11 Dashboard flagged queue', title: 'Flagged items queue', chip: 'REFUNDS HELD',
+        kpis: [{ num: String(s.flags.length), label: 'open flags', color: plain }, { num: String(over24), label: '> 24h', color: red }, { num: '\u20B96.2L', label: 'refunds on hold', color: blue }, { num: '2', label: 'escalated', color: red }],
+        listTitle: 'Open flags awaiting decision \u2014 sorted by age',
+        rows: s.flags.map((f, i) => ({
+          title: f.id + ' \u00B7 ' + f.reason,
+          sub: 'age ' + f.age + ' \u00B7 ' + (f.amt === '\u2014' ? 'no refund hold' : f.amt + ' on hold'),
+          right: f.amt, rightColor: f.amt === '\u2014' ? 'rgba(27,29,33,0.5)' : blue,
+          action: 'Review \u25B8',
+          go: () => this.openPlayer(f.id, i, 'dash-flagged'),
+        })),
+        foot: 'decision recorded with operator + timestamp + video reference \u00B7 ageing flags escalate to the supervisor',
+      };
+    }
+    if (screen === 'dash-stations') dash = {
+      label: '12 Dashboard station health', title: 'Station health', chip: 'TELEMETRY',
+      kpis: null,
+      banner: '\u26A0 2 stations need attention \u2014 threshold alerts sent',
+      listTitle: 'Last upload \u00B7 pending queue \u00B7 disk / browser storage \u00B7 camera',
+      rows: [
+        { title: 'PACK-BENCH-1', sub: 'up 2m ago \u00B7 0 queued \u00B7 disk 38%', right: 'cam OK', rightColor: green, action: '\u2192', go: () => drill('ORD-10293') },
+        { title: 'PACK-BENCH-2', sub: 'up 41m ago \u00B7 12 queued \u00B7 disk 61%', right: 'offline', rightColor: red, action: '\u2192', go: () => drill('ORD-10293') },
+        { title: 'STORE-RECV-1', sub: 'up 5m ago \u00B7 0 queued \u00B7 disk 24%', right: 'cam OK', rightColor: green, action: '\u2192', go: () => drill('RFID-1021') },
+        { title: 'RETURNS-1', sub: 'up 9m ago \u00B7 1 queued \u00B7 disk 92%', right: 'disk high', rightColor: blue, action: '\u2192', go: () => drill('ORD-10311') },
+      ],
+      foot: 'chunks buffer in IndexedDB \u00B7 background uploader pushes via signed URLs with checksum + retry',
+    };
+
+    // ----- config -----
+    const userRows = s.users.map(u => {
+      const isAd = u.role === 'admin';
+      return {
+        name: u.name, role: u.role, initial: u.name.charAt(0).toUpperCase(),
+        border: isAd ? 'rgba(142,14,34,0.5)' : 'rgba(0,0,0,0.16)',
+        color: isAd ? '#8E0E22' : 'rgba(27,29,33,0.6)',
+      };
+    });
+    const addUser = () => {
+      const n = s.newUser.trim();
+      if (!n) return;
+      this.setState({ users: [...s.users, { name: n.charAt(0).toUpperCase() + n.slice(1), role: 'operator' }], newUser: '' });
+      this.showToast('Operator added \u2014 covers Pack \u00B7 Receive \u00B7 Returns.');
+    };
+
+    // ----- player -----
+    const fromFlag = s.playerFlagIdx >= 0;
+    const stills = ['stone', 'hallmark', 'certificate'].map((l, i) => ({
+      label: s.still === i ? l + ' \u00B7 enlarged' : l,
+      border: s.still === i ? 'rgba(142,14,34,0.7)' : 'rgba(0,0,0,0.08)',
+      color: s.still === i ? '#8E0E22' : 'rgba(27,29,33,0.6)',
+      pick: () => this.setState({ still: s.still === i ? -1 : i }),
+    }));
+    const closePlayer = () => this.setState({ playerOpen: false, playing: false });
+    const verdictPos = () => {
+      if (fromFlag) {
+        const flags = s.flags.filter((_, i) => i !== s.playerFlagIdx);
+        this.setState({ flags, playerOpen: false, playing: false, screen: 'dash-flagged' });
+        this.showToast('Accept approved \u2014 refund released. Decision recorded with video reference.');
+      } else {
+        this.setState({ playerOpen: false, playing: false });
+        this.showToast('Verdict recorded: same item \u2014 feeds the accept decision.');
+      }
+    };
+    const verdictNeg = () => {
+      this.setState({ playerOpen: false, playing: false });
+      if (fromFlag) { this.setState({ screen: 'dash-flagged' }); this.showToast('Flag upheld \u2014 refund stays on hold.'); }
+      else this.showToast('Mismatch suspected \u2014 flag with a reason to hold the refund.');
+    };
+
+    // floating tab bar
+    const adminScrList = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
+    const taskTabs = [{ id: 'pack', label: 'Pack' }, { id: 'recv', label: 'Receive' }, { id: 'ret', label: 'Returns' }].map(t => {
+      const active = screen === t.id || (screen === 'kiosk' && s.mode === t.id);
+      return {
+        label: t.label,
+        bg: active ? '#8E0E22' : 'transparent',
+        color: active ? '#FFFFFF' : 'rgba(40,32,38,0.7)',
+        pick: () => this.setState({ screen: 'kiosk', mode: t.id, adminMenuOpen: false }),
+      };
+    });
+    const adminActive = adminScrList.includes(screen);
+    const adminMenuItems = [
+      { id: 'search', label: 'Search & playback' },
+      { id: 'player', label: 'Side-by-side player' },
+      { id: 'dash-coverage', label: 'Coverage' },
+      { id: 'dash-consignment', label: 'Consignment' },
+      { id: 'dash-returns', label: 'Returns summary' },
+      { id: 'dash-flagged', label: 'Flagged queue', badge: String(s.flags.length) },
+      { id: 'dash-stations', label: 'Station health' },
+      { id: 'config', label: 'Users & config' },
+    ].map(n => ({
+      label: n.label, hasBadge: !!n.badge, badge: n.badge || '',
+      bg: screen === n.id ? 'rgba(142,14,34,0.14)' : 'transparent',
+      color: screen === n.id ? '#8E0E22' : '#1B1D21',
+      go: () => {
+        if (n.id === 'player') { this.setState({ adminMenuOpen: false }); this.openPlayer('ORD-10293', -1, null); }
+        else this.setState({ screen: n.id, adminMenuOpen: false });
+      },
+    }));
+
+    // tour spotlight geometry
+    const tr = s.tourRect;
+    let hasSpot = false, spotTop = '0px', spotLeft = '0px', spotW = '0px', spotH = '0px';
+    let cardTop = '50%', cardLeft = '50%', cardTransform = 'translate(-50%,-50%)';
+    if (s.tourOpen && tr) {
+      hasSpot = true;
+      const pad = 8;
+      spotTop = (tr.t - pad) + 'px'; spotLeft = (tr.l - pad) + 'px';
+      spotW = (tr.w + pad * 2) + 'px'; spotH = (tr.h + pad * 2) + 'px';
+      const vw = window.innerWidth, vh = window.innerHeight, cw = 390, ch = 260;
+      const cl = Math.min(Math.max(tr.l, 14), Math.max(14, vw - cw - 14));
+      let ct = tr.t + tr.h + pad + 14;
+      if (ct + ch > vh - 14) ct = Math.max(14, tr.t - pad - 14 - ch);
+      cardTop = ct + 'px'; cardLeft = cl + 'px'; cardTransform = 'none';
+    }
+
+    const screenChips = { kiosk: 'STATION READY', pack: 'PACK & RECORD', recv: 'STORE RECEIVING', ret: 'RETURN INSPECTION' };
+
+    return {
+      // routing
+      isLogin,
+      isOpSurface: ['kiosk', 'pack', 'recv', 'ret'].includes(screen),
+      isKiosk: screen === 'kiosk', isPack: screen === 'pack', isRecv: screen === 'recv', isRet: screen === 'ret',
+      isAdmin: ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'].includes(screen),
+      isSearch: screen === 'search', isConfig: screen === 'config', isDash: !!dash,
+      // login
+      username: s.username, password: s.password, onUsername: set('username'), onPassword: set('password'),
+      onLoginKey: (e) => { if (e.key === 'Enter') doLogin(); },
+      pickOperatorTab: () => this.setState({ tab: 'operator' }), pickAdminTab: () => this.setState({ tab: 'admin' }),
+      opTabBg: s.tab === 'operator' ? activeTabBg : idleTabBg, opTabColor: s.tab === 'operator' ? activeTabColor : idleTabColor,
+      adTabBg: s.tab === 'admin' ? activeTabBg : idleTabBg, adTabColor: s.tab === 'admin' ? activeTabColor : idleTabColor,
+      doLogin,
+      loginHint: s.tab === 'operator' ? 'Operator \u2192 boots straight to the kiosk station (Pack \u00B7 Receive \u00B7 Returns)' : 'Admin \u2192 opens the web shell (search \u00B7 player \u00B7 dashboards \u00B7 config)',
+      // shell
+      userLabel: s.userLabel || 'Mira', userInitial: (s.userLabel || 'M').charAt(0).toUpperCase(),
+      screenChip: screenChips[screen] || '',
+      signOut: () => this.setState({ screen: 'login', password: '', profileMenuOpen: false, adminMenuOpen: false }),
+      // profile badge + dropdown
+      profileOpen: s.profileMenuOpen,
+      toggleProfile: () => this.setState({ profileMenuOpen: !s.profileMenuOpen }),
+      profileCaret: s.profileMenuOpen ? '\u25B2' : '\u25BC',
+      goProfile: () => { this.setState({ profileMenuOpen: false }); this.showToast('My profile \u2014 name, PIN and shift details (prototype).'); },
+      goSettings: () => {
+        if (s.role === 'admin') this.setState({ profileMenuOpen: false, screen: 'config' });
+        else { this.setState({ profileMenuOpen: false }); this.showToast('Station settings are managed by an admin.'); }
+      },
+      // kiosk
+      modeChips, demoChips, scanInput: s.scanInput, onScanInput: set('scanInput'),
+      onScanKey: (e) => { if (e.key === 'Enter') doScan(); }, doScan, lastSession: s.lastSession,
+      // pack
+      packId: s.packId, recTime: this.fmt(s.recSec), packStills: s.packStills,
+      capturePackStill: () => this.setState({ packStills: s.packStills + 1 }),
+      packRows,
+      scanPackItem, packScanDone: pd.allScanned, packScanOpacity: pd.allScanned ? 0.4 : 1,
+      scanPackUnknown: () => this.setState({ packUnknown: true }),
+      resolveUnknown: () => this.setState({ packUnknown: false }),
+      packUnknown: s.packUnknown,
+      packCondPhase: pd.allScanned && !pd.unknown && s.packCond !== 'confirmed',
+      confirmCondition: () => this.setState({ packCond: 'confirmed' }),
+      packBannerMsg: pd.banner.msg, packBannerBorder: pb.border, packBannerBg: pb.bg, packBannerColor: pb.color,
+      packCloseDisabled: !pd.pass, packCloseOpacity: pd.pass ? 1 : 0.4,
+      closePack, flagPack,
+      // receiving
+      recvChallan: s.recvChallan, recvRows, recvSummary,
+      scanRecvItem, recvScanDone: short === 0, recvScanOpacity: short === 0 ? 0.4 : 1,
+      scanRecvUnknown,
+      recvBannerMsg: recvBanner.msg, recvBannerBorder: rb.border, recvBannerBg: rb.bg, recvBannerColor: rb.color,
+      recvConfirmDisabled: matched === 0, recvConfirmOpacity: matched === 0 ? 0.4 : 1,
+      confirmRecv, flagRecv,
+      // returns
+      retId: s.retId, retStills: s.retStills,
+      captureRetStill: () => this.setState({ retStills: s.retStills + 1 }),
+      retReasons, retNeedReason: s.retNeedReason,
+      acceptRet, flagRet,
+      openSbsRet: () => this.openPlayer(s.retId, -1, 'ret'),
+      // admin
+      navItems,
+      q: s.q, onQuery: (e) => this.setState({ q: e.target.value }),
+      results, noResults: results.length === 0, hasSel: !!sel,
+      selId: sel ? sel.id : '', selOutcome: sel ? sel.outcome : '', selBadgeBorder: selTone.border, selBadgeColor: selTone.color,
+      selOperator: sel ? sel.operator : '', selStation: sel ? sel.station : '', selTs: sel ? sel.ts : '', selHash: sel ? sel.hash : '',
+      selPair: !!(sel && sel.pair),
+      openSbsSel: () => sel && this.openPlayer(sel.id, -1, 'search'),
+      // dash
+      dashLabel: dash ? dash.label : '', dashTitle: dash ? dash.title : '', dashChip: dash ? dash.chip : '',
+      dashHasKpis: !!(dash && dash.kpis), dashKpis: dash && dash.kpis ? dash.kpis : [],
+      dashHasBanner: !!(dash && dash.banner), dashBanner: dash && dash.banner ? dash.banner : '',
+      dashListTitle: dash ? dash.listTitle : '', dashRows: dash ? dash.rows : [], dashFoot: dash ? dash.foot : '',
+      // config
+      userRows, newUser: s.newUser, onNewUser: set('newUser'), addUser,
+      toggleTiering: () => this.setState({ tiering: !s.tiering }),
+      tierLabel: s.tiering ? 'ON \u00B7 running' : 'OFF',
+      tierBorder: s.tiering ? 'rgba(23,163,95,0.5)' : 'rgba(0,0,0,0.2)',
+      tierBg: s.tiering ? 'rgba(23,163,95,0.08)' : 'transparent',
+      tierColor: s.tiering ? '#0E8A50' : 'rgba(27,29,33,0.5)',
+      // player
+      playerOpen: s.playerOpen, playerId: s.playerId,
+      playerT: s.t, playerPct: s.t + '%',
+      playerTime: this.fmt(Math.round(s.t * 0.84)),
+      onScrub: (e) => this.setState({ t: Number(e.target.value) }),
+      togglePlay: () => this.setState({ playing: !s.playing }),
+      playLabel: s.playing ? '\u275A\u275A Pause' : '\u25B6 Sync play',
+      stepBack: () => this.setState({ t: Math.max(0, s.t - 10) }),
+      stepFwd: () => this.setState({ t: Math.min(100, s.t + 10) }),
+      playerStills: stills,
+      verdictHint: fromFlag ? 'Supervisor decision \u2014 releases or keeps the refund hold.' : 'Verdict feeds the accept / flag decision.',
+      verdictNegLabel: fromFlag ? 'Uphold flag \u2014 keep hold' : 'Mismatch suspected',
+      verdictPosLabel: fromFlag ? 'Approve accept \u2014 release refund' : 'Same item \u2014 confirm',
+      verdictNeg, verdictPos, closePlayer,
+      // back navigation + save popup
+      isSession: ['pack', 'recv', 'ret'].includes(screen),
+      goBack: () => this.setState({ backConfirm: true }),
+      backConfirmOpen: s.backConfirm,
+      backCancel: () => this.setState({ backConfirm: false }),
+      backDiscard: () => {
+        const sid = screen === 'pack' ? s.packId : screen === 'recv' ? s.recvChallan : s.retId;
+        this.setState({ backConfirm: false, screen: 'kiosk', lastSession: sid + ' \u00B7 discarded' });
+        this.showToast('Session discarded \u2014 no video filed.');
+      },
+      backSave: () => {
+        const sid = screen === 'pack' ? s.packId : screen === 'recv' ? s.recvChallan : s.retId;
+        const kind = screen === 'pack' ? 'pack' : screen === 'recv' ? 'challan \u00B7 receive' : 'return';
+        const rec = { id: sid, kinds: kind, outcome: 'draft', tone: 'amber', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today \u00B7 paused at ' + this.fmt(s.recSec), hash: 'f0' + Math.random().toString(16).slice(2, 8) + '\u20262d88', pair: false };
+        this.setState({ backConfirm: false, screen: 'kiosk', lastSession: sid + ' \u00B7 saved as draft', records: [rec, ...s.records] });
+        this.showToast('Session saved as draft \u2014 scan ' + sid + ' to resume.');
+      },
+      // feature-wise tour
+      tourOpen: s.tourOpen,
+      openTour: () => { this.setState({ tourReturn: s.screen }); this.tourGo(0); },
+      closeTour: () => this.endTour(),
+      tourStepNum: s.tourStep + 1,
+      tourTotal: this.tourDefs().length,
+      tourTitle: this.tourDefs()[s.tourStep].t,
+      tourBody: this.tourDefs()[s.tourStep].b,
+      tourDots: this.tourDefs().map((_, i) => ({ bg: i === s.tourStep ? '#8E0E22' : '#E5E7EB' })),
+      tourHasBack: s.tourStep > 0,
+      tourBack: () => this.tourGo(s.tourStep - 1),
+      tourNext: () => this.tourGo(s.tourStep + 1),
+      tourNextLabel: s.tourStep >= this.tourDefs().length - 1 ? 'Finish' : 'Next',
+      tourCount: (s.tourStep + 1) + ' / ' + this.tourDefs().length,
+      hasSpot, noSpot: !hasSpot,
+      spotTop, spotLeft, spotW, spotH, cardTop, cardLeft, cardTransform,
+      // floating tab bar
+      showTabBar: screen !== 'login',
+      taskTabs, adminMenuItems,
+      isAdminUser: s.role === 'admin',
+      adminMenuOpen: s.adminMenuOpen,
+      toggleAdminMenu: () => this.setState({ adminMenuOpen: !s.adminMenuOpen }),
+      adminTabBg: adminActive ? '#8E0E22' : 'transparent',
+      adminTabColor: adminActive ? '#FFFFFF' : 'rgba(40,32,38,0.7)',
+      adminCaret: s.adminMenuOpen ? '\u25BC' : '\u25B2',
+      // toast
+      hasToast: !!s.toast, toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>
