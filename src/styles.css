@@ -1,0 +1,232 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(900px 600px at 85% -10%, rgba(211, 43, 71, 0.16), transparent 60%),
+    radial-gradient(800px 600px at -10% 30%, rgba(64, 110, 220, 0.13), transparent 55%),
+    radial-gradient(700px 500px at 60% 110%, rgba(240, 165, 46, 0.14), transparent 55%),
+    linear-gradient(160deg, #f4eef1, #e9eaf3);
+  background-attachment: fixed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input::placeholder {
+  color: rgba(27, 29, 33, 0.35);
+}
+
+button,
+input {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.16);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}
+@keyframes ringPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(142, 14, 34, 0.25);
+  }
+  70% {
+    box-shadow: 0 0 0 26px rgba(142, 14, 34, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(142, 14, 34, 0);
+  }
+}
+@keyframes feedDrift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 56px 56px;
+  }
+}
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* hover / focus states (the design's style-hover / style-focus attributes) */
+.hv-brighten:hover {
+  filter: brightness(1.06);
+}
+.hv-dark:hover {
+  background: #7a0b1c !important;
+}
+.hv-white65:hover {
+  background: rgba(255, 255, 255, 0.65) !important;
+}
+.hv-white7:hover {
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+.hv-white75:hover {
+  background: rgba(255, 255, 255, 0.75) !important;
+}
+.hv-white85:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+.hv-accent14:hover {
+  background: rgba(142, 14, 34, 0.14) !important;
+}
+.hv-red05:hover {
+  background: rgba(229, 62, 62, 0.05) !important;
+}
+.hv-red08:hover {
+  background: rgba(229, 62, 62, 0.08) !important;
+}
+.hv-border-accent:hover {
+  border-color: rgba(142, 14, 34, 0.5) !important;
+}
+.hv-border-accent-strong:hover {
+  border-color: #8e0e22 !important;
+}
+.hv-chip:hover {
+  border-color: rgba(142, 14, 34, 0.5) !important;
+  background: #eff5fe !important;
+}
+.hv-text-dark:hover {
+  color: #1b1d21 !important;
+}
+.hv-text-mid:hover {
+  color: rgba(27, 29, 33, 0.65) !important;
+}
+.fc-accent:focus {
+  border-color: #8e0e22 !important;
+}
+.fc-accent-white:focus {
+  border-color: #8e0e22 !important;
+  background: #ffffff !important;
+}
+
+/* responsive layout grids */
+.login-split {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+}
+.pack-grid {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 16px;
+  padding: 16px;
+}
+.recv-grid {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 16px;
+  padding: 16px;
+}
+.ret-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+  min-height: 0;
+}
+.search-grid {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  align-items: start;
+}
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.demo-chip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+.player-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+  padding: 16px 20px 0;
+}
+
+@media (max-width: 1024px) {
+  .pack-grid,
+  .recv-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .search-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .login-split {
+    grid-template-columns: 1fr;
+  }
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .config-grid {
+    grid-template-columns: 1fr;
+  }
+  .status-chips {
+    display: none !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .demo-chip-grid {
+    grid-template-columns: 1fr;
+  }
+  .ret-grid,
+  .player-grid {
+    grid-template-columns: 1fr;
+  }
+  .topbar {
+    height: auto !important;
+    min-height: 48px;
+    flex-wrap: wrap;
+    padding: 8px 14px !important;
+    gap: 8px !important;
+    border-radius: 24px !important;
+  }
+  .topbar img[alt='Mayavé'] {
+    height: 30px !important;
+  }
+}
