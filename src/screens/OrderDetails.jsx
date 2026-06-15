@@ -268,7 +268,6 @@ export default function OrderDetails({ ctx }) {
       <OrderTabs tabs={tabs} active={activeTab} onPick={onTab} />
 
       {activeTab === 'detail' && (
-      <>
       <div className="order-grid">
         {/* left: items + timeline */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -315,6 +314,8 @@ export default function OrderDetails({ ctx }) {
               );
             })}
           </div>
+
+          <RemarkBox ctx={ctx} id={order.id} variant="thread" />
         </div>
 
         {/* right: customer + custom details + media */}
@@ -368,8 +369,6 @@ export default function OrderDetails({ ctx }) {
           </div>
         </div>
       </div>
-      <RemarkBox ctx={ctx} id={order.id} variant="thread" />
-      </>
       )}
 
       {activeTab !== 'detail' && (
