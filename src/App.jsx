@@ -10,6 +10,7 @@ import Dashboard from './screens/Dashboard.jsx';
 import UsersConfig from './screens/UsersConfig.jsx';
 import Orders from './screens/Orders.jsx';
 import OrderDetails from './screens/OrderDetails.jsx';
+import Home from './screens/Home.jsx';
 import { emptyCustomOrder } from './data.js';
 import TopBar from './components/TopBar.jsx';
 import TabBar from './components/TabBar.jsx';
@@ -21,7 +22,7 @@ import Toast from './components/Toast.jsx';
 const OPERATOR_SCREENS = ['kiosk', 'pack', 'recv', 'ret'];
 const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 // available to both roles — rendered under whichever chrome matches the user
-const SHARED_SCREENS = ['orders', 'order'];
+const SHARED_SCREENS = ['home', 'orders', 'order'];
 const DASH_SCREENS = ['dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations'];
 
 export default function App() {
@@ -195,7 +196,13 @@ export default function App() {
   const openOrder = useCallback((id) => set({ screen: 'order', orderId: id, orderTab: 'detail', orderEditing: false, orderDraft: null, adminMenuOpen: false }), [set]);
   const newCustomOrder = useCallback(() => set({ screen: 'order', orderId: '', orderTab: 'detail', orderEditing: true, orderDraft: emptyCustomOrder(), adminMenuOpen: false }), [set]);
 
-  const ctx = { s, set, showToast, openSession, logOrderEvent, openPlayer, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder };
+  // open one of the two working lists, clearing filters so the switch is predictable
+  const openList = useCallback(
+    (kind, status) => set({ screen: 'orders', listKind: kind, oStatus: status || 'all', oChannel: 'all', oDate: 'all', oq: '', oSel: [], adminMenuOpen: false }),
+    [set]
+  );
+
+  const ctx = { s, set, showToast, openSession, logOrderEvent, openPlayer, openList, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder };
 
   const screen = s.screen;
   const isShared = SHARED_SCREENS.includes(screen);
@@ -205,6 +212,7 @@ export default function App() {
 
   const sharedScreens = (
     <>
+      {screen === 'home' && <Home ctx={ctx} />}
       {screen === 'orders' && <Orders ctx={ctx} />}
       {screen === 'order' && <OrderDetails ctx={ctx} />}
     </>

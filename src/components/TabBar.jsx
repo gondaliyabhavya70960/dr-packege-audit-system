@@ -6,14 +6,15 @@ const MENU_BG = 'rgba(255,255,255,0.72)';
 const MENU_BORDER = '1px solid rgba(255,255,255,0.7)';
 
 export default function TabBar({ ctx }) {
-  const { s, set, openPlayer } = ctx;
+  const { s, set, openPlayer, openList } = ctx;
   const screen = s.screen;
 
-  // the two sides — each lands on its own order list; the single order then
-  // exposes the side-specific tools (warehouse adds Receive, store does not).
-  const sideTabs = [
-    { id: 'warehouse', label: 'Warehouse' },
-    { id: 'store', label: 'Store' },
+  // primary nav: the overview dashboard plus the two working lists. The
+  // warehouse/store side is chosen at login, not here.
+  const navTabs = [
+    { id: 'home', label: 'Overview' },
+    { id: 'packaging', label: 'Packaging' },
+    { id: 'transfer', label: 'Transfers' },
   ];
 
   const adminMenuItems = [
@@ -33,7 +34,8 @@ export default function TabBar({ ctx }) {
   // so the button and the dropdown read as one continuous surface.
   const adminFilled = adminActive || adminOpen;
   const onOrders = screen === 'orders' || screen === 'order';
-  const scanActive = ['kiosk', 'pack', 'recv', 'ret'].includes(screen);
+  const navActive = (id) => (id === 'home' ? screen === 'home' : onOrders && s.listKind === id);
+  const navGo = (id) => (id === 'home' ? set({ screen: 'home', adminMenuOpen: false }) : openList(id));
   const divider = <div style={{ width: 1, height: 22, background: 'rgba(40,32,38,0.15)', margin: '0 2px' }} />;
 
   const pillBtn = (active) => ({
@@ -51,25 +53,11 @@ export default function TabBar({ ctx }) {
   return (
     <div data-tour="nav" style={{ position: 'fixed', left: '50%', bottom: 18, transform: 'translateX(-50%)', zIndex: 40 }}>
       <div style={{ ...glassFloat, display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999 }}>
-        {sideTabs.map((t) => {
-          const active = onOrders && s.side === t.id;
-          return (
-            <button
-              key={t.id}
-              data-tour={t.id === 'warehouse' ? 'sidenav' : undefined}
-              onClick={() => set({ side: t.id, screen: 'orders', adminMenuOpen: false })}
-              style={pillBtn(active)}
-            >
-              {t.label}
-            </button>
-          );
-        })}
-
-        {/* quick scan — the station kiosk (Pack · Receive · Returns by scan) */}
-        {divider}
-        <button onClick={() => set({ screen: 'kiosk', adminMenuOpen: false })} style={pillBtn(scanActive)}>
-          Scan
-        </button>
+        {navTabs.map((t) => (
+          <button key={t.id} onClick={() => navGo(t.id)} style={pillBtn(navActive(t.id))}>
+            {t.label}
+          </button>
+        ))}
 
         {s.role === 'admin' && (
           <>

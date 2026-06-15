@@ -1,7 +1,15 @@
 import { MONO, glassFloat, glassPopover } from '../data.js';
 import { UserIcon, GearIcon, LogoutIcon } from './icons.jsx';
 
-const SCREEN_CHIPS = { kiosk: 'STATION READY', pack: 'PACK & RECORD', recv: 'STORE RECEIVING', ret: 'RETURN INSPECTION' };
+const SCREEN_CHIPS = { home: 'OVERVIEW', kiosk: 'STATION READY', pack: 'PACK & RECORD', recv: 'STORE RECEIVING', ret: 'RETURN INSPECTION' };
+
+function SideChip({ side }) {
+  return (
+    <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.14em', padding: '4px 11px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>
+      {side === 'store' ? 'STORE' : 'WAREHOUSE'}
+    </span>
+  );
+}
 
 const barStyle = {
   ...glassFloat,
@@ -107,6 +115,7 @@ export default function TopBar({ ctx, variant }) {
       <div className="topbar" style={barStyle}>
         <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 40 }} />
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: 'rgba(40,32,38,0.55)' }}>ADMIN CONSOLE</span>
+        <SideChip side={s.side} />
         <div style={{ flex: 1 }} />
         <TourButton onClick={openTour} />
         <ProfileMenu ctx={ctx} roleChip="ADMIN" roleLine="ADMIN · ALL ACCESS" />
@@ -129,7 +138,10 @@ export default function TopBar({ ctx, variant }) {
         )}
         <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.1)' }} />
         <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.7)', letterSpacing: '0.06em' }}>AUDIT-BENCH-1</span>
-        <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.1em', padding: '4px 11px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{SCREEN_CHIPS[s.screen] || ''}</span>
+        <SideChip side={s.side} />
+        {SCREEN_CHIPS[s.screen] && (
+          <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.1em', padding: '4px 11px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{SCREEN_CHIPS[s.screen]}</span>
+        )}
       </div>
       <div className="status-chips" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <StatusChip label="Camera OK" />
