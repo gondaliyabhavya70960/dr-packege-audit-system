@@ -62,10 +62,6 @@ export default function Orders({ ctx }) {
     return b.ts - a.ts; // new
   });
 
-  const flaggedCount = kindOrders.filter((o) => o.tone === 'red').length;
-  const transitVal = kindOrders.filter((o) => o.statusKey === 'transit').reduce((n, o) => n + o.valNum, 0);
-  const transitLabel = transitVal >= 100000 ? '₹' + (transitVal / 100000).toFixed(2) + 'L' : '₹' + transitVal.toLocaleString('en-IN');
-
   const allIds = list.map((o) => o.id);
   const allSel = allIds.length > 0 && allIds.every((id) => s.oSel.includes(id));
   const toggleAll = () => set({ oSel: allSel ? [] : allIds });
@@ -85,9 +81,6 @@ export default function Orders({ ctx }) {
           </div>
           <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.55)' }}>{isTransfer ? 'Inter-branch challans & consignments — open one to receive, return or view its detail.' : 'Customer orders to pack & dispatch — open one to pack, return or view its detail.'}</span>
         </div>
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.65)', color: 'rgba(27,29,33,0.55)' }}>
-          {kindOrders.length} {isTransfer ? 'TRANSFERS' : 'PACKAGING'} · {flaggedCount} FLAGGED · {transitLabel} IN TRANSIT
-        </span>
         <div style={{ flex: 1 }} />
         <button
           data-tour="customorder"
