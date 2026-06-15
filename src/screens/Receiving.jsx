@@ -1,5 +1,6 @@
 import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
 import PrevStepClip from '../components/PrevStepClip.jsx';
+import RemarkBox from '../components/RemarkBox.jsx';
 
 export default function Receiving({ ctx }) {
   const { s, set, showToast, logOrderEvent } = ctx;
@@ -97,6 +98,8 @@ export default function Receiving({ ctx }) {
             Confirm received
           </button>
         </div>
+
+        <RemarkBox ctx={ctx} id={s.recvChallan} />
       </div>
 
       {/* arrival feed */}

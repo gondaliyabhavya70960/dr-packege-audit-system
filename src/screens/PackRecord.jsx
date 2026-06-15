@@ -1,4 +1,5 @@
 import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
+import RemarkBox from '../components/RemarkBox.jsx';
 
 export default function PackRecord({ ctx }) {
   const { s, set, showToast, logOrderEvent } = ctx;
@@ -129,6 +130,8 @@ export default function PackRecord({ ctx }) {
             Close session
           </button>
         </div>
+
+        <RemarkBox ctx={ctx} id={s.packId} />
       </div>
     </div>
   );

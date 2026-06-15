@@ -50,6 +50,10 @@ export const seedOrders = [
       { label: 'Delivered', time: '13 Jun · 16:21', who: 'OTP confirmed', clip: false },
     ],
     custom: { priority: 'White-glove', giftWrap: true, insured: '₹1.50L', slot: '13 Jun · 4–7 PM', instructions: 'Call before delivery. Hand to addressee only.', notes: 'Repeat VIP customer — 4th order this quarter.' },
+    remarks: [
+      { who: 'Mira', time: '12 Jun · 11:05', text: 'Packed with extra bubble wrap — fragile solitaire.' },
+      { who: 'Arjun', time: '13 Jun · 16:30', text: 'Delivery OTP verified, customer happy.' },
+    ],
   },
   {
     id: 'ORD-10311', channel: 'Online', customer: 'Isha Verma', phone: '+91 99300 55678',
@@ -313,6 +317,13 @@ export function fmt(sec) {
   const m = Math.floor(sec / 60);
   const s = sec % 60;
   return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+// human timestamp for a freshly-added remark, e.g. "15 Jun · 10:32"
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+export function nowStamp() {
+  const d = new Date();
+  return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' · ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
 }
 
 export const MONO = "'IBM Plex Mono',monospace";

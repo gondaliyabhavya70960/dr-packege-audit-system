@@ -1,4 +1,5 @@
 import { MONO, glass, feedBg, fmt } from '../data.js';
+import RemarkBox from '../components/RemarkBox.jsx';
 
 const REASONS = ['wrong item', 'not genuine', 'damaged', 'empty box'];
 
@@ -93,6 +94,8 @@ export default function ReturnInspection({ ctx }) {
           Accept → restock
         </button>
       </div>
+
+      <RemarkBox ctx={ctx} id={s.retId} />
     </div>
   );
 }
