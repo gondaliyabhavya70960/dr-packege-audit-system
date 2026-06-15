@@ -5,6 +5,183 @@ export const RED = '#C62B22';
 export const GREEN = '#0E8A50';
 export const PLAIN = '#1B1D21';
 
+// ---- orders list ----
+
+// reference "now" for the date filters (matches the demo data window)
+export const NOW_TS = Date.parse('2026-06-15T10:00:00');
+
+// status groups used by the Orders filter; label + tone drive the badge
+export const ORDER_STATUSES = [
+  { key: 'packed', label: 'Packed', tone: 'plain' },
+  { key: 'transit', label: 'In transit', tone: 'amber' },
+  { key: 'received', label: 'Received', tone: 'green' },
+  { key: 'delivery', label: 'Out for delivery', tone: 'amber' },
+  { key: 'delivered', label: 'Delivered', tone: 'green' },
+  { key: 'returned', label: 'Returned', tone: 'red' },
+  { key: 'flagged', label: 'Flagged', tone: 'red' },
+];
+
+export const ORDER_CHANNELS = ['Online', 'Store', 'B2B'];
+
+const blankCustom = { priority: 'Standard', giftWrap: false, insured: '', slot: '', instructions: '', notes: '' };
+
+export const seedOrders = [
+  {
+    id: 'ORD-10293', channel: 'Online', customer: 'Aarav Shah', phone: '+91 98200 11234',
+    address: '14 Brigade Rd, Bengaluru 560001', placed: '12 Jun 2026 · 09:14', ts: Date.parse('2026-06-12T09:14:00'),
+    statusKey: 'delivered', status: 'Delivered', tone: 'green', station: 'PACK-BENCH-1', value: '₹1.42L', valNum: 142000,
+    items: [
+      { sku: 'SKU 4471', name: 'Solitaire ring', qty: 1, condition: 'verified' },
+      { sku: 'SKU 4472', name: 'Diamond pendant', qty: 1, condition: 'verified' },
+      { sku: 'SKU 4480', name: 'Gold bangle', qty: 1, condition: 'verified' },
+    ],
+    timeline: [
+      { label: 'Order placed', time: '12 Jun · 09:14', who: 'web checkout', clip: false },
+      { label: 'Packed · Warehouse', time: '12 Jun · 11:02', who: 'Mira · PACK-BENCH-1', clip: true },
+      { label: 'Dispatched → Gati', time: '12 Jun · 14:02', who: 'auto', clip: false },
+      { label: 'Out for delivery', time: '13 Jun · 08:40', who: 'Gati', clip: false },
+      { label: 'Delivered', time: '13 Jun · 16:21', who: 'OTP confirmed', clip: false },
+    ],
+    custom: { priority: 'White-glove', giftWrap: true, insured: '₹1.50L', slot: '13 Jun · 4–7 PM', instructions: 'Call before delivery. Hand to addressee only.', notes: 'Repeat VIP customer — 4th order this quarter.' },
+  },
+  {
+    id: 'ORD-10311', channel: 'Online', customer: 'Isha Verma', phone: '+91 99300 55678',
+    address: '7 Koregaon Park, Pune 411001', placed: '13 Jun 2026 · 10:05', ts: Date.parse('2026-06-13T10:05:00'),
+    statusKey: 'returned', status: 'Returned · flagged', tone: 'red', station: 'RETURNS-1', value: '₹1.20L', valNum: 120000,
+    items: [{ sku: 'SKU 4490', name: 'Emerald drop earrings', qty: 1, condition: 'disputed' }],
+    timeline: [
+      { label: 'Order placed', time: '06 Jun · 12:30', who: 'web checkout', clip: false },
+      { label: 'Packed · Warehouse', time: '06 Jun · 15:10', who: 'Mira · PACK-BENCH-1', clip: true },
+      { label: 'Delivered', time: '08 Jun · 13:00', who: 'OTP confirmed', clip: false },
+      { label: 'Return requested', time: '11 Jun · 09:20', who: 'customer · "not genuine"', clip: false },
+      { label: 'Return inspected', time: '13 Jun · 16:21', who: 'Sana · RETURNS-1', clip: true },
+    ],
+    custom: { priority: 'Express', giftWrap: false, insured: '₹1.20L', slot: '—', instructions: 'Customer claims item differs from photos.', notes: 'Refund held pending side-by-side verdict.' },
+  },
+  {
+    id: 'DC-2026-00417', channel: 'B2B', customer: 'MG Road Store', phone: '+91 80 4112 9000',
+    address: 'MG Road, Bengaluru 560001', placed: '10 Jun 2026 · 10:05', ts: Date.parse('2026-06-10T10:05:00'),
+    statusKey: 'transit', status: 'In transit · short', tone: 'amber', station: 'STORE-RECV-1', value: '₹5.60L', valNum: 560000,
+    items: [
+      { sku: 'SKU 4471', name: 'Solitaire ring', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4472', name: 'Diamond pendant', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4480', name: 'Gold bangle', qty: 1, condition: 'pending' },
+    ],
+    timeline: [
+      { label: 'Challan raised', time: '10 Jun · 10:05', who: 'warehouse', clip: false },
+      { label: 'Dispatched → Gati', time: '10 Jun · 13:40', who: 'auto', clip: false },
+      { label: 'In transit', time: '11 Jun · —', who: 'Gati · 2 days', clip: false },
+    ],
+    custom: { priority: 'Standard', giftWrap: false, insured: '₹5.60L', slot: '—', instructions: 'Inter-branch transfer for festive stock.', notes: 'Reconcile expected short by 1 — confirm on arrival.' },
+  },
+  {
+    id: 'RFID-1021', channel: 'Store', customer: 'Surat Flagship', phone: '+91 261 245 1100',
+    address: 'Ghod Dod Rd, Surat 395007', placed: '11 Jun 2026 · 11:40', ts: Date.parse('2026-06-11T11:40:00'),
+    statusKey: 'received', status: 'Received', tone: 'green', station: 'STORE-RECV-1', value: '₹0.78L', valNum: 78000,
+    items: [{ sku: 'SKU 4471', name: 'Solitaire ring', qty: 1, condition: 'verified' }],
+    timeline: [
+      { label: 'Dispatched → Gati', time: '10 Jun · 09:00', who: 'warehouse', clip: false },
+      { label: 'Received · Store', time: '11 Jun · 11:40', who: 'Devang · STORE-RECV-1', clip: true },
+      { label: 'Shelved', time: '11 Jun · 12:05', who: 'Devang', clip: false },
+    ],
+    custom: { ...blankCustom, insured: '₹0.80L', notes: 'All RFIDs ticked on arrival.' },
+  },
+  {
+    id: 'ORD-10288', channel: 'Online', customer: 'Rohan Mehta', phone: '+91 97400 33221',
+    address: '22 Banjara Hills, Hyderabad 500034', placed: '10 Jun 2026 · 08:30', ts: Date.parse('2026-06-10T08:30:00'),
+    statusKey: 'flagged', status: 'Flagged · damaged', tone: 'red', station: 'RETURNS-1', value: '₹0.90L', valNum: 90000,
+    items: [{ sku: 'SKU 4502', name: 'Tennis bracelet', qty: 1, condition: 'damaged' }],
+    timeline: [
+      { label: 'Order placed', time: '04 Jun · 18:10', who: 'web checkout', clip: false },
+      { label: 'Packed · Warehouse', time: '05 Jun · 10:20', who: 'Rahul · PACK-BENCH-2', clip: true },
+      { label: 'Return inspected', time: '10 Jun · 14:30', who: 'Sana · RETURNS-1', clip: true },
+    ],
+    custom: { priority: 'Standard', giftWrap: false, insured: '₹0.90L', slot: '—', instructions: 'Transit damage suspected.', notes: '2 channels affected this week.' },
+  },
+  {
+    id: 'ORD-10301', channel: 'Online', customer: 'Neha Kapoor', phone: '+91 98115 77654',
+    address: '5 Vasant Vihar, New Delhi 110057', placed: '12 Jun 2026 · 16:45', ts: Date.parse('2026-06-12T16:45:00'),
+    statusKey: 'packed', status: 'Packed', tone: 'plain', station: 'PACK-BENCH-1', value: '₹2.10L', valNum: 210000,
+    items: [
+      { sku: 'SKU 4510', name: 'Polki necklace', qty: 1, condition: 'verified' },
+      { sku: 'SKU 4511', name: 'Matching jhumkas', qty: 1, condition: 'verified' },
+    ],
+    timeline: [
+      { label: 'Order placed', time: '12 Jun · 16:45', who: 'web checkout', clip: false },
+      { label: 'Packed · Warehouse', time: '12 Jun · 18:30', who: 'Mira · PACK-BENCH-1', clip: true },
+    ],
+    custom: { priority: 'White-glove', giftWrap: true, insured: '₹2.20L', slot: 'awaiting dispatch', instructions: 'Bridal set — fragile, double box.', notes: '' },
+  },
+  {
+    id: 'ORD-10305', channel: 'Online', customer: 'Vikram Nair', phone: '+91 96000 12000',
+    address: '31 Marine Drive, Kochi 682031', placed: '13 Jun 2026 · 07:20', ts: Date.parse('2026-06-13T07:20:00'),
+    statusKey: 'delivery', status: 'Out for delivery', tone: 'amber', station: 'PACK-BENCH-2', value: '₹0.65L', valNum: 65000,
+    items: [{ sku: 'SKU 4521', name: 'Mangalsutra', qty: 1, condition: 'verified' }],
+    timeline: [
+      { label: 'Order placed', time: '11 Jun · 20:00', who: 'web checkout', clip: false },
+      { label: 'Packed · Warehouse', time: '12 Jun · 09:15', who: 'Rahul · PACK-BENCH-2', clip: true },
+      { label: 'Out for delivery', time: '13 Jun · 07:20', who: 'Gati', clip: false },
+    ],
+    custom: { ...blankCustom, insured: '₹0.70L', slot: '13 Jun · 12–3 PM' },
+  },
+  {
+    id: 'ORD-10312', channel: 'Online', customer: 'Ananya Iyer', phone: '+91 99020 45000',
+    address: '9 Adyar, Chennai 600020', placed: '14 Jun 2026 · 11:10', ts: Date.parse('2026-06-14T11:10:00'),
+    statusKey: 'packed', status: 'Packed', tone: 'plain', station: 'PACK-BENCH-1', value: '₹3.40L', valNum: 340000,
+    items: [
+      { sku: 'SKU 4530', name: 'Diamond choker', qty: 1, condition: 'verified' },
+      { sku: 'SKU 4531', name: 'Cocktail ring', qty: 2, condition: 'verified' },
+    ],
+    timeline: [
+      { label: 'Order placed', time: '14 Jun · 11:10', who: 'web checkout', clip: false },
+      { label: 'Packed · Warehouse', time: '14 Jun · 13:50', who: 'Mira · PACK-BENCH-1', clip: true },
+    ],
+    custom: { priority: 'Express', giftWrap: true, insured: '₹3.50L', slot: 'awaiting dispatch', instructions: 'Anniversary gift — include note card.', notes: '' },
+  },
+  {
+    id: 'DC-2026-00411', channel: 'B2B', customer: 'Surat Flagship', phone: '+91 261 245 1100',
+    address: 'Ghod Dod Rd, Surat 395007', placed: '09 Jun 2026 · 09:00', ts: Date.parse('2026-06-09T09:00:00'),
+    statusKey: 'received', status: 'Received · short', tone: 'amber', station: 'STORE-RECV-1', value: '₹4.10L', valNum: 410000,
+    items: [
+      { sku: 'SKU 4471', name: 'Solitaire ring', qty: 2, condition: 'verified' },
+      { sku: 'SKU 4480', name: 'Gold bangle', qty: 1, condition: 'missing' },
+    ],
+    timeline: [
+      { label: 'Challan raised', time: '08 Jun · 17:30', who: 'warehouse', clip: false },
+      { label: 'Received · Store', time: '09 Jun · 09:00', who: 'Devang · STORE-RECV-1', clip: true },
+      { label: 'Reconcile open', time: '09 Jun · 09:30', who: 'short 1', clip: false },
+    ],
+    custom: { ...blankCustom, insured: '₹4.10L', notes: 'One bangle short — flagged with arrival video.' },
+  },
+  {
+    id: 'ORD-10322', channel: 'Store', customer: 'Walk-in · Surat', phone: '—',
+    address: 'Ghod Dod Rd, Surat 395007', placed: '14 Jun 2026 · 17:55', ts: Date.parse('2026-06-14T17:55:00'),
+    statusKey: 'delivered', status: 'Delivered', tone: 'green', station: 'STORE-RECV-1', value: '₹0.48L', valNum: 48000,
+    items: [{ sku: 'SKU 4540', name: 'Gold coin · 8g', qty: 1, condition: 'verified' }],
+    timeline: [
+      { label: 'In-store purchase', time: '14 Jun · 17:55', who: 'counter 2', clip: false },
+      { label: 'Handed over', time: '14 Jun · 18:02', who: 'verified at desk', clip: true },
+    ],
+    custom: { ...blankCustom },
+  },
+];
+
+export const PRIORITY_OPTIONS = ['Standard', 'Express', 'White-glove'];
+
+export function emptyCustomOrder() {
+  return { id: '', channel: 'Online', customer: '', value: '', station: 'AUDIT-BENCH-1', ...blankCustom };
+}
+
+// fallback order built for an id that has no seeded record (e.g. a session just closed)
+export function synthOrder(id) {
+  return {
+    id, channel: '—', customer: '—', phone: '—', address: '—', placed: 'today',
+    ts: NOW_TS, statusKey: 'packed', status: 'On record', tone: 'plain', station: 'AUDIT-BENCH-1',
+    value: '—', valNum: 0, items: [], timeline: [{ label: 'Session filed', time: 'today', who: 'auto', clip: true }],
+    custom: { ...blankCustom },
+  };
+}
+
 export const initialState = {
   screen: 'login',
   username: '',
@@ -61,6 +238,17 @@ export const initialState = {
   ],
   newUser: '',
   tiering: true,
+  // orders list + custom order details
+  orders: seedOrders,
+  oq: '',
+  oStatus: 'all',
+  oChannel: 'all',
+  oDate: 'all',
+  oSort: 'new',
+  oSel: [],
+  orderId: '',
+  orderEditing: false,
+  orderDraft: null,
   // tour
   tourOpen: false,
   tourStep: 0,

@@ -35,8 +35,25 @@ Any password works in this prototype.
 | 07    | Side-by-side player   | pack vs return clip, sync play, stills, supervisor verdicts        |
 | 08–12 | Dashboards            | coverage, consignment, returns, flagged queue, station health      |
 | 13    | Users & config        | roles, retention & tiering, alert thresholds                       |
+| 14    | Orders                | searchable/filterable order list with bulk select and CSV export   |
+| 15    | Custom order details  | per-order detail view with editable custom fields; create new      |
 
 Plus: floating task/admin tab bar, save-as-draft back confirmation, 9-step feature tour (auto-starts on first visit), toasts.
+
+### Orders & custom order details
+
+The admin console includes an **Orders** screen — a full order list with:
+
+- Search (order ID / customer / channel) and filters for **status**, **channel**, and **date range**
+- Sort by newest/oldest or order value
+- Multi-select with a bulk-action bar (CSV export)
+- A row action and a header **"Custom order details"** button that open the detail view
+
+**Custom order details** shows the order's items, full event timeline (with links to the
+filed video clips), customer & shipping, linked evidence with tamper-evident hashes, and an
+editable **custom fields** block — priority, gift wrap, insured value, delivery slot, special
+instructions and internal notes. The header button can also create a brand-new custom order,
+which is added to the list. Search & playback links straight into the same detail view.
 
 ## Stack
 

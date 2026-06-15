@@ -1,6 +1,6 @@
 import { MONO } from '../data.js';
 
-const ADMIN_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
+const ADMIN_SCREENS = ['search', 'orders', 'order', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 
 export default function TabBar({ ctx }) {
   const { s, set, openPlayer } = ctx;
@@ -14,6 +14,7 @@ export default function TabBar({ ctx }) {
 
   const adminMenuItems = [
     { id: 'search', label: 'Search & playback' },
+    { id: 'orders', label: 'Orders', badge: String(s.orders.length) },
     { id: 'player', label: 'Side-by-side player' },
     { id: 'dash-coverage', label: 'Coverage' },
     { id: 'dash-consignment', label: 'Consignment' },
