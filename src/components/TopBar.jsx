@@ -109,13 +109,16 @@ function TourButton({ onClick }) {
 export default function TopBar({ ctx, variant }) {
   const { s, set, openTour } = ctx;
   const isSession = ['pack', 'recv', 'ret'].includes(s.screen);
+  // station id, side + live-health chips belong to a single order; everywhere
+  // else (overview, lists, kiosk) the top bar stays clean.
+  const showStation = s.screen === 'order';
 
   if (variant === 'admin') {
     return (
       <div className="topbar" style={barStyle}>
         <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 40 }} />
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: 'rgba(40,32,38,0.55)' }}>ADMIN CONSOLE</span>
-        <SideChip side={s.side} />
+        {showStation && <SideChip side={s.side} />}
         <div style={{ flex: 1 }} />
         <TourButton onClick={openTour} />
         <ProfileMenu ctx={ctx} roleChip="ADMIN" roleLine="ADMIN · ALL ACCESS" />
@@ -136,18 +139,24 @@ export default function TopBar({ ctx, variant }) {
             ← Back
           </button>
         )}
-        <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.1)' }} />
-        <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.7)', letterSpacing: '0.06em' }}>AUDIT-BENCH-1</span>
-        <SideChip side={s.side} />
-        {SCREEN_CHIPS[s.screen] && (
-          <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.1em', padding: '4px 11px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{SCREEN_CHIPS[s.screen]}</span>
+        {showStation && (
+          <>
+            <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.1)' }} />
+            <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.7)', letterSpacing: '0.06em' }}>AUDIT-BENCH-1</span>
+            <SideChip side={s.side} />
+            {SCREEN_CHIPS[s.screen] && (
+              <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.1em', padding: '4px 11px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{SCREEN_CHIPS[s.screen]}</span>
+            )}
+          </>
         )}
       </div>
-      <div className="status-chips" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <StatusChip label="Camera OK" />
-        <StatusChip label="Uploads · 0 pending" />
-        <StatusChip label="Online" />
-      </div>
+      {showStation && (
+        <div className="status-chips" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <StatusChip label="Camera OK" />
+          <StatusChip label="Uploads · 0 pending" />
+          <StatusChip label="Online" />
+        </div>
+      )}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <TourButton onClick={openTour} />
         <ProfileMenu ctx={ctx} roleChip="OPERATOR" roleLine="OPERATOR · PACK · RECEIVE · RETURNS" />
