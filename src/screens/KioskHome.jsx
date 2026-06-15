@@ -21,7 +21,7 @@ export default function KioskHome({ ctx }) {
 
   return (
     <div data-screen-label="02 Kiosk home" style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, padding: 28, overflow: 'auto' }}>
-      <div style={{ width: 100, height: 100, flex: 'none', borderRadius: '50%', background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(142,14,34,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'ringPulse 2.6s ease-out infinite' }}>
+      <div style={{ width: 100, height: 100, flex: 'none', borderRadius: '50%', background: 'var(--tile)', backdropFilter: 'blur(14px)', border: '1px solid rgba(142,14,34,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'ringPulse 2.6s ease-out infinite' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 3, height: 30 }}>
           {bars.map(([w, h], i) => (
             <div key={i} style={{ width: w, height: h, background: '#8E0E22' }} />
@@ -31,7 +31,7 @@ export default function KioskHome({ ctx }) {
 
       <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 760 }}>
         <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: '-0.01em', textWrap: 'pretty' }}>Ready — scan an order ID, RFID, or challan</div>
-        <div style={{ fontSize: 16, color: 'rgba(27,29,33,0.55)', textWrap: 'pretty' }}>Pick a task — Pack, Receive or Returns — then scan. The session opens and recording starts.</div>
+        <div style={{ fontSize: 16, color: 'var(--ink-55)', textWrap: 'pretty' }}>Pick a task — Pack, Receive or Returns — then scan. The session opens and recording starts.</div>
       </div>
 
       <div data-tour="scanner" style={{ ...glass, width: 700, maxWidth: '94%', padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -42,10 +42,10 @@ export default function KioskHome({ ctx }) {
               key={d.id}
               className="hv-chip"
               onClick={() => openSession(d.kind, d.id)}
-              style={{ textAlign: 'left', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 16, padding: '13px 14px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 4 }}
+              style={{ textAlign: 'left', background: 'var(--tile)', border: '1px solid var(--tile-border)', borderRadius: 16, padding: '13px 14px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 4 }}
             >
-              <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 500, color: '#1B1D21' }}>{d.label}</span>
-              <span style={{ fontSize: 12, color: 'rgba(27,29,33,0.5)' }}>{d.sub}</span>
+              <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 500, color: 'var(--ink)' }}>{d.label}</span>
+              <span style={{ fontSize: 12, color: 'var(--ink-50)' }}>{d.sub}</span>
             </button>
           ))}
         </div>
@@ -58,7 +58,7 @@ export default function KioskHome({ ctx }) {
               if (e.key === 'Enter') doScan();
             }}
             placeholder="…or type any ID and press Enter (ORD-… / RFID-… / DC-…)"
-            style={{ flex: 1, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', borderRadius: 10, padding: '11px 18px', color: '#1B1D21', fontSize: 13, outline: 'none', fontFamily: MONO }}
+            style={{ flex: 1, background: 'var(--tile)', border: '1px solid var(--line)', borderRadius: 10, padding: '11px 18px', color: 'var(--ink)', fontSize: 13, outline: 'none', fontFamily: MONO }}
           />
           <button className="hv-brighten" onClick={doScan} style={{ background: '#8E0E22', border: 'none', color: '#FFFFFF', borderRadius: 14, padding: '11px 26px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 8px 22px -8px rgba(142,14,34,0.6), inset 0 1px 0 rgba(255,255,255,0.25)' }}>
             Scan
@@ -67,8 +67,8 @@ export default function KioskHome({ ctx }) {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-        <div style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.5)' }}>Last session: {s.lastSession}</div>
-        <button className="hv-text-mid" onClick={signOut} style={{ background: 'none', border: 'none', color: 'rgba(27,29,33,0.35)', fontFamily: MONO, fontSize: 11, cursor: 'pointer', letterSpacing: '0.08em' }}>
+        <div style={{ fontFamily: MONO, fontSize: 12, color: 'var(--ink-50)' }}>Last session: {s.lastSession}</div>
+        <button className="hv-text-mid" onClick={signOut} style={{ background: 'none', border: 'none', color: 'var(--ink-35)', fontFamily: MONO, fontSize: 11, cursor: 'pointer', letterSpacing: '0.08em' }}>
           ADMIN EXIT (PIN)
         </button>
       </div>

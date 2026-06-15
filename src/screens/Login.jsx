@@ -1,5 +1,5 @@
 import { MONO } from '../data.js';
-import { PackageIcon } from '../components/icons.jsx';
+import { PackageIcon, SunIcon, MoonIcon, AutoThemeIcon } from '../components/icons.jsx';
 
 export default function Login({ ctx }) {
   const { s, set, openTour } = ctx;
@@ -18,8 +18,19 @@ export default function Login({ ctx }) {
     <span style={{ width: 20, height: 20, borderRadius: '50%', background: '#16A34A', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, flex: 'none' }}>✓</span>
   );
 
+  const themeLabel = ctx.theme === 'light' ? 'Light' : ctx.theme === 'dark' ? 'Dark' : 'Auto';
+  const themeIcon = ctx.theme === 'light' ? <SunIcon size={18} /> : ctx.theme === 'dark' ? <MoonIcon size={18} /> : <AutoThemeIcon size={18} />;
+
   return (
-    <div data-screen-label="01 Login" className="login-split">
+    <div data-screen-label="01 Login" className="login-split" style={{ position: 'relative' }}>
+      <button
+        onClick={ctx.cycleTheme}
+        title={'Theme: ' + themeLabel + ' — tap to switch'}
+        aria-label={'Theme: ' + themeLabel}
+        style={{ position: 'absolute', top: 18, right: 18, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: 'var(--tile-strong)', backdropFilter: 'blur(20px) saturate(1.6)', WebkitBackdropFilter: 'blur(20px) saturate(1.6)', border: '1px solid var(--tile-border)', color: 'var(--ink-80)', borderRadius: 999, cursor: 'pointer', boxShadow: '0 8px 22px -10px rgba(20,14,28,0.4)' }}
+      >
+        {themeIcon}
+      </button>
       <div style={{ background: 'radial-gradient(900px 600px at 80% 20%, #A81330, #7C0A1A 70%)', color: '#FFFFFF', padding: '44px 48px', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
           <span style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(255,255,255,0.14)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -76,7 +87,7 @@ export default function Login({ ctx }) {
         <div style={{ width: 420, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <span style={{ fontSize: 30, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>Sign in</span>
-            <span style={{ fontSize: 15, color: '#4B5563' }}>Enter your credentials to access the console.</span>
+            <span style={{ fontSize: 15, color: 'var(--ink-70)' }}>Enter your credentials to access the console.</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
             <label style={{ fontSize: 14, fontWeight: 700 }}>Username</label>
@@ -109,8 +120,8 @@ export default function Login({ ctx }) {
           >
             Sign in
           </button>
-          <div style={{ height: 1, background: '#E5E7EB', marginTop: 8 }} />
-          <div style={{ textAlign: 'center', fontSize: 13.5, color: '#6B7280', lineHeight: 1.6 }}>
+          <div style={{ height: 1, background: 'var(--line-strong)', marginTop: 8 }} />
+          <div style={{ textAlign: 'center', fontSize: 13.5, color: 'var(--ink-55)', lineHeight: 1.6 }}>
             Demo accounts (change before real use):
             <br />
             <b>admin / admin123</b> · console &nbsp;·&nbsp; <b>operator / operator123</b> · kiosk

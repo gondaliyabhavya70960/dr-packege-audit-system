@@ -62,7 +62,9 @@ which is added to the list. Search & playback links straight into the same detai
 
 - [Vite](https://vitejs.dev) + [React 18](https://react.dev) — no other runtime dependencies
 - All demo state lives in a single client-side store (`src/App.jsx`), ported 1:1 from the design prototype's state machine
-- iPadOS-style **Liquid Glass** visual language: layered radial-gradient canvas; translucent, heavily-blurred material with specular rim highlights; concentric rounded corners; springy/press-scaled controls and accent focus rings — built from shared material tokens (`glass`, `glassFloat`, `glassPopover`, `glassSheet` in `src/data.js`). Palette is unchanged: `#8E0E22` Mayavé maroon with IBM Plex Mono data accents.
+- iPadOS-style **Liquid Glass** visual language: layered radial-gradient canvas; translucent, heavily-blurred material with specular rim highlights; concentric rounded corners; springy/press-scaled controls and accent focus rings — built from shared material tokens (`glass`, `glassFloat`, `glassPopover`, `glassSheet` in `src/data.js`). `#8E0E22` Mayavé maroon accent with IBM Plex Mono data values.
+- **Adaptive light/dark materials**: every surface is themed through CSS variables (`:root` / `[data-theme="dark"]` in `src/styles.css`) — canvas "wallpaper", glass tints, ink ramp, hairlines and tiles all swap together. Theme follows the OS by default (auto) and a sun/moon/auto toggle in the top bar (and on login) cycles auto → light → dark, persisted to `localStorage`. The translucent materials pick up the wallpaper's colour glow behind them.
+- **Motion**: pointer **parallax + a specular "lensing" sheen** on the floating top/tab bars, and **spring entrance** animations on cards, sheets and menus — all baked into the material tokens and gated behind `prefers-reduced-motion`.
 
 ## Project layout
 

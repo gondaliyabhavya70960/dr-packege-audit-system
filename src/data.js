@@ -288,13 +288,13 @@ export function tone(t) {
   if (t === 'green') return { border: 'rgba(23,163,95,0.5)', color: '#0E8A50' };
   if (t === 'red') return { border: 'rgba(229,62,62,0.5)', color: '#C62B22' };
   if (t === 'amber') return { border: 'rgba(217,142,4,0.5)', color: '#9A6A00' };
-  return { border: 'rgba(0,0,0,0.2)', color: 'rgba(27,29,33,0.6)' };
+  return { border: 'var(--line-strong)', color: 'var(--ink-60)' };
 }
 
 export function dotFor(st) {
   if (st === 'ok') return { dot: '✓', dotColor: '#0E8A50', dotBorder: 'rgba(23,163,95,0.5)', dotBg: 'rgba(23,163,95,0.08)' };
   if (st === 'bad') return { dot: '!', dotColor: '#C62B22', dotBorder: 'rgba(229,62,62,0.5)', dotBg: 'rgba(229,62,62,0.06)' };
-  return { dot: '···', dotColor: 'rgba(27,29,33,0.45)', dotBorder: 'rgba(0,0,0,0.15)', dotBg: 'transparent' };
+  return { dot: '···', dotColor: 'var(--ink-45)', dotBorder: 'var(--line-strong)', dotBg: 'transparent' };
 }
 
 export function fmt(sec) {
@@ -305,41 +305,47 @@ export function fmt(sec) {
 
 export const MONO = "'IBM Plex Mono',monospace";
 
-// shared liquid-glass card surface (iPadOS-style material — colours unchanged)
+// Shared liquid-glass materials. Colours come from theme CSS variables
+// (see styles.css :root / [data-theme=dark]) so every surface adapts to the
+// active light/dark "wallpaper" automatically. Spring entrances are baked in.
 export const glass = {
-  background: 'rgba(255,255,255,0.5)',
+  background: 'var(--glass-bg)',
   backdropFilter: 'blur(40px) saturate(1.8)',
   WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
-  border: '1px solid rgba(255,255,255,0.55)',
+  border: '1px solid var(--glass-border)',
   borderRadius: 24,
-  boxShadow: '0 10px 34px -10px rgba(30,22,40,0.20), 0 2px 8px rgba(30,22,40,0.05), inset 0 1px 0 rgba(255,255,255,0.85), inset 0 0 0 0.5px rgba(255,255,255,0.30)',
+  boxShadow: 'var(--glass-shadow)',
+  animation: 'lgRise 0.5s cubic-bezier(0.2,0.9,0.25,1) both',
 };
 
 // floating chrome (top bars, tab bar) — brighter rim, deeper lift
 export const glassFloat = {
-  background: 'rgba(255,255,255,0.42)',
+  background: 'var(--float-bg)',
   backdropFilter: 'blur(50px) saturate(1.9)',
   WebkitBackdropFilter: 'blur(50px) saturate(1.9)',
-  border: '1px solid rgba(255,255,255,0.6)',
-  boxShadow: '0 16px 44px -8px rgba(40,28,50,0.24), 0 4px 12px rgba(40,28,50,0.08), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 1px rgba(255,255,255,0.25)',
+  border: '1px solid var(--float-border)',
+  boxShadow: 'var(--float-shadow)',
+  animation: 'lgFade 0.5s ease both',
 };
 
 // popovers / dropdown menus — more opaque for legibility over content
 export const glassPopover = {
-  background: 'rgba(255,255,255,0.72)',
+  background: 'var(--popover-bg)',
   backdropFilter: 'blur(50px) saturate(2)',
   WebkitBackdropFilter: 'blur(50px) saturate(2)',
-  border: '1px solid rgba(255,255,255,0.7)',
-  boxShadow: '0 24px 60px -12px rgba(40,28,50,0.34), inset 0 1px 0 rgba(255,255,255,0.95)',
+  border: '1px solid var(--popover-border)',
+  boxShadow: 'var(--popover-shadow)',
+  animation: 'lgFade 0.18s ease both',
 };
 
 // modal sheets / overlays
 export const glassSheet = {
-  background: 'rgba(255,255,255,0.6)',
+  background: 'var(--sheet-bg)',
   backdropFilter: 'blur(50px) saturate(1.9)',
   WebkitBackdropFilter: 'blur(50px) saturate(1.9)',
-  border: '1px solid rgba(255,255,255,0.65)',
-  boxShadow: '0 40px 90px -20px rgba(20,14,28,0.45), inset 0 1px 0 rgba(255,255,255,0.9)',
+  border: '1px solid var(--sheet-border)',
+  boxShadow: 'var(--sheet-shadow)',
+  animation: 'lgPop 0.34s cubic-bezier(0.2,0.9,0.25,1) both',
 };
 
 // dark camera-feed placeholder surface

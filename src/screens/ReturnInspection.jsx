@@ -30,7 +30,7 @@ export default function ReturnInspection({ ctx }) {
         <span style={{ fontSize: 18, fontWeight: 700 }}>
           Return inspection · <span style={{ fontFamily: MONO, fontWeight: 500 }}>{s.retId}</span>
         </span>
-        <span style={{ fontFamily: MONO, fontSize: 16, color: '#1B1D21', marginLeft: 8 }}>{fmt(s.recSec)}</span>
+        <span style={{ fontFamily: MONO, fontSize: 16, color: 'var(--ink)', marginLeft: 8 }}>{fmt(s.recSec)}</span>
         <button className="hv-accent14" onClick={() => openPlayer(s.retId, -1, 'ret')} style={{ marginLeft: 'auto', background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
           Open side-by-side
         </button>
@@ -38,7 +38,7 @@ export default function ReturnInspection({ ctx }) {
 
       <div className="ret-grid">
         <div style={{ ...glass, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 16px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 16px', borderBottom: '1px solid var(--line)' }}>
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#E53E3E', animation: 'pulse 1.4s ease-in-out infinite' }} />
             <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: '#C62B22' }}>LIVE · UNBOXING — RETURNS DESK</span>
           </div>
@@ -46,24 +46,24 @@ export default function ReturnInspection({ ctx }) {
             <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>[ live feed — unboxing · returns desk ]</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '0 12px 12px' }}>
-            <button className="hv-border-accent" onClick={() => set({ retStills: s.retStills + 1 })} style={{ background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', color: '#1B1D21', borderRadius: 999, padding: '9px 18px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+            <button className="hv-border-accent" onClick={() => set({ retStills: s.retStills + 1 })} style={{ background: 'var(--tile)', border: '1px solid var(--line)', color: 'var(--ink)', borderRadius: 999, padding: '9px 18px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
               📷 Capture still
             </button>
-            <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.55)' }}>stills: {s.retStills} · stone / hallmark / cert</span>
+            <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--ink-55)' }}>stills: {s.retStills} · stone / hallmark / cert</span>
           </div>
         </div>
 
         <div style={{ ...glass, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 16px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-            <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: 'rgba(27,29,33,0.55)' }}>ORIGINAL PACK CLIP — AUTO-PULLED</span>
-            <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, padding: '3px 9px', borderRadius: 999, background: 'rgba(255,255,255,0.45)', color: 'rgba(27,29,33,0.5)' }}>packed 12 Jun · PACK-BENCH-1</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 16px', borderBottom: '1px solid var(--line)' }}>
+            <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: 'var(--ink-55)' }}>ORIGINAL PACK CLIP — AUTO-PULLED</span>
+            <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, padding: '3px 9px', borderRadius: 999, background: 'var(--tile)', color: 'var(--ink-50)' }}>packed 12 Jun · PACK-BENCH-1</span>
           </div>
           <div style={{ flex: 1, margin: 12, borderRadius: 14, ...feedBg, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 180, position: 'relative' }}>
             <span style={{ width: 54, height: 54, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', fontSize: 18, background: 'rgba(142,14,34,0.9)' }}>▶</span>
-            <span style={{ position: 'absolute', bottom: 10, left: 12, fontFamily: MONO, fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>[ pack video — same order ID ]</span>
+            <span style={{ position: 'absolute', bottom: 10, left: 12, fontFamily: MONO, fontSize: 11, color: 'var(--tile)' }}>[ pack video — same order ID ]</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', padding: '0 12px 12px' }}>
-            <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.4)' }}>the decisive evidence in a 'not genuine' claim</span>
+            <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--ink-40)' }}>the decisive evidence in a 'not genuine' claim</span>
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@ export default function ReturnInspection({ ctx }) {
             <button
               key={r}
               onClick={() => set({ retReason: r, retNeedReason: false })}
-              style={{ cursor: 'pointer', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, border: '1px solid ' + (active ? 'rgba(142,14,34,0.7)' : 'rgba(0,0,0,0.14)'), background: active ? 'rgba(142,14,34,0.1)' : 'transparent', color: active ? '#8E0E22' : 'rgba(27,29,33,0.6)' }}
+              style={{ cursor: 'pointer', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, border: '1px solid ' + (active ? 'rgba(142,14,34,0.7)' : 'var(--line-strong)'), background: active ? 'rgba(142,14,34,0.1)' : 'transparent', color: active ? '#8E0E22' : 'var(--ink-60)' }}
             >
               {r}
             </button>

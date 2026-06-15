@@ -1,5 +1,5 @@
 import { MONO, glassFloat, glassPopover } from '../data.js';
-import { UserIcon, GearIcon, LogoutIcon } from './icons.jsx';
+import { UserIcon, GearIcon, LogoutIcon, SunIcon, MoonIcon, AutoThemeIcon } from './icons.jsx';
 
 const SCREEN_CHIPS = { kiosk: 'STATION READY', pack: 'PACK & RECORD', recv: 'STORE RECEIVING', ret: 'RETURN INSPECTION' };
 
@@ -13,15 +13,32 @@ const barStyle = {
   padding: '0 20px',
   margin: '14px 16px 0',
   borderRadius: 999,
+  // subtle pointer parallax (variables set on <html> from App)
+  transform: 'translate3d(calc(var(--px) * 5px), calc(var(--py) * 3px), 0)',
   // the backdrop-filter creates a stacking context; without an explicit
   // z-index the profile dropdown would paint under the screen content
   position: 'relative',
   zIndex: 10,
 };
 
+function ThemeToggle({ ctx }) {
+  const label = ctx.theme === 'light' ? 'Light' : ctx.theme === 'dark' ? 'Dark' : 'Auto';
+  const icon = ctx.theme === 'light' ? <SunIcon size={17} /> : ctx.theme === 'dark' ? <MoonIcon size={17} /> : <AutoThemeIcon size={17} />;
+  return (
+    <button
+      onClick={ctx.cycleTheme}
+      title={'Theme: ' + label + ' — tap to switch'}
+      aria-label={'Theme: ' + label}
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, flex: 'none', background: 'var(--tile-strong)', border: '1px solid var(--tile-border)', color: 'var(--ink-80)', borderRadius: 999, cursor: 'pointer' }}
+    >
+      {icon}
+    </button>
+  );
+}
+
 function StatusChip({ label }) {
   return (
-    <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.55)', padding: '5px 11px', background: 'rgba(255,255,255,0.45)', borderRadius: 999 }}>
+    <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: MONO, fontSize: 11, color: 'var(--ink-55)', padding: '5px 11px', background: 'var(--tile)', borderRadius: 999 }}>
       <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#17A35F' }} />
       {label}
     </span>
@@ -45,23 +62,23 @@ function ProfileMenu({ ctx, roleChip, roleLine }) {
 
   const userLabel = s.userLabel || 'Mira';
   const userInitial = userLabel.charAt(0).toUpperCase();
-  const itemStyle = { display: 'flex', alignItems: 'center', gap: 10, textAlign: 'left', border: 'none', background: 'transparent', borderRadius: 11, padding: '10px 12px', fontSize: 14, fontWeight: 600, color: '#1B1D21', cursor: 'pointer' };
+  const itemStyle = { display: 'flex', alignItems: 'center', gap: 10, textAlign: 'left', border: 'none', background: 'transparent', borderRadius: 11, padding: '10px 12px', fontSize: 14, fontWeight: 600, color: 'var(--ink)', cursor: 'pointer' };
 
   return (
     <div style={{ position: 'relative' }}>
       <button
         className="hv-white85"
         onClick={() => set({ profileMenuOpen: !s.profileMenuOpen })}
-        style={{ display: 'flex', alignItems: 'center', gap: 9, height: 42, padding: '3px 14px 3px 5px', background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.75)', borderRadius: 999, cursor: 'pointer' }}
+        style={{ display: 'flex', alignItems: 'center', gap: 9, height: 42, padding: '3px 14px 3px 5px', background: 'var(--tile-strong)', border: '1px solid var(--tile-border)', borderRadius: 999, cursor: 'pointer' }}
       >
         <span style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(142,14,34,0.14)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700 }}>{userInitial}</span>
-        <span style={{ fontSize: 14, fontWeight: 700, color: '#1B1D21' }}>{userLabel}</span>
+        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>{userLabel}</span>
         <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', padding: '3px 8px', borderRadius: 999, background: 'rgba(142,14,34,0.14)', color: '#8E0E22' }}>{roleChip}</span>
-        <span style={{ fontSize: 9, color: 'rgba(40,32,38,0.55)' }}>{s.profileMenuOpen ? '▲' : '▼'}</span>
+        <span style={{ fontSize: 9, color: 'var(--ink-55)' }}>{s.profileMenuOpen ? '▲' : '▼'}</span>
       </button>
       {s.profileMenuOpen && (
         <div style={{ ...glassPopover, position: 'absolute', right: 0, top: 54, width: 238, borderRadius: 22, padding: 8, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '8px 12px 10px', borderBottom: '1px solid rgba(40,32,38,0.08)', marginBottom: 4 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '8px 12px 10px', borderBottom: '1px solid var(--line)', marginBottom: 4 }}>
             <span style={{ fontSize: 14, fontWeight: 700 }}>{userLabel}</span>
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: '#8E0E22' }}>{roleLine}</span>
           </div>
@@ -73,7 +90,7 @@ function ProfileMenu({ ctx, roleChip, roleLine }) {
             <GearIcon />
             Settings
           </button>
-          <div style={{ height: 1, background: 'rgba(40,32,38,0.08)', margin: '4px 6px' }} />
+          <div style={{ height: 1, background: 'var(--line)', margin: '4px 6px' }} />
           <button className="hv-red08" onClick={signOut} style={{ ...itemStyle, fontWeight: 700, color: '#C62B22' }}>
             <LogoutIcon />
             Sign out
@@ -90,7 +107,7 @@ function TourButton({ onClick }) {
       className="hv-white85"
       onClick={onClick}
       title="App guide"
-      style={{ display: 'flex', alignItems: 'center', gap: 7, height: 38, padding: '0 16px', background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.75)', color: '#8E0E22', borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+      style={{ display: 'flex', alignItems: 'center', gap: 7, height: 38, padding: '0 16px', background: 'var(--tile-strong)', border: '1px solid var(--tile-border)', color: '#8E0E22', borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
     >
       <img src="/assets/app-guide.svg" alt="App guide" style={{ width: 18, height: 18 }} />
       Tour
@@ -106,8 +123,9 @@ export default function TopBar({ ctx, variant }) {
     return (
       <div className="topbar" style={barStyle}>
         <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 40 }} />
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: 'rgba(40,32,38,0.55)' }}>ADMIN CONSOLE</span>
+        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: 'var(--ink-55)' }}>ADMIN CONSOLE</span>
         <div style={{ flex: 1 }} />
+        <ThemeToggle ctx={ctx} />
         <TourButton onClick={openTour} />
         <ProfileMenu ctx={ctx} roleChip="ADMIN" roleLine="ADMIN · ALL ACCESS" />
       </div>
@@ -122,13 +140,13 @@ export default function TopBar({ ctx, variant }) {
           <button
             className="hv-white75"
             onClick={() => set({ backConfirm: true })}
-            style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', color: '#1B1D21', borderRadius: 999, padding: '7px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+            style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--tile)', border: '1px solid var(--line)', color: 'var(--ink)', borderRadius: 999, padding: '7px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
           >
             ← Back
           </button>
         )}
-        <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.1)' }} />
-        <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.7)', letterSpacing: '0.06em' }}>AUDIT-BENCH-1</span>
+        <div style={{ width: 1, height: 20, background: 'var(--line-strong)' }} />
+        <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--ink-70)', letterSpacing: '0.06em' }}>AUDIT-BENCH-1</span>
         <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.1em', padding: '4px 11px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{SCREEN_CHIPS[s.screen] || ''}</span>
       </div>
       <div className="status-chips" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -137,6 +155,7 @@ export default function TopBar({ ctx, variant }) {
         <StatusChip label="Online" />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <ThemeToggle ctx={ctx} />
         <TourButton onClick={openTour} />
         <ProfileMenu ctx={ctx} roleChip="OPERATOR" roleLine="OPERATOR · PACK · RECEIVE · RETURNS" />
       </div>

@@ -173,10 +173,58 @@ export default function App() {
 
   const signOut = useCallback(() => set({ screen: 'login', password: '', profileMenuOpen: false, adminMenuOpen: false }), [set]);
 
+  // ---- adaptive light/dark theme (auto follows the OS / "wallpaper") ----
+  const [themePref, setThemePref] = useState(() => {
+    try {
+      return localStorage.getItem('pa_theme') || 'auto';
+    } catch (e) {
+      return 'auto';
+    }
+  });
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = () => {
+      const eff = themePref === 'auto' ? (mq.matches ? 'dark' : 'light') : themePref;
+      document.documentElement.dataset.theme = eff;
+    };
+    apply();
+    try {
+      localStorage.setItem('pa_theme', themePref);
+    } catch (e) {
+      /* storage unavailable */
+    }
+    if (themePref === 'auto') {
+      mq.addEventListener('change', apply);
+      return () => mq.removeEventListener('change', apply);
+    }
+  }, [themePref]);
+  const cycleTheme = useCallback(() => setThemePref((p) => (p === 'auto' ? 'light' : p === 'light' ? 'dark' : 'auto')), []);
+
+  // ---- pointer parallax / lensing on the floating bars ----
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let raf = 0;
+    const onMove = (e) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const px = (e.clientX / window.innerWidth - 0.5) * 2;
+        const py = (e.clientY / window.innerHeight - 0.5) * 2;
+        const st = document.documentElement.style;
+        st.setProperty('--px', px.toFixed(3));
+        st.setProperty('--py', py.toFixed(3));
+      });
+    };
+    window.addEventListener('pointermove', onMove);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   const openOrder = useCallback((id) => set({ screen: 'order', orderId: id, orderEditing: false, orderDraft: null, adminMenuOpen: false }), [set]);
   const newCustomOrder = useCallback(() => set({ screen: 'order', orderId: '', orderEditing: true, orderDraft: emptyCustomOrder(), adminMenuOpen: false }), [set]);
 
-  const ctx = { s, set, showToast, openSession, openPlayer, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder };
+  const ctx = { s, set, showToast, openSession, openPlayer, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder, theme: themePref, cycleTheme };
 
   const screen = s.screen;
   const isShared = SHARED_SCREENS.includes(screen);
@@ -196,7 +244,7 @@ export default function App() {
       style={{
         minHeight: '100vh',
         background: 'transparent',
-        color: '#1B1D21',
+        color: 'var(--ink)',
         fontFamily: "-apple-system,BlinkMacSystemFont,'Figtree','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif",
         position: 'relative',
       }}

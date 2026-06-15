@@ -2,8 +2,8 @@ import { MONO, glassFloat, glassPopover } from '../data.js';
 
 const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 
-const MENU_BG = 'rgba(255,255,255,0.72)';
-const MENU_BORDER = '1px solid rgba(255,255,255,0.7)';
+const MENU_BG = 'var(--popover-bg)';
+const MENU_BORDER = '1px solid var(--popover-border)';
 
 export default function TabBar({ ctx }) {
   const { s, set, openPlayer } = ctx;
@@ -32,7 +32,7 @@ export default function TabBar({ ctx }) {
   // so the button and the dropdown read as one continuous surface.
   const adminFilled = adminActive || adminOpen;
   const ordersActive = screen === 'orders' || screen === 'order';
-  const divider = <div style={{ width: 1, height: 22, background: 'rgba(40,32,38,0.15)', margin: '0 2px' }} />;
+  const divider = <div style={{ width: 1, height: 22, background: 'var(--line-strong)', margin: '0 2px' }} />;
 
   const pillBtn = (active) => ({
     border: 'none',
@@ -42,13 +42,26 @@ export default function TabBar({ ctx }) {
     fontSize: 13.5,
     fontWeight: 700,
     background: active ? '#8E0E22' : 'transparent',
-    color: active ? '#FFFFFF' : 'rgba(40,32,38,0.7)',
+    color: active ? '#FFFFFF' : 'var(--ink-70)',
     transition: 'background 0.18s ease, color 0.18s ease',
   });
 
   return (
-    <div data-tour="nav" style={{ position: 'fixed', left: '50%', bottom: 18, transform: 'translateX(-50%)', zIndex: 40 }}>
-      <div style={{ ...glassFloat, display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999 }}>
+    <div data-tour="nav" style={{ position: 'fixed', left: '50%', bottom: 18, transform: 'translate(calc(-50% + var(--px) * 6px), calc(var(--py) * -4px))', zIndex: 40 }}>
+      <div style={{ ...glassFloat, position: 'relative', display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999, overflow: 'visible' }}>
+        {/* pointer-following specular sheen ("lensing") */}
+        <span
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 999,
+            pointerEvents: 'none',
+            background: 'radial-gradient(150px circle at calc(50% + var(--px) * 42%) calc(50% + var(--py) * 60%), rgba(255,255,255,0.5), transparent 70%)',
+            mixBlendMode: 'soft-light',
+            opacity: 0.9,
+          }}
+        />
         {taskTabs.map((t) => {
           const active = screen === t.id || (screen === 'kiosk' && s.mode === t.id);
           return (
@@ -109,7 +122,7 @@ export default function TabBar({ ctx }) {
                       zIndex: 42,
                     }}
                   >
-                    <div style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.18em', color: 'rgba(40,32,38,0.55)', padding: '8px 12px 6px' }}>ADMIN TOOLS</div>
+                    <div style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.18em', color: 'var(--ink-55)', padding: '8px 12px 6px' }}>ADMIN TOOLS</div>
                     {adminMenuItems.map((n) => {
                       const active = screen === n.id;
                       return (
@@ -124,7 +137,7 @@ export default function TabBar({ ctx }) {
                               set({ screen: n.id, adminMenuOpen: false });
                             }
                           }}
-                          style={{ display: 'flex', alignItems: 'center', gap: 8, textAlign: 'left', border: 'none', cursor: 'pointer', borderRadius: 11, padding: '10px 12px', fontSize: 14, fontWeight: 600, background: active ? 'rgba(142,14,34,0.14)' : 'transparent', color: active ? '#8E0E22' : '#1B1D21' }}
+                          style={{ display: 'flex', alignItems: 'center', gap: 8, textAlign: 'left', border: 'none', cursor: 'pointer', borderRadius: 11, padding: '10px 12px', fontSize: 14, fontWeight: 600, background: active ? 'rgba(142,14,34,0.14)' : 'transparent', color: active ? '#8E0E22' : 'var(--ink)' }}
                         >
                           <span style={{ flex: 1 }}>{n.label}</span>
                           {n.badge && (

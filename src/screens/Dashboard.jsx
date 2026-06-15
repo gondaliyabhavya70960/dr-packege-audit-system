@@ -22,7 +22,7 @@ export default function Dashboard({ ctx }) {
       rows: [
         { title: 'PACK-BENCH-2 · op. Rahul', sub: 'today · camera offline 41 min', right: '7 missing', rightColor: RED, action: '→', go: () => drill('ORD-10293') },
         { title: 'PACK-BENCH-1 · op. Mira', sub: 'today · sessions closed early', right: '4 missing', rightColor: RED, action: '→', go: () => drill('ORD-10293') },
-        { title: 'RETURNS-1 · op. Sana', sub: 'yesterday · upload retry pending', right: '2 missing', rightColor: 'rgba(27,29,33,0.6)', action: '→', go: () => drill('ORD-10311') },
+        { title: 'RETURNS-1 · op. Sana', sub: 'yesterday · upload retry pending', right: '2 missing', rightColor: 'var(--ink-60)', action: '→', go: () => drill('ORD-10311') },
       ],
       foot: 'coverage_rate = packed-with-video vs total · threshold alert fires on a coverage gap < 95%',
     };
@@ -85,7 +85,7 @@ export default function Dashboard({ ctx }) {
         title: f.id + ' · ' + f.reason,
         sub: 'age ' + f.age + ' · ' + (f.amt === '—' ? 'no refund hold' : f.amt + ' on hold'),
         right: f.amt,
-        rightColor: f.amt === '—' ? 'rgba(27,29,33,0.5)' : ACCENT,
+        rightColor: f.amt === '—' ? 'var(--ink-50)' : ACCENT,
         action: 'Review ▸',
         go: () => openPlayer(f.id, i, 'dash-flagged'),
       })),
@@ -116,7 +116,7 @@ export default function Dashboard({ ctx }) {
     <div data-screen-label={dash.label} style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, minHeight: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>{dash.title}</h1>
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.65)', color: 'rgba(27,29,33,0.55)' }}>{dash.chip}</span>
+        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'var(--tile)', backdropFilter: 'blur(14px)', border: '1px solid var(--tile-border)', color: 'var(--ink-55)' }}>{dash.chip}</span>
       </div>
 
       {dash.kpis && (
@@ -124,7 +124,7 @@ export default function Dashboard({ ctx }) {
           {dash.kpis.map((k) => (
             <div key={k.label} style={{ ...glass, borderRadius: 14, padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 4, boxShadow: '0 2px 10px rgba(15,30,60,0.04)' }}>
               <span style={{ fontSize: 36, fontWeight: 700, letterSpacing: '-0.02em', color: k.color }}>{k.num}</span>
-              <span style={{ fontSize: 13, fontWeight: 500, color: 'rgba(27,29,33,0.55)' }}>{k.label}</span>
+              <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink-55)' }}>{k.label}</span>
             </div>
           ))}
         </div>
@@ -135,12 +135,12 @@ export default function Dashboard({ ctx }) {
       )}
 
       <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <span style={{ fontSize: 15, fontWeight: 700, color: 'rgba(27,29,33,0.75)' }}>{dash.listTitle}</span>
+        <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink-75)' }}>{dash.listTitle}</span>
         {dash.rows.map((r, i) => (
-          <button key={i} className="hv-chip" onClick={r.go} style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14, padding: '12px 15px' }}>
+          <button key={i} className="hv-chip" onClick={r.go} style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', background: 'var(--tile)', border: '1px solid var(--tile-border)', borderRadius: 14, padding: '12px 15px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1, minWidth: 0 }}>
-              <span style={{ fontSize: 15, fontWeight: 600, color: '#1B1D21' }}>{r.title}</span>
-              <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.5)' }}>{r.sub}</span>
+              <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>{r.title}</span>
+              <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--ink-50)' }}>{r.sub}</span>
             </div>
             <span style={{ fontFamily: MONO, fontSize: 12, color: r.rightColor }}>{r.right}</span>
             <span style={{ fontSize: 13, fontWeight: 700, color: '#8E0E22' }}>{r.action}</span>
@@ -148,7 +148,7 @@ export default function Dashboard({ ctx }) {
         ))}
       </div>
 
-      <div style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.35)' }}>{dash.foot}</div>
+      <div style={{ fontFamily: MONO, fontSize: 11, color: 'var(--ink-35)' }}>{dash.foot}</div>
     </div>
   );
 }

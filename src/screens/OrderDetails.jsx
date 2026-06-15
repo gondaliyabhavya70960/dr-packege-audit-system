@@ -2,12 +2,12 @@ import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS } from 
 import { EditIcon, ChevronRightIcon } from '../components/icons.jsx';
 
 const inputStyle = {
-  background: 'rgba(255,255,255,0.6)',
-  border: '1px solid rgba(0,0,0,0.1)',
+  background: 'var(--tile-strong)',
+  border: '1px solid var(--line-strong)',
   borderRadius: 10,
   padding: '9px 13px',
   fontSize: 14,
-  color: '#1B1D21',
+  color: 'var(--ink)',
   outline: 'none',
   width: '100%',
   fontFamily: 'inherit',
@@ -22,7 +22,7 @@ const condTone = (c) => {
 function Field({ label, children }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-      <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: 'rgba(27,29,33,0.45)' }}>{label}</span>
+      <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: 'var(--ink-45)' }}>{label}</span>
       {children}
     </div>
   );
@@ -43,7 +43,7 @@ function CustomEditor({ draft, upd }) {
         <Field label="GIFT WRAP">
           <button
             onClick={() => upd('giftWrap', !draft.giftWrap)}
-            style={{ ...inputStyle, cursor: 'pointer', textAlign: 'left', fontWeight: 700, color: draft.giftWrap ? '#0E8A50' : 'rgba(27,29,33,0.5)' }}
+            style={{ ...inputStyle, cursor: 'pointer', textAlign: 'left', fontWeight: 700, color: draft.giftWrap ? '#0E8A50' : 'var(--ink-50)' }}
           >
             {draft.giftWrap ? 'Yes · gift wrap' : 'No'}
           </button>
@@ -69,9 +69,9 @@ function CustomEditor({ draft, upd }) {
 
 function ReadRow({ label, value, accent }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, padding: '8px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-      <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.5)', width: 130, flex: 'none' }}>{label}</span>
-      <span style={{ fontSize: 14, fontWeight: accent ? 700 : 500, color: accent ? '#8E0E22' : '#1B1D21', textWrap: 'pretty' }}>{value || '—'}</span>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, padding: '8px 0', borderBottom: '1px solid var(--line)' }}>
+      <span style={{ fontSize: 13, color: 'var(--ink-50)', width: 130, flex: 'none' }}>{label}</span>
+      <span style={{ fontSize: 14, fontWeight: accent ? 700 : 500, color: accent ? '#8E0E22' : 'var(--ink)', textWrap: 'pretty' }}>{value || '—'}</span>
     </div>
   );
 }
@@ -112,7 +112,7 @@ export default function OrderDetails({ ctx }) {
         <div style={{ ...glass, padding: 22, maxWidth: 760, width: '100%', display: 'flex', flexDirection: 'column', gap: 18 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <span style={{ fontSize: 20, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>Custom order details</span>
-            <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.55)' }}>Record a bespoke order with its handling, insurance and audit notes. It joins the orders list and links to any video filed under the same ID.</span>
+            <span style={{ fontSize: 14, color: 'var(--ink-55)' }}>Record a bespoke order with its handling, insurance and audit notes. It joins the orders list and links to any video filed under the same ID.</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -139,11 +139,11 @@ export default function OrderDetails({ ctx }) {
             </Field>
           </div>
 
-          <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
+          <div style={{ height: 1, background: 'var(--line)' }} />
           <CustomEditor draft={d} upd={upd} />
 
           <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
-            <button className="hv-white75" onClick={backToList} style={{ background: 'rgba(255,255,255,0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(27,29,33,0.7)', borderRadius: 10, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+            <button className="hv-white75" onClick={backToList} style={{ background: 'var(--tile)', border: '1px solid var(--line)', color: 'var(--ink-70)', borderRadius: 10, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
               Cancel
             </button>
             <div style={{ flex: 1 }} />
@@ -182,7 +182,7 @@ export default function OrderDetails({ ctx }) {
             <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + t.border, color: t.color }}>{order.status}</span>
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{order.channel.toUpperCase()}</span>
           </div>
-          <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.6)' }}>{order.customer} · {order.value} · placed {order.placed}</span>
+          <span style={{ fontSize: 14, color: 'var(--ink-60)' }}>{order.customer} · {order.value} · placed {order.placed}</span>
         </div>
         <div style={{ flex: 1 }} />
         {hasPair && (
@@ -192,7 +192,7 @@ export default function OrderDetails({ ctx }) {
         )}
         {editing ? (
           <>
-            <button className="hv-white75" onClick={cancelEdit} style={{ background: 'rgba(255,255,255,0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(27,29,33,0.7)', borderRadius: 10, padding: '10px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
+            <button className="hv-white75" onClick={cancelEdit} style={{ background: 'var(--tile)', border: '1px solid var(--line)', color: 'var(--ink-70)', borderRadius: 10, padding: '10px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
               Cancel
             </button>
             <button className="hv-brighten" onClick={saveEdit} style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '10px 20px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>
@@ -200,7 +200,7 @@ export default function OrderDetails({ ctx }) {
             </button>
           </>
         ) : (
-          <button className="hv-border-accent" onClick={startEdit} style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.75)', color: '#8E0E22', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-border-accent" onClick={startEdit} style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--tile-strong)', border: '1px solid var(--tile-border)', color: '#8E0E22', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
             <EditIcon size={15} />
             Edit custom details
           </button>
@@ -212,16 +212,16 @@ export default function OrderDetails({ ctx }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <span style={{ fontSize: 16, fontWeight: 700 }}>Items</span>
-            {order.items.length === 0 && <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.45)' }}>No line items recorded for this entry.</span>}
+            {order.items.length === 0 && <span style={{ fontSize: 13, color: 'var(--ink-45)' }}>No line items recorded for this entry.</span>}
             {order.items.map((it, i) => {
               const ct = condTone(it.condition);
               return (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14, padding: '11px 14px' }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--tile)', border: '1px solid var(--tile-border)', borderRadius: 14, padding: '11px 14px' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                     <span style={{ fontSize: 15, fontWeight: 600 }}>{it.name}</span>
-                    <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.5)' }}>{it.sku}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--ink-50)' }}>{it.sku}</span>
                   </div>
-                  <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(27,29,33,0.6)' }}>×{it.qty}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: 'var(--ink-60)' }}>×{it.qty}</span>
                   <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + ct.border, color: ct.color }}>{it.condition}</span>
                 </div>
               );
@@ -247,7 +247,7 @@ export default function OrderDetails({ ctx }) {
                         </button>
                       )}
                     </div>
-                    <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.5)' }}>{e.time} · {e.who}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--ink-50)' }}>{e.time} · {e.who}</span>
                   </div>
                 </div>
               );
@@ -287,13 +287,13 @@ export default function OrderDetails({ ctx }) {
 
           <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <span style={{ fontSize: 16, fontWeight: 700 }}>Linked evidence</span>
-            {clips.length === 0 && <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.45)' }}>No video filed yet.</span>}
+            {clips.length === 0 && <span style={{ fontSize: 13, color: 'var(--ink-45)' }}>No video filed yet.</span>}
             {clips.map((e, i) => (
               <button
                 key={i}
                 onClick={() => openPlayer(order.id, -1, 'order')}
                 className="hv-chip"
-                style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14, padding: '11px 14px' }}
+                style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', background: 'var(--tile)', border: '1px solid var(--tile-border)', borderRadius: 14, padding: '11px 14px' }}
               >
                 <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13 }}>▶</span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
@@ -316,8 +316,8 @@ function Breadcrumb({ onBack, crumb }) {
       <button className="hv-text-dark" onClick={onBack} style={{ background: 'none', border: 'none', color: '#8E0E22', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
         ← Orders
       </button>
-      <span style={{ color: 'rgba(27,29,33,0.35)' }}>/</span>
-      <span style={{ fontFamily: MONO, color: 'rgba(27,29,33,0.6)' }}>{crumb}</span>
+      <span style={{ color: 'var(--ink-35)' }}>/</span>
+      <span style={{ fontFamily: MONO, color: 'var(--ink-60)' }}>{crumb}</span>
     </div>
   );
 }
