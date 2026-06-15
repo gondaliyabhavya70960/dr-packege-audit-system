@@ -219,6 +219,11 @@ textarea {
   min-height: 340px;
 }
 
+/* picture-in-picture "previous step" mini clip on a recording bench */
+.prev-clip:hover {
+  box-shadow: 0 0 0 2px rgba(142, 14, 34, 0.7), 0 12px 26px -8px rgba(0, 0, 0, 0.75) !important;
+}
+
 @media (max-width: 1024px) {
   .pack-grid,
   .recv-grid {

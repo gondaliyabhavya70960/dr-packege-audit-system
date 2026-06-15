@@ -1,4 +1,5 @@
 import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
+import PrevStepClip from '../components/PrevStepClip.jsx';
 
 export default function Receiving({ ctx }) {
   const { s, set, showToast, logOrderEvent } = ctx;
@@ -108,6 +109,7 @@ export default function Receiving({ ctx }) {
         <div style={{ flex: 1, margin: 13, borderRadius: 16, position: 'relative', ...feedBg, animation: 'feedDrift 6s linear infinite', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
           <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>[ live feed — arrival · store webcam ]</span>
           <span style={{ position: 'absolute', top: 12, left: 12, fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 9px', borderRadius: 6, background: 'rgba(0,0,0,0.55)', color: 'rgba(255,255,255,0.75)' }}>CAM-02 · receiving point</span>
+          <PrevStepClip ctx={ctx} id={s.recvChallan} fallbackLabel="Pack clip · warehouse" />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', padding: '0 13px 13px' }}>
           <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.4)' }}>arrival video retained with the pack video · both attach to any flag</span>
