@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MONO, glass } from '../data.js';
+import { MONO, glass, cardLight, INK } from '../data.js';
 
 // Per-order remark / comment system. `variant="thread"` shows the full
 // comment list plus an input (used on the order's Detail/overview); the default
@@ -26,7 +26,7 @@ export default function RemarkBox({ ctx, id, variant = 'input' }) {
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter') submit(); }}
         placeholder="Add a remark…"
-        style={{ flex: 1, background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(0,0,0,0.1)', borderRadius: 10, padding: '10px 13px', fontSize: 14, color: '#1B1D21', outline: 'none' }}
+        style={{ flex: 1, background: '#FFFFFF', border: '1px solid #E2E4E9', borderRadius: 12, padding: '11px 14px', fontSize: 14, color: '#1B1D21', outline: 'none' }}
       />
       <button
         className="hv-brighten"
@@ -53,9 +53,9 @@ export default function RemarkBox({ ctx, id, variant = 'input' }) {
 
   // thread (Detail / overview)
   return (
-    <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontSize: 16, fontWeight: 700 }}>Remarks</span>
+        <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Remarks</span>
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{remarks.length}</span>
       </div>
       {remarks.length === 0 && <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.45)' }}>No remarks yet — add one from any step.</span>}
