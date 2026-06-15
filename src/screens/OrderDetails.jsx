@@ -3,6 +3,7 @@ import { EditIcon, ChevronRightIcon } from '../components/icons.jsx';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
+import RemarkBox from '../components/RemarkBox.jsx';
 
 // Action tabs shown on a single order, by side. The warehouse handles incoming
 // stock so it also gets Receive; the store side does not.
@@ -267,6 +268,7 @@ export default function OrderDetails({ ctx }) {
       <OrderTabs tabs={tabs} active={activeTab} onPick={onTab} />
 
       {activeTab === 'detail' && (
+      <>
       <div className="order-grid">
         {/* left: items + timeline */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -366,6 +368,8 @@ export default function OrderDetails({ ctx }) {
           </div>
         </div>
       </div>
+      <RemarkBox ctx={ctx} id={order.id} variant="thread" />
+      </>
       )}
 
       {activeTab !== 'detail' && (

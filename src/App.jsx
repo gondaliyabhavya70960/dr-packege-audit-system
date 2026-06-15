@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { initialState, tourDefs } from './data.js';
-import Login from './screens/Login.jsx';
+import { initialState, tourDefs, nowStamp } from './data.js';import Login from './screens/Login.jsx';
 import KioskHome from './screens/KioskHome.jsx';
 import PackRecord from './screens/PackRecord.jsx';
 import Receiving from './screens/Receiving.jsx';
@@ -196,13 +195,26 @@ export default function App() {
   const openOrder = useCallback((id) => set({ screen: 'order', orderId: id, orderTab: 'detail', orderEditing: false, orderDraft: null, adminMenuOpen: false }), [set]);
   const newCustomOrder = useCallback(() => set({ screen: 'order', orderId: '', orderTab: 'detail', orderEditing: true, orderDraft: emptyCustomOrder(), adminMenuOpen: false }), [set]);
 
+  // append a remark (comment) to an order — username + timestamp + text,
+  // surfaced on the order's Detail/overview thread.
+  const addRemark = useCallback((id, text) => {
+    const t = (text || '').trim();
+    if (!t || !id) return;
+    setS((cur) => ({
+      ...cur,
+      orders: cur.orders.map((o) =>
+        o.id === id ? { ...o, remarks: [...(o.remarks || []), { text: t, who: cur.userLabel || 'operator', time: nowStamp() }] } : o
+      ),
+    }));
+  }, []);
+
   // open one of the two working lists, clearing filters so the switch is predictable
   const openList = useCallback(
     (kind, status) => set({ screen: 'orders', listKind: kind, oStatus: status || 'all', oChannel: 'all', oDate: 'all', oq: '', oSel: [], adminMenuOpen: false }),
     [set]
   );
 
-  const ctx = { s, set, showToast, openSession, logOrderEvent, openPlayer, openList, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder };
+  const ctx = { s, set, showToast, openSession, logOrderEvent, openPlayer, openList, addRemark, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder };
 
   const screen = s.screen;
   const isShared = SHARED_SCREENS.includes(screen);
