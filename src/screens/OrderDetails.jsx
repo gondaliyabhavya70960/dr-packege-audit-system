@@ -1,4 +1,4 @@
-import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS } from '../data.js';
+import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE } from '../data.js';
 import { EditIcon, ChevronRightIcon } from '../components/icons.jsx';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
@@ -25,7 +25,7 @@ const LIVE_TABS = ['pack', 'recv', 'ret'];
 
 function OrderTabs({ tabs, active, onPick }) {
   return (
-    <div style={{ ...glass, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 16, alignSelf: 'flex-start', flexWrap: 'wrap', maxWidth: '100%' }}>
+    <div style={{ ...cardLight, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 14, alignSelf: 'flex-start', flexWrap: 'wrap', maxWidth: '100%' }}>
       {tabs.map((tb) => {
         const on = tb.id === active;
         const live = on && LIVE_TABS.includes(tb.id);
@@ -117,9 +117,9 @@ function CustomEditor({ draft, upd }) {
 
 function ReadRow({ label, value, accent }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, padding: '8px 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-      <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.5)', width: 130, flex: 'none' }}>{label}</span>
-      <span style={{ fontSize: 14, fontWeight: accent ? 700 : 500, color: accent ? '#8E0E22' : '#1B1D21', textWrap: 'pretty' }}>{value || '—'}</span>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, padding: '9px 0', borderBottom: '1px solid ' + HAIRLINE }}>
+      <span style={{ fontSize: 13, color: MUTE, width: 130, flex: 'none' }}>{label}</span>
+      <span style={{ fontSize: 14, fontWeight: accent ? 700 : 600, color: accent ? '#8E0E22' : INK, textWrap: 'pretty' }}>{value || '—'}</span>
     </div>
   );
 }
@@ -229,14 +229,14 @@ export default function OrderDetails({ ctx }) {
       <Breadcrumb onBack={backToList} crumb={order.id} back={backLabel} />
 
       {/* header card */}
-      <div style={{ ...glass, padding: 18, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+      <div style={{ ...cardLight, padding: 20, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
             <span style={{ fontFamily: MONO, fontSize: 20, fontWeight: 500 }}>{order.id}</span>
             <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + t.border, color: t.color }}>{order.status}</span>
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{order.channel.toUpperCase()}</span>
           </div>
-          <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.6)' }}>{order.customer} · {order.value} · placed {order.placed}</span>
+          <span style={{ fontSize: 14, color: MUTE }}>{order.customer} · {order.value} · placed {order.placed}</span>
         </div>
         <div style={{ flex: 1 }} />
         {activeTab === 'detail' && (
@@ -272,13 +272,13 @@ export default function OrderDetails({ ctx }) {
       <div className="order-grid">
         {/* left: items + timeline */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <span style={{ fontSize: 16, fontWeight: 700 }}>Items</span>
+          <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Items</span>
             {order.items.length === 0 && <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.45)' }}>No line items recorded for this entry.</span>}
             {order.items.map((it, i) => {
               const ct = condTone(it.condition);
               return (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14, padding: '11px 14px' }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, ...surfaceSubtle, borderRadius: 12, padding: '12px 14px' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                     <span style={{ fontSize: 15, fontWeight: 600 }}>{it.name}</span>
                     <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.5)' }}>{it.sku}</span>
@@ -290,8 +290,8 @@ export default function OrderDetails({ ctx }) {
             })}
           </div>
 
-          <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <span style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>Timeline</span>
+          <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontSize: 16, fontWeight: 700, marginBottom: 6, color: INK, letterSpacing: '-0.01em' }}>Timeline</span>
             {order.timeline.map((e, i) => {
               const last = i === order.timeline.length - 1;
               return (
@@ -319,8 +319,8 @@ export default function OrderDetails({ ctx }) {
 
         {/* right: customer + custom details + media */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <span style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>Customer &amp; shipping</span>
+          <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <span style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, color: INK, letterSpacing: '-0.01em' }}>Customer &amp; shipping</span>
             <ReadRow label="Customer" value={order.customer} />
             <ReadRow label="Phone" value={order.phone} />
             <ReadRow label="Address" value={order.address} />
@@ -328,9 +328,9 @@ export default function OrderDetails({ ctx }) {
             <ReadRow label="Station" value={order.station} />
           </div>
 
-          <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12, border: editing ? '1px solid rgba(142,14,34,0.4)' : glass.border }}>
+          <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 12, border: editing ? '1px solid rgba(142,14,34,0.4)' : cardLight.border }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 16, fontWeight: 700 }}>Custom order details</span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Custom order details</span>
               {editing && <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(142,14,34,0.1)', color: '#8E0E22' }}>EDITING</span>}
             </div>
             {editing ? (
@@ -347,15 +347,15 @@ export default function OrderDetails({ ctx }) {
             )}
           </div>
 
-          <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <span style={{ fontSize: 16, fontWeight: 700 }}>Linked evidence</span>
+          <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Linked evidence</span>
             {clips.length === 0 && <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.45)' }}>No video filed yet.</span>}
             {clips.map((e, i) => (
               <button
                 key={i}
                 onClick={() => openPlayer(order.id, -1, 'order')}
                 className="hv-chip"
-                style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14, padding: '11px 14px' }}
+                style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', ...surfaceSubtle, borderRadius: 12, padding: '12px 14px' }}
               >
                 <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13 }}>▶</span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>

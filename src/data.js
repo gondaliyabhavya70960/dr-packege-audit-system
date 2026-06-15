@@ -369,3 +369,18 @@ export const glassSheet = {
 export const feedBg = {
   background: 'repeating-linear-gradient(135deg,#17171D 0px,#17171D 14px,#121217 14px,#121217 28px)',
 };
+
+// ---- clean / minimal surfaces (modern light look — used on the order detail page) ----
+export const cardLight = {
+  background: '#FFFFFF',
+  border: '1px solid #ECEDF0',
+  borderRadius: 18,
+  boxShadow: '0 1px 2px rgba(15,17,21,0.05), 0 14px 32px -22px rgba(15,17,21,0.28)',
+};
+export const surfaceSubtle = {
+  background: '#F7F8FA',
+  border: '1px solid #EDEFF2',
+};
+export const INK = '#0F1115';
+export const MUTE = '#6B7280';
+export const HAIRLINE = '#F0F1F3';
