@@ -1,7 +1,7 @@
 import { MONO, glass, feedBg, tone } from '../data.js';
 
 export default function SearchPlayback({ ctx }) {
-  const { s, set, openPlayer } = ctx;
+  const { s, set, openPlayer, openOrder } = ctx;
 
   const ql = s.q.trim().toLowerCase();
   const results = s.records.filter((r) => !ql || r.id.toLowerCase().includes(ql) || r.kinds.toLowerCase().includes(ql) || r.outcome.toLowerCase().includes(ql));
@@ -64,11 +64,16 @@ export default function SearchPlayback({ ctx }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                 <span style={{ fontFamily: MONO, fontSize: 18 }}>{sel.id}</span>
                 <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.06em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + selTone.border, color: selTone.color }}>{sel.outcome}</span>
-                {sel.pair && (
-                  <button className="hv-accent14" onClick={() => openPlayer(sel.id, -1, 'search')} style={{ marginLeft: 'auto', background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-                    Open side-by-side ▸
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  <button className="hv-border-accent" onClick={() => openOrder(sel.id)} style={{ background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.75)', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                    Custom order details ▸
                   </button>
-                )}
+                  {sel.pair && (
+                    <button className="hv-accent14" onClick={() => openPlayer(sel.id, -1, 'search')} style={{ background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                      Open side-by-side ▸
+                    </button>
+                  )}
+                </div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>

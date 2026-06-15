@@ -8,6 +8,9 @@ import ReturnInspection from './screens/ReturnInspection.jsx';
 import SearchPlayback from './screens/SearchPlayback.jsx';
 import Dashboard from './screens/Dashboard.jsx';
 import UsersConfig from './screens/UsersConfig.jsx';
+import Orders from './screens/Orders.jsx';
+import OrderDetails from './screens/OrderDetails.jsx';
+import { emptyCustomOrder } from './data.js';
 import TopBar from './components/TopBar.jsx';
 import TabBar from './components/TabBar.jsx';
 import SideBySidePlayer from './components/SideBySidePlayer.jsx';
@@ -16,7 +19,7 @@ import Tour from './components/Tour.jsx';
 import Toast from './components/Toast.jsx';
 
 const OPERATOR_SCREENS = ['kiosk', 'pack', 'recv', 'ret'];
-const ADMIN_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
+const ADMIN_SCREENS = ['search', 'orders', 'order', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 const DASH_SCREENS = ['dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations'];
 
 export default function App() {
@@ -168,7 +171,10 @@ export default function App() {
 
   const signOut = useCallback(() => set({ screen: 'login', password: '', profileMenuOpen: false, adminMenuOpen: false }), [set]);
 
-  const ctx = { s, set, showToast, openSession, openPlayer, tourGo, openTour, endTour, signOut };
+  const openOrder = useCallback((id) => set({ screen: 'order', orderId: id, orderEditing: false, orderDraft: null, adminMenuOpen: false }), [set]);
+  const newCustomOrder = useCallback(() => set({ screen: 'order', orderId: '', orderEditing: true, orderDraft: emptyCustomOrder(), adminMenuOpen: false }), [set]);
+
+  const ctx = { s, set, showToast, openSession, openPlayer, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder };
 
   const screen = s.screen;
   const isOpSurface = OPERATOR_SCREENS.includes(screen);
@@ -203,6 +209,8 @@ export default function App() {
           <TopBar ctx={ctx} variant="admin" />
           <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 120 }}>
             {screen === 'search' && <SearchPlayback ctx={ctx} />}
+            {screen === 'orders' && <Orders ctx={ctx} />}
+            {screen === 'order' && <OrderDetails ctx={ctx} />}
             {DASH_SCREENS.includes(screen) && <Dashboard ctx={ctx} />}
             {screen === 'config' && <UsersConfig ctx={ctx} />}
           </div>

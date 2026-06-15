@@ -183,6 +183,15 @@ input {
   gap: 13px;
   padding: 16px 20px 0;
 }
+.order-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.order-row:hover {
+  background: rgba(142, 14, 34, 0.05) !important;
+}
 
 @media (max-width: 1024px) {
   .pack-grid,
@@ -191,6 +200,9 @@ input {
     height: auto;
   }
   .search-grid {
+    grid-template-columns: 1fr;
+  }
+  .order-grid {
     grid-template-columns: 1fr;
   }
 }
