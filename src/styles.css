@@ -219,9 +219,10 @@ textarea {
   min-height: 340px;
 }
 
-/* picture-in-picture "previous step" mini clip on a recording bench */
+/* inline "previous step" mini clip at the bottom of the receive checklist */
 .prev-clip:hover {
-  box-shadow: 0 0 0 2px rgba(142, 14, 34, 0.7), 0 12px 26px -8px rgba(0, 0, 0, 0.75) !important;
+  border-color: rgba(142, 14, 34, 0.5) !important;
+  box-shadow: 0 8px 20px -10px rgba(30, 22, 40, 0.3) !important;
 }
 
 @media (max-width: 1024px) {
