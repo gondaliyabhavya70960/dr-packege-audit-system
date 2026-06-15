@@ -1,6 +1,6 @@
 import { MONO } from '../data.js';
 
-const ADMIN_SCREENS = ['search', 'orders', 'order', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
+const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 
 export default function TabBar({ ctx }) {
   const { s, set, openPlayer } = ctx;
@@ -14,7 +14,6 @@ export default function TabBar({ ctx }) {
 
   const adminMenuItems = [
     { id: 'search', label: 'Search & playback' },
-    { id: 'orders', label: 'Orders', badge: String(s.orders.length) },
     { id: 'player', label: 'Side-by-side player' },
     { id: 'dash-coverage', label: 'Coverage' },
     { id: 'dash-consignment', label: 'Consignment' },
@@ -24,7 +23,9 @@ export default function TabBar({ ctx }) {
     { id: 'config', label: 'Users & config' },
   ];
 
-  const adminActive = ADMIN_SCREENS.includes(screen);
+  const adminActive = ADMIN_ONLY_SCREENS.includes(screen);
+  const ordersActive = screen === 'orders' || screen === 'order';
+  const divider = <div style={{ width: 1, height: 22, background: 'rgba(40,32,38,0.15)', margin: '0 2px' }} />;
 
   return (
     <div data-tour="nav" style={{ position: 'fixed', left: '50%', bottom: 18, transform: 'translateX(-50%)', zIndex: 40, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
@@ -70,9 +71,20 @@ export default function TabBar({ ctx }) {
             </button>
           );
         })}
+
+        {/* Orders — available to every role */}
+        {divider}
+        <button
+          data-tour="ordersnav"
+          onClick={() => set({ screen: 'orders', adminMenuOpen: false })}
+          style={{ border: 'none', cursor: 'pointer', borderRadius: 999, padding: '10px 18px', fontSize: 13.5, fontWeight: 700, background: ordersActive ? '#8E0E22' : 'transparent', color: ordersActive ? '#FFFFFF' : 'rgba(40,32,38,0.7)' }}
+        >
+          Orders
+        </button>
+
         {s.role === 'admin' && (
           <>
-            <div style={{ width: 1, height: 22, background: 'rgba(40,32,38,0.15)', margin: '0 2px' }} />
+            {divider}
             <button
               onClick={() => set({ adminMenuOpen: !s.adminMenuOpen })}
               style={{ display: 'flex', alignItems: 'center', gap: 7, border: 'none', cursor: 'pointer', borderRadius: 999, padding: '10px 18px', fontSize: 13.5, fontWeight: 700, background: adminActive ? '#8E0E22' : 'transparent', color: adminActive ? '#FFFFFF' : 'rgba(40,32,38,0.7)' }}

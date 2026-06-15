@@ -19,7 +19,9 @@ import Tour from './components/Tour.jsx';
 import Toast from './components/Toast.jsx';
 
 const OPERATOR_SCREENS = ['kiosk', 'pack', 'recv', 'ret'];
-const ADMIN_SCREENS = ['search', 'orders', 'order', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
+const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
+// available to both roles — rendered under whichever chrome matches the user
+const SHARED_SCREENS = ['orders', 'order'];
 const DASH_SCREENS = ['dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations'];
 
 export default function App() {
@@ -177,8 +179,17 @@ export default function App() {
   const ctx = { s, set, showToast, openSession, openPlayer, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder };
 
   const screen = s.screen;
-  const isOpSurface = OPERATOR_SCREENS.includes(screen);
-  const isAdminSurface = ADMIN_SCREENS.includes(screen);
+  const isShared = SHARED_SCREENS.includes(screen);
+  // shared screens follow the signed-in role's chrome; operators never see admin chrome
+  const isOpSurface = OPERATOR_SCREENS.includes(screen) || (isShared && s.role !== 'admin');
+  const isAdminSurface = ADMIN_ONLY_SCREENS.includes(screen) || (isShared && s.role === 'admin');
+
+  const sharedScreens = (
+    <>
+      {screen === 'orders' && <Orders ctx={ctx} />}
+      {screen === 'order' && <OrderDetails ctx={ctx} />}
+    </>
+  );
 
   return (
     <div
@@ -200,6 +211,7 @@ export default function App() {
             {screen === 'pack' && <PackRecord ctx={ctx} />}
             {screen === 'recv' && <Receiving ctx={ctx} />}
             {screen === 'ret' && <ReturnInspection ctx={ctx} />}
+            {sharedScreens}
           </div>
         </div>
       )}
@@ -209,10 +221,9 @@ export default function App() {
           <TopBar ctx={ctx} variant="admin" />
           <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 120 }}>
             {screen === 'search' && <SearchPlayback ctx={ctx} />}
-            {screen === 'orders' && <Orders ctx={ctx} />}
-            {screen === 'order' && <OrderDetails ctx={ctx} />}
             {DASH_SCREENS.includes(screen) && <Dashboard ctx={ctx} />}
             {screen === 'config' && <UsersConfig ctx={ctx} />}
+            {sharedScreens}
           </div>
         </div>
       )}

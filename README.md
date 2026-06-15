@@ -42,7 +42,10 @@ Plus: floating task/admin tab bar, save-as-draft back confirmation, 9-step featu
 
 ### Orders & custom order details
 
-The admin console includes an **Orders** screen — a full order list with:
+**Orders** is available to **both roles** — operators reach it from the **Orders** tab in the
+floating bottom bar (next to Pack / Receive / Returns), and admins get the same tab alongside
+the Admin menu. Each role sees it under its own chrome, and the order data is shared between
+them. It's a full order list with:
 
 - Search (order ID / customer / channel) and filters for **status**, **channel**, and **date range**
 - Sort by newest/oldest or order value
