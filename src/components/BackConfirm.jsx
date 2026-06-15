@@ -1,4 +1,4 @@
-import { fmt } from '../data.js';
+import { fmt, glassSheet } from '../data.js';
 
 export default function BackConfirm({ ctx }) {
   const { s, set, showToast } = ctx;
@@ -18,8 +18,8 @@ export default function BackConfirm({ ctx }) {
   };
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(35,42,55,0.4)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-      <div style={{ width: 430, maxWidth: '94%', background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(22px) saturate(1.4)', borderRadius: 18, padding: 26, display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0 24px 70px rgba(15,30,60,0.25)' }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(28,20,32,0.32)', backdropFilter: 'blur(14px) saturate(1.4)', WebkitBackdropFilter: 'blur(14px) saturate(1.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div style={{ ...glassSheet, width: 430, maxWidth: '94%', borderRadius: 26, padding: 26, display: 'flex', flexDirection: 'column', gap: 14 }}>
         <span style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em' }}>Leave this session?</span>
         <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.6)', lineHeight: 1.5, textWrap: 'pretty' }}>
           Recording will stop. Save your progress as a draft to resume later, or discard the session — no video will be filed.

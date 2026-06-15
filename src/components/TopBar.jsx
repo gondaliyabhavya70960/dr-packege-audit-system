@@ -1,9 +1,10 @@
-import { MONO } from '../data.js';
+import { MONO, glassFloat, glassPopover } from '../data.js';
 import { UserIcon, GearIcon, LogoutIcon } from './icons.jsx';
 
 const SCREEN_CHIPS = { kiosk: 'STATION READY', pack: 'PACK & RECORD', recv: 'STORE RECEIVING', ret: 'RETURN INSPECTION' };
 
 const barStyle = {
+  ...glassFloat,
   height: 58,
   flex: 'none',
   display: 'flex',
@@ -12,11 +13,6 @@ const barStyle = {
   padding: '0 20px',
   margin: '14px 16px 0',
   borderRadius: 999,
-  border: '1px solid rgba(255,255,255,0.7)',
-  background: 'rgba(255,255,255,0.5)',
-  backdropFilter: 'blur(26px) saturate(1.6)',
-  WebkitBackdropFilter: 'blur(26px) saturate(1.6)',
-  boxShadow: '0 12px 36px rgba(60,30,40,0.16), inset 0 1px 0 rgba(255,255,255,0.85)',
   // the backdrop-filter creates a stacking context; without an explicit
   // z-index the profile dropdown would paint under the screen content
   position: 'relative',
@@ -64,7 +60,7 @@ function ProfileMenu({ ctx, roleChip, roleLine }) {
         <span style={{ fontSize: 9, color: 'rgba(40,32,38,0.55)' }}>{s.profileMenuOpen ? '▲' : '▼'}</span>
       </button>
       {s.profileMenuOpen && (
-        <div style={{ position: 'absolute', right: 0, top: 50, width: 238, borderRadius: 18, padding: 8, background: 'rgba(255,255,255,0.94)', backdropFilter: 'blur(30px) saturate(1.7)', WebkitBackdropFilter: 'blur(30px) saturate(1.7)', border: '1px solid rgba(255,255,255,0.78)', boxShadow: '0 16px 48px rgba(60,30,40,0.24)', display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
+        <div style={{ ...glassPopover, position: 'absolute', right: 0, top: 54, width: 238, borderRadius: 22, padding: 8, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '8px 12px 10px', borderBottom: '1px solid rgba(40,32,38,0.08)', marginBottom: 4 }}>
             <span style={{ fontSize: 14, fontWeight: 700 }}>{userLabel}</span>
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: '#8E0E22' }}>{roleLine}</span>

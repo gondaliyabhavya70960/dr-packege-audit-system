@@ -1,4 +1,4 @@
-import { MONO, demoChips } from '../data.js';
+import { MONO, demoChips, glass } from '../data.js';
 
 export default function KioskHome({ ctx }) {
   const { s, set, openSession, signOut } = ctx;
@@ -34,7 +34,7 @@ export default function KioskHome({ ctx }) {
         <div style={{ fontSize: 16, color: 'rgba(27,29,33,0.55)', textWrap: 'pretty' }}>Pick a task — Pack, Receive or Returns — then scan. The session opens and recording starts.</div>
       </div>
 
-      <div data-tour="scanner" style={{ width: 700, maxWidth: '94%', background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(26px) saturate(1.5)', WebkitBackdropFilter: 'blur(26px) saturate(1.5)', border: '1px solid rgba(255,255,255,0.65)', borderRadius: 16, padding: 18, display: 'flex', flexDirection: 'column', gap: 12, boxShadow: '0 4px 18px rgba(15,30,60,0.06)' }}>
+      <div data-tour="scanner" style={{ ...glass, width: 700, maxWidth: '94%', padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: '#8E0E22' }}>DEMO SCANNER — TAP TO SIMULATE A HID SCAN</div>
         <div className="demo-chip-grid">
           {demoChips.map((d) => (
@@ -60,7 +60,7 @@ export default function KioskHome({ ctx }) {
             placeholder="…or type any ID and press Enter (ORD-… / RFID-… / DC-…)"
             style={{ flex: 1, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', borderRadius: 10, padding: '11px 18px', color: '#1B1D21', fontSize: 13, outline: 'none', fontFamily: MONO }}
           />
-          <button className="hv-brighten" onClick={doScan} style={{ background: '#8E0E22', border: 'none', color: '#FFFFFF', borderRadius: 10, padding: '11px 26px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-brighten" onClick={doScan} style={{ background: '#8E0E22', border: 'none', color: '#FFFFFF', borderRadius: 14, padding: '11px 26px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 8px 22px -8px rgba(142,14,34,0.6), inset 0 1px 0 rgba(255,255,255,0.25)' }}>
             Scan
           </button>
         </div>
