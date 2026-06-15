@@ -62,7 +62,7 @@ which is added to the list. Search & playback links straight into the same detai
 
 - [Vite](https://vitejs.dev) + [React 18](https://react.dev) — no other runtime dependencies
 - All demo state lives in a single client-side store (`src/App.jsx`), ported 1:1 from the design prototype's state machine
-- Liquid-glass visual language: layered radial-gradient canvas, frosted cards, `#8E0E22` Mayavé maroon, IBM Plex Mono data accents
+- iPadOS-style **Liquid Glass** visual language: layered radial-gradient canvas; translucent, heavily-blurred material with specular rim highlights; concentric rounded corners; springy/press-scaled controls and accent focus rings — built from shared material tokens (`glass`, `glassFloat`, `glassPopover`, `glassSheet` in `src/data.js`). Palette is unchanged: `#8E0E22` Mayavé maroon with IBM Plex Mono data accents.
 
 ## Project layout
 

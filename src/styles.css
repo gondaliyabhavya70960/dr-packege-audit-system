@@ -8,6 +8,9 @@ body {
     radial-gradient(700px 500px at 60% 110%, rgba(240, 165, 46, 0.14), transparent 55%),
     linear-gradient(160deg, #f4eef1, #e9eaf3);
   background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 * {
@@ -19,8 +22,10 @@ input::placeholder {
 }
 
 button,
-input {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+input,
+select,
+textarea {
+  font-family: -apple-system, BlinkMacSystemFont, 'Figtree', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -28,11 +33,21 @@ input {
   height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.16);
-  border-radius: 6px;
+  background: rgba(40, 30, 50, 0.18);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(40, 30, 50, 0.3);
+  background-clip: padding-box;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+
+::selection {
+  background: rgba(142, 14, 34, 0.18);
 }
 
 @keyframes pulse {
@@ -236,9 +251,80 @@ input {
     flex-wrap: wrap;
     padding: 8px 14px !important;
     gap: 8px !important;
-    border-radius: 24px !important;
+    border-radius: 26px !important;
   }
   .topbar img[alt='Mayavé'] {
     height: 30px !important;
+  }
+}
+
+/* ============================================================
+   Liquid Glass polish (iPadOS-style) — visual only, no colour
+   or behaviour changes.
+   ============================================================ */
+
+/* tactile, springy controls everywhere */
+button {
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.18s ease, box-shadow 0.22s ease, border-color 0.18s ease, color 0.18s ease, filter 0.18s ease;
+}
+button:active {
+  transform: scale(0.965);
+}
+button:disabled {
+  transform: none;
+}
+input,
+select,
+textarea {
+  transition: border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.22s ease;
+}
+
+/* soft rounded form fields across the whole project (radius only) */
+input:not([type='range']):not([type='checkbox']),
+select,
+textarea {
+  border-radius: 14px !important;
+}
+
+/* brand-accent focus ring for keyboard users */
+button:focus-visible,
+a:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(142, 14, 34, 0.35);
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(142, 14, 34, 0.28);
+}
+
+/* glassy hover lift for opt-in cards/chips */
+.hv-chip,
+.hv-border-accent,
+.hv-accent14 {
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.22s ease, filter 0.18s ease;
+}
+.hv-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px -12px rgba(30, 22, 40, 0.3);
+}
+.order-row {
+  transition: background-color 0.16s ease;
+}
+
+/* range slider in the brand accent, chunkier glass thumb */
+input[type='range'] {
+  height: 6px;
+  border-radius: 999px !important;
+  accent-color: #8e0e22;
+}
+
+/* honour reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

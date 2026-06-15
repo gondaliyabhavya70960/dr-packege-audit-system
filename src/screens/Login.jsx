@@ -31,7 +31,7 @@ export default function Login({ ctx }) {
         <div style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.18, letterSpacing: '-0.01em', maxWidth: 480, textWrap: 'pretty' }}>
           One ID. Every checkpoint. Video proof you can pull up in seconds.
         </div>
-        <div style={{ marginTop: 30, width: 430, maxWidth: '100%', background: '#FFFFFF', color: '#1B1D21', borderRadius: 16, padding: 18, boxShadow: '0 24px 60px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', gap: 13 }}>
+        <div style={{ marginTop: 30, width: 430, maxWidth: '100%', background: 'rgba(255,255,255,0.96)', color: '#1B1D21', borderRadius: 22, padding: 18, boxShadow: '0 30px 70px -20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.9)', display: 'flex', flexDirection: 'column', gap: 13 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 700 }}>DC-2026-00417</span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FBE5E8', color: '#C8102E', borderRadius: 999, padding: '4px 12px', fontSize: 11, fontWeight: 800, letterSpacing: '0.08em' }}>
@@ -105,7 +105,7 @@ export default function Login({ ctx }) {
             data-tour="login"
             className="hv-dark"
             onClick={doLogin}
-            style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer', marginTop: 4 }}
+            style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 14, padding: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer', marginTop: 4, boxShadow: '0 8px 22px -8px rgba(142,14,34,0.6), inset 0 1px 0 rgba(255,255,255,0.25)' }}
           >
             Sign in
           </button>

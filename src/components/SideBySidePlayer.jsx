@@ -1,4 +1,4 @@
-import { MONO, glass, feedBg, fmt } from '../data.js';
+import { MONO, glassSheet, feedBg, fmt } from '../data.js';
 
 const STILL_LABELS = ['stone', 'hallmark', 'certificate'];
 
@@ -35,7 +35,7 @@ export default function SideBySidePlayer({ ctx }) {
         <span style={{ color: '#8E0E22' }}>{label}</span>
         <span>{meta}</span>
       </div>
-      <div style={{ height: 230, borderRadius: 16, position: 'relative', ...feedBg, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <div style={{ height: 230, borderRadius: 18, position: 'relative', ...feedBg, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
         <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>{text}</span>
         <div style={{ position: 'absolute', left: 0, bottom: 0, height: 4, background: '#8E0E22', width: s.t + '%' }} />
       </div>
@@ -43,8 +43,8 @@ export default function SideBySidePlayer({ ctx }) {
   );
 
   return (
-    <div data-screen-label="07 Side-by-side player" style={{ position: 'fixed', inset: 0, zIndex: 60, background: 'rgba(35,42,55,0.4)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 30 }}>
-      <div style={{ ...glass, width: 1040, maxWidth: '96%', maxHeight: '94vh', overflow: 'auto', boxShadow: '0 30px 80px rgba(15,30,60,0.25)', display: 'flex', flexDirection: 'column' }}>
+    <div data-screen-label="07 Side-by-side player" style={{ position: 'fixed', inset: 0, zIndex: 60, background: 'rgba(28,20,32,0.32)', backdropFilter: 'blur(16px) saturate(1.4)', WebkitBackdropFilter: 'blur(16px) saturate(1.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 30 }}>
+      <div style={{ ...glassSheet, borderRadius: 28, width: 1040, maxWidth: '96%', maxHeight: '94vh', overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 20px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
           <span style={{ fontSize: 18, fontWeight: 700 }}>
             Side-by-side · <span style={{ fontFamily: MONO, fontWeight: 500 }}>{s.playerId}</span>

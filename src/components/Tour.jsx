@@ -1,4 +1,4 @@
-import { tourDefs } from '../data.js';
+import { tourDefs, glassPopover } from '../data.js';
 
 export default function Tour({ ctx }) {
   const { s, tourGo, endTour } = ctx;
@@ -36,7 +36,7 @@ export default function Tour({ ctx }) {
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(25,12,15,0.55)' }} />
       )}
 
-      <div style={{ position: 'absolute', width: 390, maxWidth: '92vw', background: 'rgba(255,255,255,0.72)', backdropFilter: 'blur(24px) saturate(1.4)', borderRadius: 18, padding: 22, display: 'flex', flexDirection: 'column', gap: 11, boxShadow: '0 24px 70px rgba(0,0,0,0.4)', transition: 'all 0.35s ease', top: cardTop, left: cardLeft, transform: cardTransform }}>
+      <div style={{ ...glassPopover, position: 'absolute', width: 390, maxWidth: '92vw', borderRadius: 24, padding: 22, display: 'flex', flexDirection: 'column', gap: 11, transition: 'all 0.35s ease', top: cardTop, left: cardLeft, transform: cardTransform }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
           <span style={{ width: 36, height: 36, flex: 'none', borderRadius: '50%', background: '#FBE5E8', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800 }}>{s.tourStep + 1}</span>
           <span style={{ fontSize: 19, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em', flex: 1 }}>{step.t}</span>

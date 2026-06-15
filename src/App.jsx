@@ -197,7 +197,7 @@ export default function App() {
         minHeight: '100vh',
         background: 'transparent',
         color: '#1B1D21',
-        fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif",
+        fontFamily: "-apple-system,BlinkMacSystemFont,'Figtree','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif",
         position: 'relative',
       }}
     >

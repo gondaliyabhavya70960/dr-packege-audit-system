@@ -1,9 +1,9 @@
-import { MONO } from '../data.js';
+import { MONO, glassFloat, glassPopover } from '../data.js';
 
 const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 
-const MENU_BG = 'rgba(255,255,255,0.92)';
-const MENU_BORDER = '1px solid rgba(255,255,255,0.72)';
+const MENU_BG = 'rgba(255,255,255,0.72)';
+const MENU_BORDER = '1px solid rgba(255,255,255,0.7)';
 
 export default function TabBar({ ctx }) {
   const { s, set, openPlayer } = ctx;
@@ -48,7 +48,7 @@ export default function TabBar({ ctx }) {
 
   return (
     <div data-tour="nav" style={{ position: 'fixed', left: '50%', bottom: 18, transform: 'translateX(-50%)', zIndex: 40 }}>
-      <div style={{ display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999, background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(30px) saturate(1.7)', WebkitBackdropFilter: 'blur(30px) saturate(1.7)', border: '1px solid rgba(255,255,255,0.7)', boxShadow: '0 16px 48px rgba(60,30,40,0.22), inset 0 1px 0 rgba(255,255,255,0.85)' }}>
+      <div style={{ ...glassFloat, display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999 }}>
         {taskTabs.map((t) => {
           const active = screen === t.id || (screen === 'kiosk' && s.mode === t.id);
           return (
@@ -95,18 +95,14 @@ export default function TabBar({ ctx }) {
                   />
                   <div
                     style={{
+                      ...glassPopover,
                       position: 'absolute',
                       bottom: 'calc(100% + 11px)',
                       right: 0,
                       width: 280,
                       maxWidth: '78vw',
-                      borderRadius: 18,
+                      borderRadius: 22,
                       padding: 8,
-                      background: MENU_BG,
-                      backdropFilter: 'blur(30px) saturate(1.7)',
-                      WebkitBackdropFilter: 'blur(30px) saturate(1.7)',
-                      border: MENU_BORDER,
-                      boxShadow: '0 16px 48px rgba(60,30,40,0.24)',
                       display: 'flex',
                       flexDirection: 'column',
                       gap: 2,
