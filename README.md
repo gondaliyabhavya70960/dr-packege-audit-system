@@ -26,7 +26,7 @@ Any password works in this prototype.
 
 | #     | Screen                | Where                                                              |
 | ----- | --------------------- | ------------------------------------------------------------------ |
-| 01    | Login                 | role-based routing, guided-tour entry                              |
+| 01    | Login                 | role-based routing, Warehouse/Store side selection, guided-tour entry |
 | 02    | Kiosk home            | demo HID scanner — chips or free input (`ORD-…` / `RFID-…` / `DC-…`) |
 | 03    | Pack & Record         | live-feed pane, expected-vs-scanned, condition check, flag/close   |
 | 04    | Store receiving       | challan reconcile, short/extra detection, arrival feed             |
@@ -38,24 +38,28 @@ Any password works in this prototype.
 | 14    | Orders                | per-side order list (Warehouse / Store) — search/filters, bulk select, CSV export |
 | 15    | Single order          | tabbed hub — Detail + inline Packing / Receive / Return tools, editable custom fields, create new |
 
-Plus: floating Warehouse / Store / Scan + admin tab bar, save-as-draft back confirmation, 9-step feature tour (auto-starts on first visit), toasts.
+Plus: post-login **Overview** dashboard (order counts → the two lists), floating Overview / Packaging / Transfers + admin tab bar, save-as-draft back confirmation, 9-step feature tour (auto-starts on first visit), toasts.
 
 ### Warehouse / Store flow
 
-The floating bottom bar leads with two **sides** — **Warehouse** and **Store** — plus a **Scan**
-shortcut to the station kiosk (and the **Admin** menu for admins). Both sides, and the flow
-below, are identical for **operators and admins**; each just renders under its own chrome.
+You pick your **side — Warehouse or Store — at login**. It drives which tools a single order
+exposes (warehouse adds Receive) and rides along as a chip in the top bar. The whole flow is
+identical for **operators and admins**; each just renders under its own chrome.
 
 ```
-[Warehouse | Store]  →  order list  →  single order  →  action tabs
+login (pick side)  →  Overview dashboard  →  order list  →  single order  →  action tabs
 ```
 
-1. **Order list** — "Packaging & transferring goods". The same shared order list on either
-   side (search / filter / sort / bulk CSV export), titled for the side you're on.
-2. **Single order** — every row opens the order, which carries a tab bar of side-specific tools:
+1. **Overview** — the post-login landing: a total order count, per-status counts, and the two
+   working lists one tap away.
+2. **Two lists** — the floating bottom bar is **Overview · Packaging · Transfers** (+ **Admin**
+   for admins):
+   - **Packaging orders** — customer orders to pack & dispatch.
+   - **Transferring goods** — inter-branch challans & consignments (DC / RFID ids, B2B channel).
+3. **Single order** — every row opens the order, which carries a tab bar of side-specific tools:
    - **Warehouse:** Detail · **Packing** · **Receive** · **Return**
    - **Store:** Detail · **Packing** · **Return** _(no Receive)_
-3. **Tools run inline** — picking Packing / Receive / Return runs that recording tool (live
+4. **Tools run inline** — picking Packing / Receive / Return runs that recording tool (live
    feed, expected-vs-scanned, flag/close) **in place on the order**, anchored to its ID. Closing
    or flagging a session writes the outcome back to the order's timeline and returns to **Detail**.
 

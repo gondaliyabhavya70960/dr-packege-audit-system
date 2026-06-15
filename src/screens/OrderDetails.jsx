@@ -221,11 +221,11 @@ export default function OrderDetails({ ctx }) {
   const tabs = SIDE_TABS[s.side] || SIDE_TABS.warehouse;
   const activeTab = tabs.some((tb) => tb.id === s.orderTab) ? s.orderTab : 'detail';
   const onTab = (id) => (id === 'detail' ? set({ orderTab: 'detail' }) : openSession(id, order.id, 'order'));
-  const sideLabel = s.side === 'store' ? 'Store' : 'Warehouse';
+  const backLabel = s.listKind === 'transfer' ? 'Transferring goods' : 'Packaging';
 
   return (
     <div data-screen-label="15 Custom order details" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, minHeight: '100%' }}>
-      <Breadcrumb onBack={backToList} crumb={order.id} side={sideLabel} />
+      <Breadcrumb onBack={backToList} crumb={order.id} back={backLabel} />
 
       {/* header card */}
       <div style={{ ...glass, padding: 18, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
@@ -379,11 +379,11 @@ export default function OrderDetails({ ctx }) {
   );
 }
 
-function Breadcrumb({ onBack, crumb, side }) {
+function Breadcrumb({ onBack, crumb, back }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
       <button className="hv-text-dark" onClick={onBack} style={{ background: 'none', border: 'none', color: '#8E0E22', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
-        ← {side ? side + ' orders' : 'Orders'}
+        ← {back || 'Orders'}
       </button>
       <span style={{ color: 'rgba(27,29,33,0.35)' }}>/</span>
       <span style={{ fontFamily: MONO, color: 'rgba(27,29,33,0.6)' }}>{crumb}</span>

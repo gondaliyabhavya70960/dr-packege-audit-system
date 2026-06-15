@@ -8,7 +8,7 @@ export default function Login({ ctx }) {
     const uname = (s.username || 'admin').trim().toLowerCase();
     const isAd = uname === 'admin' || uname === 'manager' || uname === 'auditor';
     const label = uname === 'admin' ? 'System Admin' : uname.charAt(0).toUpperCase() + uname.slice(1);
-    set({ screen: isAd ? 'dash-coverage' : 'kiosk', userLabel: label, role: isAd ? 'admin' : 'operator' });
+    set({ screen: 'home', userLabel: label, role: isAd ? 'admin' : 'operator' });
   };
   const onKey = (e) => {
     if (e.key === 'Enter') doLogin();
@@ -100,6 +100,28 @@ export default function Login({ ctx }) {
               placeholder="••••••••"
               style={{ background: '#FFFFFF', border: '1px solid rgba(110,100,108,0.35)', borderRadius: 10, padding: '13px 15px', fontSize: 15, outline: 'none', color: '#1B1D21' }}
             />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+            <label style={{ fontSize: 14, fontWeight: 700 }}>Your side</label>
+            <div style={{ display: 'flex', gap: 8 }}>
+              {[
+                { id: 'warehouse', label: 'Warehouse' },
+                { id: 'store', label: 'Store' },
+              ].map((o) => {
+                const on = s.side === o.id;
+                return (
+                  <button
+                    key={o.id}
+                    type="button"
+                    onClick={() => set({ side: o.id })}
+                    style={{ flex: 1, cursor: 'pointer', borderRadius: 12, padding: '12px 10px', fontSize: 14.5, fontWeight: 700, border: '1px solid ' + (on ? '#8E0E22' : 'rgba(110,100,108,0.35)'), background: on ? '#8E0E22' : '#FFFFFF', color: on ? '#FFFFFF' : '#1B1D21' }}
+                  >
+                    {o.label}
+                  </button>
+                );
+              })}
+            </div>
+            <span style={{ fontSize: 12.5, color: '#6B7280' }}>Warehouse can pack, receive &amp; return; Store packs &amp; returns.</span>
           </div>
           <button
             data-tour="login"

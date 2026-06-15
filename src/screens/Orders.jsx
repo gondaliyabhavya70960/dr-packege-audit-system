@@ -1,4 +1,4 @@
-import { MONO, glass, tone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS } from '../data.js';
+import { MONO, glass, tone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder } from '../data.js';
 import { SearchIcon, PlusIcon, ChevronRightIcon } from '../components/icons.jsx';
 
 const DAY = 86400000;
@@ -40,9 +40,12 @@ export default function Orders({ ctx }) {
   const { s, set, openOrder, newCustomOrder } = ctx;
 
   const sideLabel = s.side === 'store' ? 'Store' : 'Warehouse';
+  const isTransfer = s.listKind === 'transfer';
+  const listLabel = isTransfer ? 'Transferring goods' : 'Packaging orders';
+  const kindOrders = s.orders.filter((o) => isTransferOrder(o) === isTransfer);
 
   const ql = s.oq.trim().toLowerCase();
-  let list = s.orders.filter((o) => {
+  let list = kindOrders.filter((o) => {
     if (ql && !(o.id.toLowerCase().includes(ql) || o.customer.toLowerCase().includes(ql) || o.channel.toLowerCase().includes(ql) || o.status.toLowerCase().includes(ql))) return false;
     if (s.oStatus !== 'all' && o.statusKey !== s.oStatus) return false;
     if (s.oChannel !== 'all' && o.channel !== s.oChannel) return false;
@@ -59,8 +62,8 @@ export default function Orders({ ctx }) {
     return b.ts - a.ts; // new
   });
 
-  const flaggedCount = s.orders.filter((o) => o.tone === 'red').length;
-  const transitVal = s.orders.filter((o) => o.statusKey === 'transit').reduce((n, o) => n + o.valNum, 0);
+  const flaggedCount = kindOrders.filter((o) => o.tone === 'red').length;
+  const transitVal = kindOrders.filter((o) => o.statusKey === 'transit').reduce((n, o) => n + o.valNum, 0);
   const transitLabel = transitVal >= 100000 ? '₹' + (transitVal / 100000).toFixed(2) + 'L' : '₹' + transitVal.toLocaleString('en-IN');
 
   const allIds = list.map((o) => o.id);
@@ -77,13 +80,13 @@ export default function Orders({ ctx }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>{sideLabel} · Orders</h1>
+            <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>{listLabel}</h1>
             <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{sideLabel.toUpperCase()}</span>
           </div>
-          <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.55)' }}>Packaging &amp; transferring goods — open an order to pack, receive, return or view its detail.</span>
+          <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.55)' }}>{isTransfer ? 'Inter-branch challans & consignments — open one to receive, return or view its detail.' : 'Customer orders to pack & dispatch — open one to pack, return or view its detail.'}</span>
         </div>
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.65)', color: 'rgba(27,29,33,0.55)' }}>
-          {s.orders.length} TOTAL · {flaggedCount} FLAGGED · {transitLabel} IN TRANSIT
+          {kindOrders.length} {isTransfer ? 'TRANSFERS' : 'PACKAGING'} · {flaggedCount} FLAGGED · {transitLabel} IN TRANSIT
         </span>
         <div style={{ flex: 1 }} />
         <button
@@ -227,7 +230,7 @@ export default function Orders({ ctx }) {
       </div>
 
       <div style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.35)' }}>
-        showing {list.length} of {s.orders.length} orders · every row opens the custom order details with its linked video evidence
+        showing {list.length} of {kindOrders.length} {listLabel.toLowerCase()} · every row opens the single order with its linked video evidence
       </div>
     </div>
   );

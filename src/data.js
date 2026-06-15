@@ -23,6 +23,13 @@ export const ORDER_STATUSES = [
 
 export const ORDER_CHANNELS = ['Online', 'Store', 'B2B'];
 
+// Split the shared order pool into the two working lists: "transferring goods"
+// (inter-branch challans / consignments — DC & RFID ids, B2B channel) vs
+// "packaging" (everything else — customer orders to pack & dispatch).
+export function isTransferOrder(o) {
+  return o.channel === 'B2B' || /^(DC|RFID)/i.test(o.id);
+}
+
 const blankCustom = { priority: 'Standard', giftWrap: false, insured: '', slot: '', instructions: '', notes: '' };
 
 export const seedOrders = [
@@ -250,7 +257,8 @@ export const initialState = {
   orderEditing: false,
   orderDraft: null,
   // warehouse / store flow
-  side: 'warehouse', // 'warehouse' | 'store'
+  side: 'warehouse', // 'warehouse' | 'store' — chosen at login; drives single-order tools
+  listKind: 'packaging', // 'packaging' | 'transfer' — which working list is open
   orderTab: 'detail', // 'detail' | 'pack' | 'recv' | 'ret' — active tool on the single order
   sessionReturn: 'kiosk', // where a pack/recv/ret session returns on close: 'kiosk' | 'order'
   // tour
