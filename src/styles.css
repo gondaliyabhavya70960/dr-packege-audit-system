@@ -208,6 +208,17 @@ textarea {
   background: rgba(142, 14, 34, 0.05) !important;
 }
 
+/* Pack / Receive / Return tools rendered inline as a tab on a single order:
+   drop the full-viewport sizing so they flow inside the order page. */
+.order-tool .pack-grid,
+.order-tool .recv-grid {
+  height: auto;
+  padding: 0;
+}
+.order-tool .ret-grid {
+  min-height: 340px;
+}
+
 @media (max-width: 1024px) {
   .pack-grid,
   .recv-grid {

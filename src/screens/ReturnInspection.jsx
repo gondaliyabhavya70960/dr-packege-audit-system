@@ -3,11 +3,13 @@ import { MONO, glass, feedBg, fmt } from '../data.js';
 const REASONS = ['wrong item', 'not genuine', 'damaged', 'empty box'];
 
 export default function ReturnInspection({ ctx }) {
-  const { s, set, showToast, openPlayer } = ctx;
+  const { s, set, showToast, openPlayer, logOrderEvent } = ctx;
+
+  const exitNav = s.sessionReturn === 'order' ? { screen: 'order', orderTab: 'detail' } : { screen: 'kiosk' };
 
   const acceptRet = () => {
     const rec = { id: s.retId, kinds: 'return', outcome: 'accepted', tone: 'green', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'd9' + Math.random().toString(16).slice(2, 8) + '…5a10', pair: true };
-    set({ screen: 'kiosk', lastSession: s.retId + ' · return accepted · restock', records: [rec, ...s.records] });
+    set({ ...exitNav, lastSession: s.retId + ' · return accepted · restock', records: [rec, ...s.records], orders: logOrderEvent(s.retId, 'Return accepted · restock') });
     showToast('Return accepted → restock. Outcome written back with video reference.');
   };
 
@@ -18,7 +20,7 @@ export default function ReturnInspection({ ctx }) {
     }
     const flag = { id: s.retId, reason: s.retReason, age: 'now', amt: '₹1.2L' };
     const rec = { id: s.retId, kinds: 'return', outcome: 'flagged', tone: 'red', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'e2' + Math.random().toString(16).slice(2, 8) + '…3f77', pair: true };
-    set({ screen: 'kiosk', lastSession: s.retId + ' · flagged · refund held', flags: [flag, ...s.flags], records: [rec, ...s.records] });
+    set({ ...exitNav, lastSession: s.retId + ' · flagged · refund held', flags: [flag, ...s.flags], records: [rec, ...s.records], orders: logOrderEvent(s.retId, 'Return flagged · refund held') });
     showToast('Refund held — flag (' + s.retReason + ') awaits supervisor approval.');
   };
 

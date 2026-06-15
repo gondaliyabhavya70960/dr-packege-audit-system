@@ -1,7 +1,9 @@
 import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
 
 export default function Receiving({ ctx }) {
-  const { s, set, showToast } = ctx;
+  const { s, set, showToast, logOrderEvent } = ctx;
+
+  const exitNav = s.sessionReturn === 'order' ? { screen: 'order', orderTab: 'detail' } : { screen: 'kiosk' };
 
   const rows = s.recvRows.map((r) => {
     const st = r.state === 'received' ? 'ok' : r.state === 'extra' ? 'bad' : 'wait';
@@ -40,13 +42,13 @@ export default function Receiving({ ctx }) {
     if (matched === 0) return;
     const out = short === 0 && extras === 0 ? 'received' : 'partial';
     const rec = { id: s.recvChallan, kinds: 'challan · receive', outcome: out, tone: out === 'received' ? 'green' : 'amber', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'c7' + Math.random().toString(16).slice(2, 8) + '…1b22', pair: false };
-    set({ screen: 'kiosk', lastSession: s.recvChallan + ' · ' + out, records: [rec, ...s.records] });
+    set({ ...exitNav, lastSession: s.recvChallan + ' · ' + out, records: [rec, ...s.records], orders: logOrderEvent(s.recvChallan, 'Received · reconciled (' + out + ')') });
     showToast('Reconcile result (' + out + ') pushed to Gati — arrival video retained.');
   };
 
   const flagRecv = () => {
     const flag = { id: s.recvChallan, reason: short > 0 ? 'short ' + short : 'extra ' + extras, age: 'now', amt: '—' };
-    set({ screen: 'kiosk', lastSession: s.recvChallan + ' · flagged', flags: [flag, ...s.flags] });
+    set({ ...exitNav, lastSession: s.recvChallan + ' · flagged', flags: [flag, ...s.flags], orders: logOrderEvent(s.recvChallan, 'Receive flagged · short/extra') });
     showToast('Consignment flagged — both videos attached as proof.');
   };
 

@@ -39,6 +39,8 @@ function Select({ value, onChange, children, label }) {
 export default function Orders({ ctx }) {
   const { s, set, openOrder, newCustomOrder } = ctx;
 
+  const sideLabel = s.side === 'store' ? 'Store' : 'Warehouse';
+
   const ql = s.oq.trim().toLowerCase();
   let list = s.orders.filter((o) => {
     if (ql && !(o.id.toLowerCase().includes(ql) || o.customer.toLowerCase().includes(ql) || o.channel.toLowerCase().includes(ql) || o.status.toLowerCase().includes(ql))) return false;
@@ -73,7 +75,13 @@ export default function Orders({ ctx }) {
     <div data-screen-label="14 Orders" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, minHeight: '100%' }}>
       {/* header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-        <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>Orders</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>{sideLabel} · Orders</h1>
+            <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{sideLabel.toUpperCase()}</span>
+          </div>
+          <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.55)' }}>Packaging &amp; transferring goods — open an order to pack, receive, return or view its detail.</span>
+        </div>
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.65)', color: 'rgba(27,29,33,0.55)' }}>
           {s.orders.length} TOTAL · {flaggedCount} FLAGGED · {transitLabel} IN TRANSIT
         </span>

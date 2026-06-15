@@ -249,6 +249,10 @@ export const initialState = {
   orderId: '',
   orderEditing: false,
   orderDraft: null,
+  // warehouse / store flow
+  side: 'warehouse', // 'warehouse' | 'store'
+  orderTab: 'detail', // 'detail' | 'pack' | 'recv' | 'ret' — active tool on the single order
+  sessionReturn: 'kiosk', // where a pack/recv/ret session returns on close: 'kiosk' | 'order'
   // tour
   tourOpen: false,
   tourStep: 0,
