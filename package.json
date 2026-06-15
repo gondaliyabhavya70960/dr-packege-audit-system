@@ -2,19 +2,16 @@
   "name": "dr-packege-audit-system",
   "private": true,
   "version": "0.1.0",
-  "description": "Mayavé Packaging Audit System — video-proof packing, receiving and returns console",
-  "type": "module",
+  "description": "Mayavé Packaging Audit System — video-proof packing, receiving and returns console (Next.js)",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
+    "next": "^14.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^5.4.11"
   }
 }

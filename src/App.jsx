@@ -1,4 +1,7 @@
+'use client';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { initialState, tourDefs, nowStamp } from './data.js';import Login from './screens/Login.jsx';
 import KioskHome from './screens/KioskHome.jsx';
 import PackRecord from './screens/PackRecord.jsx';
@@ -24,13 +27,76 @@ const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash
 const SHARED_SCREENS = ['home', 'orders', 'order'];
 const DASH_SCREENS = ['dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations'];
 
+// ---- URL <-> screen mapping (Next.js built-in routing) ----
+// The app is a stateful client experience; we map its `screen` (+ orderId /
+// listKind) to real routes so every surface has a shareable, SSR-able URL.
+function pathToNav(pathname) {
+  if (!pathname || pathname === '/') return { screen: 'login' };
+  if (pathname === '/overview') return { screen: 'home' };
+  if (pathname === '/packaging') return { screen: 'orders', listKind: 'packaging' };
+  if (pathname === '/transfers') return { screen: 'orders', listKind: 'transfer' };
+  if (pathname === '/kiosk') return { screen: 'kiosk' };
+  if (pathname.startsWith('/session/')) {
+    const mode = pathname.slice('/session/'.length);
+    return { screen: ['pack', 'recv', 'ret'].includes(mode) ? mode : 'kiosk' };
+  }
+  if (pathname.startsWith('/orders/')) {
+    const id = decodeURIComponent(pathname.slice('/orders/'.length));
+    return { screen: 'order', orderId: id === 'new' ? '' : id };
+  }
+  if (pathname.startsWith('/admin/')) {
+    const sec = pathname.slice('/admin/'.length);
+    return { screen: sec === 'search' ? 'search' : sec === 'config' ? 'config' : 'dash-' + sec };
+  }
+  return { screen: 'login' };
+}
+function navToPath(s) {
+  switch (s.screen) {
+    case 'home': return '/overview';
+    case 'orders': return s.listKind === 'transfer' ? '/transfers' : '/packaging';
+    case 'order': return '/orders/' + (s.orderId ? encodeURIComponent(s.orderId) : 'new');
+    case 'kiosk': return '/kiosk';
+    case 'pack':
+    case 'recv':
+    case 'ret': return '/session/' + s.screen;
+    case 'search': return '/admin/search';
+    case 'config': return '/admin/config';
+    case 'login': return '/';
+    default: return s.screen && s.screen.startsWith('dash-') ? '/admin/' + s.screen.slice(5) : '/';
+  }
+}
+
 export default function App() {
-  const [s, setS] = useState(initialState);
+  const pathname = usePathname();
+  const router = useRouter();
+  // initialise the screen from the URL so SSR + first client render match (no hydration flash)
+  const [s, setS] = useState(() => ({ ...initialState, ...pathToNav(pathname) }));
   const set = useCallback((patch) => setS((cur) => ({ ...cur, ...patch })), []);
 
   // latest state for timer/measure callbacks
   const sRef = useRef(s);
   sRef.current = s;
+
+  // state -> URL: reflect the active screen in the address bar
+  useEffect(() => {
+    const path = navToPath(sRef.current);
+    if (path !== pathname) router.push(path);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [s.screen, s.orderId, s.listKind]);
+
+  // URL -> state: handle deep links and browser back/forward
+  useEffect(() => {
+    const nav = pathToNav(pathname);
+    const cur = sRef.current;
+    if (
+      nav.screen !== cur.screen ||
+      (nav.orderId !== undefined && nav.orderId !== cur.orderId) ||
+      (nav.listKind !== undefined && nav.listKind !== cur.listKind)
+    ) {
+      set(nav);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   const toastT = useRef();
   const tourMeasureT = useRef();

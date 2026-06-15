@@ -6,12 +6,18 @@ The original design source is kept at [`design/export-src.dc.html`](design/expor
 
 ## Run it
 
+This is a **Next.js (App Router)** app.
+
 ```bash
 npm install
-npm run dev      # local dev server
-npm run build    # production build → dist/
-npm run preview  # serve the production build
+npm run dev      # http://localhost:3000
+npm run build    # production build → .next/
+npm run start    # serve the production build
 ```
+
+Migrating from the old Vite setup? See [`MIGRATION.md`](MIGRATION.md) for the
+full step‑by‑step (routing, SSR/hydration, data fetching, SEO, env, best
+practices).
 
 ## Demo accounts
 
@@ -81,18 +87,27 @@ which is added to the list. Search & playback links straight into the same detai
 
 ## Stack
 
-- [Vite](https://vitejs.dev) + [React 18](https://react.dev) — no other runtime dependencies
-- All demo state lives in a single client-side store (`src/App.jsx`), ported 1:1 from the design prototype's state machine
+- [Next.js 14 (App Router)](https://nextjs.org) + [React 18](https://react.dev)
+- Real routes per surface (`/overview`, `/packaging`, `/transfers`, `/orders/[id]`, `/admin/[section]`, …) with per-route SEO metadata and SSR; the interactive app is a client island mounted in `app/layout.jsx`, with `src/App.jsx` syncing its `screen` state to the URL
+- All demo state lives in a single client-side store (`src/App.jsx`); orders are also exposed via a mock Route Handler at `/api/orders`
 - iPadOS-style **Liquid Glass** visual language: layered radial-gradient canvas; translucent, heavily-blurred material with specular rim highlights; concentric rounded corners; springy/press-scaled controls and accent focus rings — built from shared material tokens (`glass`, `glassFloat`, `glassPopover`, `glassSheet` in `src/data.js`). Palette is unchanged: `#8E0E22` Mayavé maroon with IBM Plex Mono data accents.
 
 ## Project layout
 
 ```
+app/
+  layout.jsx           # <html><body>, global CSS, default SEO metadata, mounts <App/>
+  page.jsx             # "/" + per-route page.jsx files (metadata carriers)
+  orders/[id]/         # dynamic order route (generateMetadata)
+  admin/[section]/     # dynamic admin route
+  session/[mode]/      # standalone pack/receive/return (legacy, via kiosk/tour)
+  api/orders/route.js  # mock data source (Route Handler)
 src/
-  App.jsx              # state machine + routing (port of the design's DCLogic)
+  App.jsx              # 'use client' state machine + URL⇄screen sync
   data.js              # seed records/flags/users, tour steps, palette helpers
-  screens/             # 01–13 screen components
-  components/          # top bar, tab bar, player, tour, modals, toast
+  screens/             # screen components
+  components/          # top bar, tab bar, player, tour, modals, remarks, toast
+  styles.css           # global stylesheet (imported in app/layout.jsx)
 design/
   export-src.dc.html   # original Claude design source (reference)
 ```
