@@ -1,7 +1,11 @@
 import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
 
 export default function PackRecord({ ctx }) {
-  const { s, set, showToast } = ctx;
+  const { s, set, showToast, logOrderEvent } = ctx;
+
+  // where the session goes when it closes: back to the order's Detail tab when run
+  // inline on a single order, otherwise back to the kiosk.
+  const exitNav = s.sessionReturn === 'order' ? { screen: 'order', orderTab: 'detail' } : { screen: 'kiosk' };
 
   const items = s.packItems;
   const allScanned = items.length > 0 && items.every((i) => i.got >= i.need);
@@ -38,14 +42,14 @@ export default function PackRecord({ ctx }) {
   const closePack = () => {
     if (!pass) return;
     const rec = { id: s.packId, kinds: 'pack', outcome: 'PASS', tone: 'green', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today · ' + fmt(s.recSec) + ' session', hash: 'a1' + Math.random().toString(16).slice(2, 8) + '…e4f2', pair: false };
-    set({ screen: 'kiosk', lastSession: s.packId + ' · sealed · PASS', records: [rec, ...s.records] });
+    set({ ...exitNav, lastSession: s.packId + ' · sealed · PASS', records: [rec, ...s.records], orders: logOrderEvent(s.packId, 'Packed · Warehouse') });
     showToast('Pack video filed under ' + s.packId + ' — dispatch confirmed → Gati');
   };
 
   const flagPack = () => {
     const flag = { id: s.packId, reason: 'pack mismatch', age: 'now', amt: '—' };
     const rec = { id: s.packId, kinds: 'pack', outcome: 'HOLD', tone: 'red', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'b3' + Math.random().toString(16).slice(2, 8) + '…7c01', pair: false };
-    set({ screen: 'kiosk', lastSession: s.packId + ' · HOLD · flagged', flags: [flag, ...s.flags], records: [rec, ...s.records] });
+    set({ ...exitNav, lastSession: s.packId + ' · HOLD · flagged', flags: [flag, ...s.flags], records: [rec, ...s.records], orders: logOrderEvent(s.packId, 'Pack flagged · hold') });
     showToast('Session held — flag raised with video evidence. Supervisor notified.');
   };
 

@@ -1,5 +1,52 @@
 import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS } from '../data.js';
 import { EditIcon, ChevronRightIcon } from '../components/icons.jsx';
+import PackRecord from './PackRecord.jsx';
+import Receiving from './Receiving.jsx';
+import ReturnInspection from './ReturnInspection.jsx';
+
+// Action tabs shown on a single order, by side. The warehouse handles incoming
+// stock so it also gets Receive; the store side does not.
+const SIDE_TABS = {
+  warehouse: [
+    { id: 'detail', label: 'Detail' },
+    { id: 'pack', label: 'Packing' },
+    { id: 'recv', label: 'Receive' },
+    { id: 'ret', label: 'Return' },
+  ],
+  store: [
+    { id: 'detail', label: 'Detail' },
+    { id: 'pack', label: 'Packing' },
+    { id: 'ret', label: 'Return' },
+  ],
+};
+
+const LIVE_TABS = ['pack', 'recv', 'ret'];
+
+function OrderTabs({ tabs, active, onPick }) {
+  return (
+    <div style={{ ...glass, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 16, alignSelf: 'flex-start', flexWrap: 'wrap', maxWidth: '100%' }}>
+      {tabs.map((tb) => {
+        const on = tb.id === active;
+        const live = on && LIVE_TABS.includes(tb.id);
+        return (
+          <button
+            key={tb.id}
+            onClick={() => onPick(tb.id)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 7, border: 'none', cursor: 'pointer', borderRadius: 11,
+              padding: '9px 18px', fontSize: 13.5, fontWeight: 700,
+              background: on ? '#8E0E22' : 'transparent', color: on ? '#FFFFFF' : 'rgba(27,29,33,0.65)',
+              boxShadow: on ? '0 4px 14px rgba(142,14,34,0.25)' : 'none',
+            }}
+          >
+            {live && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#FFFFFF', animation: 'pulse 1.4s ease-in-out infinite' }} />}
+            {tb.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 const inputStyle = {
   background: 'rgba(255,255,255,0.6)',
@@ -77,14 +124,14 @@ function ReadRow({ label, value, accent }) {
 }
 
 export default function OrderDetails({ ctx }) {
-  const { s, set, showToast, openPlayer } = ctx;
+  const { s, set, showToast, openPlayer, openSession } = ctx;
 
   const creating = s.orderId === '' && s.orderEditing && s.orderDraft;
   const order = creating ? null : s.orders.find((o) => o.id === s.orderId) || synthOrder(s.orderId);
   const editing = s.orderEditing && !creating;
 
   const upd = (k, v) => set({ orderDraft: { ...s.orderDraft, [k]: v } });
-  const backToList = () => set({ screen: 'orders', orderEditing: false, orderDraft: null });
+  const backToList = () => set({ screen: 'orders', orderTab: 'detail', orderEditing: false, orderDraft: null });
 
   // ---- create mode ----
   if (creating) {
@@ -170,9 +217,15 @@ export default function OrderDetails({ ctx }) {
 
   const c = editing ? s.orderDraft : order.custom;
 
+  // side-aware action tabs on the single order (Detail / Packing / Receive / Return)
+  const tabs = SIDE_TABS[s.side] || SIDE_TABS.warehouse;
+  const activeTab = tabs.some((tb) => tb.id === s.orderTab) ? s.orderTab : 'detail';
+  const onTab = (id) => (id === 'detail' ? set({ orderTab: 'detail' }) : openSession(id, order.id, 'order'));
+  const sideLabel = s.side === 'store' ? 'Store' : 'Warehouse';
+
   return (
     <div data-screen-label="15 Custom order details" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, minHeight: '100%' }}>
-      <Breadcrumb onBack={backToList} crumb={order.id} />
+      <Breadcrumb onBack={backToList} crumb={order.id} side={sideLabel} />
 
       {/* header card */}
       <div style={{ ...glass, padding: 18, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
@@ -185,6 +238,8 @@ export default function OrderDetails({ ctx }) {
           <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.6)' }}>{order.customer} · {order.value} · placed {order.placed}</span>
         </div>
         <div style={{ flex: 1 }} />
+        {activeTab === 'detail' && (
+          <>
         {hasPair && (
           <button className="hv-accent14" onClick={() => openPlayer(order.id, -1, 'order')} style={{ background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
             Open side-by-side ▸
@@ -205,8 +260,13 @@ export default function OrderDetails({ ctx }) {
             Edit custom details
           </button>
         )}
+          </>
+        )}
       </div>
 
+      <OrderTabs tabs={tabs} active={activeTab} onPick={onTab} />
+
+      {activeTab === 'detail' && (
       <div className="order-grid">
         {/* left: items + timeline */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -306,15 +366,24 @@ export default function OrderDetails({ ctx }) {
           </div>
         </div>
       </div>
+      )}
+
+      {activeTab !== 'detail' && (
+        <div className="order-tool" style={{ marginTop: 2 }}>
+          {activeTab === 'pack' && <PackRecord ctx={ctx} />}
+          {activeTab === 'recv' && <Receiving ctx={ctx} />}
+          {activeTab === 'ret' && <ReturnInspection ctx={ctx} />}
+        </div>
+      )}
     </div>
   );
 }
 
-function Breadcrumb({ onBack, crumb }) {
+function Breadcrumb({ onBack, crumb, side }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
       <button className="hv-text-dark" onClick={onBack} style={{ background: 'none', border: 'none', color: '#8E0E22', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
-        ← Orders
+        ← {side ? side + ' orders' : 'Orders'}
       </button>
       <span style={{ color: 'rgba(27,29,33,0.35)' }}>/</span>
       <span style={{ fontFamily: MONO, color: 'rgba(27,29,33,0.6)' }}>{crumb}</span>

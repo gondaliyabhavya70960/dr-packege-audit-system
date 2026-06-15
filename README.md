@@ -35,17 +35,34 @@ Any password works in this prototype.
 | 07    | Side-by-side player   | pack vs return clip, sync play, stills, supervisor verdicts        |
 | 08–12 | Dashboards            | coverage, consignment, returns, flagged queue, station health      |
 | 13    | Users & config        | roles, retention & tiering, alert thresholds                       |
-| 14    | Orders                | searchable/filterable order list with bulk select and CSV export   |
-| 15    | Custom order details  | per-order detail view with editable custom fields; create new      |
+| 14    | Orders                | per-side order list (Warehouse / Store) — search/filters, bulk select, CSV export |
+| 15    | Single order          | tabbed hub — Detail + inline Packing / Receive / Return tools, editable custom fields, create new |
 
-Plus: floating task/admin tab bar, save-as-draft back confirmation, 9-step feature tour (auto-starts on first visit), toasts.
+Plus: floating Warehouse / Store / Scan + admin tab bar, save-as-draft back confirmation, 9-step feature tour (auto-starts on first visit), toasts.
+
+### Warehouse / Store flow
+
+The floating bottom bar leads with two **sides** — **Warehouse** and **Store** — plus a **Scan**
+shortcut to the station kiosk (and the **Admin** menu for admins). Both sides, and the flow
+below, are identical for **operators and admins**; each just renders under its own chrome.
+
+```
+[Warehouse | Store]  →  order list  →  single order  →  action tabs
+```
+
+1. **Order list** — "Packaging & transferring goods". The same shared order list on either
+   side (search / filter / sort / bulk CSV export), titled for the side you're on.
+2. **Single order** — every row opens the order, which carries a tab bar of side-specific tools:
+   - **Warehouse:** Detail · **Packing** · **Receive** · **Return**
+   - **Store:** Detail · **Packing** · **Return** _(no Receive)_
+3. **Tools run inline** — picking Packing / Receive / Return runs that recording tool (live
+   feed, expected-vs-scanned, flag/close) **in place on the order**, anchored to its ID. Closing
+   or flagging a session writes the outcome back to the order's timeline and returns to **Detail**.
 
 ### Orders & custom order details
 
-**Orders** is available to **both roles** — operators reach it from the **Orders** tab in the
-floating bottom bar (next to Pack / Receive / Returns), and admins get the same tab alongside
-the Admin menu. Each role sees it under its own chrome, and the order data is shared between
-them. It's a full order list with:
+**Orders** is available to **both roles** under each side's chrome, and the order data is shared
+between them. It's a full order list with:
 
 - Search (order ID / customer / channel) and filters for **status**, **channel**, and **date range**
 - Sort by newest/oldest or order value

@@ -41,7 +41,9 @@ export default function App() {
     const iv = setInterval(() => {
       setS((cur) => {
         const upd = {};
-        if (cur.screen === 'pack' || cur.screen === 'recv' || cur.screen === 'ret') upd.recSec = cur.recSec + 1;
+        const inSession = cur.screen === 'pack' || cur.screen === 'recv' || cur.screen === 'ret';
+        const inOrderSession = cur.screen === 'order' && (cur.orderTab === 'pack' || cur.orderTab === 'recv' || cur.orderTab === 'ret');
+        if (inSession || inOrderSession) upd.recSec = cur.recSec + 1;
         if (cur.playerOpen && cur.playing) upd.t = cur.t >= 100 ? 0 : Math.min(100, cur.t + 2);
         return Object.keys(upd).length ? { ...cur, ...upd } : cur;
       });
@@ -58,12 +60,19 @@ export default function App() {
     [set]
   );
 
+  // Open a Pack / Receive / Return session for an id. `returnTo` decides where it
+  // lives and where it returns: 'kiosk' (default — standalone full-screen session)
+  // or 'order' (rendered inline as a tab on the single-order page).
   const openSession = useCallback(
-    (kind, id) => {
+    (kind, id, returnTo) => {
       if (!id) return;
+      const nav =
+        returnTo === 'order'
+          ? { screen: 'order', orderTab: kind, sessionReturn: 'order', orderEditing: false, orderDraft: null }
+          : { screen: kind, sessionReturn: 'kiosk' };
       if (kind === 'pack') {
         set({
-          screen: 'pack',
+          ...nav,
           packId: id,
           recSec: 0,
           packStills: 0,
@@ -78,7 +87,7 @@ export default function App() {
         });
       } else if (kind === 'recv') {
         set({
-          screen: 'recv',
+          ...nav,
           recvChallan: id,
           recSec: 0,
           recvRows: [
@@ -89,11 +98,21 @@ export default function App() {
           scanInput: '',
         });
       } else {
-        set({ screen: 'ret', retId: id, recSec: 0, retStills: 0, retReason: null, retNeedReason: false, scanInput: '' });
+        set({ ...nav, retId: id, recSec: 0, retStills: 0, retReason: null, retNeedReason: false, scanInput: '' });
       }
     },
     [set]
   );
+
+  // When a session is run from inside an order (sessionReturn === 'order'), append the
+  // outcome to that order's timeline so the Detail tab reflects what just happened.
+  const logOrderEvent = useCallback((id, label) => {
+    const st = sRef.current;
+    if (st.sessionReturn !== 'order' || !id) return st.orders;
+    return st.orders.map((o) =>
+      o.id === id ? { ...o, timeline: [...o.timeline, { label, time: 'today', who: st.userLabel || 'station', clip: true }] } : o
+    );
+  }, []);
 
   const openPlayer = useCallback(
     (id, flagIdx, backTo) => {
@@ -173,10 +192,10 @@ export default function App() {
 
   const signOut = useCallback(() => set({ screen: 'login', password: '', profileMenuOpen: false, adminMenuOpen: false }), [set]);
 
-  const openOrder = useCallback((id) => set({ screen: 'order', orderId: id, orderEditing: false, orderDraft: null, adminMenuOpen: false }), [set]);
-  const newCustomOrder = useCallback(() => set({ screen: 'order', orderId: '', orderEditing: true, orderDraft: emptyCustomOrder(), adminMenuOpen: false }), [set]);
+  const openOrder = useCallback((id) => set({ screen: 'order', orderId: id, orderTab: 'detail', orderEditing: false, orderDraft: null, adminMenuOpen: false }), [set]);
+  const newCustomOrder = useCallback(() => set({ screen: 'order', orderId: '', orderTab: 'detail', orderEditing: true, orderDraft: emptyCustomOrder(), adminMenuOpen: false }), [set]);
 
-  const ctx = { s, set, showToast, openSession, openPlayer, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder };
+  const ctx = { s, set, showToast, openSession, logOrderEvent, openPlayer, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder };
 
   const screen = s.screen;
   const isShared = SHARED_SCREENS.includes(screen);

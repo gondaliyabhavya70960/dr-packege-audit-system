@@ -9,10 +9,11 @@ export default function TabBar({ ctx }) {
   const { s, set, openPlayer } = ctx;
   const screen = s.screen;
 
-  const taskTabs = [
-    { id: 'pack', label: 'Pack' },
-    { id: 'recv', label: 'Receive' },
-    { id: 'ret', label: 'Returns' },
+  // the two sides — each lands on its own order list; the single order then
+  // exposes the side-specific tools (warehouse adds Receive, store does not).
+  const sideTabs = [
+    { id: 'warehouse', label: 'Warehouse' },
+    { id: 'store', label: 'Store' },
   ];
 
   const adminMenuItems = [
@@ -31,7 +32,8 @@ export default function TabBar({ ctx }) {
   // "connected fill": the trigger carries the accent fill whenever it's active OR its menu is open,
   // so the button and the dropdown read as one continuous surface.
   const adminFilled = adminActive || adminOpen;
-  const ordersActive = screen === 'orders' || screen === 'order';
+  const onOrders = screen === 'orders' || screen === 'order';
+  const scanActive = ['kiosk', 'pack', 'recv', 'ret'].includes(screen);
   const divider = <div style={{ width: 1, height: 22, background: 'rgba(40,32,38,0.15)', margin: '0 2px' }} />;
 
   const pillBtn = (active) => ({
@@ -49,19 +51,24 @@ export default function TabBar({ ctx }) {
   return (
     <div data-tour="nav" style={{ position: 'fixed', left: '50%', bottom: 18, transform: 'translateX(-50%)', zIndex: 40 }}>
       <div style={{ ...glassFloat, display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999 }}>
-        {taskTabs.map((t) => {
-          const active = screen === t.id || (screen === 'kiosk' && s.mode === t.id);
+        {sideTabs.map((t) => {
+          const active = onOrders && s.side === t.id;
           return (
-            <button key={t.id} onClick={() => set({ screen: 'kiosk', mode: t.id, adminMenuOpen: false })} style={pillBtn(active)}>
+            <button
+              key={t.id}
+              data-tour={t.id === 'warehouse' ? 'sidenav' : undefined}
+              onClick={() => set({ side: t.id, screen: 'orders', adminMenuOpen: false })}
+              style={pillBtn(active)}
+            >
               {t.label}
             </button>
           );
         })}
 
-        {/* Orders — available to every role */}
+        {/* quick scan — the station kiosk (Pack · Receive · Returns by scan) */}
         {divider}
-        <button data-tour="ordersnav" onClick={() => set({ screen: 'orders', adminMenuOpen: false })} style={pillBtn(ordersActive)}>
-          Orders
+        <button onClick={() => set({ screen: 'kiosk', adminMenuOpen: false })} style={pillBtn(scanActive)}>
+          Scan
         </button>
 
         {s.role === 'admin' && (

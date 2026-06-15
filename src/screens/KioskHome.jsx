@@ -34,6 +34,25 @@ export default function KioskHome({ ctx }) {
         <div style={{ fontSize: 16, color: 'rgba(27,29,33,0.55)', textWrap: 'pretty' }}>Pick a task — Pack, Receive or Returns — then scan. The session opens and recording starts.</div>
       </div>
 
+      <div data-tour="modes" style={{ ...glass, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 14 }}>
+        {[
+          { id: 'pack', label: 'Pack' },
+          { id: 'recv', label: 'Receive' },
+          { id: 'ret', label: 'Returns' },
+        ].map((m) => {
+          const on = s.mode === m.id;
+          return (
+            <button
+              key={m.id}
+              onClick={() => set({ mode: m.id })}
+              style={{ border: 'none', cursor: 'pointer', borderRadius: 10, padding: '9px 22px', fontSize: 14, fontWeight: 700, background: on ? '#8E0E22' : 'transparent', color: on ? '#FFFFFF' : 'rgba(27,29,33,0.65)', boxShadow: on ? '0 4px 14px rgba(142,14,34,0.25)' : 'none' }}
+            >
+              {m.label}
+            </button>
+          );
+        })}
+      </div>
+
       <div data-tour="scanner" style={{ ...glass, width: 700, maxWidth: '94%', padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: '#8E0E22' }}>DEMO SCANNER — TAP TO SIMULATE A HID SCAN</div>
         <div className="demo-chip-grid">
