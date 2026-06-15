@@ -305,14 +305,41 @@ export function fmt(sec) {
 
 export const MONO = "'IBM Plex Mono',monospace";
 
-// shared liquid-glass card surface
+// shared liquid-glass card surface (iPadOS-style material — colours unchanged)
 export const glass = {
-  background: 'rgba(255,255,255,0.55)',
-  backdropFilter: 'blur(26px) saturate(1.5)',
-  WebkitBackdropFilter: 'blur(26px) saturate(1.5)',
+  background: 'rgba(255,255,255,0.5)',
+  backdropFilter: 'blur(40px) saturate(1.8)',
+  WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
+  border: '1px solid rgba(255,255,255,0.55)',
+  borderRadius: 24,
+  boxShadow: '0 10px 34px -10px rgba(30,22,40,0.20), 0 2px 8px rgba(30,22,40,0.05), inset 0 1px 0 rgba(255,255,255,0.85), inset 0 0 0 0.5px rgba(255,255,255,0.30)',
+};
+
+// floating chrome (top bars, tab bar) — brighter rim, deeper lift
+export const glassFloat = {
+  background: 'rgba(255,255,255,0.42)',
+  backdropFilter: 'blur(50px) saturate(1.9)',
+  WebkitBackdropFilter: 'blur(50px) saturate(1.9)',
+  border: '1px solid rgba(255,255,255,0.6)',
+  boxShadow: '0 16px 44px -8px rgba(40,28,50,0.24), 0 4px 12px rgba(40,28,50,0.08), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 1px rgba(255,255,255,0.25)',
+};
+
+// popovers / dropdown menus — more opaque for legibility over content
+export const glassPopover = {
+  background: 'rgba(255,255,255,0.72)',
+  backdropFilter: 'blur(50px) saturate(2)',
+  WebkitBackdropFilter: 'blur(50px) saturate(2)',
+  border: '1px solid rgba(255,255,255,0.7)',
+  boxShadow: '0 24px 60px -12px rgba(40,28,50,0.34), inset 0 1px 0 rgba(255,255,255,0.95)',
+};
+
+// modal sheets / overlays
+export const glassSheet = {
+  background: 'rgba(255,255,255,0.6)',
+  backdropFilter: 'blur(50px) saturate(1.9)',
+  WebkitBackdropFilter: 'blur(50px) saturate(1.9)',
   border: '1px solid rgba(255,255,255,0.65)',
-  borderRadius: 16,
-  boxShadow: '0 2px 12px rgba(15,30,60,0.05)',
+  boxShadow: '0 40px 90px -20px rgba(20,14,28,0.45), inset 0 1px 0 rgba(255,255,255,0.9)',
 };
 
 // dark camera-feed placeholder surface
