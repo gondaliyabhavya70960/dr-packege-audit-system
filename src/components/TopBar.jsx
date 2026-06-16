@@ -1,5 +1,5 @@
 import { MONO, glassFloat, glassPopover } from '../data.js';
-import { UserIcon, GearIcon, LogoutIcon } from './icons.jsx';
+import { User, Settings, LogOut } from 'lucide-react';
 
 const SCREEN_CHIPS = { home: 'OVERVIEW', kiosk: 'STATION READY', pack: 'PACK & RECORD', recv: 'STORE RECEIVING', ret: 'RETURN INSPECTION' };
 
@@ -74,16 +74,16 @@ function ProfileMenu({ ctx, roleChip, roleLine }) {
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: '#8E0E22' }}>{roleLine}</span>
           </div>
           <button className="hv-white7" onClick={goProfile} style={itemStyle}>
-            <UserIcon />
+            <User size={16} aria-hidden="true" />
             My profile
           </button>
           <button className="hv-white7" onClick={goSettings} style={itemStyle}>
-            <GearIcon />
+            <Settings size={16} aria-hidden="true" />
             Settings
           </button>
           <div style={{ height: 1, background: 'rgba(40,32,38,0.08)', margin: '4px 6px' }} />
           <button className="hv-red08" onClick={signOut} style={{ ...itemStyle, fontWeight: 700, color: '#C62B22' }}>
-            <LogoutIcon />
+            <LogOut size={16} aria-hidden="true" />
             Sign out
           </button>
         </div>

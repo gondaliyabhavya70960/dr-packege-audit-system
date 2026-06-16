@@ -1,5 +1,5 @@
 import { MONO, glass, tone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder } from '../data.js';
-import { SearchIcon, PlusIcon, ChevronRightIcon } from '../components/icons.jsx';
+import { Search, Plus, ChevronRight } from 'lucide-react';
 
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
@@ -88,7 +88,7 @@ export default function Orders({ ctx }) {
           onClick={newCustomOrder}
           style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '11px 18px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}
         >
-          <PlusIcon size={16} />
+          <Plus size={16} aria-hidden="true" />
           Custom order details
         </button>
       </div>
@@ -99,7 +99,7 @@ export default function Orders({ ctx }) {
           <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: '#6B7280' }}>SEARCH</span>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <span style={{ position: 'absolute', left: 13, color: '#6B7280', display: 'flex' }}>
-              <SearchIcon size={16} />
+              <Search size={16} aria-hidden="true" />
             </span>
             <input
               className="fc-accent"
@@ -206,7 +206,7 @@ export default function Orders({ ctx }) {
                       style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '7px 14px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
                     >
                       Custom details
-                      <ChevronRightIcon size={14} />
+                      <ChevronRight size={14} aria-hidden="true" />
                     </button>
                   </span>
                 </div>
