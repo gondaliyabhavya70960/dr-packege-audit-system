@@ -1,6 +1,5 @@
-import { Play } from 'lucide-react';
+import { Play, SquarePen, ChevronRight } from 'lucide-react';
 import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE } from '../data.js';
-import { EditIcon, ChevronRightIcon } from '../components/icons.jsx';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
@@ -258,7 +257,7 @@ export default function OrderDetails({ ctx }) {
           </>
         ) : (
           <button className="hv-border-accent" onClick={startEdit} style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.75)', color: '#8E0E22', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-            <EditIcon size={15} />
+            <SquarePen size={15} aria-hidden="true" />
             Edit custom details
           </button>
         )}
@@ -364,7 +363,7 @@ export default function OrderDetails({ ctx }) {
                   <span style={{ fontSize: 14, fontWeight: 600 }}>{e.label}</span>
                   <span style={{ fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>sha-256 · {order.id.replace(/[^a-z0-9]/gi, '').slice(-4).toLowerCase()}{(i + 7).toString(16)}c1…f{i}2 ✓</span>
                 </div>
-                <ChevronRightIcon size={16} />
+                <ChevronRight size={16} aria-hidden="true" />
               </button>
             ))}
           </div>

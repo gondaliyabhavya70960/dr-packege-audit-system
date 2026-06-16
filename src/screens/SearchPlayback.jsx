@@ -1,6 +1,5 @@
-import { Play } from 'lucide-react';
+import { Play, Search, ChevronRight } from 'lucide-react';
 import { MONO, glass, feedBg, tone } from '../data.js';
-import { SearchIcon, ChevronRightIcon } from '../components/icons.jsx';
 
 export default function SearchPlayback({ ctx }) {
   const { s, set, openPlayer, openOrder } = ctx;
@@ -20,7 +19,7 @@ export default function SearchPlayback({ ctx }) {
       <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
         <div style={{ position: 'relative', flex: 1, maxWidth: 520, display: 'flex', alignItems: 'center' }}>
           <span style={{ position: 'absolute', left: 16, color: '#6B7280', display: 'flex', pointerEvents: 'none' }} aria-hidden="true">
-            <SearchIcon size={17} />
+            <Search size={17} aria-hidden="true" />
           </span>
           <input
             data-tour="search"
@@ -74,11 +73,11 @@ export default function SearchPlayback({ ctx }) {
                 <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.06em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + selTone.border, color: selTone.color }}>{sel.outcome}</span>
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   <button className="hv-border-accent" onClick={() => openOrder(sel.id)} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.75)', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-                    Custom order details <ChevronRightIcon size={15} />
+                    Custom order details <ChevronRight size={15} aria-hidden="true" />
                   </button>
                   {sel.pair && (
                     <button className="hv-accent14" onClick={() => openPlayer(sel.id, -1, 'search')} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-                      Open side-by-side <ChevronRightIcon size={15} />
+                      Open side-by-side <ChevronRight size={15} aria-hidden="true" />
                     </button>
                   )}
                 </div>

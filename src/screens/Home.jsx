@@ -1,6 +1,5 @@
-import { Package, Truck } from 'lucide-react';
+import { Package, Truck, ChevronRight } from 'lucide-react';
 import { MONO, MUTE, glass, tone, ORDER_STATUSES, isTransferOrder } from '../data.js';
-import { ChevronRightIcon } from '../components/icons.jsx';
 
 // Post-login landing: an at-a-glance count of the order book, with the two
 // working lists (packaging vs transferring goods) one tap away.
@@ -40,7 +39,7 @@ export default function Home({ ctx }) {
         <span style={{ fontFamily: MONO, fontSize: 30, fontWeight: 500, color: '#8E0E22', lineHeight: 1 }}>{count}</span>
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: MUTE }}>ORDERS</span>
       </div>
-      <ChevronRightIcon size={18} />
+      <ChevronRight size={18} aria-hidden="true" />
     </button>
   );
 
