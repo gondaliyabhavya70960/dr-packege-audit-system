@@ -30,6 +30,26 @@ export function isTransferOrder(o) {
   return o.channel === 'B2B' || /^(DC|RFID)/i.test(o.id);
 }
 
+// Fulfilling warehouse (origin). Override per order with `o.from`.
+export const ORIGIN_WH = 'Surat WH';
+
+// Best-effort city from a postal address like "14 Brigade Rd, Bengaluru 560001".
+export function cityOf(address) {
+  if (!address || address === '—') return '—';
+  const parts = address.split(',').map((s) => s.trim()).filter(Boolean);
+  const last = parts[parts.length - 1] || '';
+  const city = last.replace(/\s*\d{4,6}\s*$/, '').trim();
+  return city || parts[0] || '—';
+}
+
+// Sender -> receiver for an order row. Sender is the fulfilling warehouse;
+// receiver is the destination store/branch for transfers, otherwise the
+// customer's city.
+export function orderRoute(o) {
+  const transfer = isTransferOrder(o);
+  return { from: o.from || ORIGIN_WH, to: transfer ? o.customer : cityOf(o.address), transfer };
+}
+
 const blankCustom = { priority: 'Standard', giftWrap: false, insured: '', slot: '', instructions: '', notes: '' };
 
 export const seedOrders = [

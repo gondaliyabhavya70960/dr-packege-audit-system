@@ -1,5 +1,5 @@
-import { MONO, glass, tone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder } from '../data.js';
-import { Search, Plus, ChevronRight } from 'lucide-react';
+import { MONO, glass, tone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
+import { Search, Plus, ChevronRight, ArrowRight } from 'lucide-react';
 
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
@@ -23,7 +23,7 @@ const selectStyle = {
   backgroundPosition: 'right 12px center',
 };
 
-const COLS = '30px 1.7fr 0.7fr 0.9fr 0.8fr 1fr 1.1fr 1.3fr';
+const COLS = '30px 1.5fr 1.5fr 0.6fr 0.8fr 0.7fr 0.9fr 1fr 1.2fr';
 
 function Select({ value, onChange, children, label }) {
   return (
@@ -163,11 +163,12 @@ export default function Orders({ ctx }) {
       {/* table */}
       <div style={{ ...glass, padding: 0, overflow: 'hidden' }}>
         <div style={{ overflowX: 'auto' }}>
-          <div style={{ minWidth: 880 }}>
+          <div style={{ minWidth: 1040 }}>
             {/* header row */}
             <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 12, alignItems: 'center', padding: '12px 18px', borderBottom: '1px solid rgba(0,0,0,0.06)', fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', color: '#6B7280' }}>
               <input type="checkbox" checked={allSel} onChange={toggleAll} style={{ accentColor: '#8E0E22', cursor: 'pointer', width: 15, height: 15 }} />
               <span>ORDER</span>
+              <span>ROUTE</span>
               <span>ITEMS</span>
               <span>VALUE</span>
               <span>CHANNEL</span>
@@ -179,6 +180,7 @@ export default function Orders({ ctx }) {
             {list.map((o) => {
               const t = tone(o.tone);
               const items = o.items.reduce((n, it) => n + it.qty, 0);
+              const route = orderRoute(o);
               const sel = s.oSel.includes(o.id);
               return (
                 <div
@@ -191,6 +193,13 @@ export default function Orders({ ctx }) {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
                     <span style={{ fontFamily: MONO, fontSize: 14, color: '#1B1D21' }}>{o.id}</span>
                     <span style={{ fontSize: 13, color: '#5B616B', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o.customer}</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+                    <span title={'From ' + route.from} style={{ fontSize: 12.5, color: '#6B7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{route.from}</span>
+                    <span title={'To ' + route.to} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: '#1B1D21', minWidth: 0 }}>
+                      <ArrowRight size={12} aria-hidden="true" style={{ flex: 'none', color: '#8E0E22' }} />
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{route.to}</span>
+                    </span>
                   </div>
                   <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.7)' }}>{items} pc{items === 1 ? '' : 's'}</span>
                   <span style={{ fontSize: 14, fontWeight: 600 }}>{o.value}</span>
