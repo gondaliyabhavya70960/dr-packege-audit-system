@@ -396,13 +396,13 @@ export function tone(t) {
   if (t === 'green') return { border: 'rgba(23,163,95,0.5)', color: '#0E8A50' };
   if (t === 'red') return { border: 'rgba(229,62,62,0.5)', color: '#C62B22' };
   if (t === 'amber') return { border: 'rgba(217,142,4,0.5)', color: '#9A6A00' };
-  return { border: 'rgba(0,0,0,0.2)', color: 'rgba(27,29,33,0.6)' };
+  return { border: 'rgba(0,0,0,0.2)', color: '#5B616B' };
 }
 
 export function dotFor(st) {
   if (st === 'ok') return { dot: '✓', dotColor: '#0E8A50', dotBorder: 'rgba(23,163,95,0.5)', dotBg: 'rgba(23,163,95,0.08)' };
   if (st === 'bad') return { dot: '!', dotColor: '#C62B22', dotBorder: 'rgba(229,62,62,0.5)', dotBg: 'rgba(229,62,62,0.06)' };
-  return { dot: '···', dotColor: 'rgba(27,29,33,0.45)', dotBorder: 'rgba(0,0,0,0.15)', dotBg: 'transparent' };
+  return { dot: '···', dotColor: '#6B7280', dotBorder: 'rgba(0,0,0,0.15)', dotBg: 'transparent' };
 }
 
 export function fmt(sec) {
@@ -419,6 +419,13 @@ export function nowStamp() {
 }
 
 export const MONO = "'IBM Plex Mono',monospace";
+
+// Shared type + spacing scale. Mirrors Tailwind's text-*/space utilities so
+// inline-styled components and utility classes stay on the same rhythm.
+// (Tailwind: text-xs=12 sm=14 base=16 lg=18 xl=20 2xl=24 3xl=30; spacing 1=4px.)
+export const TYPE = { xs: 12, sm: 13, label: 11, base: 14, md: 16, lg: 20, xl: 24, display: 32 };
+export const LH = { tight: 1.2, snug: 1.35, normal: 1.5 };
+export const SPACE = { '1': 4, '2': 8, '3': 12, '4': 16, '5': 20, '6': 24, '8': 32 };
 
 // shared liquid-glass card surface (iPadOS-style material — colours unchanged)
 export const glass = {

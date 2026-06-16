@@ -31,7 +31,7 @@ export default function KioskHome({ ctx }) {
 
       <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 760 }}>
         <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: '-0.01em', textWrap: 'pretty' }}>Ready — scan an order ID, RFID, or challan</div>
-        <div style={{ fontSize: 16, color: 'rgba(27,29,33,0.55)', textWrap: 'pretty' }}>Pick a task — Pack, Receive or Returns — then scan. The session opens and recording starts.</div>
+        <div style={{ fontSize: 16, color: '#5B616B', textWrap: 'pretty' }}>Pick a task — Pack, Receive or Returns — then scan. The session opens and recording starts.</div>
       </div>
 
       <div data-tour="modes" style={{ ...glass, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 14 }}>
@@ -64,7 +64,7 @@ export default function KioskHome({ ctx }) {
               style={{ textAlign: 'left', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 16, padding: '13px 14px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 4 }}
             >
               <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 500, color: '#1B1D21' }}>{d.label}</span>
-              <span style={{ fontSize: 12, color: 'rgba(27,29,33,0.5)' }}>{d.sub}</span>
+              <span style={{ fontSize: 12, color: '#6B7280' }}>{d.sub}</span>
             </button>
           ))}
         </div>
@@ -86,8 +86,8 @@ export default function KioskHome({ ctx }) {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-        <div style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.5)' }}>Last session: {s.lastSession}</div>
-        <button className="hv-text-mid" onClick={signOut} style={{ background: 'none', border: 'none', color: 'rgba(27,29,33,0.35)', fontFamily: MONO, fontSize: 11, cursor: 'pointer', letterSpacing: '0.08em' }}>
+        <div style={{ fontFamily: MONO, fontSize: 12, color: '#6B7280' }}>Last session: {s.lastSession}</div>
+        <button className="hv-text-mid" onClick={signOut} style={{ background: 'none', border: 'none', color: '#6B7280', fontFamily: MONO, fontSize: 11, cursor: 'pointer', letterSpacing: '0.08em' }}>
           ADMIN EXIT (PIN)
         </button>
       </div>

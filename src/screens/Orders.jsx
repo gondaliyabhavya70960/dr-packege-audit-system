@@ -28,7 +28,7 @@ const COLS = '30px 1.7fr 0.7fr 0.9fr 0.8fr 1fr 1.1fr 1.3fr';
 function Select({ value, onChange, children, label }) {
   return (
     <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: 'rgba(27,29,33,0.45)' }}>{label}</span>
+      <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: '#6B7280' }}>{label}</span>
       <select className="fc-accent" value={value} onChange={onChange} style={selectStyle}>
         {children}
       </select>
@@ -79,7 +79,7 @@ export default function Orders({ ctx }) {
             <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>{listLabel}</h1>
             <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{sideLabel.toUpperCase()}</span>
           </div>
-          <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.55)' }}>{isTransfer ? 'Inter-branch challans & consignments — open one to receive, return or view its detail.' : 'Customer orders to pack & dispatch — open one to pack, return or view its detail.'}</span>
+          <span style={{ fontSize: 13, color: '#5B616B' }}>{isTransfer ? 'Inter-branch challans & consignments — open one to receive, return or view its detail.' : 'Customer orders to pack & dispatch — open one to pack, return or view its detail.'}</span>
         </div>
         <div style={{ flex: 1 }} />
         <button
@@ -96,9 +96,9 @@ export default function Orders({ ctx }) {
       {/* toolbar: search + filters */}
       <div style={{ ...glass, padding: 14, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 220 }}>
-          <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: 'rgba(27,29,33,0.45)' }}>SEARCH</span>
+          <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: '#6B7280' }}>SEARCH</span>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-            <span style={{ position: 'absolute', left: 13, color: 'rgba(27,29,33,0.4)', display: 'flex' }}>
+            <span style={{ position: 'absolute', left: 13, color: '#6B7280', display: 'flex' }}>
               <SearchIcon size={16} />
             </span>
             <input
@@ -154,7 +154,7 @@ export default function Orders({ ctx }) {
             Export CSV
           </button>
           <div style={{ flex: 1 }} />
-          <button className="hv-text-dark" onClick={() => set({ oSel: [] })} style={{ background: 'none', border: 'none', color: 'rgba(27,29,33,0.55)', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-text-dark" onClick={() => set({ oSel: [] })} style={{ background: 'none', border: 'none', color: '#5B616B', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
             Clear selection
           </button>
         </div>
@@ -165,7 +165,7 @@ export default function Orders({ ctx }) {
         <div style={{ overflowX: 'auto' }}>
           <div style={{ minWidth: 880 }}>
             {/* header row */}
-            <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 12, alignItems: 'center', padding: '12px 18px', borderBottom: '1px solid rgba(0,0,0,0.06)', fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', color: 'rgba(27,29,33,0.5)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 12, alignItems: 'center', padding: '12px 18px', borderBottom: '1px solid rgba(0,0,0,0.06)', fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', color: '#6B7280' }}>
               <input type="checkbox" checked={allSel} onChange={toggleAll} style={{ accentColor: '#8E0E22', cursor: 'pointer', width: 15, height: 15 }} />
               <span>ORDER</span>
               <span>ITEMS</span>
@@ -190,12 +190,12 @@ export default function Orders({ ctx }) {
                   <input type="checkbox" checked={sel} onClick={(e) => e.stopPropagation()} onChange={() => toggleOne(o.id)} style={{ accentColor: '#8E0E22', cursor: 'pointer', width: 15, height: 15 }} />
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
                     <span style={{ fontFamily: MONO, fontSize: 14, color: '#1B1D21' }}>{o.id}</span>
-                    <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.55)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o.customer}</span>
+                    <span style={{ fontSize: 13, color: '#5B616B', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o.customer}</span>
                   </div>
                   <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.7)' }}>{items} pc{items === 1 ? '' : 's'}</span>
                   <span style={{ fontSize: 14, fontWeight: 600 }}>{o.value}</span>
-                  <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.6)' }}>{o.channel}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.55)' }}>{o.placed.split(' · ')[0]}</span>
+                  <span style={{ fontSize: 13, color: '#5B616B' }}>{o.channel}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 12, color: '#5B616B' }}>{o.placed.split(' · ')[0]}</span>
                   <span>
                     <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + t.border, color: t.color, whiteSpace: 'nowrap' }}>{o.status}</span>
                   </span>
@@ -214,7 +214,7 @@ export default function Orders({ ctx }) {
             })}
 
             {list.length === 0 && (
-              <div style={{ padding: 40, textAlign: 'center', color: 'rgba(27,29,33,0.45)', fontSize: 14 }}>
+              <div style={{ padding: 40, textAlign: 'center', color: '#6B7280', fontSize: 14 }}>
                 No orders match these filters — <button onClick={resetFilters} style={{ background: 'none', border: 'none', color: '#8E0E22', fontSize: 14, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}>clear filters</button>
               </div>
             )}
@@ -222,7 +222,7 @@ export default function Orders({ ctx }) {
         </div>
       </div>
 
-      <div style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.35)' }}>
+      <div style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>
         showing {list.length} of {kindOrders.length} {listLabel.toLowerCase()} · every row opens the single order with its linked video evidence
       </div>
     </div>
