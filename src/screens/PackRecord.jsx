@@ -73,8 +73,8 @@ export default function PackRecord({ ctx }) {
           <button className="hv-border-accent" onClick={() => set({ packStills: s.packStills + 1 })} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', color: '#1B1D21', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
             <Camera size={16} strokeWidth={2} aria-hidden="true" /> Capture still
           </button>
-          <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.55)' }}>stills: {s.packStills}</span>
-          <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.4)' }}>chunks hashed at capture · uploading</span>
+          <span style={{ fontFamily: MONO, fontSize: 12, color: '#5B616B' }}>stills: {s.packStills}</span>
+          <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>chunks hashed at capture · uploading</span>
         </div>
       </div>
 
@@ -83,14 +83,14 @@ export default function PackRecord({ ctx }) {
         <div style={{ ...glass, padding: 16, display: 'flex', flexDirection: 'column', gap: 10, flex: 1, minHeight: 0, overflow: 'auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
             <span data-tour="packlist" style={{ fontSize: 17, fontWeight: 700 }}>Expected vs scanned</span>
-            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.45)', color: 'rgba(27,29,33,0.55)' }}>GATI · LIVE</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.45)', color: '#5B616B' }}>GATI · LIVE</span>
           </div>
           {rows.map((row) => (
             <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14 }}>
               <span style={{ width: 26, height: 26, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, border: '1px solid ' + row.dotBorder, color: row.dotColor, background: row.dotBg }}>{row.dot}</span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
                 <span style={{ fontSize: 15, fontWeight: 600 }}>{row.name}</span>
-                <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.5)' }}>{row.sku}</span>
+                <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{row.sku}</span>
               </div>
               <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 13, color: row.dotColor }}>{row.count}</span>
             </div>

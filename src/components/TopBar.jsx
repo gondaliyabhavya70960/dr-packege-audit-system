@@ -29,7 +29,7 @@ const barStyle = {
 
 function StatusChip({ label }) {
   return (
-    <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.55)', padding: '5px 11px', background: 'rgba(255,255,255,0.45)', borderRadius: 999 }}>
+    <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: MONO, fontSize: 11, color: '#5B616B', padding: '5px 11px', background: 'rgba(255,255,255,0.45)', borderRadius: 999 }}>
       <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#17A35F' }} />
       {label}
     </span>
@@ -116,7 +116,7 @@ export default function TopBar({ ctx, variant }) {
   if (variant === 'admin') {
     return (
       <div className="topbar" style={barStyle}>
-        <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 40 }} />
+        <img src="/assets/mayave-logo.png" alt="Mayavé" width={97} height={40} style={{ height: 40, width: 'auto' }} />
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: 'rgba(40,32,38,0.55)' }}>ADMIN CONSOLE</span>
         {showStation && <SideChip side={s.side} />}
         <div style={{ flex: 1 }} />
@@ -129,7 +129,7 @@ export default function TopBar({ ctx, variant }) {
   return (
     <div data-tour="topbar" className="topbar" style={{ ...barStyle, justifyContent: 'space-between' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 40 }} />
+        <img src="/assets/mayave-logo.png" alt="Mayavé" width={97} height={40} style={{ height: 40, width: 'auto' }} />
         {isSession && (
           <button
             className="hv-white75"

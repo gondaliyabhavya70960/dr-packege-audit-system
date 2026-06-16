@@ -53,10 +53,10 @@ export default function Home({ ctx }) {
             <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>{sideLabel} · Overview</h1>
             <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{sideLabel.toUpperCase()}</span>
           </div>
-          <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.55)' }}>Welcome{s.userLabel ? ', ' + s.userLabel : ''} — your order book at a glance. Pick a list to start.</span>
+          <span style={{ fontSize: 13, color: '#5B616B' }}>Welcome{s.userLabel ? ', ' + s.userLabel : ''} — your order book at a glance. Pick a list to start.</span>
         </div>
         <div style={{ flex: 1 }} />
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '6px 12px', borderRadius: 999, background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.65)', color: 'rgba(27,29,33,0.55)' }}>
+        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '6px 12px', borderRadius: 999, background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.65)', color: '#5B616B' }}>
           {orders.length} TOTAL · {flaggedCount} FLAGGED · {transitLabel} IN TRANSIT
         </span>
       </div>
@@ -80,7 +80,7 @@ export default function Home({ ctx }) {
                 className="hv-border-accent"
                 style={{ background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 6 }}
               >
-                <span style={{ fontFamily: MONO, fontSize: 28, fontWeight: 500, lineHeight: 1, color: st.n ? '#1B1D21' : 'rgba(27,29,33,0.3)' }}>{st.n}</span>
+                <span style={{ fontFamily: MONO, fontSize: 28, fontWeight: 500, lineHeight: 1, color: st.n ? '#1B1D21' : '#6B7280' }}>{st.n}</span>
                 <span style={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: '0.04em', padding: '3px 9px', borderRadius: 999, alignSelf: 'flex-start', border: '1px solid ' + tn.border, color: tn.color }}>{st.label}</span>
               </button>
             );

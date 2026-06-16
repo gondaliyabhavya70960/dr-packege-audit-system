@@ -1,3 +1,4 @@
+import { ArrowRight, ChevronRight, AlertTriangle } from 'lucide-react';
 import { MONO, glass, ACCENT, RED, GREEN, PLAIN } from '../data.js';
 
 export default function Dashboard({ ctx }) {
@@ -22,7 +23,7 @@ export default function Dashboard({ ctx }) {
       rows: [
         { title: 'PACK-BENCH-2 · op. Rahul', sub: 'today · camera offline 41 min', right: '7 missing', rightColor: RED, action: '→', go: () => drill('ORD-10293') },
         { title: 'PACK-BENCH-1 · op. Mira', sub: 'today · sessions closed early', right: '4 missing', rightColor: RED, action: '→', go: () => drill('ORD-10293') },
-        { title: 'RETURNS-1 · op. Sana', sub: 'yesterday · upload retry pending', right: '2 missing', rightColor: 'rgba(27,29,33,0.6)', action: '→', go: () => drill('ORD-10311') },
+        { title: 'RETURNS-1 · op. Sana', sub: 'yesterday · upload retry pending', right: '2 missing', rightColor: '#5B616B', action: '→', go: () => drill('ORD-10311') },
       ],
       foot: 'coverage_rate = packed-with-video vs total · threshold alert fires on a coverage gap < 95%',
     };
@@ -85,7 +86,7 @@ export default function Dashboard({ ctx }) {
         title: f.id + ' · ' + f.reason,
         sub: 'age ' + f.age + ' · ' + (f.amt === '—' ? 'no refund hold' : f.amt + ' on hold'),
         right: f.amt,
-        rightColor: f.amt === '—' ? 'rgba(27,29,33,0.5)' : ACCENT,
+        rightColor: f.amt === '—' ? '#6B7280' : ACCENT,
         action: 'Review ▸',
         go: () => openPlayer(f.id, i, 'dash-flagged'),
       })),
@@ -116,7 +117,7 @@ export default function Dashboard({ ctx }) {
     <div data-screen-label={dash.label} style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, minHeight: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>{dash.title}</h1>
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.65)', color: 'rgba(27,29,33,0.55)' }}>{dash.chip}</span>
+        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.65)', color: '#5B616B' }}>{dash.chip}</span>
       </div>
 
       {dash.kpis && (
@@ -124,14 +125,17 @@ export default function Dashboard({ ctx }) {
           {dash.kpis.map((k) => (
             <div key={k.label} style={{ ...glass, borderRadius: 14, padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 4, boxShadow: '0 2px 10px rgba(15,30,60,0.04)' }}>
               <span style={{ fontSize: 36, fontWeight: 700, letterSpacing: '-0.02em', color: k.color }}>{k.num}</span>
-              <span style={{ fontSize: 13, fontWeight: 500, color: 'rgba(27,29,33,0.55)' }}>{k.label}</span>
+              <span style={{ fontSize: 13, fontWeight: 500, color: '#5B616B' }}>{k.label}</span>
             </div>
           ))}
         </div>
       )}
 
       {dash.banner && (
-        <div style={{ border: '1px solid rgba(217,142,4,0.35)', background: 'rgba(217,142,4,0.07)', color: '#9A6A00', borderRadius: 16, padding: '13px 16px', fontSize: 14, fontWeight: 600 }}>{dash.banner}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9, border: '1px solid rgba(217,142,4,0.35)', background: 'rgba(217,142,4,0.07)', color: '#9A6A00', borderRadius: 16, padding: '13px 16px', fontSize: 14, fontWeight: 600 }}>
+          <AlertTriangle size={17} aria-hidden="true" style={{ flex: 'none' }} />
+          <span>{dash.banner.replace(/^⚠\s*/, '')}</span>
+        </div>
       )}
 
       <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -140,15 +144,24 @@ export default function Dashboard({ ctx }) {
           <button key={i} className="hv-chip" onClick={r.go} style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14, padding: '12px 15px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1, minWidth: 0 }}>
               <span style={{ fontSize: 15, fontWeight: 600, color: '#1B1D21' }}>{r.title}</span>
-              <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.5)' }}>{r.sub}</span>
+              <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{r.sub}</span>
             </div>
             <span style={{ fontFamily: MONO, fontSize: 12, color: r.rightColor }}>{r.right}</span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#8E0E22' }}>{r.action}</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, flex: 'none', fontSize: 13, fontWeight: 700, color: '#8E0E22' }}>
+              {r.action === '→' ? (
+                <ArrowRight size={16} aria-hidden="true" />
+              ) : (
+                <>
+                  {r.action.replace(/\s*▸\s*$/, '')}
+                  <ChevronRight size={15} aria-hidden="true" />
+                </>
+              )}
+            </span>
           </button>
         ))}
       </div>
 
-      <div style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.35)' }}>{dash.foot}</div>
+      <div style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{dash.foot}</div>
     </div>
   );
 }

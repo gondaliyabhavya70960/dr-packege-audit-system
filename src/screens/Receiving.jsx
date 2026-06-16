@@ -62,16 +62,16 @@ export default function Receiving({ ctx }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <span style={{ fontSize: 17, fontWeight: 700 }}>Expected items — scan each RFID to tick</span>
-              <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.5)' }}>Challan {s.recvChallan}</span>
+              <span style={{ fontFamily: MONO, fontSize: 12, color: '#6B7280' }}>Challan {s.recvChallan}</span>
             </div>
-            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.45)', color: 'rgba(27,29,33,0.55)' }}>GATI · CHALLAN</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.45)', color: '#5B616B' }}>GATI · CHALLAN</span>
           </div>
           {rows.map((row) => (
             <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14 }}>
               <span style={{ width: 26, height: 26, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, border: '1px solid ' + row.dotBorder, color: row.dotColor, background: row.dotBg }}>{row.dot}</span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 <span style={{ fontFamily: MONO, fontSize: 14 }}>{row.rfid}</span>
-                <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.55)' }}>{row.name}</span>
+                <span style={{ fontSize: 13, color: '#5B616B' }}>{row.name}</span>
               </div>
               <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 12, letterSpacing: '0.06em', color: row.dotColor }}>{row.stateLabel}</span>
             </div>
@@ -115,7 +115,7 @@ export default function Receiving({ ctx }) {
           <span style={{ position: 'absolute', top: 12, left: 12, fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 9px', borderRadius: 6, background: 'rgba(0,0,0,0.55)', color: 'rgba(255,255,255,0.75)' }}>CAM-02 · receiving point</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', padding: '0 13px 13px' }}>
-          <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.4)' }}>arrival video retained with the pack video · both attach to any flag</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>arrival video retained with the pack video · both attach to any flag</span>
         </div>
       </div>
     </div>

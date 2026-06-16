@@ -44,7 +44,7 @@ export default function RemarkBox({ ctx, id, variant = 'input' }) {
       <div style={{ ...glass, padding: 14, display: 'flex', flexDirection: 'column', gap: 9 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 14, fontWeight: 700 }}>Remark</span>
-          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.08em', color: 'rgba(27,29,33,0.45)' }}>{remarks.length} on this order · shown in Detail</span>
+          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.08em', color: '#6B7280' }}>{remarks.length} on this order · shown in Detail</span>
         </div>
         {inputRow}
       </div>
@@ -58,7 +58,7 @@ export default function RemarkBox({ ctx, id, variant = 'input' }) {
         <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Remarks</span>
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{remarks.length}</span>
       </div>
-      {remarks.length === 0 && <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.45)' }}>No remarks yet — add one from any step.</span>}
+      {remarks.length === 0 && <span style={{ fontSize: 13, color: '#6B7280' }}>No remarks yet — add one from any step.</span>}
       {remarks.map((r, i) => (
         <div key={i} style={{ display: 'flex', gap: 10 }}>
           <span style={{ width: 30, height: 30, flex: 'none', borderRadius: '50%', background: 'rgba(142,14,34,0.12)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>
@@ -67,7 +67,7 @@ export default function RemarkBox({ ctx, id, variant = 'input' }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
               <span style={{ fontSize: 13.5, fontWeight: 700 }}>{r.who}</span>
-              <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.45)' }}>{r.time}</span>
+              <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{r.time}</span>
             </div>
             <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.8)', textWrap: 'pretty' }}>{r.text}</span>
           </div>

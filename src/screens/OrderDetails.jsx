@@ -71,7 +71,7 @@ const condTone = (c) => {
 function Field({ label, children }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-      <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: 'rgba(27,29,33,0.45)' }}>{label}</span>
+      <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: '#6B7280' }}>{label}</span>
       {children}
     </div>
   );
@@ -92,7 +92,7 @@ function CustomEditor({ draft, upd }) {
         <Field label="GIFT WRAP">
           <button
             onClick={() => upd('giftWrap', !draft.giftWrap)}
-            style={{ ...inputStyle, cursor: 'pointer', textAlign: 'left', fontWeight: 700, color: draft.giftWrap ? '#0E8A50' : 'rgba(27,29,33,0.5)' }}
+            style={{ ...inputStyle, cursor: 'pointer', textAlign: 'left', fontWeight: 700, color: draft.giftWrap ? '#0E8A50' : '#6B7280' }}
           >
             {draft.giftWrap ? 'Yes · gift wrap' : 'No'}
           </button>
@@ -161,7 +161,7 @@ export default function OrderDetails({ ctx }) {
         <div style={{ ...glass, padding: 22, maxWidth: 760, width: '100%', display: 'flex', flexDirection: 'column', gap: 18 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <span style={{ fontSize: 20, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>Custom order details</span>
-            <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.55)' }}>Record a bespoke order with its handling, insurance and audit notes. It joins the orders list and links to any video filed under the same ID.</span>
+            <span style={{ fontSize: 14, color: '#5B616B' }}>Record a bespoke order with its handling, insurance and audit notes. It joins the orders list and links to any video filed under the same ID.</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -274,16 +274,16 @@ export default function OrderDetails({ ctx }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Items</span>
-            {order.items.length === 0 && <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.45)' }}>No line items recorded for this entry.</span>}
+            {order.items.length === 0 && <span style={{ fontSize: 13, color: '#6B7280' }}>No line items recorded for this entry.</span>}
             {order.items.map((it, i) => {
               const ct = condTone(it.condition);
               return (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, ...surfaceSubtle, borderRadius: 12, padding: '12px 14px' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                     <span style={{ fontSize: 15, fontWeight: 600 }}>{it.name}</span>
-                    <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.5)' }}>{it.sku}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{it.sku}</span>
                   </div>
-                  <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(27,29,33,0.6)' }}>×{it.qty}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: '#5B616B' }}>×{it.qty}</span>
                   <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + ct.border, color: ct.color }}>{it.condition}</span>
                 </div>
               );
@@ -309,7 +309,7 @@ export default function OrderDetails({ ctx }) {
                         </button>
                       )}
                     </div>
-                    <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.5)' }}>{e.time} · {e.who}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{e.time} · {e.who}</span>
                   </div>
                 </div>
               );
@@ -351,7 +351,7 @@ export default function OrderDetails({ ctx }) {
 
           <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Linked evidence</span>
-            {clips.length === 0 && <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.45)' }}>No video filed yet.</span>}
+            {clips.length === 0 && <span style={{ fontSize: 13, color: '#6B7280' }}>No video filed yet.</span>}
             {clips.map((e, i) => (
               <button
                 key={i}
@@ -389,8 +389,8 @@ function Breadcrumb({ onBack, crumb, back }) {
       <button className="hv-text-dark" onClick={onBack} style={{ background: 'none', border: 'none', color: '#8E0E22', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
         ← {back || 'Orders'}
       </button>
-      <span style={{ color: 'rgba(27,29,33,0.35)' }}>/</span>
-      <span style={{ fontFamily: MONO, color: 'rgba(27,29,33,0.6)' }}>{crumb}</span>
+      <span style={{ color: '#6B7280' }}>/</span>
+      <span style={{ fontFamily: MONO, color: '#5B616B' }}>{crumb}</span>
     </div>
   );
 }

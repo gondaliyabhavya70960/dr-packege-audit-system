@@ -1,5 +1,6 @@
 import { X, Rewind, FastForward, Play, Pause } from 'lucide-react';
-import { MONO, glassSheet, feedBg, fmt } from '../data.js';
+import { MONO, glassSheet, fmt } from '../data.js';
+import ClipPlayer from './ClipPlayer.jsx';
 
 const STILL_LABELS = ['stone', 'hallmark', 'certificate'];
 
@@ -32,14 +33,13 @@ export default function SideBySidePlayer({ ctx }) {
 
   const clipPane = (label, meta, text) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.55)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: MONO, fontSize: 11, color: '#5B616B' }}>
         <span style={{ color: '#8E0E22' }}>{label}</span>
         <span>{meta}</span>
       </div>
-      <div style={{ height: 230, borderRadius: 18, position: 'relative', ...feedBg, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-        <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>{text}</span>
-        <div style={{ position: 'absolute', left: 0, bottom: 0, height: 4, background: '#8E0E22', width: s.t + '%' }} />
-      </div>
+      {/* real <video> pipeline (poster + MP4/WebM + lazy); falls back to the
+          placeholder until a clip source is wired in — see ClipPlayer. */}
+      <ClipPlayer label={text} t={s.t} height={230} radius={18} />
     </div>
   );
 
@@ -73,28 +73,28 @@ export default function SideBySidePlayer({ ctx }) {
             <FastForward size={16} aria-hidden="true" />
           </button>
           <input type="range" min="0" max="100" value={s.t} onChange={(e) => set({ t: Number(e.target.value) })} style={{ flex: 1, accentColor: '#8E0E22', cursor: 'pointer' }} />
-          <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(27,29,33,0.6)' }}>{fmt(Math.round(s.t * 0.84))} / 01:24</span>
+          <span style={{ fontFamily: MONO, fontSize: 13, color: '#5B616B' }}>{fmt(Math.round(s.t * 0.84))} / 01:24</span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '0 20px 14px', flexWrap: 'wrap' }}>
-          <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.5)' }}>STILLS</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>STILLS</span>
           {STILL_LABELS.map((l, i) => {
             const active = s.still === i;
             return (
               <button
                 key={l}
                 onClick={() => set({ still: active ? -1 : i })}
-                style={{ cursor: 'pointer', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 600, background: 'rgba(255,255,255,0.45)', border: '1px solid ' + (active ? 'rgba(142,14,34,0.7)' : 'rgba(0,0,0,0.08)'), color: active ? '#8E0E22' : 'rgba(27,29,33,0.6)' }}
+                style={{ cursor: 'pointer', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 600, background: 'rgba(255,255,255,0.45)', border: '1px solid ' + (active ? 'rgba(142,14,34,0.7)' : 'rgba(0,0,0,0.08)'), color: active ? '#8E0E22' : '#5B616B' }}
               >
                 {active ? l + ' · enlarged' : l}
               </button>
             );
           })}
-          <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.35)' }}>click a still to enlarge</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>click a still to enlarge</span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderTop: '1px solid rgba(0,0,0,0.05)', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.6)' }}>{fromFlag ? 'Supervisor decision — releases or keeps the refund hold.' : 'Verdict feeds the accept / flag decision.'}</span>
+          <span style={{ fontSize: 14, color: '#5B616B' }}>{fromFlag ? 'Supervisor decision — releases or keeps the refund hold.' : 'Verdict feeds the accept / flag decision.'}</span>
           <div style={{ flex: 1 }} />
           <button className="hv-red05" onClick={verdictNeg} style={{ background: '#FFFFFF', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: '11px 22px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
             {fromFlag ? 'Uphold flag — keep hold' : 'Mismatch suspected'}

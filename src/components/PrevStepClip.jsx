@@ -39,7 +39,7 @@ export default function PrevStepClip({ ctx, id, fallbackLabel = 'Previous step' 
         </span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
           <span style={{ fontSize: 14, fontWeight: 700 }}>Previous step · {prev.label}</span>
-          <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.55)' }}>tap to review the clip — spot any issue</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: '#5B616B' }}>tap to review the clip — spot any issue</span>
         </div>
         <span style={{ marginLeft: 'auto', flex: 'none', display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', color: '#8E0E22', borderRadius: 999, padding: '7px 14px', fontSize: 12.5, fontWeight: 700 }}>Review ▸</span>
       </button>

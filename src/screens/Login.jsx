@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react';
 import { MONO } from '../data.js';
 import { PackageIcon } from '../components/icons.jsx';
 
@@ -15,7 +16,7 @@ export default function Login({ ctx }) {
   };
 
   const check = (
-    <span style={{ width: 20, height: 20, borderRadius: '50%', background: '#16A34A', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, flex: 'none' }}>✓</span>
+    <span style={{ width: 20, height: 20, borderRadius: '50%', background: '#16A34A', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}><Check size={13} strokeWidth={3} aria-hidden="true" /></span>
   );
 
   return (
@@ -66,7 +67,7 @@ export default function Login({ ctx }) {
               <span style={{ marginLeft: 'auto', fontSize: 13, fontWeight: 700, color: '#C8102E' }}>live</span>
             </div>
           </div>
-          <div style={{ background: '#E3F5EC', color: '#11704B', borderRadius: 10, padding: '10px 14px', fontSize: 13.5, fontWeight: 600 }}>✓ Detected 3 / 3 SKUs — matches challan</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#E3F5EC', color: '#11704B', borderRadius: 10, padding: '10px 14px', fontSize: 13.5, fontWeight: 600 }}><Check size={15} strokeWidth={3} aria-hidden="true" /> Detected 3 / 3 SKUs — matches challan</div>
         </div>
         <div style={{ flex: 1 }} />
         <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.04em', color: 'rgba(255,255,255,0.75)' }}>SOC-2 governance · RBAC · configurable retention</div>
