@@ -52,7 +52,123 @@ export function orderRoute(o) {
 
 const blankCustom = { priority: 'Standard', giftWrap: false, insured: '', slot: '', instructions: '', notes: '' };
 
-export const seedOrders = [
+// ---- order stages (pack -> receive -> return) ----
+// Which stages a given order has already completed (read from its timeline /
+// status). Used to lock completed stages to a read-only evidence view.
+export function orderStages(o) {
+  const labels = (o.timeline || []).map((e) => (e.label || '').toLowerCase());
+  const has = (s) => labels.some((l) => l.includes(s));
+  return {
+    pack: has('packed') || ['transit', 'received', 'delivery', 'delivered', 'returned', 'flagged'].includes(o.statusKey),
+    recv: has('received') || o.statusKey === 'received',
+    ret: has('return inspected') || has('return ') || ['returned', 'flagged'].includes(o.statusKey),
+  };
+}
+
+// The filed clip (+ a deterministic tamper-evident hash) for a completed stage.
+export function stageClip(o, stage) {
+  const want = stage === 'pack' ? 'packed' : stage === 'recv' ? 'received' : 'return';
+  const e = (o.timeline || []).find((ev) => ev.clip && (ev.label || '').toLowerCase().includes(want));
+  if (!e) return null;
+  const seed = (o.id + stage).replace(/[^a-z0-9]/gi, '').toLowerCase().padEnd(8, '0');
+  return { label: e.label, time: e.time, who: e.who, hash: seed.slice(0, 4) + '…' + seed.slice(-4) };
+}
+
+// ---- deterministic demo-order generator (no Math.random -> SSR-safe) ----
+const GEN_CITIES = [
+  ['Mumbai', '400001'], ['Bengaluru', '560001'], ['New Delhi', '110001'], ['Hyderabad', '500034'],
+  ['Chennai', '600020'], ['Pune', '411001'], ['Kolkata', '700019'], ['Ahmedabad', '380009'],
+  ['Surat', '395007'], ['Jaipur', '302001'], ['Kochi', '682031'], ['Vadodara', '390007'],
+  ['Indore', '452001'], ['Nagpur', '440001'], ['Lucknow', '226001'], ['Chandigarh', '160017'],
+];
+const GEN_AREAS = ['MG Road', 'Brigade Rd', 'Park Street', 'Banjara Hills', 'Koregaon Park', 'Jubilee Hills', 'Marine Drive', 'Civil Lines', 'C Scheme', 'Ghod Dod Rd', 'Linking Rd', 'Adyar', 'Salt Lake', 'Vasant Vihar'];
+const GEN_NAMES = ['Aarav Shah', 'Isha Verma', 'Rohan Mehta', 'Neha Kapoor', 'Vikram Nair', 'Ananya Iyer', 'Kavya Reddy', 'Aditya Rao', 'Meera Joshi', 'Pooja Nair', 'Sanjay Gupta', 'Diya Patel', 'Arjun Menon', 'Riya Singh', 'Karan Malhotra', 'Sneha Pillai', 'Rahul Bose', 'Tara Krishnan', 'Dev Anand', 'Nisha Rao', 'Yash Agarwal', 'Anjali Desai', 'Manish Jain', 'Priya Chauhan', 'Varun Sethi', 'Ira Banerjee', 'Nikhil Kulkarni', 'Aisha Khan', 'Rohit Saxena', 'Lata Mani'];
+const GEN_STORES = ['MG Road Store', 'Surat Flagship', 'Ahmedabad Flagship', 'Vadodara Branch', 'Jaipur Branch', 'Indore Store', 'Pune Galleria', 'Kochi Marine', 'Hyderabad Banjara', 'Chennai Express Ave', 'Delhi CP Store', 'Kolkata Park St'];
+const GEN_ITEMS = [['SKU 4471', 'Solitaire ring'], ['SKU 4472', 'Diamond pendant'], ['SKU 4480', 'Gold bangle'], ['SKU 4490', 'Emerald drop earrings'], ['SKU 4502', 'Tennis bracelet'], ['SKU 4510', 'Polki necklace'], ['SKU 4521', 'Mangalsutra'], ['SKU 4530', 'Diamond choker'], ['SKU 4531', 'Cocktail ring'], ['SKU 4540', 'Gold coin · 8g'], ['SKU 4550', 'Kundan necklace set'], ['SKU 4560', 'Diamond stud earrings'], ['SKU 4571', 'Ruby cocktail ring'], ['SKU 4590', 'Pearl drop pendant'], ['SKU 4601', 'Temple jewellery set'], ['SKU 4612', 'Sapphire ring']];
+const GEN_OPS = ['Mira', 'Rahul', 'Sana', 'Devang', 'Priya', 'Karan'];
+const PACK_STATUS = ['packed', 'transit', 'delivery', 'delivered', 'delivered', 'returned', 'flagged', 'packed', 'delivered', 'transit'];
+const XFER_STATUS = ['transit', 'received', 'received', 'transit', 'delivered'];
+
+function statusMeta(k) {
+  const m = {
+    packed: ['Packed', 'plain'], transit: ['In transit', 'amber'], received: ['Received', 'green'],
+    delivery: ['Out for delivery', 'amber'], delivered: ['Delivered', 'green'], returned: ['Returned', 'red'], flagged: ['Flagged', 'red'],
+  };
+  return m[k] || ['On record', 'plain'];
+}
+function condFor(k) {
+  if (k === 'returned' || k === 'flagged') return 'disputed';
+  if (k === 'delivered' || k === 'received') return 'verified';
+  return 'pending';
+}
+function genTimeline(k, transfer, op, dm) {
+  const T = [];
+  if (transfer) {
+    T.push({ label: 'Challan raised', time: dm + ' · 09:00', who: 'warehouse', clip: false });
+    T.push({ label: 'Dispatched → Gati', time: dm + ' · 12:30', who: 'auto', clip: false });
+    if (k === 'received') {
+      T.push({ label: 'Received · Store', time: dm + ' · 15:30', who: op + ' · STORE-RECV-1', clip: true });
+      T.push({ label: 'Shelved', time: dm + ' · 16:05', who: op, clip: false });
+    } else T.push({ label: 'In transit', time: dm + ' · —', who: 'Gati · 2 days', clip: false });
+    return T;
+  }
+  T.push({ label: 'Order placed', time: dm + ' · 09:14', who: 'web checkout', clip: false });
+  T.push({ label: 'Packed · Warehouse', time: dm + ' · 11:02', who: op + ' · PACK-BENCH-1', clip: true });
+  if (k === 'transit') T.push({ label: 'In transit', time: dm + ' · —', who: 'Gati', clip: false });
+  if (k === 'delivery') T.push({ label: 'Out for delivery', time: dm + ' · 08:40', who: 'Gati', clip: false });
+  if (k === 'delivered') T.push({ label: 'Delivered', time: dm + ' · 16:21', who: 'OTP confirmed', clip: false });
+  if (k === 'returned' || k === 'flagged') {
+    T.push({ label: 'Delivered', time: dm + ' · 13:00', who: 'OTP confirmed', clip: false });
+    T.push({ label: 'Return requested', time: dm + ' · 09:20', who: 'customer', clip: false });
+    T.push({ label: 'Return inspected', time: dm + ' · 16:21', who: op + ' · RETURNS-1', clip: true });
+  }
+  return T;
+}
+function generateOrders(n) {
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const isB2B = i % 6 === 0;
+    const isRfid = !isB2B && i % 11 === 0;
+    const transfer = isB2B || isRfid;
+    const k = transfer ? XFER_STATUS[i % XFER_STATUS.length] : PACK_STATUS[i % PACK_STATUS.length];
+    const [city, pin] = GEN_CITIES[i % GEN_CITIES.length];
+    const area = GEN_AREAS[(i * 3) % GEN_AREAS.length];
+    const op = GEN_OPS[i % GEN_OPS.length];
+    const customer = transfer ? GEN_STORES[i % GEN_STORES.length] : GEN_NAMES[i % GEN_NAMES.length];
+    const channel = isB2B ? 'B2B' : i % 4 === 0 ? 'Store' : 'Online';
+    const id = isB2B ? 'DC-2026-00' + (600 + i) : isRfid ? 'RFID-' + (1200 + i) : 'ORD-' + (10400 + i);
+    const day = 2 + (i % 13);
+    const hh = 8 + (i % 11);
+    const mm = (i * 7) % 60;
+    const pad = (x) => String(x).padStart(2, '0');
+    const dm = pad(day) + ' Jun';
+    const ts = Date.parse('2026-06-' + pad(day) + 'T' + pad(hh) + ':' + pad(mm) + ':00');
+    const placed = pad(day) + ' Jun 2026 · ' + pad(hh) + ':' + pad(mm);
+    const cond = condFor(k);
+    const it1 = GEN_ITEMS[i % GEN_ITEMS.length];
+    const items = [{ sku: it1[0], name: it1[1], qty: 1 + (i % 2), condition: cond }];
+    if (i % 3 === 0) {
+      const it2 = GEN_ITEMS[(i * 7 + 3) % GEN_ITEMS.length];
+      items.push({ sku: it2[0], name: it2[1], qty: 1, condition: cond });
+    }
+    const valNum = 45000 + ((i * 37) % 60) * 5000;
+    const [status, tone] = statusMeta(k);
+    const order = {
+      id, channel, customer, phone: '+91 9' + pad((i * 13) % 90) + '00 ' + pad((i * 7) % 90) + '' + pad((i * 3) % 90),
+      address: ((i % 90) + 1) + ' ' + area + ', ' + city + ' ' + pin, placed, ts,
+      statusKey: k, status, tone, station: transfer ? 'STORE-RECV-' + (1 + (i % 2)) : 'PACK-BENCH-' + (1 + (i % 2)),
+      value: '₹' + (valNum / 100000).toFixed(2) + 'L', valNum,
+      items, timeline: genTimeline(k, transfer, op, dm),
+      custom: { ...blankCustom, insured: '₹' + (valNum / 100000).toFixed(2) + 'L', priority: i % 5 === 0 ? 'Express' : i % 9 === 0 ? 'White-glove' : 'Standard' },
+      from: 'Surat WH',
+    };
+    if (i % 4 === 0) order.remarks = [{ who: op, time: placed.split(' · ')[0] + ' · 11:08', text: transfer ? 'RFIDs matched on dispatch.' : 'Condition verified at the bench.' }];
+    out.push(order);
+  }
+  return out;
+}
+
+const curatedOrders = [
   {
     id: 'ORD-10293', channel: 'Online', customer: 'Aarav Shah', phone: '+91 98200 11234',
     address: '14 Brigade Rd, Bengaluru 560001', placed: '12 Jun 2026 · 09:14', ts: Date.parse('2026-06-12T09:14:00'),
@@ -283,6 +399,9 @@ export const seedOrders = [
     remarks: [{ who: 'Mira', time: '11 Jun · 10:10', text: 'Gift note card added as requested.' }],
   },
 ];
+
+// curated demo orders + ~104 generated ones (varied stage / status / city / channel)
+export const seedOrders = [...curatedOrders, ...generateOrders(104)];
 
 export const PRIORITY_OPTIONS = ['Standard', 'Express', 'White-glove'];
 

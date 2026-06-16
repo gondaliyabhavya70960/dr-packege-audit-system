@@ -29,7 +29,7 @@ const barStyle = {
 
 function StatusChip({ label }) {
   return (
-    <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: MONO, fontSize: 11, color: '#5B616B', padding: '5px 11px', background: 'rgba(255,255,255,0.45)', borderRadius: 999 }}>
+    <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: MONO, fontSize: 11, color: '#41464E', padding: '5px 11px', background: 'rgba(255,255,255,0.82)', border: '1px solid rgba(255,255,255,0.9)', borderRadius: 999 }}>
       <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#17A35F' }} />
       {label}
     </span>

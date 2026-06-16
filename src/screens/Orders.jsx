@@ -1,5 +1,6 @@
 import { MONO, glass, tone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
-import { Search, Plus, ChevronRight, ArrowRight } from 'lucide-react';
+import { Search, Plus, ChevronRight, ArrowRight, SearchX } from 'lucide-react';
+import EmptyState from '../components/EmptyState.jsx';
 
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
@@ -223,8 +224,17 @@ export default function Orders({ ctx }) {
             })}
 
             {list.length === 0 && (
-              <div style={{ padding: 40, textAlign: 'center', color: '#6B7280', fontSize: 14 }}>
-                No orders match these filters — <button onClick={resetFilters} style={{ background: 'none', border: 'none', color: '#8E0E22', fontSize: 14, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}>clear filters</button>
+              <div style={{ padding: 18 }}>
+                <EmptyState
+                  icon={SearchX}
+                  title="No orders match"
+                  sub={'Nothing in ' + listLabel.toLowerCase() + ' matches these filters.'}
+                  action={
+                    <button onClick={resetFilters} style={{ marginTop: 4, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                      Clear filters
+                    </button>
+                  }
+                />
               </div>
             )}
           </div>
