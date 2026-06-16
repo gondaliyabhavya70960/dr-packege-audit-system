@@ -1,9 +1,41 @@
-import { Play, SquarePen, ChevronRight } from 'lucide-react';
-import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE } from '../data.js';
+import { Play, SquarePen, ChevronRight, Lock } from 'lucide-react';
+import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, orderStages, stageClip } from '../data.js';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
 import RemarkBox from '../components/RemarkBox.jsx';
+import ClipPlayer from '../components/ClipPlayer.jsx';
+
+const STAGE_TITLES = { pack: 'Packing', recv: 'Receiving', ret: 'Return inspection' };
+
+// A completed stage is locked to a read-only evidence view: the filed clip +
+// the order's remarks. No live recording controls.
+function CompletedStage({ order, stage, ctx }) {
+  const clip = stageClip(order, stage);
+  const g = tone('green');
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ ...cardLight, padding: 18, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>{STAGE_TITLES[stage]}</span>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: MONO, fontSize: 10.5, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + g.border, color: g.color }}>
+          <Lock size={11} aria-hidden="true" /> RECORDED · READ-ONLY
+        </span>
+        {clip && <span style={{ fontFamily: MONO, fontSize: 12, color: MUTE }}>{clip.time} · {clip.who}</span>}
+      </div>
+      <div style={{ ...cardLight, padding: 14 }}>
+        <ClipPlayer
+          label={clip ? '[ ' + clip.label + ' — filed clip ]' : '[ no clip on file for this step ]'}
+          id={order.id}
+          ts={clip ? clip.time : undefined}
+          hash={clip ? clip.hash : undefined}
+          height={320}
+          radius={14}
+        />
+      </div>
+      <RemarkBox ctx={ctx} id={order.id} variant="thread" readOnly />
+    </div>
+  );
+}
 
 // Action tabs shown on a single order, by side. The warehouse handles incoming
 // stock so it also gets Receive; the store side does not.
@@ -23,12 +55,13 @@ const SIDE_TABS = {
 
 const LIVE_TABS = ['pack', 'recv', 'ret'];
 
-function OrderTabs({ tabs, active, onPick }) {
+function OrderTabs({ tabs, active, onPick, stages }) {
   return (
     <div style={{ ...cardLight, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 14, alignSelf: 'flex-start', flexWrap: 'wrap', maxWidth: '100%' }}>
       {tabs.map((tb) => {
         const on = tb.id === active;
-        const live = on && LIVE_TABS.includes(tb.id);
+        const done = stages && stages[tb.id];
+        const live = on && LIVE_TABS.includes(tb.id) && !done;
         return (
           <button
             key={tb.id}
@@ -41,6 +74,7 @@ function OrderTabs({ tabs, active, onPick }) {
             }}
           >
             {live && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#FFFFFF', animation: 'pulse 1.4s ease-in-out infinite' }} />}
+            {done && <Lock size={12} aria-hidden="true" style={{ opacity: 0.8 }} />}
             {tb.label}
           </button>
         );
@@ -221,7 +255,12 @@ export default function OrderDetails({ ctx }) {
   // side-aware action tabs on the single order (Detail / Packing / Receive / Return)
   const tabs = SIDE_TABS[s.side] || SIDE_TABS.warehouse;
   const activeTab = tabs.some((tb) => tb.id === s.orderTab) ? s.orderTab : 'detail';
-  const onTab = (id) => (id === 'detail' ? set({ orderTab: 'detail' }) : openSession(id, order.id, 'order'));
+  const stages = orderStages(order); // which stages are already completed (read-only)
+  const onTab = (id) => {
+    if (id === 'detail') return set({ orderTab: 'detail' });
+    if (stages[id]) return set({ orderTab: id }); // completed step -> read-only, no live session
+    return openSession(id, order.id, 'order');
+  };
   const backLabel = s.listKind === 'transfer' ? 'Transferring goods' : 'Packaging';
 
   return (
@@ -265,7 +304,7 @@ export default function OrderDetails({ ctx }) {
         )}
       </div>
 
-      <OrderTabs tabs={tabs} active={activeTab} onPick={onTab} />
+      <OrderTabs tabs={tabs} active={activeTab} onPick={onTab} stages={stages} />
 
       {activeTab === 'detail' && (
       <div className="order-grid">
@@ -373,9 +412,15 @@ export default function OrderDetails({ ctx }) {
 
       {activeTab !== 'detail' && (
         <div className="order-tool" style={{ marginTop: 2 }}>
-          {activeTab === 'pack' && <PackRecord ctx={ctx} />}
-          {activeTab === 'recv' && <Receiving ctx={ctx} />}
-          {activeTab === 'ret' && <ReturnInspection ctx={ctx} />}
+          {stages[activeTab] ? (
+            <CompletedStage order={order} stage={activeTab} ctx={ctx} />
+          ) : (
+            <>
+              {activeTab === 'pack' && <PackRecord ctx={ctx} />}
+              {activeTab === 'recv' && <Receiving ctx={ctx} />}
+              {activeTab === 'ret' && <ReturnInspection ctx={ctx} />}
+            </>
+          )}
         </div>
       )}
     </div>

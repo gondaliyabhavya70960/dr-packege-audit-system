@@ -5,7 +5,7 @@ import { MONO, glass, cardLight, INK } from '../data.js';
 // comment list plus an input (used on the order's Detail/overview); the default
 // compact input is used on each step (Packing / Receive / Return). Every remark
 // is stamped with the signed-in user and the time it was added.
-export default function RemarkBox({ ctx, id, variant = 'input' }) {
+export default function RemarkBox({ ctx, id, variant = 'input', readOnly = false }) {
   const { s, addRemark } = ctx;
   const [text, setText] = useState('');
   const order = s.orders.find((o) => o.id === id);
@@ -58,7 +58,7 @@ export default function RemarkBox({ ctx, id, variant = 'input' }) {
         <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Remarks</span>
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{remarks.length}</span>
       </div>
-      {remarks.length === 0 && <span style={{ fontSize: 13, color: '#6B7280' }}>No remarks yet — add one from any step.</span>}
+      {remarks.length === 0 && <span style={{ fontSize: 13, color: '#6B7280' }}>{readOnly ? 'No remarks on this order.' : 'No remarks yet — add one from any step.'}</span>}
       {remarks.map((r, i) => (
         <div key={i} style={{ display: 'flex', gap: 10 }}>
           <span style={{ width: 30, height: 30, flex: 'none', borderRadius: '50%', background: 'rgba(142,14,34,0.12)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>
@@ -73,7 +73,7 @@ export default function RemarkBox({ ctx, id, variant = 'input' }) {
           </div>
         </div>
       ))}
-      {inputRow}
+      {!readOnly && inputRow}
     </div>
   );
 }

@@ -1,5 +1,6 @@
-import { Play, Search, ChevronRight } from 'lucide-react';
+import { Play, Search, ChevronRight, FileSearch } from 'lucide-react';
 import { MONO, glass, feedBg, tone } from '../data.js';
+import EmptyState from '../components/EmptyState.jsx';
 
 export default function SearchPlayback({ ctx }) {
   const { s, set, openPlayer, openOrder } = ctx;
@@ -55,9 +56,7 @@ export default function SearchPlayback({ ctx }) {
             );
           })}
           {results.length === 0 && (
-            <div style={{ padding: 24, textAlign: 'center', color: '#6B7280', fontSize: 14, border: '1px dashed rgba(0,0,0,0.15)', borderRadius: 16 }}>
-              No records match — try ORD-10293, RFID-1021 or DC-2026-00417
-            </div>
+            <EmptyState icon={FileSearch} title="No records match" sub="Try an order ID, RFID or challan — e.g. ORD-10293, RFID-1021 or DC-2026-00417." />
           )}
         </div>
 
