@@ -110,7 +110,7 @@ export default function Receiving({ ctx }) {
           <span style={{ fontFamily: MONO, fontSize: 14, color: '#1B1D21' }}>Arrival · {s.recvChallan}</span>
           <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 17, color: '#1B1D21' }}>{fmt(s.recSec)}</span>
         </div>
-        <div style={{ flex: 1, margin: 13, borderRadius: 16, position: 'relative', ...feedBg, animation: 'feedDrift 6s linear infinite', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
+        <div role="img" aria-label="Live arrival camera feed, store receiving point" style={{ flex: 1, margin: 13, borderRadius: 16, position: 'relative', ...feedBg, animation: 'feedDrift 6s linear infinite', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
           <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>[ live feed — arrival · store webcam ]</span>
           <span style={{ position: 'absolute', top: 12, left: 12, fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 9px', borderRadius: 6, background: 'rgba(0,0,0,0.55)', color: 'rgba(255,255,255,0.75)' }}>CAM-02 · receiving point</span>
         </div>

@@ -1,3 +1,4 @@
+import { Camera } from 'lucide-react';
 import { MONO, glass, feedBg, fmt } from '../data.js';
 import RemarkBox from '../components/RemarkBox.jsx';
 
@@ -49,8 +50,8 @@ export default function ReturnInspection({ ctx }) {
             <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>[ live feed — unboxing · returns desk ]</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '0 12px 12px' }}>
-            <button className="hv-border-accent" onClick={() => set({ retStills: s.retStills + 1 })} style={{ background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', color: '#1B1D21', borderRadius: 999, padding: '9px 18px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
-              📷 Capture still
+            <button className="hv-border-accent" onClick={() => set({ retStills: s.retStills + 1 })} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', color: '#1B1D21', borderRadius: 999, padding: '9px 18px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+              <Camera size={16} strokeWidth={2} aria-hidden="true" /> Capture still
             </button>
             <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.55)' }}>stills: {s.retStills} · stone / hallmark / cert</span>
           </div>

@@ -1,3 +1,4 @@
+import { Play } from 'lucide-react';
 import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE } from '../data.js';
 import { EditIcon, ChevronRightIcon } from '../components/icons.jsx';
 import PackRecord from './PackRecord.jsx';
@@ -303,8 +304,8 @@ export default function OrderDetails({ ctx }) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{ fontSize: 14, fontWeight: 600 }}>{e.label}</span>
                       {e.clip && (
-                        <button onClick={() => openPlayer(order.id, -1, 'order')} className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 3, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '2px 9px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
-                          ▶ clip
+                        <button onClick={() => openPlayer(order.id, -1, 'order')} aria-label="Play clip" className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '2px 9px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
+                          <Play size={11} aria-hidden="true" /> clip
                         </button>
                       )}
                     </div>
@@ -358,7 +359,7 @@ export default function OrderDetails({ ctx }) {
                 className="hv-chip"
                 style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', ...surfaceSubtle, borderRadius: 12, padding: '12px 14px' }}
               >
-                <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13 }}>▶</span>
+                <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Play size={15} aria-hidden="true" /></span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                   <span style={{ fontSize: 14, fontWeight: 600 }}>{e.label}</span>
                   <span style={{ fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>sha-256 · {order.id.replace(/[^a-z0-9]/gi, '').slice(-4).toLowerCase()}{(i + 7).toString(16)}c1…f{i}2 ✓</span>

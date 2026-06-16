@@ -1,4 +1,5 @@
-import { MONO, glass, tone, ORDER_STATUSES, isTransferOrder } from '../data.js';
+import { Package, Truck } from 'lucide-react';
+import { MONO, MUTE, glass, tone, ORDER_STATUSES, isTransferOrder } from '../data.js';
 import { ChevronRightIcon } from '../components/icons.jsx';
 
 // Post-login landing: an at-a-glance count of the order book, with the two
@@ -21,20 +22,23 @@ export default function Home({ ctx }) {
     return { ...st, n: p + t, kind: t > p ? 'transfer' : 'packaging' };
   });
 
-  const ListCard = ({ kind, label, count, sub, glyph }) => (
+  const ListCard = ({ kind, label, count, sub, Icon }) => (
     <button
       onClick={() => openList(kind)}
+      aria-label={`${label} — ${count} orders`}
       className="hv-border-accent"
       style={{ ...glass, textAlign: 'left', cursor: 'pointer', padding: 20, display: 'flex', alignItems: 'center', gap: 16 }}
     >
-      <span style={{ width: 56, height: 56, flex: 'none', borderRadius: 16, background: 'rgba(142,14,34,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{glyph}</span>
+      <span style={{ width: 56, height: 56, flex: 'none', borderRadius: 16, background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Icon size={26} strokeWidth={2} aria-hidden="true" />
+      </span>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1, minWidth: 0 }}>
         <span style={{ fontSize: 17, fontWeight: 700 }}>{label}</span>
-        <span style={{ fontSize: 13, color: 'rgba(27,29,33,0.55)' }}>{sub}</span>
+        <span style={{ fontSize: 13, color: MUTE }}>{sub}</span>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
         <span style={{ fontFamily: MONO, fontSize: 30, fontWeight: 500, color: '#8E0E22', lineHeight: 1 }}>{count}</span>
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: 'rgba(27,29,33,0.45)' }}>ORDERS</span>
+        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: MUTE }}>ORDERS</span>
       </div>
       <ChevronRightIcon size={18} />
     </button>
@@ -59,8 +63,8 @@ export default function Home({ ctx }) {
 
       {/* two working lists */}
       <div className="config-grid">
-        <ListCard kind="packaging" label="Packaging orders" count={packaging.length} sub="Customer orders to pack &amp; dispatch" glyph="📦" />
-        <ListCard kind="transfer" label="Transferring goods" count={transfer.length} sub="Inter-branch challans &amp; consignments" glyph="🚚" />
+        <ListCard kind="packaging" label="Packaging orders" count={packaging.length} sub="Customer orders to pack &amp; dispatch" Icon={Package} />
+        <ListCard kind="transfer" label="Transferring goods" count={transfer.length} sub="Inter-branch challans &amp; consignments" Icon={Truck} />
       </div>
 
       {/* counts by status */}

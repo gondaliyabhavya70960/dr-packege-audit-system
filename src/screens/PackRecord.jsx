@@ -1,3 +1,4 @@
+import { Camera } from 'lucide-react';
 import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
 import RemarkBox from '../components/RemarkBox.jsx';
 
@@ -64,13 +65,13 @@ export default function PackRecord({ ctx }) {
           <span style={{ fontFamily: MONO, fontSize: 14, color: '#1B1D21' }}>Session {s.packId}</span>
           <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 17, color: '#1B1D21' }}>{fmt(s.recSec)}</span>
         </div>
-        <div style={{ flex: 1, margin: 13, borderRadius: 16, position: 'relative', ...feedBg, animation: 'feedDrift 6s linear infinite', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
+        <div role="img" aria-label="Live pack-bench camera feed, top view" style={{ flex: 1, margin: 13, borderRadius: 16, position: 'relative', ...feedBg, animation: 'feedDrift 6s linear infinite', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
           <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>[ live feed — top-view · pack bench ]</span>
           <span style={{ position: 'absolute', top: 12, left: 12, fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 9px', borderRadius: 6, background: 'rgba(0,0,0,0.55)', color: 'rgba(255,255,255,0.75)' }}>CAM-01 · 1080p · top view</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '0 13px 13px' }}>
-          <button className="hv-border-accent" onClick={() => set({ packStills: s.packStills + 1 })} style={{ background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', color: '#1B1D21', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
-            📷 Capture still
+          <button className="hv-border-accent" onClick={() => set({ packStills: s.packStills + 1 })} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', color: '#1B1D21', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+            <Camera size={16} strokeWidth={2} aria-hidden="true" /> Capture still
           </button>
           <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(27,29,33,0.55)' }}>stills: {s.packStills}</span>
           <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 11, color: 'rgba(27,29,33,0.4)' }}>chunks hashed at capture · uploading</span>
