@@ -1,6 +1,7 @@
 import { X, Rewind, FastForward, Play, Pause } from 'lucide-react';
 import { MONO, glassSheet, fmt } from '../data.js';
 import ClipPlayer from './ClipPlayer.jsx';
+import useDialog from './useDialog.js';
 
 const STILL_LABELS = ['stone', 'hallmark', 'certificate'];
 
@@ -9,6 +10,8 @@ export default function SideBySidePlayer({ ctx }) {
 
   const fromFlag = s.playerFlagIdx >= 0;
   const closePlayer = () => set({ playerOpen: false, playing: false });
+  const dialogRef = useDialog(closePlayer);
+  const playerRec = s.records.find((r) => r.id === s.playerId);
 
   const verdictPos = () => {
     if (fromFlag) {
@@ -39,15 +42,15 @@ export default function SideBySidePlayer({ ctx }) {
       </div>
       {/* real <video> pipeline (poster + MP4/WebM + lazy); falls back to the
           placeholder until a clip source is wired in — see ClipPlayer. */}
-      <ClipPlayer label={text} t={s.t} height={230} radius={18} />
+      <ClipPlayer label={text} id={s.playerId} ts={meta.replace(/^·\s*/, '')} hash={playerRec && playerRec.hash} t={s.t} height={230} radius={18} />
     </div>
   );
 
   return (
     <div data-screen-label="07 Side-by-side player" style={{ position: 'fixed', inset: 0, zIndex: 60, background: 'rgba(28,20,32,0.32)', backdropFilter: 'blur(16px) saturate(1.4)', WebkitBackdropFilter: 'blur(16px) saturate(1.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 30 }}>
-      <div style={{ ...glassSheet, borderRadius: 28, width: 1040, maxWidth: '96%', maxHeight: '94vh', overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="player-title" tabIndex={-1} style={{ ...glassSheet, borderRadius: 28, width: 1040, maxWidth: '96%', maxHeight: '94vh', overflow: 'auto', display: 'flex', flexDirection: 'column', outline: 'none' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 20px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-          <span style={{ fontSize: 18, fontWeight: 700 }}>
+          <span id="player-title" style={{ fontSize: 18, fontWeight: 700 }}>
             Side-by-side · <span style={{ fontFamily: MONO, fontWeight: 500 }}>{s.playerId}</span>
           </span>
           <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>SAME ITEM? — ANSWERED VISUALLY</span>

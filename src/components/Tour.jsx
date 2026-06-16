@@ -1,8 +1,10 @@
 import { X } from 'lucide-react';
 import { tourDefs, glassPopover } from '../data.js';
+import useDialog from './useDialog.js';
 
 export default function Tour({ ctx }) {
   const { s, tourGo, endTour } = ctx;
+  const dialogRef = useDialog(endTour);
 
   const step = tourDefs[s.tourStep];
   const tr = s.tourRect;
@@ -37,10 +39,10 @@ export default function Tour({ ctx }) {
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(25,12,15,0.55)' }} />
       )}
 
-      <div style={{ ...glassPopover, position: 'absolute', width: 390, maxWidth: '92vw', borderRadius: 24, padding: 22, display: 'flex', flexDirection: 'column', gap: 11, transition: 'all 0.35s ease', top: cardTop, left: cardLeft, transform: cardTransform }}>
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="tour-title" tabIndex={-1} style={{ ...glassPopover, position: 'absolute', width: 390, maxWidth: '92vw', borderRadius: 24, padding: 22, display: 'flex', flexDirection: 'column', gap: 11, transition: 'all 0.35s ease', top: cardTop, left: cardLeft, transform: cardTransform, outline: 'none' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
           <span style={{ width: 36, height: 36, flex: 'none', borderRadius: '50%', background: '#FBE5E8', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800 }}>{s.tourStep + 1}</span>
-          <span style={{ fontSize: 19, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em', flex: 1 }}>{step.t}</span>
+          <span id="tour-title" style={{ fontSize: 19, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em', flex: 1 }}>{step.t}</span>
           <button className="hv-text-dark" onClick={endTour} aria-label="Close tour" style={{ display: 'inline-flex', background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', padding: 2 }}>
             <X size={17} aria-hidden="true" />
           </button>

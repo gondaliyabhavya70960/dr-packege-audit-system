@@ -21,6 +21,17 @@ body {
   box-sizing: border-box;
 }
 
+/* data tool: align figures so IDs, values, counts and timecodes scan in columns */
+body {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* kiosk/touch ergonomics: a comfortable tap area on the persistent bottom nav */
+[data-tour='nav'] button {
+  min-height: 44px;
+}
+
 input::placeholder {
   color: rgba(27, 29, 33, 0.35);
 }

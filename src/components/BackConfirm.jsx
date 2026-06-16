@@ -1,7 +1,9 @@
 import { fmt, glassSheet } from '../data.js';
+import useDialog from './useDialog.js';
 
 export default function BackConfirm({ ctx }) {
   const { s, set, showToast } = ctx;
+  const dialogRef = useDialog(() => set({ backConfirm: false }));
 
   const sid = s.screen === 'pack' ? s.packId : s.screen === 'recv' ? s.recvChallan : s.retId;
 
@@ -19,8 +21,8 @@ export default function BackConfirm({ ctx }) {
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(28,20,32,0.32)', backdropFilter: 'blur(14px) saturate(1.4)', WebkitBackdropFilter: 'blur(14px) saturate(1.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-      <div style={{ ...glassSheet, width: 430, maxWidth: '94%', borderRadius: 26, padding: 26, display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <span style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em' }}>Leave this session?</span>
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="backconfirm-title" tabIndex={-1} style={{ ...glassSheet, width: 430, maxWidth: '94%', borderRadius: 26, padding: 26, display: 'flex', flexDirection: 'column', gap: 14, outline: 'none' }}>
+        <span id="backconfirm-title" style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em' }}>Leave this session?</span>
         <span style={{ fontSize: 14, color: '#5B616B', lineHeight: 1.5, textWrap: 'pretty' }}>
           Recording will stop. Save your progress as a draft to resume later, or discard the session — no video will be filed.
         </span>
