@@ -1,3 +1,4 @@
+import { X, Rewind, FastForward, Play, Pause } from 'lucide-react';
 import { MONO, glassSheet, feedBg, fmt } from '../data.js';
 
 const STILL_LABELS = ['stone', 'hallmark', 'certificate'];
@@ -50,8 +51,8 @@ export default function SideBySidePlayer({ ctx }) {
             Side-by-side · <span style={{ fontFamily: MONO, fontWeight: 500 }}>{s.playerId}</span>
           </span>
           <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>SAME ITEM? — ANSWERED VISUALLY</span>
-          <button className="hv-white75" onClick={closePlayer} style={{ marginLeft: 'auto', background: 'rgba(255,255,255,0.45)', border: 'none', color: 'rgba(27,29,33,0.7)', borderRadius: '50%', width: 34, height: 34, fontSize: 15, cursor: 'pointer' }}>
-            ✕
+          <button className="hv-white75" onClick={closePlayer} aria-label="Close player" style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.45)', border: 'none', color: 'rgba(27,29,33,0.7)', borderRadius: '50%', width: 34, height: 34, cursor: 'pointer' }}>
+            <X size={17} aria-hidden="true" />
           </button>
         </div>
 
@@ -61,14 +62,15 @@ export default function SideBySidePlayer({ ctx }) {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 20px' }}>
-          <button className="hv-white75" onClick={() => set({ t: Math.max(0, s.t - 10) })} style={{ background: 'rgba(255,255,255,0.45)', border: 'none', color: '#1B1D21', borderRadius: 999, padding: '8px 14px', fontSize: 13, cursor: 'pointer' }}>
-            ◀◀
+          <button className="hv-white75" onClick={() => set({ t: Math.max(0, s.t - 10) })} aria-label="Back 10%" style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,0.45)', border: 'none', color: '#1B1D21', borderRadius: 999, padding: '8px 14px', cursor: 'pointer' }}>
+            <Rewind size={16} aria-hidden="true" />
           </button>
-          <button className="hv-brighten" onClick={() => set({ playing: !s.playing })} style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 999, padding: '9px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer', minWidth: 110 }}>
-            {s.playing ? '❚❚ Pause' : '▶ Sync play'}
+          <button className="hv-brighten" onClick={() => set({ playing: !s.playing })} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 999, padding: '9px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer', minWidth: 130 }}>
+            {s.playing ? <Pause size={15} aria-hidden="true" /> : <Play size={15} aria-hidden="true" />}
+            {s.playing ? 'Pause' : 'Sync play'}
           </button>
-          <button className="hv-white75" onClick={() => set({ t: Math.min(100, s.t + 10) })} style={{ background: 'rgba(255,255,255,0.45)', border: 'none', color: '#1B1D21', borderRadius: 999, padding: '8px 14px', fontSize: 13, cursor: 'pointer' }}>
-            ▶▶
+          <button className="hv-white75" onClick={() => set({ t: Math.min(100, s.t + 10) })} aria-label="Forward 10%" style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,0.45)', border: 'none', color: '#1B1D21', borderRadius: 999, padding: '8px 14px', cursor: 'pointer' }}>
+            <FastForward size={16} aria-hidden="true" />
           </button>
           <input type="range" min="0" max="100" value={s.t} onChange={(e) => set({ t: Number(e.target.value) })} style={{ flex: 1, accentColor: '#8E0E22', cursor: 'pointer' }} />
           <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(27,29,33,0.6)' }}>{fmt(Math.round(s.t * 0.84))} / 01:24</span>

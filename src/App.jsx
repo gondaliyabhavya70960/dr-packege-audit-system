@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { initialState, tourDefs, nowStamp } from './data.js';import Login from './screens/Login.jsx';
 import KioskHome from './screens/KioskHome.jsx';
 import PackRecord from './screens/PackRecord.jsx';
@@ -16,10 +17,13 @@ import Home from './screens/Home.jsx';
 import { emptyCustomOrder } from './data.js';
 import TopBar from './components/TopBar.jsx';
 import TabBar from './components/TabBar.jsx';
-import SideBySidePlayer from './components/SideBySidePlayer.jsx';
 import BackConfirm from './components/BackConfirm.jsx';
 import Tour from './components/Tour.jsx';
 import Toast from './components/Toast.jsx';
+
+// the heavy side-by-side video player is only needed on demand — keep it out of
+// the initial bundle.
+const SideBySidePlayer = dynamic(() => import('./components/SideBySidePlayer.jsx'), { ssr: false });
 
 const OPERATOR_SCREENS = ['kiosk', 'pack', 'recv', 'ret'];
 const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];

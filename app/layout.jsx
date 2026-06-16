@@ -11,7 +11,7 @@ export const metadata = {
   description:
     'Video proof at the three moments that matter — packing, store receiving and returns — all linked to one ID (order / RFID / challan).',
   applicationName: APP_NAME,
-  icons: { icon: '/favicon.svg' },
+  icons: { icon: '/favicon.svg', apple: '/favicon.svg' },
   openGraph: {
     title: APP_NAME,
     description: 'Packing · Receiving · Returns — one ID, every checkpoint, video proof in seconds.',
@@ -31,6 +31,17 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        {/* Load the brand typefaces the UI references (IBM Plex Mono for data /
+            IDs, Figtree for UI). Previously referenced but never loaded, so the
+            mono aesthetic fell back to the OS default monospace. */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>
         <App />
         {children}
