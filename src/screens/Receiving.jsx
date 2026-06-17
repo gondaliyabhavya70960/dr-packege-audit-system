@@ -1,9 +1,12 @@
 import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
 import PrevStepClip from '../components/PrevStepClip.jsx';
 import RemarkBox from '../components/RemarkBox.jsx';
+import RecordButton from '../components/RecordButton.jsx';
 
 export default function Receiving({ ctx }) {
   const { s, set, showToast, logOrderEvent } = ctx;
+  const rec = s.recActive;
+  const toggleRec = () => set({ recActive: !s.recActive });
 
   const exitNav = s.sessionReturn === 'order' ? { screen: 'order', orderTab: 'detail' } : { screen: 'kiosk' };
 
@@ -105,16 +108,17 @@ export default function Receiving({ ctx }) {
       {/* arrival feed */}
       <div style={{ ...glass, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 18px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#E53E3E', animation: 'pulse 1.4s ease-in-out infinite' }} />
-          <span style={{ fontFamily: MONO, fontSize: 12, color: '#C62B22', letterSpacing: '0.18em' }}>REC</span>
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: rec ? '#E53E3E' : '#9AA0A6', animation: rec ? 'pulse 1.4s ease-in-out infinite' : 'none' }} />
+          <span style={{ fontFamily: MONO, fontSize: 12, color: rec ? '#C62B22' : '#6B7280', letterSpacing: '0.18em' }}>{rec ? 'REC' : 'PAUSED'}</span>
           <span style={{ fontFamily: MONO, fontSize: 14, color: '#1B1D21' }}>Arrival · {s.recvChallan}</span>
           <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 17, color: '#1B1D21' }}>{fmt(s.recSec)}</span>
         </div>
-        <div role="img" aria-label="Live arrival camera feed, store receiving point" style={{ flex: 1, margin: 13, borderRadius: 16, position: 'relative', ...feedBg, animation: 'feedDrift 6s linear infinite', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
-          <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>[ live feed — arrival · store webcam ]</span>
+        <div role="img" aria-label={rec ? 'Live arrival camera feed, store receiving point' : 'Arrival camera paused'} style={{ flex: 1, margin: 13, borderRadius: 16, position: 'relative', ...feedBg, animation: rec ? 'feedDrift 6s linear infinite' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
+          <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>{rec ? '[ live feed — arrival · store webcam ]' : '[ recording paused — press start ]'}</span>
           <span style={{ position: 'absolute', top: 12, left: 12, fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 9px', borderRadius: 6, background: 'rgba(0,0,0,0.55)', color: 'rgba(255,255,255,0.75)' }}>CAM-02 · receiving point</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', padding: '0 13px 13px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '0 13px 13px', flexWrap: 'wrap' }}>
+          <RecordButton recording={rec} onToggle={toggleRec} />
           <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>arrival video retained with the pack video · both attach to any flag</span>
         </div>
       </div>

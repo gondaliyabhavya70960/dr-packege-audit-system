@@ -113,7 +113,8 @@ export default function App() {
         const upd = {};
         const inSession = cur.screen === 'pack' || cur.screen === 'recv' || cur.screen === 'ret';
         const inOrderSession = cur.screen === 'order' && (cur.orderTab === 'pack' || cur.orderTab === 'recv' || cur.orderTab === 'ret');
-        if (inSession || inOrderSession) upd.recSec = cur.recSec + 1;
+        // only advance the session clock while recording is live (Start/Stop)
+        if ((inSession || inOrderSession) && cur.recActive) upd.recSec = cur.recSec + 1;
         if (cur.playerOpen && cur.playing) upd.t = cur.t >= 100 ? 0 : Math.min(100, cur.t + 2);
         return Object.keys(upd).length ? { ...cur, ...upd } : cur;
       });
@@ -138,8 +139,8 @@ export default function App() {
       if (!id) return;
       const nav =
         returnTo === 'order'
-          ? { screen: 'order', orderTab: kind, sessionReturn: 'order', orderEditing: false, orderDraft: null }
-          : { screen: kind, sessionReturn: 'kiosk' };
+          ? { screen: 'order', orderTab: kind, sessionReturn: 'order', orderEditing: false, orderDraft: null, recActive: true }
+          : { screen: kind, sessionReturn: 'kiosk', recActive: true };
       if (kind === 'pack') {
         set({
           ...nav,

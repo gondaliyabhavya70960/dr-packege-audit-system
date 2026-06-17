@@ -42,8 +42,9 @@ The whole interactive app is a **client island** — `src/App.jsx` (`'use client
 **`src/screens/`:** `Login` (role + side select) · `Home` (Overview: order counts + the two lists) · `Orders` (the list; serves both Packaging & Transfers) · `OrderDetails` (single‑order tabbed hub) · `PackRecord` / `Receiving` / `ReturnInspection` (live recording tools) · `KioskHome` (legacy scanner) · `SearchPlayback` · `Dashboard` (admin dashboards) · `UsersConfig`.
 
 - **Two order lists** = `Orders.jsx` filtered by `s.listKind` (`packaging` vs `transfer`) via `isTransferOrder(o)`. Has search/status/channel/date filters, sort, bulk‑select + CSV, and a **Route column** (`orderRoute`: `Surat WH → city` for packaging, `→ store/branch` for transfers).
-- **Single order** (`OrderDetails`) = tabbed: **Detail · Packing · Receive (warehouse only) · Return**. Detail shows items, timeline, customer & shipping, custom fields (editable), linked evidence, and the **Remarks** thread. Packing/Receive/Return run **inline**.
-  - **Stage‑lock:** once a stage is complete (`orderStages(order)`), its tab is **read‑only** — shows only the filed clip (`ClipPlayer` with the `id·timestamp·hash` overlay) + **read‑only remarks** + a 🔒 "Recorded · read‑only" badge. The current/incomplete stage stays the **live editable** tool.
+- **Single order** (`OrderDetails`) = tabbed: **Detail · Packing · Receive · Return** — all four tabs show on every side (`ORDER_TABS`). Detail shows items, timeline, customer & shipping, custom fields (editable), linked evidence, and the **Remarks** thread. Packing/Receive/Return run **inline**.
+  - **Stage‑lock:** once a stage is complete (`orderStages(order)`), its tab is **read‑only** — shows only the filed clip (`ClipPlayer` with the `id·timestamp·hash` overlay) + **read‑only remarks** + a 🔒 "Recorded · read‑only" badge. The current/incomplete stage stays the **live editable** tool. A **`draft`** order has no completed stages, so its Packing tab opens the live, editable `PackRecord` tool.
+  - **Create mode** (`/orders/new`) adds a **Packing video capture** section (`PackingCapture`): a `VideoCaptureCard` + the list of clips filed so far (held on `orderDraft.packVideos`). Saving with ≥1 clip files the order as **Packed**; with none, as **Draft**.
 - **Remarks** (`RemarkBox`): per‑order comments stamped with username + time. `variant="thread"` (Detail, with input) / `variant="input"` (steps) / `readOnly` (locked stages).
 - **Admin:** `SearchPlayback`, dashboards, `UsersConfig`, and the **`SideBySidePlayer`** modal (pack vs return, evidence overlay, `useDialog` a11y).
 
@@ -52,11 +53,15 @@ The whole interactive app is a **client island** — `src/App.jsx` (`'use client
 - **Order shape:** `{ id, channel('Online'|'Store'|'B2B'), customer, phone, address, placed, ts, statusKey, status, tone, station, value, valNum, items[]{sku,name,qty,condition}, timeline[]{label,time,who,clip}, custom{}, remarks?[]{who,time,text}, from? }`.
 - **Helpers:** `isTransferOrder` · `cityOf(address)` · `orderRoute(o)` · `orderStages(o)→{pack,recv,ret}` · `stageClip(o,stage)` · `tone()` · `dotFor()` · `fmt()` · `nowStamp()` · `synthOrder()` · `emptyCustomOrder()`. Also `flags`, `records`, `users` arrays + `tourDefs`.
 - Stage completion is read from the **timeline labels** (`Packed…`, `Received…`, `Return inspected…`) + `statusKey`.
+- **`ORDER_STATUSES`** (drives the filter + Home counts): `draft` · `packed` · `transit` · `received` · `delivery` · `delivered` · `returned` · `flagged`. **Draft** = bespoke / not‑yet‑packed (tone `plain`). `emptyCustomOrder()` seeds `packVideos: []`.
+- **`initialState.recActive`** (default `true`) — live‑recording on/off; the 1s heartbeat only advances `recSec` while it's on (Start/Stop toggle on every live feed).
 
 ## 7. Key components (`src/components/`)
 - **`ClipPlayer`** — real `<video>` pipeline: poster + MP4/WebM sources + `muted/playsInline/preload="none"` + **evidence overlay (id·ts·hash)** + buffering/error states; **falls back** to the styled placeholder until clips exist at `/public/assets/clips/<id>.{mp4,webm}`.
 - **`SideBySidePlayer`** — review modal (uses `useDialog`, `ClipPlayer`).
 - **`useDialog(onClose)`** — `role="dialog"`/`aria-modal`, **Esc to close**, focus trap + restore. Used by player, `BackConfirm`, `Tour`.
+- **`RecordButton`** — shared Start/Stop recording toggle (red Stop while live, accent Start when idle); on every live feed (`PackRecord`/`Receiving`/`ReturnInspection`) + `VideoCaptureCard`.
+- **`VideoCaptureCard`** — self‑contained recording card: live feed + `RecordButton` + running timer + still capture; **Stop** files a take via `onCapture({label,dur,stills,time,hash})`. Used by `PackingCapture` in the create form.
 - **`RemarkBox`**, **`PrevStepClip`** (mini prev‑step clip on Receive), **`EmptyState`** (icon+title+sub+action), **`Toast`** (`aria-live`), **`TopBar`**, **`TabBar`**, **`Tour`**, **`BackConfirm`**, **`icons.jsx`** (PackageIcon only).
 
 ## 8. History (merged PRs #9–#24, newest first)
