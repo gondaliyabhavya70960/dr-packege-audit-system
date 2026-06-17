@@ -1,10 +1,12 @@
-import { Play, SquarePen, ChevronRight, Lock } from 'lucide-react';
-import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, orderStages, stageClip } from '../data.js';
+import { useState } from 'react';
+import { Play, SquarePen, ChevronRight, Lock, Video, Trash2 } from 'lucide-react';
+import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, orderStages, stageClip, fmt } from '../data.js';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
 import RemarkBox from '../components/RemarkBox.jsx';
 import ClipPlayer from '../components/ClipPlayer.jsx';
+import VideoCaptureCard from '../components/VideoCaptureCard.jsx';
 
 const STAGE_TITLES = { pack: 'Packing', recv: 'Receiving', ret: 'Return inspection' };
 
@@ -37,21 +39,15 @@ function CompletedStage({ order, stage, ctx }) {
   );
 }
 
-// Action tabs shown on a single order, by side. The warehouse handles incoming
-// stock so it also gets Receive; the store side does not.
-const SIDE_TABS = {
-  warehouse: [
-    { id: 'detail', label: 'Detail' },
-    { id: 'pack', label: 'Packing' },
-    { id: 'recv', label: 'Receive' },
-    { id: 'ret', label: 'Return' },
-  ],
-  store: [
-    { id: 'detail', label: 'Detail' },
-    { id: 'pack', label: 'Packing' },
-    { id: 'ret', label: 'Return' },
-  ],
-};
+// Every single order exposes the full set of tabs — Detail, Packing, Receive
+// and Return — regardless of which side (warehouse / store) is signed in. Each
+// stage opens its tool inline; completed stages lock to a read-only clip view.
+const ORDER_TABS = [
+  { id: 'detail', label: 'Detail' },
+  { id: 'pack', label: 'Packing' },
+  { id: 'recv', label: 'Receive' },
+  { id: 'ret', label: 'Return' },
+];
 
 const LIVE_TABS = ['pack', 'recv', 'ret'];
 
@@ -149,6 +145,71 @@ function CustomEditor({ draft, upd }) {
   );
 }
 
+// Packing video capture for the new custom-order form: a live recording card
+// (start / stop / capture still) plus the list of clips filed so far. Each clip
+// expands to an evidence player. The list lives on the draft, so it saves with
+// the order.
+function PackingCapture({ orderId, videos, setVideos }) {
+  const [openIdx, setOpenIdx] = useState(-1);
+  const list = videos || [];
+
+  const addClip = (clip) => setVideos([...list, clip]);
+  const removeClip = (i) => {
+    setVideos(list.filter((_, idx) => idx !== i));
+    setOpenIdx((cur) => (cur === i ? -1 : cur > i ? cur - 1 : cur));
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>
+          <Video size={17} aria-hidden="true" style={{ color: '#8E0E22' }} /> Packing video capture
+        </span>
+        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{list.length} CLIP{list.length === 1 ? '' : 'S'}</span>
+      </div>
+      <span style={{ fontSize: 13, color: '#5B616B' }}>Record the pack at the bench — start, capture stills, then stop to file each clip against this order. Filed clips appear in the list below.</span>
+
+      <VideoCaptureCard id={orderId || 'NEW-ORDER'} label="Pack capture" camLabel="CAM-01 · pack bench" feedText="[ live feed — top-view · pack bench ]" onCapture={addClip} minHeight={210} />
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {list.length === 0 ? (
+          <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '14px 16px', fontSize: 13, color: '#6B7280' }}>No clips captured yet — press <strong style={{ color: '#8E0E22' }}>Start recording</strong> above to film the pack.</div>
+        ) : (
+          list.map((v, i) => {
+            const open = openIdx === i;
+            return (
+              <div key={i} style={{ ...surfaceSubtle, borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px' }}>
+                  <button
+                    onClick={() => setOpenIdx(open ? -1 : i)}
+                    aria-label={open ? 'Hide clip' : 'Play clip'}
+                    className="hv-accent14"
+                    style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer' }}
+                  >
+                    <Play size={15} aria-hidden="true" />
+                  </button>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+                    <span style={{ fontSize: 14, fontWeight: 600 }}>Pack clip {i + 1} · {fmt(v.dur)}{v.stills ? ' · ' + v.stills + ' still' + (v.stills === 1 ? '' : 's') : ''}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>{v.time} · sha {v.hash} ✓</span>
+                  </div>
+                  <button onClick={() => removeClip(i)} aria-label="Remove clip" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
+                    <Trash2 size={14} aria-hidden="true" />
+                  </button>
+                </div>
+                {open && (
+                  <div style={{ padding: '0 14px 14px' }}>
+                    <ClipPlayer label={'[ pack clip ' + (i + 1) + ' — filed ]'} id={orderId || 'NEW-ORDER'} ts={v.time} hash={v.hash} height={180} radius={12} />
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+}
+
 function ReadRow({ label, value, accent }) {
   return (
     <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, padding: '9px 0', borderBottom: '1px solid ' + HAIRLINE }}>
@@ -177,15 +238,21 @@ export default function OrderDetails({ ctx }) {
         showToast('Add at least an order ID and customer to save.');
         return;
       }
+      const who = s.userLabel || 'admin';
+      const vids = d.packVideos || [];
+      const packed = vids.length > 0; // captured a pack clip -> filed as Packed, else Draft
+      const timeline = [{ label: 'Custom order created', time: 'today', who, clip: false }];
+      if (packed) timeline.push({ label: 'Packed · Warehouse', time: 'today', who: who + ' · ' + d.station, clip: true });
       const newOrder = {
         id, channel: d.channel, customer: d.customer.trim(), phone: '—', address: '—',
-        placed: 'today · custom entry', ts: Date.now(), statusKey: 'packed', status: 'Custom · on record',
+        placed: 'today · custom entry', ts: Date.now(),
+        statusKey: packed ? 'packed' : 'draft', status: packed ? 'Packed' : 'Draft',
         tone: 'plain', station: d.station, value: d.value.trim() || '—', valNum: 0,
-        items: [], timeline: [{ label: 'Custom order created', time: 'today', who: s.userLabel || 'admin', clip: false }],
+        items: [], timeline,
         custom: { priority: d.priority, giftWrap: d.giftWrap, insured: d.insured, slot: d.slot, instructions: d.instructions, notes: d.notes },
       };
       set({ orders: [newOrder, ...s.orders], orderId: id, orderEditing: false, orderDraft: null });
-      showToast('Custom order ' + id + ' saved to the orders list.');
+      showToast(packed ? 'Custom order ' + id + ' filed with pack video — saved to the orders list.' : 'Draft order ' + id + ' saved to the orders list.');
     };
 
     return (
@@ -224,6 +291,9 @@ export default function OrderDetails({ ctx }) {
           <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
           <CustomEditor draft={d} upd={upd} />
 
+          <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
+          <PackingCapture orderId={d.id} videos={d.packVideos} setVideos={(v) => upd('packVideos', v)} />
+
           <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
             <button className="hv-white75" onClick={backToList} style={{ background: 'rgba(255,255,255,0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(27,29,33,0.7)', borderRadius: 10, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
               Cancel
@@ -252,8 +322,8 @@ export default function OrderDetails({ ctx }) {
 
   const c = editing ? s.orderDraft : order.custom;
 
-  // side-aware action tabs on the single order (Detail / Packing / Receive / Return)
-  const tabs = SIDE_TABS[s.side] || SIDE_TABS.warehouse;
+  // all four action tabs on the single order (Detail / Packing / Receive / Return)
+  const tabs = ORDER_TABS;
   const activeTab = tabs.some((tb) => tb.id === s.orderTab) ? s.orderTab : 'detail';
   const stages = orderStages(order); // which stages are already completed (read-only)
   const onTab = (id) => {

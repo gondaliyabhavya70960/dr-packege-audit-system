@@ -10,8 +10,11 @@ export const PLAIN = '#1B1D21';
 // reference "now" for the date filters (matches the demo data window)
 export const NOW_TS = Date.parse('2026-06-15T10:00:00');
 
-// status groups used by the Orders filter; label + tone drive the badge
+// status groups used by the Orders filter; label + tone drive the badge.
+// "Draft" is the earliest state — a bespoke / not-yet-packed order whose
+// packing video is still pending.
 export const ORDER_STATUSES = [
+  { key: 'draft', label: 'Draft', tone: 'plain' },
   { key: 'packed', label: 'Packed', tone: 'plain' },
   { key: 'transit', label: 'In transit', tone: 'amber' },
   { key: 'received', label: 'Received', tone: 'green' },
@@ -91,7 +94,7 @@ const XFER_STATUS = ['transit', 'received', 'received', 'transit', 'delivered'];
 
 function statusMeta(k) {
   const m = {
-    packed: ['Packed', 'plain'], transit: ['In transit', 'amber'], received: ['Received', 'green'],
+    draft: ['Draft', 'plain'], packed: ['Packed', 'plain'], transit: ['In transit', 'amber'], received: ['Received', 'green'],
     delivery: ['Out for delivery', 'amber'], delivered: ['Delivered', 'green'], returned: ['Returned', 'red'], flagged: ['Flagged', 'red'],
   };
   return m[k] || ['On record', 'plain'];
@@ -169,6 +172,21 @@ function generateOrders(n) {
 }
 
 const curatedOrders = [
+  {
+    id: 'ORD-10350', channel: 'Online', customer: 'Tanvi Desai', phone: '+91 98250 41200',
+    address: '18 CG Road, Ahmedabad 380009', placed: '15 Jun 2026 · 09:30', ts: Date.parse('2026-06-15T09:30:00'),
+    statusKey: 'draft', status: 'Draft', tone: 'plain', station: 'PACK-BENCH-1', value: '₹1.05L', valNum: 105000,
+    items: [
+      { sku: 'SKU 4471', name: 'Solitaire ring', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4490', name: 'Emerald drop earrings', qty: 1, condition: 'pending' },
+    ],
+    timeline: [
+      { label: 'Order placed', time: '15 Jun · 09:30', who: 'web checkout', clip: false },
+      { label: 'Draft saved', time: '15 Jun · 09:32', who: 'Mira · PACK-BENCH-1', clip: false },
+    ],
+    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.10L', slot: 'awaiting pack', instructions: 'Draft order — pack video not yet captured.', notes: 'Created as a draft; open the Packing tab to record and file.' },
+    remarks: [{ who: 'Mira', time: '15 Jun · 09:33', text: 'Held as draft — awaiting the pack-bench video before dispatch.' }],
+  },
   {
     id: 'ORD-10293', channel: 'Online', customer: 'Aarav Shah', phone: '+91 98200 11234',
     address: '14 Brigade Rd, Bengaluru 560001', placed: '12 Jun 2026 · 09:14', ts: Date.parse('2026-06-12T09:14:00'),
@@ -406,7 +424,7 @@ export const seedOrders = [...curatedOrders, ...generateOrders(104)];
 export const PRIORITY_OPTIONS = ['Standard', 'Express', 'White-glove'];
 
 export function emptyCustomOrder() {
-  return { id: '', channel: 'Online', customer: '', value: '', station: 'AUDIT-BENCH-1', ...blankCustom };
+  return { id: '', channel: 'Online', customer: '', value: '', station: 'AUDIT-BENCH-1', packVideos: [], ...blankCustom };
 }
 
 // fallback order built for an id that has no seeded record (e.g. a session just closed)
@@ -430,6 +448,7 @@ export const initialState = {
   backConfirm: false,
   lastSession: 'ORD-10287 · sealed · 14:02',
   recSec: 0,
+  recActive: true, // live camera recording on/off — drives the session timer + REC indicator
   // pack
   packId: '',
   packItems: [],

@@ -1,11 +1,14 @@
 import { Camera } from 'lucide-react';
 import { MONO, glass, feedBg, fmt } from '../data.js';
 import RemarkBox from '../components/RemarkBox.jsx';
+import RecordButton from '../components/RecordButton.jsx';
 
 const REASONS = ['wrong item', 'not genuine', 'damaged', 'empty box'];
 
 export default function ReturnInspection({ ctx }) {
   const { s, set, showToast, openPlayer, logOrderEvent } = ctx;
+  const rec = s.recActive;
+  const toggleRec = () => set({ recActive: !s.recActive });
 
   const exitNav = s.sessionReturn === 'order' ? { screen: 'order', orderTab: 'detail' } : { screen: 'kiosk' };
 
@@ -29,27 +32,31 @@ export default function ReturnInspection({ ctx }) {
   return (
     <div data-screen-label="05 Return inspection" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 13, padding: 16 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-        <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#E53E3E', animation: 'pulse 1.4s ease-in-out infinite' }} />
-        <span style={{ fontFamily: MONO, fontSize: 12, color: '#C62B22', letterSpacing: '0.18em' }}>REC</span>
+        <span style={{ width: 10, height: 10, borderRadius: '50%', background: rec ? '#E53E3E' : '#9AA0A6', animation: rec ? 'pulse 1.4s ease-in-out infinite' : 'none' }} />
+        <span style={{ fontFamily: MONO, fontSize: 12, color: rec ? '#C62B22' : '#6B7280', letterSpacing: '0.18em' }}>{rec ? 'REC' : 'PAUSED'}</span>
         <span style={{ fontSize: 18, fontWeight: 700 }}>
           Return inspection · <span style={{ fontFamily: MONO, fontWeight: 500 }}>{s.retId}</span>
         </span>
         <span style={{ fontFamily: MONO, fontSize: 16, color: '#1B1D21', marginLeft: 8 }}>{fmt(s.recSec)}</span>
-        <button className="hv-accent14" onClick={() => openPlayer(s.retId, -1, 'ret')} style={{ marginLeft: 'auto', background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-          Open side-by-side
-        </button>
+        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+          <RecordButton recording={rec} onToggle={toggleRec} size="sm" />
+          <button className="hv-accent14" onClick={() => openPlayer(s.retId, -1, 'ret')} style={{ background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+            Open side-by-side
+          </button>
+        </div>
       </div>
 
       <div className="ret-grid">
         <div style={{ ...glass, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 16px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#E53E3E', animation: 'pulse 1.4s ease-in-out infinite' }} />
-            <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: '#C62B22' }}>LIVE · UNBOXING — RETURNS DESK</span>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: rec ? '#E53E3E' : '#9AA0A6', animation: rec ? 'pulse 1.4s ease-in-out infinite' : 'none' }} />
+            <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: rec ? '#C62B22' : '#6B7280' }}>{rec ? 'LIVE · UNBOXING — RETURNS DESK' : 'PAUSED · UNBOXING — RETURNS DESK'}</span>
           </div>
-          <div style={{ flex: 1, margin: 12, borderRadius: 14, ...feedBg, animation: 'feedDrift 6s linear infinite', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 180 }}>
-            <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>[ live feed — unboxing · returns desk ]</span>
+          <div style={{ flex: 1, margin: 12, borderRadius: 14, ...feedBg, animation: rec ? 'feedDrift 6s linear infinite' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 180 }}>
+            <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>{rec ? '[ live feed — unboxing · returns desk ]' : '[ recording paused — press start ]'}</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '0 12px 12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '0 12px 12px', flexWrap: 'wrap' }}>
+            <RecordButton recording={rec} onToggle={toggleRec} size="sm" />
             <button className="hv-border-accent" onClick={() => set({ retStills: s.retStills + 1 })} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', color: '#1B1D21', borderRadius: 999, padding: '9px 18px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
               <Camera size={16} strokeWidth={2} aria-hidden="true" /> Capture still
             </button>
