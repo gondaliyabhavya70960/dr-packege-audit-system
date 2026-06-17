@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw } from 'lucide-react';
-import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, fmt } from '../data.js';
+import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin } from 'lucide-react';
+import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, fmt } from '../data.js';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
@@ -53,6 +53,69 @@ function EmptyStage({ stage }) {
   return <EmptyState icon={c.icon} title={c.title} sub={c.sub} />;
 }
 
+// A stage the order is actively moving toward but hasn't reached ('status' mode)
+// — a read-only order-status / tracking view (in transit / out for delivery). It
+// shows where the consignment is on its journey and when the step will unlock.
+const JOURNEY = [
+  { key: 'packed', label: 'Packed' },
+  { key: 'transit', label: 'In transit' },
+  { key: 'delivery', label: 'Out for delivery' },
+  { key: 'delivered', label: 'Delivered' },
+];
+
+const STATUS_COPY = {
+  transit: 'The consignment has left the warehouse and is on its way. The Receive step unlocks when it arrives at the store and is scanned in.',
+  delivery: 'The order is out for last-mile delivery. The Receive step unlocks once the consignment is checked in.',
+};
+
+function StatusStage({ order, stage }) {
+  const a = tone('amber');
+  const route = orderRoute(order);
+  const curIdx = JOURNEY.findIndex((m) => m.key === order.statusKey);
+  const sub = STATUS_COPY[order.statusKey] || STATUS_COPY.transit;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ ...cardLight, padding: 18, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>{STAGE_TITLES[stage]}</span>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: MONO, fontSize: 10.5, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + a.border, color: a.color }}>
+          <Truck size={11} aria-hidden="true" /> {order.status.toUpperCase()}
+        </span>
+        <span style={{ fontFamily: MONO, fontSize: 12, color: MUTE }}>live status · read-only</span>
+      </div>
+
+      <div style={{ ...cardLight, padding: 22, display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap', fontSize: 14, color: INK }}>
+          <MapPin size={15} aria-hidden="true" style={{ color: '#8E0E22', flex: 'none' }} />
+          <span style={{ fontWeight: 700 }}>{route.from}</span>
+          <ChevronRight size={15} aria-hidden="true" style={{ color: MUTE, flex: 'none' }} />
+          <span style={{ fontWeight: 700 }}>{route.to}</span>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+          {JOURNEY.map((m, i) => {
+            const done = curIdx >= 0 && i < curIdx;
+            const active = i === curIdx;
+            const reached = done || active;
+            return (
+              <div key={m.key} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, position: 'relative' }}>
+                {i < JOURNEY.length - 1 && (
+                  <span style={{ position: 'absolute', top: 9, left: '50%', width: '100%', height: 2, background: done ? '#8E0E22' : 'rgba(27,29,33,0.12)' }} />
+                )}
+                <span style={{ position: 'relative', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: active ? '#8E0E22' : done ? 'rgba(142,14,34,0.15)' : '#FFFFFF', border: '2px solid ' + (reached ? '#8E0E22' : 'rgba(27,29,33,0.2)') }}>
+                  {active && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#FFFFFF', animation: 'pulse 1.4s ease-in-out infinite' }} />}
+                </span>
+                <span style={{ fontSize: 12, fontWeight: active ? 700 : 600, color: reached ? '#8E0E22' : 'rgba(27,29,33,0.4)', textAlign: 'center' }}>{m.label}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '14px 16px', fontSize: 13.5, color: '#5B616B', lineHeight: 1.5 }}>{sub}</div>
+      </div>
+    </div>
+  );
+}
+
 // Every single order exposes the full set of tabs — Detail, Packing, Receive
 // and Return — regardless of which side (warehouse / store) is signed in. Each
 // stage opens its tool inline; completed stages lock to a read-only clip view.
@@ -74,12 +137,13 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
         const mode = modeOf(tb.id);
         const isEdit = mode === 'edit' && tb.id !== 'detail';
         const isView = mode === 'view' && tb.id !== 'detail';
+        const isStatus = mode === 'status' && tb.id !== 'detail';
         const isEmpty = mode === 'empty';
         return (
           <button
             key={tb.id}
             onClick={() => onPick(tb.id)}
-            title={isEdit ? tb.label + ' · live · edit' : isView ? tb.label + ' · recorded' : isEmpty ? tb.label + ' · not started' : tb.label}
+            title={isEdit ? tb.label + ' · live · edit' : isView ? tb.label + ' · recorded' : isStatus ? tb.label + ' · in transit' : isEmpty ? tb.label + ' · not started' : tb.label}
             style={{
               display: 'flex', alignItems: 'center', gap: 7, border: 'none', cursor: 'pointer', borderRadius: 11,
               padding: '9px 18px', fontSize: 13.5, fontWeight: 700,
@@ -90,6 +154,7 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
           >
             {isEdit && <span style={{ width: 7, height: 7, borderRadius: '50%', background: on ? '#FFFFFF' : '#8E0E22', animation: 'pulse 1.4s ease-in-out infinite' }} />}
             {isView && <Lock size={12} aria-hidden="true" style={{ opacity: on ? 0.9 : 0.7 }} />}
+            {isStatus && <Truck size={13} aria-hidden="true" style={{ opacity: on ? 0.95 : 0.75 }} />}
             {tb.label}
           </button>
         );
@@ -344,12 +409,12 @@ export default function OrderDetails({ ctx }) {
   // all four action tabs on the single order (Detail / Packing / Receive / Return)
   const tabs = ORDER_TABS;
   const activeTab = tabs.some((tb) => tb.id === s.orderTab) ? s.orderTab : 'detail';
-  // each tab's mode is derived from the order status: view | edit | empty
+  // each tab's mode is derived from the order status: view | edit | status | empty
   const modeFor = (id) => tabMode(order.statusKey, id);
   const onTab = (id) => {
     if (id === 'detail') return set({ orderTab: 'detail' });
     if (modeFor(id) === 'edit') return openSession(id, order.id, 'order'); // active stage -> live tool
-    return set({ orderTab: id, orderEditing: false, orderDraft: null }); // view / empty -> read-only
+    return set({ orderTab: id, orderEditing: false, orderDraft: null }); // view / status / empty -> read-only
   };
   const backLabel = s.listKind === 'transfer' ? 'Transferring goods' : 'Packaging';
 
@@ -510,6 +575,8 @@ export default function OrderDetails({ ctx }) {
             </>
           ) : modeFor(activeTab) === 'view' ? (
             <CompletedStage order={order} stage={activeTab} ctx={ctx} />
+          ) : modeFor(activeTab) === 'status' ? (
+            <StatusStage order={order} stage={activeTab} />
           ) : (
             <EmptyStage stage={activeTab} />
           )}

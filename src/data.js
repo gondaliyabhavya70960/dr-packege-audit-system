@@ -78,19 +78,21 @@ export function stageClip(o, stage) {
 }
 
 // ---- per-status tab modes on the single-order screen ----
-// Each order-detail tab renders in one of three modes, driven purely by the
+// Each order-detail tab renders in one of four modes, driven purely by the
 // order's status:
-//   'view'  — read-only filed-clip view (a stage already on record)
-//   'edit'  — the live, editable recording tool (the currently-active stage)
-//   'empty' — a stage not reached yet (a placeholder zero-state)
+//   'view'   — read-only filed-clip view (a stage already on record)
+//   'edit'   — the live, editable recording tool (the currently-active stage)
+//   'status' — a read-only order-status / tracking view for a stage the order is
+//              actively moving toward but hasn't reached (in transit / delivery)
+//   'empty'  — a stage not reached yet (a placeholder zero-state)
 // Detail is always 'view'. Lifecycle: draft → packed → transit → received →
 // delivery → delivered → returned / flagged.
 const TAB_MODES = {
   draft: { pack: 'edit', recv: 'empty', ret: 'empty' },
   packed: { pack: 'view', recv: 'empty', ret: 'empty' },
-  transit: { pack: 'view', recv: 'empty', ret: 'empty' },
+  transit: { pack: 'view', recv: 'status', ret: 'empty' },
   received: { pack: 'view', recv: 'edit', ret: 'empty' },
-  delivery: { pack: 'view', recv: 'view', ret: 'empty' },
+  delivery: { pack: 'view', recv: 'status', ret: 'empty' },
   delivered: { pack: 'view', recv: 'view', ret: 'empty' },
   returned: { pack: 'view', recv: 'view', ret: 'view' },
   flagged: { pack: 'view', recv: 'view', ret: 'view' },
