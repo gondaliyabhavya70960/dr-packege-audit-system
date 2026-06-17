@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, Lock, Video, Trash2 } from 'lucide-react';
-import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, orderStages, stageClip, fmt } from '../data.js';
+import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw } from 'lucide-react';
+import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, fmt } from '../data.js';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
 import RemarkBox from '../components/RemarkBox.jsx';
 import ClipPlayer from '../components/ClipPlayer.jsx';
 import VideoCaptureCard from '../components/VideoCaptureCard.jsx';
+import EmptyState from '../components/EmptyState.jsx';
 
 const STAGE_TITLES = { pack: 'Packing', recv: 'Receiving', ret: 'Return inspection' };
 
@@ -39,6 +40,19 @@ function CompletedStage({ order, stage, ctx }) {
   );
 }
 
+// A stage the order hasn't reached yet ('empty' mode) — a read-only zero-state
+// explaining when the step will unlock.
+const EMPTY_COPY = {
+  pack: { icon: Package, title: 'Packing not started', sub: 'This order has not been packed yet. The Packing step is editable while the order is a draft.' },
+  recv: { icon: Inbox, title: 'Receiving not started', sub: 'This order has not reached store receiving yet. The Receive step unlocks when the consignment arrives and is scanned in.' },
+  ret: { icon: RotateCcw, title: 'No return on this order', sub: 'Nothing has been returned. The Return step unlocks if the customer raises a return and it is inspected at the desk.' },
+};
+
+function EmptyStage({ stage }) {
+  const c = EMPTY_COPY[stage] || EMPTY_COPY.recv;
+  return <EmptyState icon={c.icon} title={c.title} sub={c.sub} />;
+}
+
 // Every single order exposes the full set of tabs — Detail, Packing, Receive
 // and Return — regardless of which side (warehouse / store) is signed in. Each
 // stage opens its tool inline; completed stages lock to a read-only clip view.
@@ -49,28 +63,33 @@ const ORDER_TABS = [
   { id: 'ret', label: 'Return' },
 ];
 
-const LIVE_TABS = ['pack', 'recv', 'ret'];
-
-function OrderTabs({ tabs, active, onPick, stages }) {
+// Tab strip indicators reflect each tab's mode: a pulsing dot marks the live,
+// editable stage; a lock marks a recorded (view) stage; an empty stage reads
+// dimmed (not started). Detail carries no badge.
+function OrderTabs({ tabs, active, onPick, modeOf }) {
   return (
     <div style={{ ...cardLight, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 14, alignSelf: 'flex-start', flexWrap: 'wrap', maxWidth: '100%' }}>
       {tabs.map((tb) => {
         const on = tb.id === active;
-        const done = stages && stages[tb.id];
-        const live = on && LIVE_TABS.includes(tb.id) && !done;
+        const mode = modeOf(tb.id);
+        const isEdit = mode === 'edit' && tb.id !== 'detail';
+        const isView = mode === 'view' && tb.id !== 'detail';
+        const isEmpty = mode === 'empty';
         return (
           <button
             key={tb.id}
             onClick={() => onPick(tb.id)}
+            title={isEdit ? tb.label + ' · live · edit' : isView ? tb.label + ' · recorded' : isEmpty ? tb.label + ' · not started' : tb.label}
             style={{
               display: 'flex', alignItems: 'center', gap: 7, border: 'none', cursor: 'pointer', borderRadius: 11,
               padding: '9px 18px', fontSize: 13.5, fontWeight: 700,
-              background: on ? '#8E0E22' : 'transparent', color: on ? '#FFFFFF' : 'rgba(27,29,33,0.65)',
+              background: on ? '#8E0E22' : 'transparent',
+              color: on ? '#FFFFFF' : isEmpty ? 'rgba(27,29,33,0.4)' : 'rgba(27,29,33,0.65)',
               boxShadow: on ? '0 4px 14px rgba(142,14,34,0.25)' : 'none',
             }}
           >
-            {live && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#FFFFFF', animation: 'pulse 1.4s ease-in-out infinite' }} />}
-            {done && <Lock size={12} aria-hidden="true" style={{ opacity: 0.8 }} />}
+            {isEdit && <span style={{ width: 7, height: 7, borderRadius: '50%', background: on ? '#FFFFFF' : '#8E0E22', animation: 'pulse 1.4s ease-in-out infinite' }} />}
+            {isView && <Lock size={12} aria-hidden="true" style={{ opacity: on ? 0.9 : 0.7 }} />}
             {tb.label}
           </button>
         );
@@ -325,11 +344,12 @@ export default function OrderDetails({ ctx }) {
   // all four action tabs on the single order (Detail / Packing / Receive / Return)
   const tabs = ORDER_TABS;
   const activeTab = tabs.some((tb) => tb.id === s.orderTab) ? s.orderTab : 'detail';
-  const stages = orderStages(order); // which stages are already completed (read-only)
+  // each tab's mode is derived from the order status: view | edit | empty
+  const modeFor = (id) => tabMode(order.statusKey, id);
   const onTab = (id) => {
     if (id === 'detail') return set({ orderTab: 'detail' });
-    if (stages[id]) return set({ orderTab: id }); // completed step -> read-only, no live session
-    return openSession(id, order.id, 'order');
+    if (modeFor(id) === 'edit') return openSession(id, order.id, 'order'); // active stage -> live tool
+    return set({ orderTab: id, orderEditing: false, orderDraft: null }); // view / empty -> read-only
   };
   const backLabel = s.listKind === 'transfer' ? 'Transferring goods' : 'Packaging';
 
@@ -374,7 +394,7 @@ export default function OrderDetails({ ctx }) {
         )}
       </div>
 
-      <OrderTabs tabs={tabs} active={activeTab} onPick={onTab} stages={stages} />
+      <OrderTabs tabs={tabs} active={activeTab} onPick={onTab} modeOf={modeFor} />
 
       {activeTab === 'detail' && (
       <div className="order-grid">
@@ -482,14 +502,16 @@ export default function OrderDetails({ ctx }) {
 
       {activeTab !== 'detail' && (
         <div className="order-tool" style={{ marginTop: 2 }}>
-          {stages[activeTab] ? (
-            <CompletedStage order={order} stage={activeTab} ctx={ctx} />
-          ) : (
+          {modeFor(activeTab) === 'edit' ? (
             <>
               {activeTab === 'pack' && <PackRecord ctx={ctx} />}
               {activeTab === 'recv' && <Receiving ctx={ctx} />}
               {activeTab === 'ret' && <ReturnInspection ctx={ctx} />}
             </>
+          ) : modeFor(activeTab) === 'view' ? (
+            <CompletedStage order={order} stage={activeTab} ctx={ctx} />
+          ) : (
+            <EmptyStage stage={activeTab} />
           )}
         </div>
       )}

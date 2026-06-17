@@ -77,6 +77,31 @@ export function stageClip(o, stage) {
   return { label: e.label, time: e.time, who: e.who, hash: seed.slice(0, 4) + '…' + seed.slice(-4) };
 }
 
+// ---- per-status tab modes on the single-order screen ----
+// Each order-detail tab renders in one of three modes, driven purely by the
+// order's status:
+//   'view'  — read-only filed-clip view (a stage already on record)
+//   'edit'  — the live, editable recording tool (the currently-active stage)
+//   'empty' — a stage not reached yet (a placeholder zero-state)
+// Detail is always 'view'. Lifecycle: draft → packed → transit → received →
+// delivery → delivered → returned / flagged.
+const TAB_MODES = {
+  draft: { pack: 'edit', recv: 'empty', ret: 'empty' },
+  packed: { pack: 'view', recv: 'empty', ret: 'empty' },
+  transit: { pack: 'view', recv: 'empty', ret: 'empty' },
+  received: { pack: 'view', recv: 'edit', ret: 'empty' },
+  delivery: { pack: 'view', recv: 'view', ret: 'empty' },
+  delivered: { pack: 'view', recv: 'view', ret: 'empty' },
+  returned: { pack: 'view', recv: 'view', ret: 'view' },
+  flagged: { pack: 'view', recv: 'view', ret: 'view' },
+};
+
+export function tabMode(statusKey, tab) {
+  if (tab === 'detail') return 'view';
+  const row = TAB_MODES[statusKey] || TAB_MODES.packed;
+  return row[tab] || 'empty';
+}
+
 // ---- deterministic demo-order generator (no Math.random -> SSR-safe) ----
 const GEN_CITIES = [
   ['Mumbai', '400001'], ['Bengaluru', '560001'], ['New Delhi', '110001'], ['Hyderabad', '500034'],
