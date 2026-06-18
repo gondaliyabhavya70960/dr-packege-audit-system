@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin } from 'lucide-react';
-import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, fmt } from '../data.js';
+import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem } from 'lucide-react';
+import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, fmt } from '../data.js';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
@@ -180,6 +180,25 @@ const condTone = (c) => {
   if (c === 'damaged' || c === 'disputed' || c === 'missing') return tone('red');
   return tone('amber');
 };
+
+// A mini "scan frame" thumbnail for a line item — a jewelry glyph over a dark
+// camera-feed crop with a YOLO-style detection box, tinted to the item's
+// condition. Stands in for the still where the product was picked up on video.
+function DetectedThumb({ item }) {
+  const ct = condTone(item.condition);
+  return (
+    <div
+      role="img"
+      aria-label={'Scan frame · ' + item.name + ' detected'}
+      title={'Detected on scan video · ' + item.name}
+      style={{ position: 'relative', width: 44, height: 44, flex: 'none', borderRadius: 9, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', ...feedBg, boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.08)' }}
+    >
+      <Gem size={19} aria-hidden="true" style={{ color: 'rgba(255,255,255,0.9)' }} />
+      <span style={{ position: 'absolute', inset: 7, border: '1.5px solid ' + ct.color, borderRadius: 4 }} />
+      <span style={{ position: 'absolute', top: 4, right: 4, width: 5, height: 5, borderRadius: '50%', background: ct.color, boxShadow: '0 0 0 1.5px rgba(0,0,0,0.35)' }} />
+    </div>
+  );
+}
 
 function Field({ label, children }) {
   return (
@@ -478,6 +497,7 @@ export default function OrderDetails({ ctx }) {
                   </div>
                   <span style={{ fontFamily: MONO, fontSize: 13, color: '#5B616B' }}>×{it.qty}</span>
                   <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + ct.border, color: ct.color }}>{it.condition}</span>
+                  <DetectedThumb item={it} />
                 </div>
               );
             })}
