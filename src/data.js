@@ -17,9 +17,11 @@ export const ORDER_STATUSES = [
   { key: 'draft', label: 'Draft', tone: 'plain' },
   { key: 'packed', label: 'Packed', tone: 'plain' },
   { key: 'transit', label: 'In transit', tone: 'amber' },
+  { key: 'receiving', label: 'Receiving', tone: 'amber' },
   { key: 'received', label: 'Received', tone: 'green' },
   { key: 'delivery', label: 'Out for delivery', tone: 'amber' },
   { key: 'delivered', label: 'Delivered', tone: 'green' },
+  { key: 'returning', label: 'Return', tone: 'amber' },
   { key: 'returned', label: 'Returned', tone: 'red' },
   { key: 'flagged', label: 'Flagged', tone: 'red' },
 ];
@@ -85,15 +87,19 @@ export function stageClip(o, stage) {
 //   'status' — a read-only order-status / tracking view for a stage the order is
 //              actively moving toward but hasn't reached (in transit / delivery)
 //   'empty'  — a stage not reached yet (a placeholder zero-state)
-// Detail is always 'view'. Lifecycle: draft → packed → transit → received →
-// delivery → delivered → returned / flagged.
+// Detail is always 'view'. Lifecycle: draft → packed → transit → receiving →
+// received → delivery → delivered → returning → returned / flagged.
+// 'receiving' (Receive tab live/edit) and 'returning' (Return tab live/edit) are
+// the active in-progress states, paired with the recorded 'received'/'returned'.
 const TAB_MODES = {
   draft: { pack: 'edit', recv: 'empty', ret: 'empty' },
   packed: { pack: 'view', recv: 'empty', ret: 'empty' },
   transit: { pack: 'view', recv: 'status', ret: 'empty' },
+  receiving: { pack: 'view', recv: 'edit', ret: 'empty' },
   received: { pack: 'view', recv: 'edit', ret: 'empty' },
   delivery: { pack: 'view', recv: 'status', ret: 'empty' },
   delivered: { pack: 'view', recv: 'view', ret: 'empty' },
+  returning: { pack: 'view', recv: 'view', ret: 'edit' },
   returned: { pack: 'view', recv: 'view', ret: 'view' },
   flagged: { pack: 'view', recv: 'view', ret: 'view' },
 };
@@ -121,8 +127,8 @@ const XFER_STATUS = ['transit', 'received', 'received', 'transit', 'delivered'];
 
 function statusMeta(k) {
   const m = {
-    draft: ['Draft', 'plain'], packed: ['Packed', 'plain'], transit: ['In transit', 'amber'], received: ['Received', 'green'],
-    delivery: ['Out for delivery', 'amber'], delivered: ['Delivered', 'green'], returned: ['Returned', 'red'], flagged: ['Flagged', 'red'],
+    draft: ['Draft', 'plain'], packed: ['Packed', 'plain'], transit: ['In transit', 'amber'], receiving: ['Receiving', 'amber'], received: ['Received', 'green'],
+    delivery: ['Out for delivery', 'amber'], delivered: ['Delivered', 'green'], returning: ['Return', 'amber'], returned: ['Returned', 'red'], flagged: ['Flagged', 'red'],
   };
   return m[k] || ['On record', 'plain'];
 }
@@ -265,6 +271,39 @@ const curatedOrders = [
       { label: 'In transit', time: '11 Jun · —', who: 'Gati · 2 days', clip: false },
     ],
     custom: { priority: 'Standard', giftWrap: false, insured: '₹5.60L', slot: '—', instructions: 'Inter-branch transfer for festive stock.', notes: 'Reconcile expected short by 1 — confirm on arrival.' },
+  },
+  {
+    id: 'RFID-1048', channel: 'Store', customer: 'Ahmedabad Flagship', phone: '+91 79 4002 7700',
+    address: 'CG Road, Ahmedabad 380009', placed: '15 Jun 2026 · 10:20', ts: Date.parse('2026-06-15T10:20:00'),
+    statusKey: 'receiving', status: 'Receiving', tone: 'amber', station: 'STORE-RECV-2', value: '₹2.30L', valNum: 230000,
+    items: [
+      { sku: 'SKU 4471', name: 'Solitaire ring', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4472', name: 'Diamond pendant', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4480', name: 'Gold bangle', qty: 1, condition: 'pending' },
+    ],
+    timeline: [
+      { label: 'Challan raised', time: '13 Jun · 09:10', who: 'warehouse', clip: false },
+      { label: 'Packed · Warehouse', time: '13 Jun · 11:30', who: 'Mira · PACK-BENCH-1', clip: true },
+      { label: 'Dispatched → Gati', time: '13 Jun · 13:20', who: 'auto', clip: false },
+      { label: 'Arrived at store', time: '15 Jun · 10:20', who: 'Devang · STORE-RECV-2', clip: false },
+    ],
+    custom: { ...blankCustom, insured: '₹2.40L', slot: '—', instructions: 'Scan each RFID at the desk to receive.', notes: 'Receiving in progress — confirm to shelve.' },
+    remarks: [{ who: 'Devang', time: '15 Jun · 10:22', text: 'Box opened at the desk — scanning RFIDs now.' }],
+  },
+  {
+    id: 'ORD-10318', channel: 'Online', customer: 'Kavya Reddy', phone: '+91 90000 88776',
+    address: '18 Jubilee Hills, Hyderabad 500033', placed: '08 Jun 2026 · 12:30', ts: Date.parse('2026-06-08T12:30:00'),
+    statusKey: 'returning', status: 'Return', tone: 'amber', station: 'RETURNS-1', value: '₹1.35L', valNum: 135000,
+    items: [{ sku: 'SKU 4590', name: 'Pearl drop pendant', qty: 1, condition: 'pending' }],
+    timeline: [
+      { label: 'Order placed', time: '08 Jun · 12:30', who: 'web checkout', clip: false },
+      { label: 'Packed · Warehouse', time: '08 Jun · 15:10', who: 'Mira · PACK-BENCH-1', clip: true },
+      { label: 'Delivered', time: '10 Jun · 13:00', who: 'OTP confirmed', clip: false },
+      { label: 'Return requested', time: '14 Jun · 09:20', who: 'customer · "size issue"', clip: false },
+      { label: 'Return inspection started', time: '14 Jun · 12:30', who: 'Sana · RETURNS-1', clip: false },
+    ],
+    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.40L', slot: '—', instructions: 'Inspect at the returns desk and record the verdict.', notes: 'Return inspection in progress.' },
+    remarks: [{ who: 'Sana', time: '14 Jun · 12:31', text: 'Customer reports loose clasp — inspecting now.' }],
   },
   {
     id: 'RFID-1021', channel: 'Store', customer: 'Surat Flagship', phone: '+91 261 245 1100',
