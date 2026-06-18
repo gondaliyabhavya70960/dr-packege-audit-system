@@ -484,13 +484,50 @@ const curatedOrders = [
   },
 ];
 
+// Every order in the working lists carries at least this many line items, so the
+// Items panel always reads as a full order. Short orders are topped up with
+// deterministic filler SKUs that inherit the order's condition verdict.
+const MIN_ITEMS = 5;
+function padItems(order) {
+  const items = order.items ? order.items.map((it) => ({ ...it })) : [];
+  if (items.length >= MIN_ITEMS) return order;
+  const used = new Set(items.map((it) => it.sku));
+  const cond = items[0] ? items[0].condition : condFor(order.statusKey);
+  for (let i = 0; items.length < MIN_ITEMS && i < GEN_ITEMS.length; i++) {
+    const [sku, name] = GEN_ITEMS[i];
+    if (used.has(sku)) continue;
+    used.add(sku);
+    items.push({ sku, name, qty: 1, condition: cond });
+  }
+  return { ...order, items };
+}
+
 // curated demo orders + ~104 generated ones (varied stage / status / city / channel)
-export const seedOrders = [...curatedOrders, ...generateOrders(104)];
+export const seedOrders = [...curatedOrders, ...generateOrders(104)].map(padItems);
 
 export const PRIORITY_OPTIONS = ['Standard', 'Express', 'White-glove'];
 
 export function emptyCustomOrder() {
   return { id: '', channel: 'Online', customer: '', value: '', station: 'AUDIT-BENCH-1', packVideos: [], ...blankCustom };
+}
+
+// Build an order record from a custom-order draft. Shared by the create form and
+// the leave-and-save dialog so both file an identical order. A pack clip captured
+// in the draft files it as Packed; otherwise it lands as a Draft.
+export function buildCustomOrder(d, who) {
+  const id = (d.id || '').trim().toUpperCase();
+  const op = who || 'admin';
+  const packed = (d.packVideos || []).length > 0;
+  const timeline = [{ label: 'Custom order created', time: 'today', who: op, clip: false }];
+  if (packed) timeline.push({ label: 'Packed · Warehouse', time: 'today', who: op + ' · ' + d.station, clip: true });
+  return {
+    id, channel: d.channel, customer: (d.customer || '').trim(), phone: '—', address: '—',
+    placed: 'today · custom entry', ts: Date.now(),
+    statusKey: packed ? 'packed' : 'draft', status: packed ? 'Packed' : 'Draft',
+    tone: 'plain', station: d.station, value: (d.value || '').trim() || '—', valNum: 0,
+    items: [], timeline,
+    custom: { priority: d.priority, giftWrap: d.giftWrap, insured: d.insured, slot: d.slot, instructions: d.instructions, notes: d.notes },
+  };
 }
 
 // fallback order built for an id that has no seeded record (e.g. a session just closed)
@@ -512,6 +549,7 @@ export const initialState = {
   mode: 'pack',
   scanInput: '',
   backConfirm: false,
+  leaveConfirm: false, // "save all details?" guard when leaving an edit/session via the logo
   lastSession: 'ORD-10287 · sealed · 14:02',
   recSec: 0,
   recActive: true, // live camera recording on/off — drives the session timer + REC indicator

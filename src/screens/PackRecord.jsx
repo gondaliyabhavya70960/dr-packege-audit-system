@@ -2,6 +2,7 @@ import { Camera } from 'lucide-react';
 import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
 import RemarkBox from '../components/RemarkBox.jsx';
 import RecordButton from '../components/RecordButton.jsx';
+import CapturedThumb from '../components/CapturedThumb.jsx';
 
 export default function PackRecord({ ctx }) {
   const { s, set, showToast, logOrderEvent } = ctx;
@@ -27,12 +28,13 @@ export default function PackRecord({ ctx }) {
   const bt = bannerTones[banner.tone];
 
   const rows = items.map((i) => {
-    const d = dotFor(i.got >= i.need ? 'ok' : 'wait');
-    return { ...d, key: i.sku, name: i.name, sku: i.sku, count: i.got + '/' + i.need + (i.got >= i.need ? ' ✓' : ' ···') };
+    const got = i.got >= i.need;
+    const d = dotFor(got ? 'ok' : 'wait');
+    return { ...d, key: i.sku, name: i.name, sku: i.sku, captured: got, count: i.got + '/' + i.need + (got ? ' ✓' : ' ···') };
   });
   if (unknown) {
     const d = dotFor('bad');
-    rows.push({ ...d, key: 'unknown', name: 'UNKNOWN ITEM', sku: 'RFID-9920 · not on this order', count: 'extra !' });
+    rows.push({ ...d, key: 'unknown', name: 'UNKNOWN ITEM', sku: 'RFID-9920 · not on this order', captured: false, count: 'extra !' });
   }
 
   const scanPackItem = () => {
@@ -91,7 +93,11 @@ export default function PackRecord({ ctx }) {
           </div>
           {rows.map((row) => (
             <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14 }}>
-              <span style={{ width: 26, height: 26, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, border: '1px solid ' + row.dotBorder, color: row.dotColor, background: row.dotBg }}>{row.dot}</span>
+              {row.captured ? (
+                <CapturedThumb size={34} label={row.name + ' — captured on video'} />
+              ) : (
+                <span style={{ width: 26, height: 26, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, border: '1px solid ' + row.dotBorder, color: row.dotColor, background: row.dotBg }}>{row.dot}</span>
+              )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
                 <span style={{ fontSize: 15, fontWeight: 600 }}>{row.name}</span>
                 <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{row.sku}</span>
