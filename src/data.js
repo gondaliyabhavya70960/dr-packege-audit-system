@@ -306,6 +306,104 @@ const curatedOrders = [
     remarks: [{ who: 'Sana', time: '14 Jun · 12:31', text: 'Customer reports loose clasp — inspecting now.' }],
   },
   {
+    id: 'ORD-10362', channel: 'Online', customer: 'Rhea Malhotra', phone: '+91 98330 21145',
+    address: '12 Linking Rd, Mumbai 400050', placed: '15 Jun 2026 · 11:20', ts: Date.parse('2026-06-15T11:20:00'),
+    statusKey: 'draft', status: 'Draft', tone: 'plain', station: 'PACK-BENCH-2', value: '₹3.20L', valNum: 320000,
+    items: [
+      { sku: 'SKU 4550', name: 'Kundan necklace set', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4560', name: 'Diamond stud earrings', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4521', name: 'Mangalsutra', qty: 1, condition: 'pending' },
+    ],
+    timeline: [
+      { label: 'Order placed', time: '15 Jun · 11:20', who: 'web checkout', clip: false },
+      { label: 'Draft saved', time: '15 Jun · 11:24', who: 'Rahul · PACK-BENCH-2', clip: false },
+    ],
+    custom: { priority: 'Express', giftWrap: true, insured: '₹3.30L', slot: 'awaiting pack', instructions: 'Bridal set — pack with tamper seals.', notes: 'Draft — pack-bench video pending before dispatch.' },
+    remarks: [{ who: 'Rahul', time: '15 Jun · 11:25', text: 'Held as draft until the bench is free for the pack video.' }],
+  },
+  {
+    id: 'ORD-10365', channel: 'Store', customer: 'Imran Qureshi', phone: '+91 99860 55410',
+    address: '3 Commercial St, Bengaluru 560001', placed: '15 Jun 2026 · 12:05', ts: Date.parse('2026-06-15T12:05:00'),
+    statusKey: 'draft', status: 'Draft', tone: 'plain', station: 'PACK-BENCH-1', value: '₹1.15L', valNum: 115000,
+    items: [
+      { sku: 'SKU 4471', name: 'Solitaire ring', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4540', name: 'Gold coin · 8g', qty: 2, condition: 'pending' },
+    ],
+    timeline: [
+      { label: 'Order placed', time: '15 Jun · 12:05', who: 'store counter', clip: false },
+      { label: 'Draft saved', time: '15 Jun · 12:09', who: 'Mira · PACK-BENCH-1', clip: false },
+    ],
+    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.20L', slot: 'awaiting pack', instructions: 'Walk-in order — customer collecting Saturday.', notes: 'Draft — awaiting pack-bench video.' },
+  },
+  {
+    id: 'DC-2026-00455', channel: 'B2B', customer: 'Jaipur Branch', phone: '+91 141 400 7788',
+    address: 'C Scheme, Jaipur 302001', placed: '13 Jun 2026 · 08:30', ts: Date.parse('2026-06-13T08:30:00'),
+    statusKey: 'receiving', status: 'Receiving', tone: 'amber', station: 'STORE-RECV-2', value: '₹6.80L', valNum: 680000,
+    items: [
+      { sku: 'SKU 4510', name: 'Polki necklace', qty: 2, condition: 'pending' },
+      { sku: 'SKU 4601', name: 'Temple jewellery set', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4480', name: 'Gold bangle', qty: 3, condition: 'pending' },
+      { sku: 'SKU 4550', name: 'Kundan necklace set', qty: 1, condition: 'pending' },
+    ],
+    timeline: [
+      { label: 'Challan raised', time: '13 Jun · 08:30', who: 'warehouse', clip: false },
+      { label: 'Packed · Warehouse', time: '13 Jun · 10:40', who: 'Priya · PACK-BENCH-1', clip: true },
+      { label: 'Dispatched → Gati', time: '13 Jun · 14:00', who: 'auto', clip: false },
+      { label: 'Arrived at store', time: '15 Jun · 09:15', who: 'Devang · STORE-RECV-2', clip: false },
+    ],
+    custom: { ...blankCustom, insured: '₹6.90L', slot: '—', instructions: 'Festive replenishment — reconcile every RFID at the desk.', notes: 'Receiving in progress — confirm to shelve.' },
+    remarks: [{ who: 'Devang', time: '15 Jun · 09:18', text: 'Two cartons open — scanning RFIDs against the challan.' }],
+  },
+  {
+    id: 'RFID-1071', channel: 'Store', customer: 'Pune Galleria', phone: '+91 20 4120 6600',
+    address: 'Koregaon Park, Pune 411001', placed: '14 Jun 2026 · 09:50', ts: Date.parse('2026-06-14T09:50:00'),
+    statusKey: 'receiving', status: 'Receiving', tone: 'amber', station: 'STORE-RECV-1', value: '₹2.95L', valNum: 295000,
+    items: [
+      { sku: 'SKU 4530', name: 'Diamond choker', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4612', name: 'Sapphire ring', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4590', name: 'Pearl drop pendant', qty: 2, condition: 'pending' },
+    ],
+    timeline: [
+      { label: 'Challan raised', time: '14 Jun · 09:50', who: 'warehouse', clip: false },
+      { label: 'Packed · Warehouse', time: '14 Jun · 11:20', who: 'Mira · PACK-BENCH-2', clip: true },
+      { label: 'Dispatched → Gati', time: '14 Jun · 15:10', who: 'auto', clip: false },
+      { label: 'Arrived at store', time: '15 Jun · 10:40', who: 'Sana · STORE-RECV-1', clip: false },
+    ],
+    custom: { ...blankCustom, insured: '₹3.00L', slot: '—', instructions: 'Scan each RFID before shelving.', notes: 'Receiving — first carton opened at the desk.' },
+  },
+  {
+    id: 'ORD-10324', channel: 'Online', customer: 'Farah Sheikh', phone: '+91 90040 33218',
+    address: '9 Adyar, Chennai 600020', placed: '06 Jun 2026 · 10:10', ts: Date.parse('2026-06-06T10:10:00'),
+    statusKey: 'returning', status: 'Return', tone: 'amber', station: 'RETURNS-1', value: '₹1.85L', valNum: 185000,
+    items: [
+      { sku: 'SKU 4490', name: 'Emerald drop earrings', qty: 1, condition: 'pending' },
+      { sku: 'SKU 4571', name: 'Ruby cocktail ring', qty: 1, condition: 'pending' },
+    ],
+    timeline: [
+      { label: 'Order placed', time: '06 Jun · 10:10', who: 'web checkout', clip: false },
+      { label: 'Packed · Warehouse', time: '06 Jun · 13:25', who: 'Rahul · PACK-BENCH-1', clip: true },
+      { label: 'Delivered', time: '09 Jun · 12:40', who: 'OTP confirmed', clip: false },
+      { label: 'Return requested', time: '14 Jun · 10:05', who: 'customer · "colour mismatch"', clip: false },
+      { label: 'Return inspection started', time: '15 Jun · 11:30', who: 'Sana · RETURNS-1', clip: false },
+    ],
+    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.90L', slot: '—', instructions: 'Verify stones against the pack clip before verdict.', notes: 'Return inspection in progress.' },
+    remarks: [{ who: 'Sana', time: '15 Jun · 11:32', text: 'Comparing emerald hue with the dispatch still now.' }],
+  },
+  {
+    id: 'ORD-10327', channel: 'Online', customer: 'Aditya Banerjee', phone: '+91 98300 77451',
+    address: '21 Salt Lake, Kolkata 700064', placed: '05 Jun 2026 · 18:30', ts: Date.parse('2026-06-05T18:30:00'),
+    statusKey: 'returning', status: 'Return', tone: 'amber', station: 'RETURNS-1', value: '₹1.30L', valNum: 130000,
+    items: [{ sku: 'SKU 4502', name: 'Tennis bracelet', qty: 1, condition: 'pending' }],
+    timeline: [
+      { label: 'Order placed', time: '05 Jun · 18:30', who: 'web checkout', clip: false },
+      { label: 'Packed · Warehouse', time: '06 Jun · 09:40', who: 'Mira · PACK-BENCH-2', clip: true },
+      { label: 'Delivered', time: '08 Jun · 14:10', who: 'OTP confirmed', clip: false },
+      { label: 'Return requested', time: '14 Jun · 16:20', who: 'customer · "clasp loose"', clip: false },
+      { label: 'Return inspection started', time: '15 Jun · 09:50', who: 'Devang · RETURNS-1', clip: false },
+    ],
+    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.35L', slot: '—', instructions: 'Check the clasp and weigh against dispatch.', notes: 'Return inspection underway.' },
+  },
+  {
     id: 'RFID-1021', channel: 'Store', customer: 'Surat Flagship', phone: '+91 261 245 1100',
     address: 'Ghod Dod Rd, Surat 395007', placed: '11 Jun 2026 · 11:40', ts: Date.parse('2026-06-11T11:40:00'),
     statusKey: 'received', status: 'Received', tone: 'green', station: 'STORE-RECV-1', value: '₹0.78L', valNum: 78000,
@@ -484,26 +582,8 @@ const curatedOrders = [
   },
 ];
 
-// Every order in the working lists carries at least this many line items, so the
-// Items panel always reads as a full order. Short orders are topped up with
-// deterministic filler SKUs that inherit the order's condition verdict.
-const MIN_ITEMS = 5;
-function padItems(order) {
-  const items = order.items ? order.items.map((it) => ({ ...it })) : [];
-  if (items.length >= MIN_ITEMS) return order;
-  const used = new Set(items.map((it) => it.sku));
-  const cond = items[0] ? items[0].condition : condFor(order.statusKey);
-  for (let i = 0; items.length < MIN_ITEMS && i < GEN_ITEMS.length; i++) {
-    const [sku, name] = GEN_ITEMS[i];
-    if (used.has(sku)) continue;
-    used.add(sku);
-    items.push({ sku, name, qty: 1, condition: cond });
-  }
-  return { ...order, items };
-}
-
 // curated demo orders + ~104 generated ones (varied stage / status / city / channel)
-export const seedOrders = [...curatedOrders, ...generateOrders(104)].map(padItems);
+export const seedOrders = [...curatedOrders, ...generateOrders(104)];
 
 export const PRIORITY_OPTIONS = ['Standard', 'Express', 'White-glove'];
 
