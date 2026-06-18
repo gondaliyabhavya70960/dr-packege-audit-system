@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem } from 'lucide-react';
-import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, fmt } from '../data.js';
+import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmt } from '../data.js';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
@@ -341,19 +341,8 @@ export default function OrderDetails({ ctx }) {
         showToast('Add at least an order ID and customer to save.');
         return;
       }
-      const who = s.userLabel || 'admin';
-      const vids = d.packVideos || [];
-      const packed = vids.length > 0; // captured a pack clip -> filed as Packed, else Draft
-      const timeline = [{ label: 'Custom order created', time: 'today', who, clip: false }];
-      if (packed) timeline.push({ label: 'Packed · Warehouse', time: 'today', who: who + ' · ' + d.station, clip: true });
-      const newOrder = {
-        id, channel: d.channel, customer: d.customer.trim(), phone: '—', address: '—',
-        placed: 'today · custom entry', ts: Date.now(),
-        statusKey: packed ? 'packed' : 'draft', status: packed ? 'Packed' : 'Draft',
-        tone: 'plain', station: d.station, value: d.value.trim() || '—', valNum: 0,
-        items: [], timeline,
-        custom: { priority: d.priority, giftWrap: d.giftWrap, insured: d.insured, slot: d.slot, instructions: d.instructions, notes: d.notes },
-      };
+      const newOrder = buildCustomOrder(d, s.userLabel || 'admin'); // captured a pack clip -> Packed, else Draft
+      const packed = newOrder.statusKey === 'packed';
       set({ orders: [newOrder, ...s.orders], orderId: id, orderEditing: false, orderDraft: null });
       showToast(packed ? 'Custom order ' + id + ' filed with pack video — saved to the orders list.' : 'Draft order ' + id + ' saved to the orders list.');
     };

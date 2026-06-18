@@ -18,6 +18,7 @@ import { emptyCustomOrder } from './data.js';
 import TopBar from './components/TopBar.jsx';
 import TabBar from './components/TabBar.jsx';
 import BackConfirm from './components/BackConfirm.jsx';
+import LeaveConfirm from './components/LeaveConfirm.jsx';
 import Tour from './components/Tour.jsx';
 import Toast from './components/Toast.jsx';
 
@@ -341,6 +342,7 @@ export default function App() {
       {screen !== 'login' && <TabBar ctx={ctx} />}
       {s.playerOpen && <SideBySidePlayer ctx={ctx} />}
       {s.backConfirm && <BackConfirm ctx={ctx} />}
+      {s.leaveConfirm && <LeaveConfirm ctx={ctx} />}
       {s.tourOpen && <Tour ctx={ctx} />}
       {s.toast && <Toast msg={s.toast} />}
     </div>

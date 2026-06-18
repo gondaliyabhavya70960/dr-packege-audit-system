@@ -2,6 +2,7 @@ import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
 import PrevStepClip from '../components/PrevStepClip.jsx';
 import RemarkBox from '../components/RemarkBox.jsx';
 import RecordButton from '../components/RecordButton.jsx';
+import CapturedThumb from '../components/CapturedThumb.jsx';
 
 export default function Receiving({ ctx }) {
   const { s, set, showToast, logOrderEvent } = ctx;
@@ -13,7 +14,7 @@ export default function Receiving({ ctx }) {
   const rows = s.recvRows.map((r) => {
     const st = r.state === 'received' ? 'ok' : r.state === 'extra' ? 'bad' : 'wait';
     const d = dotFor(st);
-    return { ...d, key: r.rfid, rfid: r.rfid, name: r.name, stateLabel: r.state };
+    return { ...d, key: r.rfid, rfid: r.rfid, name: r.name, stateLabel: r.state, captured: r.state === 'received' };
   });
 
   const matched = s.recvRows.filter((r) => r.state === 'received').length;
@@ -71,7 +72,11 @@ export default function Receiving({ ctx }) {
           </div>
           {rows.map((row) => (
             <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14 }}>
-              <span style={{ width: 26, height: 26, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, border: '1px solid ' + row.dotBorder, color: row.dotColor, background: row.dotBg }}>{row.dot}</span>
+              {row.captured ? (
+                <CapturedThumb size={34} label={row.name + ' — captured on video'} />
+              ) : (
+                <span style={{ width: 26, height: 26, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, border: '1px solid ' + row.dotBorder, color: row.dotColor, background: row.dotBg }}>{row.dot}</span>
+              )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 <span style={{ fontFamily: MONO, fontSize: 14 }}>{row.rfid}</span>
                 <span style={{ fontSize: 13, color: '#5B616B' }}>{row.name}</span>

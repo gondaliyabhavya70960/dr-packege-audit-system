@@ -113,10 +113,25 @@ export default function TopBar({ ctx, variant }) {
   // else (overview, lists, kiosk) the top bar stays clean.
   const showStation = s.screen === 'order';
 
+  // The Mayavé logo always routes home (the Overview dashboard). If the operator
+  // is mid-edit — a live recording session or an order being created / edited —
+  // guard the jump with a save-all-details popup instead of leaving silently.
+  const inOrderSession = s.screen === 'order' && ['pack', 'recv', 'ret'].includes(s.orderTab);
+  const hasUnsaved = s.orderEditing || isSession || inOrderSession;
+  const goDashboard = () => {
+    if (hasUnsaved) return set({ leaveConfirm: true });
+    set({ screen: 'home', profileMenuOpen: false, adminMenuOpen: false });
+  };
+  const Logo = (
+    <button onClick={goDashboard} title="Go to dashboard" aria-label="Go to dashboard" className="hv-brighten" style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', borderRadius: 8 }}>
+      <img src="/assets/mayave-logo.png" alt="Mayavé" width={97} height={40} style={{ height: 40, width: 'auto', display: 'block' }} />
+    </button>
+  );
+
   if (variant === 'admin') {
     return (
       <div className="topbar" style={barStyle}>
-        <img src="/assets/mayave-logo.png" alt="Mayavé" width={97} height={40} style={{ height: 40, width: 'auto' }} />
+        {Logo}
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: 'rgba(40,32,38,0.55)' }}>ADMIN CONSOLE</span>
         {showStation && <SideChip side={s.side} />}
         <div style={{ flex: 1 }} />
@@ -129,7 +144,7 @@ export default function TopBar({ ctx, variant }) {
   return (
     <div data-tour="topbar" className="topbar" style={{ ...barStyle, justifyContent: 'space-between' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <img src="/assets/mayave-logo.png" alt="Mayavé" width={97} height={40} style={{ height: 40, width: 'auto' }} />
+        {Logo}
         {isSession && (
           <button
             className="hv-white75"
