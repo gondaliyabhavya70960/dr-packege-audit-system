@@ -48,7 +48,7 @@ export default function GlassSelect({ value, onChange, options, label, minWidth 
 
   return (
     <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      {label && <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: '#6B7280' }}>{label}</span>}
+      {label && <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: '#6B7280' }}>{label}</span>}
       <div ref={wrapRef} style={{ position: 'relative', minWidth }}>
         <button type="button" className="fc-accent" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((v) => !v)} style={triggerStyle}>
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sel ? sel.label : ''}</span>
