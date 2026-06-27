@@ -1,4 +1,4 @@
-import { MONO, glass, tabMode, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
+import { MONO, glass, tabMode, fillTone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
 import { Search, Plus, ChevronRight, ArrowRight, SearchX } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
@@ -23,15 +23,6 @@ const SORT_OPTS = [
 ];
 
 const COLS = '30px 1.4fr 1.4fr 0.55fr 0.75fr 0.7fr 0.7fr 1.1fr 1fr 0.85fr';
-
-// filled (tinted) status pill — soft background + matching text, keyed by tone
-const FILL = {
-  green: { bg: 'rgba(23,163,95,0.13)', color: '#0E8A50', border: 'rgba(23,163,95,0.28)' },
-  amber: { bg: 'rgba(217,142,4,0.15)', color: '#9A6A00', border: 'rgba(217,142,4,0.30)' },
-  red: { bg: 'rgba(229,62,62,0.12)', color: '#C62B22', border: 'rgba(229,62,62,0.28)' },
-  plain: { bg: 'rgba(27,29,33,0.06)', color: '#5B616B', border: 'rgba(27,29,33,0.12)' },
-};
-const fillTone = (t) => FILL[t] || FILL.plain;
 
 // one Pk / Rc / Rt stage chip, filled by that stage's per-status mode:
 // recorded (view) → green ✓, live (edit) → amber •, otherwise → grey ·

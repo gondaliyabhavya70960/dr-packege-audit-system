@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem } from 'lucide-react';
-import { MONO, glass, tone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmt } from '../data.js';
+import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmt } from '../data.js';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
@@ -410,7 +410,7 @@ export default function OrderDetails({ ctx }) {
   }
 
   // ---- view / edit existing ----
-  const t = tone(order.tone);
+  const t = fillTone(order.tone);
   const clips = order.timeline.filter((e) => e.clip);
   const hasPair = clips.length >= 2;
 
@@ -444,7 +444,7 @@ export default function OrderDetails({ ctx }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
             <span style={{ fontFamily: MONO, fontSize: 20, fontWeight: 500 }}>{order.id}</span>
-            <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + t.border, color: t.color }}>{order.status}</span>
+            <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', padding: '5px 12px', borderRadius: 999, background: t.bg, color: t.color, border: '1px solid ' + t.border }}>{order.status}</span>
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{order.channel.toUpperCase()}</span>
           </div>
           <span style={{ fontSize: 14, color: MUTE }}>{order.customer} · {order.value} · placed {order.placed}</span>
