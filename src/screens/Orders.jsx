@@ -1,28 +1,26 @@
 import { MONO, glass, tabMode, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
 import { Search, Plus, ChevronRight, ArrowRight, SearchX } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
+import GlassSelect from '../components/GlassSelect.jsx';
 
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
 
-const selectStyle = {
-  appearance: 'none',
-  WebkitAppearance: 'none',
-  background: 'rgba(255,255,255,0.5)',
-  backdropFilter: 'blur(14px)',
-  border: '1px solid rgba(255,255,255,0.65)',
-  borderRadius: 10,
-  padding: '10px 32px 10px 14px',
-  fontSize: 13.5,
-  fontWeight: 600,
-  color: '#1B1D21',
-  outline: 'none',
-  cursor: 'pointer',
-  backgroundImage:
-    "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238E0E22' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>\")",
-  backgroundRepeat: 'no-repeat',
-  backgroundPosition: 'right 12px center',
-};
+// dropdown option lists for the glass filters
+const STATUS_OPTS = [{ value: 'all', label: 'All statuses' }, ...ORDER_STATUSES.map((st) => ({ value: st.key, label: st.label }))];
+const CHANNEL_OPTS = [{ value: 'all', label: 'All channels' }, ...ORDER_CHANNELS.map((c) => ({ value: c, label: c }))];
+const DATE_OPTS = [
+  { value: 'all', label: 'Any time' },
+  { value: 'today', label: 'Today' },
+  { value: '7d', label: 'Last 7 days' },
+  { value: '30d', label: 'Last 30 days' },
+];
+const SORT_OPTS = [
+  { value: 'new', label: 'Newest first' },
+  { value: 'old', label: 'Oldest first' },
+  { value: 'valhigh', label: 'Value · high → low' },
+  { value: 'vallow', label: 'Value · low → high' },
+];
 
 const COLS = '30px 1.4fr 1.4fr 0.55fr 0.75fr 0.7fr 0.7fr 1.1fr 1fr 0.85fr';
 
@@ -48,17 +46,6 @@ function StageBadge({ label, mode }) {
     <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, padding: '3px 7px', borderRadius: 7, whiteSpace: 'nowrap', background: sty.bg, color: sty.color, border: '1px solid ' + sty.border }}>
       {label} {sty.mark}
     </span>
-  );
-}
-
-function Select({ value, onChange, children, label }) {
-  return (
-    <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: '#6B7280' }}>{label}</span>
-      <select className="fc-accent" value={value} onChange={onChange} style={selectStyle}>
-        {children}
-      </select>
-    </label>
   );
 }
 
@@ -119,8 +106,8 @@ export default function Orders({ ctx }) {
         </button>
       </div>
 
-      {/* toolbar: search + filters */}
-      <div style={{ ...glass, padding: 14, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
+      {/* toolbar: search + filters (raised so the glass dropdowns overlay the table) */}
+      <div style={{ ...glass, padding: 14, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 220 }}>
           <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: '#6B7280' }}>SEARCH</span>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
@@ -137,33 +124,13 @@ export default function Orders({ ctx }) {
           </div>
         </label>
 
-        <Select label="STATUS" value={s.oStatus} onChange={(e) => set({ oStatus: e.target.value })}>
-          <option value="all">All statuses</option>
-          {ORDER_STATUSES.map((st) => (
-            <option key={st.key} value={st.key}>{st.label}</option>
-          ))}
-        </Select>
+        <GlassSelect label="STATUS" value={s.oStatus} onChange={(v) => set({ oStatus: v })} options={STATUS_OPTS} minWidth={150} />
 
-        <Select label="CHANNEL" value={s.oChannel} onChange={(e) => set({ oChannel: e.target.value })}>
-          <option value="all">All channels</option>
-          {ORDER_CHANNELS.map((c) => (
-            <option key={c} value={c}>{c}</option>
-          ))}
-        </Select>
+        <GlassSelect label="CHANNEL" value={s.oChannel} onChange={(v) => set({ oChannel: v })} options={CHANNEL_OPTS} minWidth={140} />
 
-        <Select label="DATE" value={s.oDate} onChange={(e) => set({ oDate: e.target.value })}>
-          <option value="all">Any time</option>
-          <option value="today">Today</option>
-          <option value="7d">Last 7 days</option>
-          <option value="30d">Last 30 days</option>
-        </Select>
+        <GlassSelect label="DATE" value={s.oDate} onChange={(v) => set({ oDate: v })} options={DATE_OPTS} minWidth={130} />
 
-        <Select label="SORT" value={s.oSort} onChange={(e) => set({ oSort: e.target.value })}>
-          <option value="new">Newest first</option>
-          <option value="old">Oldest first</option>
-          <option value="valhigh">Value · high → low</option>
-          <option value="vallow">Value · low → high</option>
-        </Select>
+        <GlassSelect label="SORT" value={s.oSort} onChange={(v) => set({ oSort: v })} options={SORT_OPTS} minWidth={150} />
 
         {filtersActive && (
           <button className="hv-border-accent" onClick={resetFilters} style={{ background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(27,29,33,0.7)', borderRadius: 10, padding: '10px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>

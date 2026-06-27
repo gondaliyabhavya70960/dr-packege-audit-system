@@ -737,6 +737,7 @@ export const initialState = {
   scanInput: '',
   backConfirm: false,
   leaveConfirm: false, // "save all details?" guard when leaving an edit/session via the logo
+  createOpen: false, // custom-order create popup
   lastSession: 'ORD-10287 · sealed · 14:02',
   recSec: 0,
   recActive: true, // live camera recording on/off — drives the session timer + REC indicator

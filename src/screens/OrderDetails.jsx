@@ -8,6 +8,7 @@ import RemarkBox from '../components/RemarkBox.jsx';
 import ClipPlayer from '../components/ClipPlayer.jsx';
 import VideoCaptureCard from '../components/VideoCaptureCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
+import GlassSelect from '../components/GlassSelect.jsx';
 
 const STAGE_TITLES = { pack: 'Packing', recv: 'Receiving', ret: 'Return inspection' };
 
@@ -215,11 +216,7 @@ function CustomEditor({ draft, upd }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         <Field label="PRIORITY">
-          <select className="fc-accent" value={draft.priority} onChange={(e) => upd('priority', e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
-            {PRIORITY_OPTIONS.map((p) => (
-              <option key={p} value={p}>{p}</option>
-            ))}
-          </select>
+          <GlassSelect value={draft.priority} onChange={(v) => upd('priority', v)} options={PRIORITY_OPTIONS.map((p) => ({ value: p, label: p }))} minWidth={0} />
         </Field>
         <Field label="GIFT WRAP">
           <button
@@ -322,6 +319,74 @@ function ReadRow({ label, value, accent }) {
   );
 }
 
+// The custom-order create form — shared by the page route and the popup modal.
+// Reads/writes the draft on ctx state; calls onClose(savedId) after save, or
+// onClose(null) on cancel.
+export function CreateOrderForm({ ctx, onClose }) {
+  const { s, set, showToast } = ctx;
+  const d = s.orderDraft;
+  if (!d) return null;
+  const upd = (k, v) => set({ orderDraft: { ...s.orderDraft, [k]: v } });
+  const cancel = () => { set({ orderDraft: null }); onClose && onClose(null); };
+  const saveCreate = () => {
+    const id = (d.id || '').trim().toUpperCase();
+    if (!id || !(d.customer || '').trim()) {
+      showToast('Add at least an order ID and customer to save.');
+      return;
+    }
+    const newOrder = buildCustomOrder(d, s.userLabel || 'admin'); // captured a pack clip -> Packed, else Draft
+    const packed = newOrder.statusKey === 'packed';
+    set({ orders: [newOrder, ...s.orders], orderDraft: null });
+    showToast(packed ? 'Custom order ' + id + ' filed with pack video — saved to the orders list.' : 'Draft order ' + id + ' saved to the orders list.');
+    onClose && onClose(id);
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <span style={{ fontSize: 20, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>Custom order details</span>
+        <span style={{ fontSize: 14, color: '#5B616B' }}>Record a bespoke order with its handling, insurance and audit notes. It joins the orders list and links to any video filed under the same ID.</span>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <Field label="ORDER ID *">
+          <input className="fc-accent" value={d.id} onChange={(e) => upd('id', e.target.value)} placeholder="ORD-… / DC-… / RFID-…" style={{ ...inputStyle, fontFamily: MONO }} />
+        </Field>
+        <Field label="CUSTOMER *">
+          <input className="fc-accent" value={d.customer} onChange={(e) => upd('customer', e.target.value)} placeholder="name or store" style={inputStyle} />
+        </Field>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+        <Field label="CHANNEL">
+          <GlassSelect value={d.channel} onChange={(v) => upd('channel', v)} options={ORDER_CHANNELS.map((c) => ({ value: c, label: c }))} minWidth={0} />
+        </Field>
+        <Field label="STATION">
+          <input className="fc-accent" value={d.station} onChange={(e) => upd('station', e.target.value)} style={{ ...inputStyle, fontFamily: MONO }} />
+        </Field>
+        <Field label="ORDER VALUE">
+          <input className="fc-accent" value={d.value} onChange={(e) => upd('value', e.target.value)} placeholder="₹0.00L" style={inputStyle} />
+        </Field>
+      </div>
+
+      <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
+      <CustomEditor draft={d} upd={upd} />
+
+      <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
+      <PackingCapture orderId={d.id} videos={d.packVideos} setVideos={(v) => upd('packVideos', v)} />
+
+      <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
+        <button className="hv-white75" onClick={cancel} style={{ background: 'rgba(255,255,255,0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(27,29,33,0.7)', borderRadius: 10, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+          Cancel
+        </button>
+        <div style={{ flex: 1 }} />
+        <button className="hv-brighten" onClick={saveCreate} style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '12px 24px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>
+          Save custom order
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function OrderDetails({ ctx }) {
   const { s, set, showToast, openPlayer, openSession } = ctx;
 
@@ -332,69 +397,13 @@ export default function OrderDetails({ ctx }) {
   const upd = (k, v) => set({ orderDraft: { ...s.orderDraft, [k]: v } });
   const backToList = () => set({ screen: 'orders', orderTab: 'detail', orderEditing: false, orderDraft: null });
 
-  // ---- create mode ----
+  // ---- create mode (page fallback; the primary entry is the popup modal) ----
   if (creating) {
-    const d = s.orderDraft;
-    const saveCreate = () => {
-      const id = (d.id || '').trim().toUpperCase();
-      if (!id || !d.customer.trim()) {
-        showToast('Add at least an order ID and customer to save.');
-        return;
-      }
-      const newOrder = buildCustomOrder(d, s.userLabel || 'admin'); // captured a pack clip -> Packed, else Draft
-      const packed = newOrder.statusKey === 'packed';
-      set({ orders: [newOrder, ...s.orders], orderId: id, orderEditing: false, orderDraft: null });
-      showToast(packed ? 'Custom order ' + id + ' filed with pack video — saved to the orders list.' : 'Draft order ' + id + ' saved to the orders list.');
-    };
-
     return (
       <div data-screen-label="15 Custom order details" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, minHeight: '100%' }}>
         <Breadcrumb onBack={backToList} crumb="New custom order" />
-        <div style={{ ...glass, padding: 22, maxWidth: 760, width: '100%', display: 'flex', flexDirection: 'column', gap: 18 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <span style={{ fontSize: 20, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>Custom order details</span>
-            <span style={{ fontSize: 14, color: '#5B616B' }}>Record a bespoke order with its handling, insurance and audit notes. It joins the orders list and links to any video filed under the same ID.</span>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <Field label="ORDER ID *">
-              <input className="fc-accent" value={d.id} onChange={(e) => upd('id', e.target.value)} placeholder="ORD-… / DC-… / RFID-…" style={{ ...inputStyle, fontFamily: MONO }} />
-            </Field>
-            <Field label="CUSTOMER *">
-              <input className="fc-accent" value={d.customer} onChange={(e) => upd('customer', e.target.value)} placeholder="name or store" style={inputStyle} />
-            </Field>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-            <Field label="CHANNEL">
-              <select className="fc-accent" value={d.channel} onChange={(e) => upd('channel', e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
-                {ORDER_CHANNELS.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </Field>
-            <Field label="STATION">
-              <input className="fc-accent" value={d.station} onChange={(e) => upd('station', e.target.value)} style={{ ...inputStyle, fontFamily: MONO }} />
-            </Field>
-            <Field label="ORDER VALUE">
-              <input className="fc-accent" value={d.value} onChange={(e) => upd('value', e.target.value)} placeholder="₹0.00L" style={inputStyle} />
-            </Field>
-          </div>
-
-          <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
-          <CustomEditor draft={d} upd={upd} />
-
-          <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
-          <PackingCapture orderId={d.id} videos={d.packVideos} setVideos={(v) => upd('packVideos', v)} />
-
-          <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
-            <button className="hv-white75" onClick={backToList} style={{ background: 'rgba(255,255,255,0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(27,29,33,0.7)', borderRadius: 10, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-              Cancel
-            </button>
-            <div style={{ flex: 1 }} />
-            <button className="hv-brighten" onClick={saveCreate} style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '12px 24px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>
-              Save custom order
-            </button>
-          </div>
+        <div style={{ ...glass, padding: 22, maxWidth: 760, width: '100%' }}>
+          <CreateOrderForm ctx={ctx} onClose={(id) => (id ? set({ orderEditing: false, orderId: id }) : backToList())} />
         </div>
       </div>
     );
