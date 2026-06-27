@@ -204,7 +204,7 @@ function DetectedThumb({ item }) {
 function Field({ label, children }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-      <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: '#6B7280' }}>{label}</span>
+      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: '#6B7280' }}>{label}</span>
       {children}
     </div>
   );

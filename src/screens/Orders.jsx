@@ -109,7 +109,7 @@ export default function Orders({ ctx }) {
       {/* toolbar: search + filters (raised so the glass dropdowns overlay the table) */}
       <div style={{ ...glass, padding: 14, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 220 }}>
-          <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: '#6B7280' }}>SEARCH</span>
+          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: '#6B7280' }}>SEARCH</span>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <span style={{ position: 'absolute', left: 13, color: '#6B7280', display: 'flex' }}>
               <Search size={16} aria-hidden="true" />
@@ -158,7 +158,7 @@ export default function Orders({ ctx }) {
         <div style={{ overflowX: 'auto' }}>
           <div style={{ minWidth: 1200 }}>
             {/* header row */}
-            <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 12, alignItems: 'center', padding: '12px 18px', borderBottom: '1px solid rgba(0,0,0,0.06)', fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', color: '#6B7280' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 12, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid rgba(0,0,0,0.06)', fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', color: '#6B7280' }}>
               <input type="checkbox" checked={allSel} onChange={toggleAll} style={{ accentColor: '#8E0E22', cursor: 'pointer', width: 15, height: 15 }} />
               <span>ORDER</span>
               <span>ROUTE</span>
