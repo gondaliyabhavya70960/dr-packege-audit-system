@@ -1,4 +1,4 @@
-import { MONO, glass, tone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
+import { MONO, glass, tabMode, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
 import { Search, Plus, ChevronRight, ArrowRight, SearchX } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
 
@@ -24,7 +24,32 @@ const selectStyle = {
   backgroundPosition: 'right 12px center',
 };
 
-const COLS = '30px 1.5fr 1.5fr 0.6fr 0.8fr 0.7fr 0.9fr 1fr 1.2fr';
+const COLS = '30px 1.4fr 1.4fr 0.55fr 0.75fr 0.7fr 0.7fr 1.1fr 1fr 0.85fr';
+
+// filled (tinted) status pill — soft background + matching text, keyed by tone
+const FILL = {
+  green: { bg: 'rgba(23,163,95,0.13)', color: '#0E8A50', border: 'rgba(23,163,95,0.28)' },
+  amber: { bg: 'rgba(217,142,4,0.15)', color: '#9A6A00', border: 'rgba(217,142,4,0.30)' },
+  red: { bg: 'rgba(229,62,62,0.12)', color: '#C62B22', border: 'rgba(229,62,62,0.28)' },
+  plain: { bg: 'rgba(27,29,33,0.06)', color: '#5B616B', border: 'rgba(27,29,33,0.12)' },
+};
+const fillTone = (t) => FILL[t] || FILL.plain;
+
+// one Pk / Rc / Rt stage chip, filled by that stage's per-status mode:
+// recorded (view) → green ✓, live (edit) → amber •, otherwise → grey ·
+function StageBadge({ label, mode }) {
+  const sty =
+    mode === 'view'
+      ? { bg: 'rgba(23,163,95,0.14)', color: '#0E8A50', border: 'rgba(23,163,95,0.32)', mark: '✓' }
+      : mode === 'edit'
+        ? { bg: 'rgba(217,142,4,0.16)', color: '#9A6A00', border: 'rgba(217,142,4,0.34)', mark: '•' }
+        : { bg: 'rgba(27,29,33,0.05)', color: 'rgba(27,29,33,0.42)', border: 'rgba(27,29,33,0.10)', mark: '·' };
+  return (
+    <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, padding: '3px 7px', borderRadius: 7, whiteSpace: 'nowrap', background: sty.bg, color: sty.color, border: '1px solid ' + sty.border }}>
+      {label} {sty.mark}
+    </span>
+  );
+}
 
 function Select({ value, onChange, children, label }) {
   return (
@@ -164,7 +189,7 @@ export default function Orders({ ctx }) {
       {/* table */}
       <div style={{ ...glass, padding: 0, overflow: 'hidden' }}>
         <div style={{ overflowX: 'auto' }}>
-          <div style={{ minWidth: 1040 }}>
+          <div style={{ minWidth: 1200 }}>
             {/* header row */}
             <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 12, alignItems: 'center', padding: '12px 18px', borderBottom: '1px solid rgba(0,0,0,0.06)', fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', color: '#6B7280' }}>
               <input type="checkbox" checked={allSel} onChange={toggleAll} style={{ accentColor: '#8E0E22', cursor: 'pointer', width: 15, height: 15 }} />
@@ -174,12 +199,13 @@ export default function Orders({ ctx }) {
               <span>VALUE</span>
               <span>CHANNEL</span>
               <span>DATE</span>
+              <span>STAGES</span>
               <span>STATUS</span>
               <span style={{ textAlign: 'right' }}>ACTION</span>
             </div>
 
             {list.map((o) => {
-              const t = tone(o.tone);
+              const f = fillTone(o.tone);
               const items = o.items.reduce((n, it) => n + it.qty, 0);
               const route = orderRoute(o);
               const sel = s.oSel.includes(o.id);
@@ -206,16 +232,21 @@ export default function Orders({ ctx }) {
                   <span style={{ fontSize: 14, fontWeight: 600 }}>{o.value}</span>
                   <span style={{ fontSize: 13, color: '#5B616B' }}>{o.channel}</span>
                   <span style={{ fontFamily: MONO, fontSize: 12, color: '#5B616B' }}>{o.placed.split(' · ')[0]}</span>
+                  <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+                    <StageBadge label="Pk" mode={tabMode(o.statusKey, 'pack')} />
+                    <StageBadge label="Rc" mode={tabMode(o.statusKey, 'recv')} />
+                    <StageBadge label="Rt" mode={tabMode(o.statusKey, 'ret')} />
+                  </div>
                   <span>
-                    <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + t.border, color: t.color, whiteSpace: 'nowrap' }}>{o.status}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '0.03em', padding: '5px 12px', borderRadius: 999, background: f.bg, color: f.color, border: '1px solid ' + f.border, whiteSpace: 'nowrap' }}>{o.status}</span>
                   </span>
                   <span style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <button
                       className="hv-accent14"
                       onClick={(e) => { e.stopPropagation(); openOrder(o.id); }}
-                      style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '7px 14px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '7px 16px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
                     >
-                      Custom details
+                      Open
                       <ChevronRight size={14} aria-hidden="true" />
                     </button>
                   </span>
