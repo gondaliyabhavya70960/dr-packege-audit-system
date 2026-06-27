@@ -849,6 +849,19 @@ export function tone(t) {
   return { border: 'rgba(0,0,0,0.2)', color: '#5B616B' };
 }
 
+// filled (tinted) badge palette by tone — soft background + matching text +
+// border. Shared by the status pills + stage chips across the orders list and
+// the overview dashboard so the filled look stays consistent.
+export const FILL_TONES = {
+  green: { bg: 'rgba(23,163,95,0.13)', color: '#0E8A50', border: 'rgba(23,163,95,0.28)' },
+  amber: { bg: 'rgba(217,142,4,0.15)', color: '#9A6A00', border: 'rgba(217,142,4,0.30)' },
+  red: { bg: 'rgba(229,62,62,0.12)', color: '#C62B22', border: 'rgba(229,62,62,0.28)' },
+  plain: { bg: 'rgba(27,29,33,0.06)', color: '#5B616B', border: 'rgba(27,29,33,0.12)' },
+};
+export function fillTone(t) {
+  return FILL_TONES[t] || FILL_TONES.plain;
+}
+
 export function dotFor(st) {
   if (st === 'ok') return { dot: '✓', dotColor: '#0E8A50', dotBorder: 'rgba(23,163,95,0.5)', dotBg: 'rgba(23,163,95,0.08)' };
   if (st === 'bad') return { dot: '!', dotColor: '#C62B22', dotBorder: 'rgba(229,62,62,0.5)', dotBg: 'rgba(229,62,62,0.06)' };

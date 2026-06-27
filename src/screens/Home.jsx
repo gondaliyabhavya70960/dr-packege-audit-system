@@ -1,5 +1,19 @@
-import { Package, Truck, ChevronRight } from 'lucide-react';
-import { MONO, MUTE, glass, tone, ORDER_STATUSES, isTransferOrder } from '../data.js';
+import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, Flag } from 'lucide-react';
+import { MONO, MUTE, glass, fillTone, ORDER_STATUSES, isTransferOrder } from '../data.js';
+
+// a vector per order status — gives each card a fill cue matching its stage
+const STATUS_ICONS = {
+  draft: FileText,
+  packed: Package,
+  transit: Truck,
+  receiving: Inbox,
+  received: PackageCheck,
+  delivery: Send,
+  delivered: CircleCheck,
+  returning: RotateCcw,
+  returned: Undo2,
+  flagged: Flag,
+};
 
 // Post-login landing: an at-a-glance count of the order book, with the two
 // working lists (packaging vs transferring goods) one tap away.
@@ -71,16 +85,22 @@ export default function Home({ ctx }) {
         <span style={{ fontSize: 16, fontWeight: 700 }}>Orders by status</span>
         <div className="kpi-grid">
           {statuses.map((st) => {
-            const tn = tone(st.tone === 'plain' ? 'plain' : st.tone);
+            const f = fillTone(st.tone);
+            const Icon = STATUS_ICONS[st.key] || Package;
             return (
               <button
                 key={st.key}
                 onClick={() => openList(st.kind, st.key)}
                 className="hv-border-accent"
-                style={{ background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 6 }}
+                style={{ background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10 }}
               >
-                <span style={{ fontFamily: MONO, fontSize: 28, fontWeight: 500, lineHeight: 1, color: st.n ? '#1B1D21' : '#6B7280' }}>{st.n}</span>
-                <span style={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: '0.04em', padding: '3px 9px', borderRadius: 999, alignSelf: 'flex-start', border: '1px solid ' + tn.border, color: tn.color }}>{st.label}</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                  <span style={{ width: 38, height: 38, flex: 'none', borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', background: f.bg, color: f.color, border: '1px solid ' + f.border }}>
+                    <Icon size={19} aria-hidden="true" />
+                  </span>
+                  <span style={{ fontFamily: MONO, fontSize: 30, fontWeight: 500, lineHeight: 1, color: st.n ? '#1B1D21' : '#9AA0A6' }}>{st.n}</span>
+                </div>
+                <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, alignSelf: 'flex-start', background: f.bg, color: f.color, border: '1px solid ' + f.border }}>{st.label}</span>
               </button>
             );
           })}
