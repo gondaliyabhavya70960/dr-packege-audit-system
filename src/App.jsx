@@ -19,6 +19,7 @@ import TopBar from './components/TopBar.jsx';
 import TabBar from './components/TabBar.jsx';
 import BackConfirm from './components/BackConfirm.jsx';
 import LeaveConfirm from './components/LeaveConfirm.jsx';
+import CreateOrderModal from './components/CreateOrderModal.jsx';
 import Tour from './components/Tour.jsx';
 import Toast from './components/Toast.jsx';
 
@@ -265,7 +266,7 @@ export default function App() {
   const signOut = useCallback(() => set({ screen: 'login', password: '', profileMenuOpen: false, adminMenuOpen: false }), [set]);
 
   const openOrder = useCallback((id) => set({ screen: 'order', orderId: id, orderTab: 'detail', orderEditing: false, orderDraft: null, adminMenuOpen: false }), [set]);
-  const newCustomOrder = useCallback(() => set({ screen: 'order', orderId: '', orderTab: 'detail', orderEditing: true, orderDraft: emptyCustomOrder(), adminMenuOpen: false }), [set]);
+  const newCustomOrder = useCallback(() => set({ createOpen: true, orderDraft: emptyCustomOrder(), adminMenuOpen: false }), [set]);
 
   // append a remark (comment) to an order — username + timestamp + text,
   // surfaced on the order's Detail/overview thread.
@@ -343,6 +344,7 @@ export default function App() {
       {s.playerOpen && <SideBySidePlayer ctx={ctx} />}
       {s.backConfirm && <BackConfirm ctx={ctx} />}
       {s.leaveConfirm && <LeaveConfirm ctx={ctx} />}
+      {s.createOpen && <CreateOrderModal ctx={ctx} />}
       {s.tourOpen && <Tour ctx={ctx} />}
       {s.toast && <Toast msg={s.toast} />}
     </div>
