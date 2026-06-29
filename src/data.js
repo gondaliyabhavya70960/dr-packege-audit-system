@@ -754,6 +754,7 @@ export const THEMES = [
   { key: 'paper', label: 'Paper', sub: 'Light · flat' },
   { key: 'midnight', label: 'Midnight', sub: 'Dark' },
   { key: 'devias', label: 'Devias', sub: 'Light · indigo' },
+  { key: 'devias-pro', label: 'Devias Pro', sub: 'Dark sidebar · indigo' },
   { key: 'materialize', label: 'Materialize', sub: 'Material · purple' },
 ];
 

@@ -6,6 +6,7 @@ const SWATCH = {
   paper: '#f3f5f8',
   midnight: 'linear-gradient(135deg, #14161c, #2b313b)',
   devias: 'linear-gradient(135deg, #f4f6f9, #635bff)',
+  'devias-pro': 'linear-gradient(135deg, #111927 60%, #635bff)',
   materialize: 'linear-gradient(135deg, #f5f4f9, #7367f0)',
 };
 

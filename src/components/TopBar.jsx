@@ -37,7 +37,7 @@ function StatusChip({ label }) {
   );
 }
 
-function ProfileMenu({ ctx, roleChip, roleLine }) {
+export function ProfileMenu({ ctx, roleChip, roleLine }) {
   const { s, set, showToast, signOut } = ctx;
 
   const goProfile = () => {

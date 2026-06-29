@@ -90,6 +90,300 @@
   --accent-rgb: 115, 103, 240;
 }
 
+/* Devias Pro: same clean light content as Devias, paired with a permanent
+   dark navy sidebar (the layout rules live in the .devias-* block below). */
+[data-theme='devias-pro'] {
+  --app-bg: #f8f9fb;
+  --surface: #ffffff;
+  --surface-border: #e6e8ee;
+  --surface-soft: #f4f6f9;
+  --surface-soft-border: #e9ecf2;
+  --hairline: #eef0f4;
+  --glass-blur: saturate(1.02);
+  --accent: #635bff;
+  --accent-2: #4f46e5;
+  --accent-rgb: 99, 91, 255;
+}
+
+/* ---- Devias Pro sidebar layout ---- */
+.devias-shell {
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+}
+.devias-sidebar {
+  width: 280px;
+  flex: none;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 18px 16px;
+  overflow-y: auto;
+  background: #111927;
+  color: rgba(255, 255, 255, 0.86);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+.dv-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px 14px;
+}
+.dv-brand-mark {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px -6px rgba(var(--accent-rgb), 0.7);
+}
+.dv-brand-name {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+.dv-workspace {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 8px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+.dv-ws-avatar {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+}
+.dv-ws-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  flex: 1;
+  min-width: 0;
+}
+.dv-ws-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.dv-ws-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+.dv-ws-chev {
+  flex: none;
+  color: rgba(255, 255, 255, 0.5);
+}
+.dv-section {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+  padding: 14px 12px 6px;
+}
+.dv-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.dv-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 11px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  transition: background 0.16s ease, color 0.16s ease;
+}
+.dv-nav:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.9);
+}
+.dv-nav.is-active {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+.dv-nav.is-active .dv-nav-icon {
+  color: var(--accent);
+}
+.dv-nav.is-active::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 22px;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent);
+}
+.dv-nav-icon {
+  flex: none;
+  color: rgba(255, 255, 255, 0.55);
+}
+.dv-nav-label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dv-nav-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(var(--accent-rgb), 0.22);
+  color: #c7c3ff;
+}
+.dv-side-foot {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.devias-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.devias-header {
+  flex: none;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface);
+  border-bottom: 1px solid var(--surface-border);
+}
+.dv-search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 320px;
+  max-width: 42vw;
+  padding: 9px 16px;
+  border-radius: 999px;
+  color: var(--mute);
+  background: var(--surface-soft);
+  border: 1px solid var(--surface-soft-border);
+}
+.dv-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.dv-icon-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink-2);
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+}
+.dv-dot {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f43f5e;
+  border: 2px solid var(--surface);
+}
+.devias-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* collapse the sidebar to icons on smaller screens */
+@media (max-width: 1024px) {
+  .devias-sidebar {
+    width: 74px;
+    padding: 18px 12px;
+  }
+  .dv-brand {
+    justify-content: center;
+    padding: 6px 0 14px;
+  }
+  .dv-brand-name,
+  .dv-ws-text,
+  .dv-ws-chev,
+  .dv-nav-label,
+  .dv-section,
+  .dv-nav-badge {
+    display: none;
+  }
+  .dv-workspace {
+    justify-content: center;
+    padding: 8px;
+  }
+  .dv-nav {
+    justify-content: center;
+    padding: 11px 0;
+  }
+  .dv-nav.is-active::before {
+    left: -12px;
+  }
+}
+@media (max-width: 640px) {
+  .dv-search {
+    display: none;
+  }
+  .devias-header {
+    padding: 0 14px;
+  }
+}
+
 html,
 body {
   margin: 0;
