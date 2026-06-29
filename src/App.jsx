@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { initialState, tourDefs, nowStamp } from './data.js';import Login from './screens/Login.jsx';
+import { initialState, tourDefs, nowStamp, THEMES } from './data.js';import Login from './screens/Login.jsx';
 import KioskHome from './screens/KioskHome.jsx';
 import PackRecord from './screens/PackRecord.jsx';
 import Receiving from './screens/Receiving.jsx';
@@ -17,7 +17,7 @@ import Home from './screens/Home.jsx';
 import { emptyCustomOrder } from './data.js';
 import TopBar from './components/TopBar.jsx';
 import TabBar from './components/TabBar.jsx';
-import DeviasShell from './components/DeviasShell.jsx';
+import SidebarShell from './components/SidebarShell.jsx';
 import BackConfirm from './components/BackConfirm.jsx';
 import LeaveConfirm from './components/LeaveConfirm.jsx';
 import CreateOrderModal from './components/CreateOrderModal.jsx';
@@ -113,7 +113,9 @@ export default function App() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem('pa_theme');
-      if (saved && saved !== sRef.current.theme) set({ theme: saved });
+      const known = THEMES.some((t) => t.key === saved);
+      if (saved && known && saved !== sRef.current.theme) set({ theme: saved });
+      else if (saved && !known) localStorage.setItem('pa_theme', sRef.current.theme || 'glass');
     } catch (e) {
       /* storage unavailable */
     }
@@ -341,9 +343,9 @@ export default function App() {
     </>
   );
 
-  // "Devias Pro" swaps the top-bar + floating-tab chrome for a permanent dark
-  // sidebar (login keeps its own full-screen split layout).
-  const useDevias = s.theme === 'devias-pro' && screen !== 'login';
+  // The sidebar themes (Devias Pro, Materialize) swap the top-bar + floating-tab
+  // chrome for a permanent vertical menu (login keeps its full-screen split).
+  const useSidebar = (s.theme === 'devias-pro' || s.theme === 'materialize') && screen !== 'login';
 
   return (
     <div
@@ -357,9 +359,9 @@ export default function App() {
     >
       {screen === 'login' && <Login ctx={ctx} />}
 
-      {useDevias && <DeviasShell ctx={ctx}>{authedContent}</DeviasShell>}
+      {useSidebar && <SidebarShell ctx={ctx}>{authedContent}</SidebarShell>}
 
-      {!useDevias && isOpSurface && (
+      {!useSidebar && isOpSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="operator" />
           <div style={{ flex: 1, minHeight: 0, position: 'relative', paddingBottom: 74, overflow: 'auto' }}>
@@ -372,7 +374,7 @@ export default function App() {
         </div>
       )}
 
-      {!useDevias && isAdminSurface && (
+      {!useSidebar && isAdminSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="admin" />
           <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 120 }}>
@@ -384,7 +386,7 @@ export default function App() {
         </div>
       )}
 
-      {screen !== 'login' && !useDevias && <TabBar ctx={ctx} />}
+      {screen !== 'login' && !useSidebar && <TabBar ctx={ctx} />}
       {s.playerOpen && <SideBySidePlayer ctx={ctx} />}
       {s.backConfirm && <BackConfirm ctx={ctx} />}
       {s.leaveConfirm && <LeaveConfirm ctx={ctx} />}

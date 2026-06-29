@@ -4,10 +4,8 @@ import { THEMES } from '../data.js';
 const SWATCH = {
   glass: 'linear-gradient(135deg, #f4eef1, #e9eaf3)',
   paper: '#f3f5f8',
-  midnight: 'linear-gradient(135deg, #14161c, #2b313b)',
-  devias: 'linear-gradient(135deg, #f4f6f9, #635bff)',
   'devias-pro': 'linear-gradient(135deg, #111927 60%, #635bff)',
-  materialize: 'linear-gradient(135deg, #f5f4f9, #7367f0)',
+  materialize: 'linear-gradient(135deg, #ece9fb 55%, #7367f0)',
 };
 
 // segmented control for the design variation. Renders correctly on every theme

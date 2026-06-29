@@ -1,9 +1,11 @@
 import { Gem, LayoutDashboard, Package, Truck, Search, Gauge, Boxes, RotateCcw, Flag, Activity, Settings, ChevronsUpDown, Bell, LifeBuoy, LogOut } from 'lucide-react';
 import { ProfileMenu } from './TopBar.jsx';
 
-// Devias Kit Pro layout variant: a permanent dark navy sidebar on the left and
-// a light content area on the right. The sidebar replaces the floating TabBar +
-// TopBar chrome used by the other themes. Navigation maps to the same screens.
+// Vertical-menu layout shared by the "Devias Pro" (dark sidebar) and
+// "Materialize" (light vertical menu) themes: a permanent left sidebar plus a
+// content area with a slim top header. It replaces the floating TopBar + TabBar
+// chrome used by the top-bar themes. The two skins differ only in CSS
+// ([data-theme] overrides on the .sb-* classes); the structure is identical.
 
 const NAV_MAIN = [
   { id: 'home', label: 'Overview', icon: LayoutDashboard },
@@ -24,10 +26,10 @@ const NAV_ADMIN = [
 function NavItem({ item, active, onClick, badge }) {
   const Icon = item.icon;
   return (
-    <button className={'dv-nav' + (active ? ' is-active' : '')} onClick={onClick} title={item.label}>
-      <Icon size={20} strokeWidth={2} className="dv-nav-icon" aria-hidden="true" />
-      <span className="dv-nav-label">{item.label}</span>
-      {badge ? <span className="dv-nav-badge">{badge}</span> : null}
+    <button className={'sb-nav' + (active ? ' is-active' : '')} onClick={onClick} title={item.label}>
+      <Icon size={20} strokeWidth={2} className="sb-nav-icon" aria-hidden="true" />
+      <span className="sb-nav-label">{item.label}</span>
+      {badge ? <span className="sb-nav-badge">{badge}</span> : null}
     </button>
   );
 }
@@ -42,22 +44,22 @@ function Sidebar({ ctx }) {
   const mainGo = (id) => (id === 'home' ? set({ screen: 'home', adminMenuOpen: false }) : openList(id));
 
   return (
-    <aside className="devias-sidebar">
-      <button className="dv-brand" onClick={() => set({ screen: 'home', adminMenuOpen: false })} title="Mayavé — Overview">
-        <span className="dv-brand-mark"><Gem size={20} color="#fff" aria-hidden="true" /></span>
-        <span className="dv-brand-name">Mayavé</span>
+    <aside className="sb-aside">
+      <button className="sb-brand" onClick={() => set({ screen: 'home', adminMenuOpen: false })} title="Mayavé — Overview">
+        <span className="sb-brand-mark"><Gem size={20} color="#fff" aria-hidden="true" /></span>
+        <span className="sb-brand-name">Mayavé</span>
       </button>
 
-      <div className="dv-workspace">
-        <span className="dv-ws-avatar">{(s.userLabel || 'M').charAt(0).toUpperCase()}</span>
-        <span className="dv-ws-text">
-          <span className="dv-ws-label">Workspace</span>
-          <span className="dv-ws-name">{s.side === 'store' ? 'Store' : 'Warehouse'}</span>
+      <div className="sb-ws">
+        <span className="sb-ws-avatar">{(s.userLabel || 'M').charAt(0).toUpperCase()}</span>
+        <span className="sb-ws-text">
+          <span className="sb-ws-label">Workspace</span>
+          <span className="sb-ws-name">{s.side === 'store' ? 'Store' : 'Warehouse'}</span>
         </span>
-        <ChevronsUpDown size={16} className="dv-ws-chev" aria-hidden="true" />
+        <ChevronsUpDown size={16} className="sb-ws-chev" aria-hidden="true" />
       </div>
 
-      <nav className="dv-nav-group">
+      <nav className="sb-nav-group">
         {NAV_MAIN.map((it) => (
           <NavItem key={it.id} item={it} active={mainActive(it.id)} onClick={() => mainGo(it.id)} />
         ))}
@@ -65,8 +67,8 @@ function Sidebar({ ctx }) {
 
       {isAdmin && (
         <>
-          <div className="dv-section">Admin</div>
-          <nav className="dv-nav-group">
+          <div className="sb-section">Admin</div>
+          <nav className="sb-nav-group">
             {NAV_ADMIN.map((it) => (
               <NavItem
                 key={it.id}
@@ -80,46 +82,46 @@ function Sidebar({ ctx }) {
         </>
       )}
 
-      <div className="dv-side-foot">
-        <button className="dv-nav" onClick={openTour} title="Take a tour">
-          <LifeBuoy size={20} className="dv-nav-icon" aria-hidden="true" />
-          <span className="dv-nav-label">Take a tour</span>
+      <div className="sb-foot">
+        <button className="sb-nav" onClick={openTour} title="Take a tour">
+          <LifeBuoy size={20} className="sb-nav-icon" aria-hidden="true" />
+          <span className="sb-nav-label">Take a tour</span>
         </button>
-        <button className="dv-nav" onClick={signOut} title="Sign out">
-          <LogOut size={20} className="dv-nav-icon" aria-hidden="true" />
-          <span className="dv-nav-label">Sign out</span>
+        <button className="sb-nav" onClick={signOut} title="Sign out">
+          <LogOut size={20} className="sb-nav-icon" aria-hidden="true" />
+          <span className="sb-nav-label">Sign out</span>
         </button>
       </div>
     </aside>
   );
 }
 
-function DeviasHeader({ ctx }) {
+function SidebarHeader({ ctx }) {
   const { s } = ctx;
   const isAdmin = s.role === 'admin';
   return (
-    <header className="devias-header">
-      <label className="dv-search">
+    <header className="sb-header">
+      <label className="sb-search">
         <Search size={18} aria-hidden="true" />
         <input placeholder="Search orders, SKUs, challans…" aria-label="Search" />
       </label>
       <div style={{ flex: 1 }} />
-      <button className="dv-icon-btn" title="Notifications" aria-label="Notifications">
+      <button className="sb-icon-btn" title="Notifications" aria-label="Notifications">
         <Bell size={19} aria-hidden="true" />
-        <span className="dv-dot" />
+        <span className="sb-dot" />
       </button>
       <ProfileMenu ctx={ctx} roleChip={isAdmin ? 'ADMIN' : 'OPERATOR'} roleLine={isAdmin ? 'ADMIN · ALL ACCESS' : 'OPERATOR · PACK · RECEIVE · RETURNS'} />
     </header>
   );
 }
 
-export default function DeviasShell({ ctx, children }) {
+export default function SidebarShell({ ctx, children }) {
   return (
-    <div className="devias-shell">
+    <div className="sb-shell">
       <Sidebar ctx={ctx} />
-      <div className="devias-main">
-        <DeviasHeader ctx={ctx} />
-        <div className="devias-content">{children}</div>
+      <div className="sb-main">
+        <SidebarHeader ctx={ctx} />
+        <div className="sb-content">{children}</div>
       </div>
     </div>
   );

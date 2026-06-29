@@ -746,16 +746,14 @@ export function synthOrder(id) {
   };
 }
 
-// selectable UI design variations. Glass / Paper / Midnight keep the brand
-// maroon; Devias and Materialize re-skin the accent (indigo / purple) to match
-// those design systems. All accents are driven by the --accent CSS variables.
+// selectable UI design variations. Glass / Paper use the floating top-bar
+// chrome; Devias Pro (dark sidebar) and Materialize (light vertical menu) use
+// the sidebar layout. All accents are driven by the --accent CSS variables.
 export const THEMES = [
   { key: 'glass', label: 'Liquid Glass', sub: 'Light · frosted' },
   { key: 'paper', label: 'Paper', sub: 'Light · flat' },
-  { key: 'midnight', label: 'Midnight', sub: 'Dark' },
-  { key: 'devias', label: 'Devias', sub: 'Light · indigo' },
   { key: 'devias-pro', label: 'Devias Pro', sub: 'Dark sidebar · indigo' },
-  { key: 'materialize', label: 'Materialize', sub: 'Material · purple' },
+  { key: 'materialize', label: 'Materialize', sub: 'Material · vertical menu' },
 ];
 
 export const initialState = {
@@ -924,12 +922,12 @@ export const SPACE = { '1': 4, '2': 8, '3': 12, '4': 16, '5': 20, '6': 24, '8': 
 
 // shared liquid-glass card surface (iPadOS-style material — colours unchanged)
 export const glass = {
-  background: 'rgba(var(--surf-rgb),0.5)',
+  background: 'var(--card-bg)',
   backdropFilter: 'var(--glass-blur)',
   WebkitBackdropFilter: 'var(--glass-blur)',
   border: '1px solid rgba(var(--surf-rgb),0.55)',
   borderRadius: 24,
-  boxShadow: '0 10px 34px -10px rgba(30,22,40,0.20), 0 2px 8px rgba(30,22,40,0.05), inset 0 1px 0 rgba(255,255,255,0.85), inset 0 0 0 0.5px rgba(255,255,255,0.30)',
+  boxShadow: 'var(--card-shadow)',
 };
 
 // floating chrome (top bars, tab bar) — brighter rim, deeper lift
