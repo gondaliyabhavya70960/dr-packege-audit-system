@@ -415,6 +415,12 @@
   background: rgba(var(--accent-rgb), 0.16);
   color: var(--accent);
 }
+/* on the active (purple gradient) pill, flip the badge to white so the count
+   stays legible instead of purple-on-purple */
+[data-theme='materialize'] .sb-nav.is-active .sb-nav-badge {
+  background: rgba(255, 255, 255, 0.24);
+  color: #ffffff;
+}
 [data-theme='materialize'] .sb-foot {
   border-top: 1px solid var(--surface-border);
 }
@@ -424,7 +430,7 @@
   height: 60px;
   border: none;
   border-radius: 10px;
-  box-shadow: 0 3px 12px 0 rgba(47, 43, 61, 0.14);
+  box-shadow: var(--card-shadow);
 }
 [data-theme='materialize'] .sb-icon-btn {
   background: var(--surface-soft);
