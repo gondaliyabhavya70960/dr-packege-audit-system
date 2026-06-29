@@ -345,7 +345,7 @@ export default function App() {
 
   // The sidebar themes (Devias Pro, Materialize) swap the top-bar + floating-tab
   // chrome for a permanent vertical menu (login keeps its full-screen split).
-  const useSidebar = (s.theme === 'devias-pro' || s.theme === 'materialize') && screen !== 'login';
+  const useSidebar = (s.theme === 'devias-pro' || (s.theme || '').startsWith('materialize')) && screen !== 'login';
 
   return (
     <div

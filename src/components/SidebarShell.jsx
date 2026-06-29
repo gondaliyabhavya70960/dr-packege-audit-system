@@ -1,4 +1,4 @@
-import { Gem, LayoutDashboard, Package, Truck, Search, Gauge, Boxes, RotateCcw, Flag, Activity, Settings, ChevronsUpDown, Bell, LifeBuoy, LogOut } from 'lucide-react';
+import { Gem, LayoutDashboard, Package, Truck, Search, Gauge, Boxes, RotateCcw, Flag, Activity, Settings, ChevronsUpDown, Bell, LifeBuoy, LogOut, Languages, Star } from 'lucide-react';
 import { ProfileMenu } from './TopBar.jsx';
 
 // Vertical-menu layout shared by the "Devias Pro" (dark sidebar) and
@@ -99,13 +99,27 @@ function Sidebar({ ctx }) {
 function SidebarHeader({ ctx }) {
   const { s } = ctx;
   const isAdmin = s.role === 'admin';
+  // the Materialize templates show a richer navbar: a CTRL+K search hint and a
+  // cluster of utility icons before the avatar.
+  const matFamily = (s.theme || '').startsWith('materialize');
   return (
     <header className="sb-header">
       <label className="sb-search">
         <Search size={18} aria-hidden="true" />
         <input placeholder="Search orders, SKUs, challans…" aria-label="Search" />
+        {matFamily && <kbd className="sb-kbd">⌘K</kbd>}
       </label>
       <div style={{ flex: 1 }} />
+      {matFamily && (
+        <button className="sb-icon-btn" title="Language" aria-label="Language">
+          <Languages size={19} aria-hidden="true" />
+        </button>
+      )}
+      {matFamily && (
+        <button className="sb-icon-btn" title="Shortcuts" aria-label="Shortcuts">
+          <Star size={19} aria-hidden="true" />
+        </button>
+      )}
       <button className="sb-icon-btn" title="Notifications" aria-label="Notifications">
         <Bell size={19} aria-hidden="true" />
         <span className="sb-dot" />

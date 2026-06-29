@@ -48,7 +48,7 @@
 
 /* Materialize — Material Design admin (pixinvent), purple primary, light
    vertical menu + floating navbar, flat white cards with soft elevation. */
-[data-theme='materialize'] {
+[data-theme^='materialize'] {
   --app-bg: #f8f7fa;
   --ink: #2f2b3d;
   --ink-2: #444050;
@@ -367,74 +367,158 @@
 }
 
 /* ---- Materialize skin: light vertical menu, purple gradient pills, floating navbar ---- */
-[data-theme='materialize'] .sb-aside {
+[data-theme^='materialize'] .sb-aside {
   background: #ffffff;
   color: var(--mute);
   border-right: 1px solid var(--surface-border);
 }
-[data-theme='materialize'] .sb-brand-name {
+[data-theme^='materialize'] .sb-brand-name {
   color: var(--mute-2);
 }
-[data-theme='materialize'] .sb-ws {
+[data-theme^='materialize'] .sb-ws {
   background: rgba(47, 43, 61, 0.06);
   border-color: transparent;
 }
-[data-theme='materialize'] .sb-ws-avatar {
+[data-theme^='materialize'] .sb-ws-avatar {
   background: linear-gradient(72deg, #9e95f5, #7367f0);
 }
-[data-theme='materialize'] .sb-ws-label,
-[data-theme='materialize'] .sb-ws-chev {
+[data-theme^='materialize'] .sb-ws-label,
+[data-theme^='materialize'] .sb-ws-chev {
   color: #a8a5b3;
 }
-[data-theme='materialize'] .sb-ws-name {
+[data-theme^='materialize'] .sb-ws-name {
   color: var(--mute-2);
 }
-[data-theme='materialize'] .sb-section {
+[data-theme^='materialize'] .sb-section {
   color: #a8a5b3;
 }
-[data-theme='materialize'] .sb-nav,
-[data-theme='materialize'] .sb-nav-icon {
+[data-theme^='materialize'] .sb-nav,
+[data-theme^='materialize'] .sb-nav-icon {
   color: var(--mute);
 }
-[data-theme='materialize'] .sb-nav:hover {
+[data-theme^='materialize'] .sb-nav:hover {
   background: rgba(47, 43, 61, 0.06);
   color: var(--mute-2);
 }
-[data-theme='materialize'] .sb-nav.is-active {
+[data-theme^='materialize'] .sb-nav.is-active {
   background: linear-gradient(72deg, #9e95f5, #7367f0);
   color: #ffffff;
   box-shadow: 0 2px 6px 0 rgba(115, 103, 240, 0.48);
 }
-[data-theme='materialize'] .sb-nav.is-active .sb-nav-icon {
+[data-theme^='materialize'] .sb-nav.is-active .sb-nav-icon {
   color: #ffffff;
 }
-[data-theme='materialize'] .sb-nav.is-active::before {
+[data-theme^='materialize'] .sb-nav.is-active::before {
   display: none;
 }
-[data-theme='materialize'] .sb-nav-badge {
+[data-theme^='materialize'] .sb-nav-badge {
   background: rgba(var(--accent-rgb), 0.16);
   color: var(--accent);
 }
 /* on the active (purple gradient) pill, flip the badge to white so the count
    stays legible instead of purple-on-purple */
-[data-theme='materialize'] .sb-nav.is-active .sb-nav-badge {
+[data-theme^='materialize'] .sb-nav.is-active .sb-nav-badge {
   background: rgba(255, 255, 255, 0.24);
   color: #ffffff;
 }
-[data-theme='materialize'] .sb-foot {
+[data-theme^='materialize'] .sb-foot {
   border-top: 1px solid var(--surface-border);
 }
 /* detached, floating navbar (the Materialize default) */
-[data-theme='materialize'] .sb-header {
+[data-theme^='materialize'] .sb-header {
   margin: 14px 16px 0;
   height: 60px;
   border: none;
   border-radius: 10px;
   box-shadow: var(--card-shadow);
 }
-[data-theme='materialize'] .sb-icon-btn {
+[data-theme^='materialize'] .sb-icon-btn {
   background: var(--surface-soft);
   border-color: var(--surface-soft-border);
+}
+/* keyboard hint chip in the navbar search (Materialize "Search [CTRL + K]") */
+.sb-kbd {
+  margin-left: 6px;
+  flex: none;
+  padding: 1px 7px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mute);
+  background: rgba(var(--ink-rgb), 0.05);
+  border: 1px solid var(--surface-border);
+}
+
+/* ---- Materialize 2: the same Material skin in the collapsed icon-rail layout
+   (Materialize "vertical menu collapsed"). Inherits everything above via the
+   [data-theme^='materialize'] family selectors; only the rail differs. ---- */
+[data-theme='materialize-2'] .sb-aside {
+  width: 76px;
+  padding: 18px 12px;
+}
+[data-theme='materialize-2'] .sb-brand {
+  justify-content: center;
+  padding: 6px 0 14px;
+}
+[data-theme='materialize-2'] .sb-brand-name,
+[data-theme='materialize-2'] .sb-ws,
+[data-theme='materialize-2'] .sb-nav-label,
+[data-theme='materialize-2'] .sb-nav-badge {
+  display: none;
+}
+[data-theme='materialize-2'] .sb-nav {
+  justify-content: center;
+  padding: 11px 0;
+}
+/* section labels collapse to slim group dividers on the rail */
+[data-theme='materialize-2'] .sb-section {
+  height: 1px;
+  padding: 0;
+  margin: 12px 14px;
+  font-size: 0;
+  overflow: hidden;
+  background: var(--surface-border);
+}
+
+/* ---- Station health: Store (60%) | divider | Warehouse (40%) ---- */
+.station-split {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+.station-col-store {
+  flex: 0 0 60%;
+  max-width: 60%;
+  min-width: 0;
+  padding-right: 24px;
+}
+.station-col-wh {
+  flex: 1 1 40%;
+  max-width: 40%;
+  min-width: 0;
+  padding-left: 24px;
+}
+.station-divider {
+  flex: none;
+  width: 1px;
+  background: var(--hairline);
+}
+@media (max-width: 900px) {
+  .station-split {
+    flex-direction: column;
+  }
+  .station-col-store,
+  .station-col-wh {
+    flex: 1 1 auto;
+    max-width: 100%;
+    padding: 0;
+  }
+  .station-divider {
+    width: auto;
+    height: 1px;
+    margin: 6px 0;
+  }
 }
 
 html,

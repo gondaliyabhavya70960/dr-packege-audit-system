@@ -1,9 +1,15 @@
-import { ArrowRight, ChevronRight, AlertTriangle } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, ChevronRight, AlertTriangle, Search } from 'lucide-react';
 import { MONO, glass, ACCENT, RED, GREEN, PLAIN } from '../data.js';
+import GlassSelect from '../components/GlassSelect.jsx';
 
 export default function Dashboard({ ctx }) {
   const { s, set, openPlayer } = ctx;
   const screen = s.screen;
+
+  // Station health gets its own card-grid layout (search / filter / sort + a
+  // Store | Warehouse split), so branch out before the generic dashboard render.
+  if (screen === 'dash-stations') return <StationHealth ctx={ctx} />;
 
   const drill = (id) => set({ screen: 'search', q: id, selId: id });
 
@@ -94,23 +100,6 @@ export default function Dashboard({ ctx }) {
     };
   }
 
-  if (screen === 'dash-stations')
-    dash = {
-      label: '12 Dashboard station health',
-      title: 'Station health',
-      chip: 'TELEMETRY',
-      kpis: null,
-      banner: '⚠ 2 stations need attention — threshold alerts sent',
-      listTitle: 'Last upload · pending queue · disk / browser storage · camera',
-      rows: [
-        { title: 'PACK-BENCH-1', sub: 'up 2m ago · 0 queued · disk 38%', right: 'cam OK', rightColor: GREEN, action: '→', go: () => drill('ORD-10293') },
-        { title: 'PACK-BENCH-2', sub: 'up 41m ago · 12 queued · disk 61%', right: 'offline', rightColor: RED, action: '→', go: () => drill('ORD-10293') },
-        { title: 'STORE-RECV-1', sub: 'up 5m ago · 0 queued · disk 24%', right: 'cam OK', rightColor: GREEN, action: '→', go: () => drill('RFID-1021') },
-        { title: 'RETURNS-1', sub: 'up 9m ago · 1 queued · disk 92%', right: 'disk high', rightColor: ACCENT, action: '→', go: () => drill('ORD-10311') },
-      ],
-      foot: 'chunks buffer in IndexedDB · background uploader pushes via signed URLs with checksum + retry',
-    };
-
   if (!dash) return null;
 
   return (
@@ -162,6 +151,148 @@ export default function Dashboard({ ctx }) {
       </div>
 
       <div style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{dash.foot}</div>
+    </div>
+  );
+}
+
+// ---- Station health -------------------------------------------------------
+// Per-station telemetry, grouped into a Store (60%) and Warehouse (40%) column
+// with a divider between, plus search / filter / sort over both lists.
+const STATIONS = [
+  { name: 'NH53, Gujarat, India', side: 'store', records: 36, last: '2026-06-19T05:05:02.755306Z', pending: 5, camera: 'unknown' },
+  { name: 'store-1', side: 'store', records: 6, last: '2026-06-18T06:41:06.537198Z', pending: 2, camera: 'unknown' },
+  { name: 'store-mg-road', side: 'store', records: 4, last: '2026-06-17T10:06:09.884057Z', pending: 4, camera: 'unknown' },
+  { name: 'pack-1', side: 'warehouse', records: 269, last: '2026-06-29T09:02:48.886273Z', pending: 26, camera: 'unknown' },
+  { name: 'Test Bench', side: 'warehouse', records: 40, last: '2026-06-19T09:48:02.091096Z', pending: 6, camera: 'unknown' },
+  { name: 'returns-1', side: 'warehouse', records: 9, last: '2026-06-18T05:04:07.017631Z', pending: 5, camera: 'unknown' },
+  { name: 'claude-test', side: 'warehouse', records: 2, last: '2026-06-18T09:15:25.970247Z', pending: 2, camera: 'unknown' },
+  { name: 'bench-1', side: 'warehouse', records: 1, last: '2026-06-18T04:51:59.305920Z', pending: 0, camera: 'unknown' },
+  { name: 'pack-2', side: 'warehouse', records: 1, last: '2026-06-16T11:26:40.872374Z', pending: 1, camera: 'unknown' },
+];
+
+const STATION_FILTERS = [
+  { value: 'all', label: 'All stations' },
+  { value: 'pending', label: 'With pending video' },
+  { value: 'clear', label: 'No pending video' },
+];
+const STATION_SORTS = [
+  { value: 'records', label: 'Most records' },
+  { value: 'pending', label: 'Most pending' },
+  { value: 'recent', label: 'Recent activity' },
+  { value: 'name', label: 'Name A–Z' },
+];
+
+function StationCard({ st, onClick }) {
+  return (
+    <button
+      type="button"
+      className="hv-chip"
+      onClick={onClick}
+      style={{ ...glass, textAlign: 'left', cursor: 'pointer', padding: 20, borderRadius: 18, display: 'flex', flexDirection: 'column', gap: 6, border: '1px solid rgba(var(--surf-rgb),0.55)' }}
+    >
+      <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: 'var(--ink-2)' }}>{st.name}</span>
+      <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--ink-2)', lineHeight: 1.1 }}>
+        {st.records} <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--mute)' }}>records</span>
+      </span>
+      <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute)' }}>last activity {st.last}</span>
+      <span style={{ fontSize: 12.5, fontWeight: 600, color: st.pending > 0 ? RED : 'var(--mute)' }}>{st.pending} pending video</span>
+      <span style={{ fontSize: 12.5, color: 'var(--mute)' }}>camera {st.camera}</span>
+    </button>
+  );
+}
+
+function StationColumn({ title, list, onOpen, minCard }) {
+  return (
+    <section style={{ display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--ink-2)' }}>{title}</h2>
+        <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)' }}>{list.length}</span>
+      </div>
+      {list.length === 0 ? (
+        <div style={{ fontSize: 13, color: 'var(--mute)', padding: '18px 4px' }}>No stations match.</div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fill, minmax(${minCard}px, 1fr))`, gap: 14, alignContent: 'start' }}>
+          {list.map((st) => (
+            <StationCard key={st.name} st={st} onClick={() => onOpen(st.name)} />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function StationHealth({ ctx }) {
+  const { set } = ctx;
+  const [q, setQ] = useState('');
+  const [filt, setFilt] = useState('all');
+  const [sort, setSort] = useState('records');
+
+  const apply = (list) => {
+    const needle = q.trim().toLowerCase();
+    let r = list.filter((st) => st.name.toLowerCase().includes(needle));
+    if (filt === 'pending') r = r.filter((st) => st.pending > 0);
+    if (filt === 'clear') r = r.filter((st) => st.pending === 0);
+    return [...r].sort((a, b) => {
+      if (sort === 'records') return b.records - a.records;
+      if (sort === 'pending') return b.pending - a.pending;
+      if (sort === 'recent') return b.last.localeCompare(a.last); // ISO 8601 sorts lexically
+      if (sort === 'name') return a.name.localeCompare(b.name);
+      return 0;
+    });
+  };
+
+  const store = apply(STATIONS.filter((st) => st.side === 'store'));
+  const warehouse = apply(STATIONS.filter((st) => st.side === 'warehouse'));
+  const openStation = (name) => set({ screen: 'search', q: name, selId: name });
+  const dirty = q || filt !== 'all' || sort !== 'records';
+
+  return (
+    <div data-screen-label="12 Dashboard station health" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, minHeight: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>Station health</h1>
+        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--surf-rgb),0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(var(--surf-rgb),0.65)', color: 'var(--mute-2)' }}>TELEMETRY</span>
+      </div>
+
+      {/* toolbar: search + filter + sort */}
+      <div style={{ ...glass, padding: 14, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
+        <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 220 }}>
+          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: 'var(--mute)' }}>SEARCH</span>
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <span style={{ position: 'absolute', left: 13, color: 'var(--mute)', display: 'flex' }}>
+              <Search size={16} aria-hidden="true" />
+            </span>
+            <input
+              className="fc-accent"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="station name…"
+              style={{ width: '100%', background: 'rgba(var(--surf-rgb),0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(var(--surf-rgb),0.65)', borderRadius: 10, padding: '10px 14px 10px 38px', color: 'var(--ink-2)', fontSize: 14, outline: 'none' }}
+            />
+          </div>
+        </label>
+        <GlassSelect label="FILTER" value={filt} onChange={setFilt} options={STATION_FILTERS} minWidth={170} />
+        <GlassSelect label="SORT BY" value={sort} onChange={setSort} options={STATION_SORTS} minWidth={160} />
+        {dirty && (
+          <button
+            className="hv-border-accent"
+            onClick={() => { setQ(''); setFilt('all'); setSort('records'); }}
+            style={{ background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: 10, padding: '10px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
+      {/* Store (60%) | divider | Warehouse (40%) */}
+      <div className="station-split">
+        <div className="station-col-store">
+          <StationColumn title="Store" list={store} onOpen={openStation} minCard={220} />
+        </div>
+        <div className="station-divider" aria-hidden="true" />
+        <div className="station-col-wh">
+          <StationColumn title="Warehouse" list={warehouse} onOpen={openStation} minCard={200} />
+        </div>
+      </div>
     </div>
   );
 }
