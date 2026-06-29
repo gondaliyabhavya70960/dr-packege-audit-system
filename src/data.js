@@ -746,8 +746,16 @@ export function synthOrder(id) {
   };
 }
 
+// selectable UI design variations (the brand colour is constant across all)
+export const THEMES = [
+  { key: 'glass', label: 'Liquid Glass', sub: 'Light · frosted' },
+  { key: 'paper', label: 'Paper', sub: 'Light · flat' },
+  { key: 'midnight', label: 'Midnight', sub: 'Dark' },
+];
+
 export const initialState = {
   screen: 'login',
+  theme: 'glass', // active design variation (persisted to localStorage)
   username: '',
   password: '',
   userLabel: '',
@@ -865,7 +873,7 @@ export function tone(t) {
   if (t === 'green') return { border: 'rgba(23,163,95,0.5)', color: '#0E8A50' };
   if (t === 'red') return { border: 'rgba(229,62,62,0.5)', color: '#C62B22' };
   if (t === 'amber') return { border: 'rgba(217,142,4,0.5)', color: '#9A6A00' };
-  return { border: 'rgba(0,0,0,0.2)', color: '#5B616B' };
+  return { border: 'rgba(var(--ink-rgb),0.25)', color: 'var(--mute-2)' };
 }
 
 // filled (tinted) badge palette by tone — soft background + matching text +
@@ -875,7 +883,7 @@ export const FILL_TONES = {
   green: { bg: 'rgba(23,163,95,0.13)', color: '#0E8A50', border: 'rgba(23,163,95,0.28)' },
   amber: { bg: 'rgba(217,142,4,0.15)', color: '#9A6A00', border: 'rgba(217,142,4,0.30)' },
   red: { bg: 'rgba(229,62,62,0.12)', color: '#C62B22', border: 'rgba(229,62,62,0.28)' },
-  plain: { bg: 'rgba(27,29,33,0.06)', color: '#5B616B', border: 'rgba(27,29,33,0.12)' },
+  plain: { bg: 'rgba(var(--ink-rgb),0.06)', color: 'var(--mute-2)', border: 'rgba(var(--ink-rgb),0.16)' },
 };
 export function fillTone(t) {
   return FILL_TONES[t] || FILL_TONES.plain;
@@ -884,7 +892,7 @@ export function fillTone(t) {
 export function dotFor(st) {
   if (st === 'ok') return { dot: '✓', dotColor: '#0E8A50', dotBorder: 'rgba(23,163,95,0.5)', dotBg: 'rgba(23,163,95,0.08)' };
   if (st === 'bad') return { dot: '!', dotColor: '#C62B22', dotBorder: 'rgba(229,62,62,0.5)', dotBg: 'rgba(229,62,62,0.06)' };
-  return { dot: '···', dotColor: '#6B7280', dotBorder: 'rgba(0,0,0,0.15)', dotBg: 'transparent' };
+  return { dot: '···', dotColor: 'var(--mute)', dotBorder: 'rgba(var(--ink-rgb),0.2)', dotBg: 'transparent' };
 }
 
 export function fmt(sec) {
@@ -911,38 +919,38 @@ export const SPACE = { '1': 4, '2': 8, '3': 12, '4': 16, '5': 20, '6': 24, '8': 
 
 // shared liquid-glass card surface (iPadOS-style material — colours unchanged)
 export const glass = {
-  background: 'rgba(255,255,255,0.5)',
-  backdropFilter: 'blur(40px) saturate(1.8)',
-  WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
-  border: '1px solid rgba(255,255,255,0.55)',
+  background: 'rgba(var(--surf-rgb),0.5)',
+  backdropFilter: 'var(--glass-blur)',
+  WebkitBackdropFilter: 'var(--glass-blur)',
+  border: '1px solid rgba(var(--surf-rgb),0.55)',
   borderRadius: 24,
   boxShadow: '0 10px 34px -10px rgba(30,22,40,0.20), 0 2px 8px rgba(30,22,40,0.05), inset 0 1px 0 rgba(255,255,255,0.85), inset 0 0 0 0.5px rgba(255,255,255,0.30)',
 };
 
 // floating chrome (top bars, tab bar) — brighter rim, deeper lift
 export const glassFloat = {
-  background: 'rgba(255,255,255,0.42)',
-  backdropFilter: 'blur(50px) saturate(1.9)',
-  WebkitBackdropFilter: 'blur(50px) saturate(1.9)',
-  border: '1px solid rgba(255,255,255,0.6)',
+  background: 'rgba(var(--surf-rgb),0.42)',
+  backdropFilter: 'var(--glass-blur)',
+  WebkitBackdropFilter: 'var(--glass-blur)',
+  border: '1px solid rgba(var(--surf-rgb),0.6)',
   boxShadow: '0 16px 44px -8px rgba(40,28,50,0.24), 0 4px 12px rgba(40,28,50,0.08), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 1px rgba(255,255,255,0.25)',
 };
 
 // popovers / dropdown menus — more opaque for legibility over content
 export const glassPopover = {
-  background: 'rgba(255,255,255,0.72)',
-  backdropFilter: 'blur(50px) saturate(2)',
-  WebkitBackdropFilter: 'blur(50px) saturate(2)',
-  border: '1px solid rgba(255,255,255,0.7)',
+  background: 'rgba(var(--surf-rgb),0.72)',
+  backdropFilter: 'var(--glass-blur)',
+  WebkitBackdropFilter: 'var(--glass-blur)',
+  border: '1px solid rgba(var(--surf-rgb),0.7)',
   boxShadow: '0 24px 60px -12px rgba(40,28,50,0.34), inset 0 1px 0 rgba(255,255,255,0.95)',
 };
 
 // modal sheets / overlays
 export const glassSheet = {
-  background: 'rgba(255,255,255,0.6)',
-  backdropFilter: 'blur(50px) saturate(1.9)',
-  WebkitBackdropFilter: 'blur(50px) saturate(1.9)',
-  border: '1px solid rgba(255,255,255,0.65)',
+  background: 'rgba(var(--surf-rgb),0.6)',
+  backdropFilter: 'var(--glass-blur)',
+  WebkitBackdropFilter: 'var(--glass-blur)',
+  border: '1px solid rgba(var(--surf-rgb),0.65)',
   boxShadow: '0 40px 90px -20px rgba(20,14,28,0.45), inset 0 1px 0 rgba(255,255,255,0.9)',
 };
 
@@ -953,15 +961,15 @@ export const feedBg = {
 
 // ---- clean / minimal surfaces (modern light look — used on the order detail page) ----
 export const cardLight = {
-  background: '#FFFFFF',
-  border: '1px solid #ECEDF0',
+  background: 'var(--surface)',
+  border: '1px solid var(--surface-border)',
   borderRadius: 18,
   boxShadow: '0 1px 2px rgba(15,17,21,0.05), 0 14px 32px -22px rgba(15,17,21,0.28)',
 };
 export const surfaceSubtle = {
-  background: '#F7F8FA',
-  border: '1px solid #EDEFF2',
+  background: 'var(--surface-soft)',
+  border: '1px solid var(--surface-soft-border)',
 };
-export const INK = '#0F1115';
-export const MUTE = '#6B7280';
-export const HAIRLINE = '#F0F1F3';
+export const INK = 'var(--ink)';
+export const MUTE = 'var(--mute)';
+export const HAIRLINE = 'var(--hairline)';

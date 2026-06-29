@@ -48,8 +48,8 @@ function Donut({ data, total, size = 132, thickness = 16 }) {
           return seg;
         })}
       </g>
-      <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" style={{ fontFamily: MONO, fontSize: size * 0.22, fontWeight: 600, fill: '#1B1D21' }}>{total}</text>
-      <text x="50%" y="63%" textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 10, letterSpacing: '0.04em', fill: '#6B7280' }}>orders</text>
+      <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" style={{ fontFamily: MONO, fontSize: size * 0.22, fontWeight: 600, fill: 'var(--ink-2)' }}>{total}</text>
+      <text x="50%" y="63%" textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 10, letterSpacing: '0.04em', fill: 'var(--mute)' }}>orders</text>
     </svg>
   );
 }
@@ -59,16 +59,16 @@ function KpiCard({ accent, title, value, unit, sub, subColor, Icon }) {
   return (
     <div style={{ ...glass, padding: 18, borderLeft: '3px solid ' + accent, display: 'flex', flexDirection: 'column', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-        <span style={{ fontSize: 13.5, fontWeight: 600, color: '#5B616B' }}>{title}</span>
+        <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--mute-2)' }}>{title}</span>
         <span style={{ width: 30, height: 30, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: accent + '1a', color: accent }}>
           <Icon size={16} aria-hidden="true" />
         </span>
       </div>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 7 }}>
-        <span style={{ fontSize: 30, fontWeight: 800, color: '#1B1D21', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</span>
-        {unit && <span style={{ fontSize: 14, color: '#6B7280' }}>{unit}</span>}
+        <span style={{ fontSize: 30, fontWeight: 800, color: 'var(--ink-2)', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</span>
+        {unit && <span style={{ fontSize: 14, color: 'var(--mute)' }}>{unit}</span>}
       </div>
-      {sub && <span style={{ fontSize: 12.5, color: subColor || '#6B7280' }}>{sub}</span>}
+      {sub && <span style={{ fontSize: 12.5, color: subColor || 'var(--mute)' }}>{sub}</span>}
     </div>
   );
 }
@@ -126,8 +126,8 @@ export default function Home({ ctx }) {
               return (
                 <button key={d.key} onClick={() => openList(kind, d.key)} className="hv-white7" style={{ display: 'flex', alignItems: 'center', gap: 10, border: 'none', background: 'transparent', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', textAlign: 'left' }}>
                   <span style={{ width: 9, height: 9, flex: 'none', borderRadius: '50%', background: d.color }} />
-                  <span style={{ fontSize: 13.5, color: '#1B1D21', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 600, color: '#1B1D21' }}>{d.value}</span>
+                  <span style={{ fontSize: 13.5, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 600, color: 'var(--ink-2)' }}>{d.value}</span>
                   <span style={{ fontFamily: MONO, fontSize: 12, color: MUTE, width: 38, textAlign: 'right' }}>{pct}%</span>
                 </button>
               );
@@ -147,7 +147,7 @@ export default function Home({ ctx }) {
             <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>{sideLabel} · Overview</h1>
             <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{sideLabel.toUpperCase()}</span>
           </div>
-          <span style={{ fontSize: 13, color: '#5B616B' }}>Welcome{s.userLabel ? ', ' + s.userLabel : ''} — your order book at a glance. Pick a list to start.</span>
+          <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>Welcome{s.userLabel ? ', ' + s.userLabel : ''} — your order book at a glance. Pick a list to start.</span>
         </div>
       </div>
 
@@ -173,13 +173,13 @@ export default function Home({ ctx }) {
               key={o.type}
               onClick={() => newOrder(o.type)}
               className="hv-border-accent"
-              style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
             >
               <span style={{ width: 42, height: 42, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
                 <o.Icon size={21} aria-hidden="true" />
               </span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
-                <span style={{ fontSize: 15, fontWeight: 700, color: '#1B1D21' }}>{o.label}</span>
+                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink-2)' }}>{o.label}</span>
                 <span style={{ fontSize: 12.5, color: MUTE }}>{o.sub}</span>
               </div>
               <ChevronRight size={18} aria-hidden="true" style={{ color: '#8E0E22', flex: 'none' }} />
@@ -200,13 +200,13 @@ export default function Home({ ctx }) {
                 key={st.key}
                 onClick={() => openList(st.kind, st.key)}
                 className="hv-border-accent"
-                style={{ background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10 }}
+                style={{ background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
                   <span style={{ width: 38, height: 38, flex: 'none', borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', background: f.bg, color: f.color, border: '1px solid ' + f.border }}>
                     <Icon size={19} aria-hidden="true" />
                   </span>
-                  <span style={{ fontFamily: MONO, fontSize: 30, fontWeight: 500, lineHeight: 1, color: st.n ? '#1B1D21' : '#9AA0A6' }}>{st.n}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 30, fontWeight: 500, lineHeight: 1, color: st.n ? 'var(--ink-2)' : '#9AA0A6' }}>{st.n}</span>
                 </div>
                 <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, alignSelf: 'flex-start', background: f.bg, color: f.color, border: '1px solid ' + f.border }}>{st.label}</span>
               </button>

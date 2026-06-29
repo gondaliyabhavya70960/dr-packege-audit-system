@@ -12,15 +12,15 @@ const triggerStyle = {
   justifyContent: 'space-between',
   gap: 8,
   width: '100%',
-  background: 'rgba(255,255,255,0.5)',
+  background: 'rgba(var(--surf-rgb),0.5)',
   backdropFilter: 'blur(14px) saturate(1.6)',
   WebkitBackdropFilter: 'blur(14px) saturate(1.6)',
-  border: '1px solid rgba(255,255,255,0.65)',
+  border: '1px solid rgba(var(--surf-rgb),0.65)',
   borderRadius: 10,
   padding: '10px 12px 10px 14px',
   fontSize: 13.5,
   fontWeight: 600,
-  color: '#1B1D21',
+  color: 'var(--ink-2)',
   outline: 'none',
   cursor: 'pointer',
 };
@@ -48,7 +48,7 @@ export default function GlassSelect({ value, onChange, options, label, minWidth 
 
   return (
     <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      {label && <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: '#6B7280' }}>{label}</span>}
+      {label && <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: 'var(--mute)' }}>{label}</span>}
       <div ref={wrapRef} style={{ position: 'relative', minWidth }}>
         <button type="button" className="fc-accent" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((v) => !v)} style={triggerStyle}>
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sel ? sel.label : ''}</span>
@@ -69,7 +69,7 @@ export default function GlassSelect({ value, onChange, options, label, minWidth 
                   aria-selected={on}
                   className="hv-white7"
                   onClick={() => { onChange(o.value); setOpen(false); }}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, textAlign: 'left', border: 'none', background: on ? 'rgba(142,14,34,0.08)' : 'transparent', color: on ? '#8E0E22' : '#1B1D21', borderRadius: 9, padding: '9px 11px', fontSize: 13.5, fontWeight: on ? 700 : 600, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, textAlign: 'left', border: 'none', background: on ? 'rgba(142,14,34,0.08)' : 'transparent', color: on ? '#8E0E22' : 'var(--ink-2)', borderRadius: 9, padding: '9px 11px', fontSize: 13.5, fontWeight: on ? 700 : 600, cursor: 'pointer', whiteSpace: 'nowrap' }}
                 >
                   {o.label}
                   {on && <Check size={14} aria-hidden="true" />}

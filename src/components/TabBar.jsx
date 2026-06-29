@@ -2,8 +2,8 @@ import { MONO, glassFloat, glassPopover } from '../data.js';
 
 const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 
-const MENU_BG = 'rgba(255,255,255,0.72)';
-const MENU_BORDER = '1px solid rgba(255,255,255,0.7)';
+const MENU_BG = 'rgba(var(--surf-rgb),0.72)';
+const MENU_BORDER = '1px solid rgba(var(--surf-rgb),0.7)';
 
 export default function TabBar({ ctx }) {
   const { s, set, openPlayer, openList } = ctx;
@@ -119,7 +119,7 @@ export default function TabBar({ ctx }) {
                               set({ screen: n.id, adminMenuOpen: false });
                             }
                           }}
-                          style={{ display: 'flex', alignItems: 'center', gap: 8, textAlign: 'left', border: 'none', cursor: 'pointer', borderRadius: 11, padding: '10px 12px', fontSize: 14, fontWeight: 600, background: active ? 'rgba(142,14,34,0.14)' : 'transparent', color: active ? '#8E0E22' : '#1B1D21' }}
+                          style={{ display: 'flex', alignItems: 'center', gap: 8, textAlign: 'left', border: 'none', cursor: 'pointer', borderRadius: 11, padding: '10px 12px', fontSize: 14, fontWeight: 600, background: active ? 'rgba(142,14,34,0.14)' : 'transparent', color: active ? '#8E0E22' : 'var(--ink-2)' }}
                         >
                           <span style={{ flex: 1 }}>{n.label}</span>
                           {n.badge && (

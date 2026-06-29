@@ -48,12 +48,12 @@ export default function VideoCaptureCard({
   const toggle = () => (recording ? finalise() : setRecording(true));
 
   return (
-    <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid #ECEDF0', background: '#FFFFFF', boxShadow: '0 1px 2px rgba(15,17,21,0.05)' }}>
+    <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid #ECEDF0', background: 'var(--surface)', boxShadow: '0 1px 2px rgba(15,17,21,0.05)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 14px', borderBottom: '1px solid #F0F1F3' }}>
         <span style={{ width: 10, height: 10, borderRadius: '50%', background: recording ? '#E53E3E' : '#9AA0A6', animation: recording ? 'pulse 1.4s ease-in-out infinite' : 'none' }} />
-        <span style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.18em', color: recording ? '#C62B22' : '#6B7280' }}>{recording ? 'REC' : 'READY'}</span>
-        <span style={{ fontFamily: MONO, fontSize: 13, color: '#1B1D21' }}>{label}</span>
-        <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 16, color: '#1B1D21' }}>{fmt(secs)}</span>
+        <span style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.18em', color: recording ? '#C62B22' : 'var(--mute)' }}>{recording ? 'REC' : 'READY'}</span>
+        <span style={{ fontFamily: MONO, fontSize: 13, color: 'var(--ink-2)' }}>{label}</span>
+        <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 16, color: 'var(--ink-2)' }}>{fmt(secs)}</span>
       </div>
       <div
         role="img"
@@ -69,12 +69,12 @@ export default function VideoCaptureCard({
           className="hv-border-accent"
           onClick={() => setStills((x) => x + 1)}
           disabled={!recording}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(0,0,0,0.08)', color: '#1B1D21', borderRadius: 10, padding: '10px 16px', fontSize: 14, fontWeight: 600, cursor: recording ? 'pointer' : 'not-allowed', opacity: recording ? 1 : 0.45 }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(var(--surf-rgb),0.6)', border: '1px solid rgba(0,0,0,0.08)', color: 'var(--ink-2)', borderRadius: 10, padding: '10px 16px', fontSize: 14, fontWeight: 600, cursor: recording ? 'pointer' : 'not-allowed', opacity: recording ? 1 : 0.45 }}
         >
           <Camera size={16} strokeWidth={2} aria-hidden="true" /> Capture still
         </button>
-        <span style={{ fontFamily: MONO, fontSize: 12, color: '#5B616B' }}>stills: {stills}</span>
-        <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{recording ? 'chunks hashed at capture · uploading' : 'stop to file the clip'}</span>
+        <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute-2)' }}>stills: {stills}</span>
+        <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{recording ? 'chunks hashed at capture · uploading' : 'stop to file the clip'}</span>
       </div>
     </div>
   );

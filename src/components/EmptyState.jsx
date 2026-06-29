@@ -9,8 +9,8 @@ export default function EmptyState({ icon: Icon, title, sub, action }) {
           <Icon size={26} aria-hidden="true" />
         </span>
       )}
-      <span style={{ fontSize: 16, fontWeight: 700, color: '#0F1115' }}>{title}</span>
-      {sub && <span style={{ fontSize: 13.5, color: '#6B7280', maxWidth: 400, lineHeight: 1.5 }}>{sub}</span>}
+      <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--ink)' }}>{title}</span>
+      {sub && <span style={{ fontSize: 13.5, color: 'var(--mute)', maxWidth: 400, lineHeight: 1.5 }}>{sub}</span>}
       {action}
     </div>
   );
