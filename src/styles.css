@@ -481,6 +481,46 @@
   background: var(--surface-border);
 }
 
+/* ---- Station health: Store (60%) | divider | Warehouse (40%) ---- */
+.station-split {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+.station-col-store {
+  flex: 0 0 60%;
+  max-width: 60%;
+  min-width: 0;
+  padding-right: 24px;
+}
+.station-col-wh {
+  flex: 1 1 40%;
+  max-width: 40%;
+  min-width: 0;
+  padding-left: 24px;
+}
+.station-divider {
+  flex: none;
+  width: 1px;
+  background: var(--hairline);
+}
+@media (max-width: 900px) {
+  .station-split {
+    flex-direction: column;
+  }
+  .station-col-store,
+  .station-col-wh {
+    flex: 1 1 auto;
+    max-width: 100%;
+    padding: 0;
+  }
+  .station-divider {
+    width: auto;
+    height: 1px;
+    margin: 6px 0;
+  }
+}
+
 html,
 body {
   margin: 0;
