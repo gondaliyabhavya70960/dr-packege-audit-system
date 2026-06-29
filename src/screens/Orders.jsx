@@ -1,7 +1,67 @@
-import { MONO, glass, tabMode, fillTone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
-import { Search, Plus, ChevronRight, ArrowRight, SearchX } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { MONO, glass, glassPopover, tabMode, fillTone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
+import { Search, Plus, ChevronRight, ChevronDown, ArrowRight, SearchX, ShoppingCart, Sparkles, Boxes } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
+
+// the order types the "New order" menu can create, each with a creative icon
+const NEW_ORDER_TYPES = [
+  { type: 'ecommerce', label: 'E-commerce order', sub: 'Online customer order', Icon: ShoppingCart, color: '#2563EB' },
+  { type: 'custom', label: 'Custom order', sub: 'Bespoke · made to order', Icon: Sparkles, color: '#8E0E22' },
+  { type: 'bulk', label: 'Bulk order', sub: 'Wholesale · B2B consignment', Icon: Boxes, color: '#9A6A00' },
+];
+
+// "New order" split button → glass popover of typed create options
+function NewOrderMenu({ onPick }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!open) return undefined;
+    const onDoc = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('mousedown', onDoc);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('mousedown', onDoc); document.removeEventListener('keydown', onKey); };
+  }, [open]);
+  const pick = (t) => { setOpen(false); onPick(t); };
+  return (
+    <div ref={ref} style={{ position: 'relative' }}>
+      <button
+        data-tour="customorder"
+        className="hv-brighten"
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '11px 16px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}
+      >
+        <Plus size={16} aria-hidden="true" />
+        New order
+        <ChevronDown size={15} aria-hidden="true" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.16s ease' }} />
+      </button>
+      {open && (
+        <div role="menu" style={{ ...glassPopover, position: 'absolute', right: 0, top: 'calc(100% + 8px)', width: 288, borderRadius: 18, padding: 8, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 80 }}>
+          {NEW_ORDER_TYPES.map((o) => (
+            <button
+              key={o.type}
+              role="menuitem"
+              className="hv-white7"
+              onClick={() => pick(o.type)}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', border: 'none', background: 'transparent', borderRadius: 12, padding: '10px 11px', cursor: 'pointer' }}
+            >
+              <span style={{ width: 38, height: 38, flex: 'none', borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
+                <o.Icon size={19} aria-hidden="true" />
+              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#1B1D21' }}>{o.label}</span>
+                <span style={{ fontSize: 12, color: '#6B7280' }}>{o.sub}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
@@ -41,7 +101,7 @@ function StageBadge({ label, mode }) {
 }
 
 export default function Orders({ ctx }) {
-  const { s, set, openOrder, newCustomOrder } = ctx;
+  const { s, set, openOrder, newOrder } = ctx;
 
   const sideLabel = s.side === 'store' ? 'Store' : 'Warehouse';
   const isTransfer = s.listKind === 'transfer';
@@ -86,15 +146,7 @@ export default function Orders({ ctx }) {
           <span style={{ fontSize: 13, color: '#5B616B' }}>{isTransfer ? 'Inter-branch challans & consignments — open one to receive, return or view its detail.' : 'Customer orders to pack & dispatch — open one to pack, return or view its detail.'}</span>
         </div>
         <div style={{ flex: 1 }} />
-        <button
-          data-tour="customorder"
-          className="hv-brighten"
-          onClick={newCustomOrder}
-          style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '11px 18px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}
-        >
-          <Plus size={16} aria-hidden="true" />
-          Custom order details
-        </button>
+        <NewOrderMenu onPick={newOrder} />
       </div>
 
       {/* toolbar: search + filters (raised so the glass dropdowns overlay the table) */}

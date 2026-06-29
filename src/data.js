@@ -694,8 +694,11 @@ export const seedOrders = [...curatedOrders, ...generateOrders(104)];
 
 export const PRIORITY_OPTIONS = ['Standard', 'Express', 'White-glove'];
 
-export function emptyCustomOrder() {
-  return { id: '', channel: 'Online', customer: '', value: '', station: 'AUDIT-BENCH-1', packVideos: [], ...blankCustom };
+// default channel for each "new order" type the create menu offers
+const ORDER_TYPE_CHANNEL = { ecommerce: 'Online', bulk: 'B2B', custom: 'Online' };
+export function emptyCustomOrder(type) {
+  const orderType = type || 'custom';
+  return { id: '', channel: ORDER_TYPE_CHANNEL[orderType] || 'Online', customer: '', value: '', station: 'AUDIT-BENCH-1', packVideos: [], orderType, ...blankCustom };
 }
 
 // Build an order record from a custom-order draft. Shared by the create form and

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem } from 'lucide-react';
+import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes } from 'lucide-react';
 import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmt } from '../data.js';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
@@ -319,6 +319,13 @@ function ReadRow({ label, value, accent }) {
   );
 }
 
+// header copy + creative icon per new-order type
+const ORDER_TYPE_META = {
+  ecommerce: { title: 'New e-commerce order', sub: 'An online customer order — capture its handling, insurance and pack video. It joins the orders list under the same ID.', Icon: ShoppingCart, color: '#2563EB' },
+  bulk: { title: 'New bulk order', sub: 'A wholesale / B2B consignment — record its handling, insurance and audit notes, then file the pack video.', Icon: Boxes, color: '#9A6A00' },
+  custom: { title: 'Custom order details', sub: 'Record a bespoke order with its handling, insurance and audit notes. It joins the orders list and links to any video filed under the same ID.', Icon: Sparkles, color: '#8E0E22' },
+};
+
 // The custom-order create form — shared by the page route and the popup modal.
 // Reads/writes the draft on ctx state; calls onClose(savedId) after save, or
 // onClose(null) on cancel.
@@ -326,6 +333,7 @@ export function CreateOrderForm({ ctx, onClose }) {
   const { s, set, showToast } = ctx;
   const d = s.orderDraft;
   if (!d) return null;
+  const meta = ORDER_TYPE_META[d.orderType] || ORDER_TYPE_META.custom;
   const upd = (k, v) => set({ orderDraft: { ...s.orderDraft, [k]: v } });
   const cancel = () => { set({ orderDraft: null }); onClose && onClose(null); };
   const saveCreate = () => {
@@ -343,9 +351,14 @@ export function CreateOrderForm({ ctx, onClose }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        <span style={{ fontSize: 20, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>Custom order details</span>
-        <span style={{ fontSize: 14, color: '#5B616B' }}>Record a bespoke order with its handling, insurance and audit notes. It joins the orders list and links to any video filed under the same ID.</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <span style={{ width: 46, height: 46, flex: 'none', borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', background: meta.color + '1a', color: meta.color }}>
+          <meta.Icon size={23} aria-hidden="true" />
+        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <span style={{ fontSize: 20, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>{meta.title}</span>
+          <span style={{ fontSize: 14, color: '#5B616B' }}>{meta.sub}</span>
+        </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
