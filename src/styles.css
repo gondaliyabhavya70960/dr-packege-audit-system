@@ -2,15 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background:
+/* ---- theme tokens ---------------------------------------------------------
+   The brand maroon never changes; themes only swap surfaces, text and the page
+   backdrop. Light "glass" values below match the original look exactly, so the
+   default theme is visually unchanged. surf-rgb / ink-rgb let translucent
+   rgba() surfaces + text flip wholesale between light and dark. */
+:root,
+[data-theme='glass'] {
+  --app-bg:
     radial-gradient(900px 600px at 85% -10%, rgba(211, 43, 71, 0.16), transparent 60%),
     radial-gradient(800px 600px at -10% 30%, rgba(64, 110, 220, 0.13), transparent 55%),
     radial-gradient(700px 500px at 60% 110%, rgba(240, 165, 46, 0.14), transparent 55%),
     linear-gradient(160deg, #f4eef1, #e9eaf3);
+  --ink: #0f1115;
+  --ink-2: #1b1d21;
+  --mute: #6b7280;
+  --mute-2: #5b616b;
+  --surface: #ffffff;
+  --surface-border: #ecedf0;
+  --surface-soft: #f7f8fa;
+  --surface-soft-border: #edeff2;
+  --hairline: #f0f1f3;
+  --surf-rgb: 255, 255, 255;
+  --ink-rgb: 27, 29, 33;
+  --glass-blur: blur(40px) saturate(1.8);
+}
+
+/* flat, no-blur light variant */
+[data-theme='paper'] {
+  --app-bg: linear-gradient(160deg, #f6f7f9, #eceef3);
+  --surface: #ffffff;
+  --surface-border: #e3e6ec;
+  --surface-soft: #f3f5f8;
+  --surface-soft-border: #e7eaf0;
+  --hairline: #eceef2;
+  --glass-blur: saturate(1.02);
+}
+
+/* dark variant — same maroon accent over dark surfaces */
+[data-theme='midnight'] {
+  --app-bg:
+    radial-gradient(900px 600px at 85% -10%, rgba(211, 43, 71, 0.2), transparent 60%),
+    radial-gradient(800px 600px at -10% 30%, rgba(64, 110, 220, 0.16), transparent 55%),
+    linear-gradient(160deg, #14161c, #0d0e13);
+  --ink: #f3f4f7;
+  --ink-2: #e7e9ee;
+  --mute: #9aa3af;
+  --mute-2: #aab2bd;
+  --surface: #191c22;
+  --surface-border: #2b313b;
+  --surface-soft: #20242c;
+  --surface-soft-border: #2b313b;
+  --hairline: #262b33;
+  --surf-rgb: 41, 46, 56;
+  --ink-rgb: 231, 233, 238;
+  --glass-blur: blur(40px) saturate(1.3);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--app-bg);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -33,7 +86,7 @@ body {
 }
 
 input::placeholder {
-  color: rgba(27, 29, 33, 0.35);
+  color: rgba(var(--ink-rgb), 0.35);
 }
 
 button,
@@ -112,16 +165,16 @@ textarea {
   background: #7a0b1c !important;
 }
 .hv-white65:hover {
-  background: rgba(255, 255, 255, 0.65) !important;
+  background: rgba(var(--surf-rgb), 0.65) !important;
 }
 .hv-white7:hover {
-  background: rgba(255, 255, 255, 0.7) !important;
+  background: rgba(var(--surf-rgb), 0.7) !important;
 }
 .hv-white75:hover {
-  background: rgba(255, 255, 255, 0.75) !important;
+  background: rgba(var(--surf-rgb), 0.75) !important;
 }
 .hv-white85:hover {
-  background: rgba(255, 255, 255, 0.85) !important;
+  background: rgba(var(--surf-rgb), 0.85) !important;
 }
 .hv-accent14:hover {
   background: rgba(142, 14, 34, 0.14) !important;
@@ -146,7 +199,7 @@ textarea {
   color: #1b1d21 !important;
 }
 .hv-text-mid:hover {
-  color: rgba(27, 29, 33, 0.65) !important;
+  color: rgba(var(--ink-rgb), 0.65) !important;
 }
 .fc-accent:focus {
   border-color: #8e0e22 !important;

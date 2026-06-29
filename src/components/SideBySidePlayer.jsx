@@ -36,7 +36,7 @@ export default function SideBySidePlayer({ ctx }) {
 
   const clipPane = (label, meta, text) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: MONO, fontSize: 11, color: '#5B616B' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: MONO, fontSize: 11, color: 'var(--mute-2)' }}>
         <span style={{ color: '#8E0E22' }}>{label}</span>
         <span>{meta}</span>
       </div>
@@ -54,7 +54,7 @@ export default function SideBySidePlayer({ ctx }) {
             Side-by-side · <span style={{ fontFamily: MONO, fontWeight: 500 }}>{s.playerId}</span>
           </span>
           <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>SAME ITEM? — ANSWERED VISUALLY</span>
-          <button className="hv-white75" onClick={closePlayer} aria-label="Close player" style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.45)', border: 'none', color: 'rgba(27,29,33,0.7)', borderRadius: '50%', width: 34, height: 34, cursor: 'pointer' }}>
+          <button className="hv-white75" onClick={closePlayer} aria-label="Close player" style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(var(--surf-rgb),0.45)', border: 'none', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: '50%', width: 34, height: 34, cursor: 'pointer' }}>
             <X size={17} aria-hidden="true" />
           </button>
         </div>
@@ -65,41 +65,41 @@ export default function SideBySidePlayer({ ctx }) {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 20px' }}>
-          <button className="hv-white75" onClick={() => set({ t: Math.max(0, s.t - 10) })} aria-label="Back 10%" style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,0.45)', border: 'none', color: '#1B1D21', borderRadius: 999, padding: '8px 14px', cursor: 'pointer' }}>
+          <button className="hv-white75" onClick={() => set({ t: Math.max(0, s.t - 10) })} aria-label="Back 10%" style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(var(--surf-rgb),0.45)', border: 'none', color: 'var(--ink-2)', borderRadius: 999, padding: '8px 14px', cursor: 'pointer' }}>
             <Rewind size={16} aria-hidden="true" />
           </button>
           <button className="hv-brighten" onClick={() => set({ playing: !s.playing })} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 999, padding: '9px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer', minWidth: 130 }}>
             {s.playing ? <Pause size={15} aria-hidden="true" /> : <Play size={15} aria-hidden="true" />}
             {s.playing ? 'Pause' : 'Sync play'}
           </button>
-          <button className="hv-white75" onClick={() => set({ t: Math.min(100, s.t + 10) })} aria-label="Forward 10%" style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,0.45)', border: 'none', color: '#1B1D21', borderRadius: 999, padding: '8px 14px', cursor: 'pointer' }}>
+          <button className="hv-white75" onClick={() => set({ t: Math.min(100, s.t + 10) })} aria-label="Forward 10%" style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(var(--surf-rgb),0.45)', border: 'none', color: 'var(--ink-2)', borderRadius: 999, padding: '8px 14px', cursor: 'pointer' }}>
             <FastForward size={16} aria-hidden="true" />
           </button>
           <input type="range" min="0" max="100" value={s.t} onChange={(e) => set({ t: Number(e.target.value) })} style={{ flex: 1, accentColor: '#8E0E22', cursor: 'pointer' }} />
-          <span style={{ fontFamily: MONO, fontSize: 13, color: '#5B616B' }}>{fmt(Math.round(s.t * 0.84))} / 01:24</span>
+          <span style={{ fontFamily: MONO, fontSize: 13, color: 'var(--mute-2)' }}>{fmt(Math.round(s.t * 0.84))} / 01:24</span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '0 20px 14px', flexWrap: 'wrap' }}>
-          <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>STILLS</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>STILLS</span>
           {STILL_LABELS.map((l, i) => {
             const active = s.still === i;
             return (
               <button
                 key={l}
                 onClick={() => set({ still: active ? -1 : i })}
-                style={{ cursor: 'pointer', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 600, background: 'rgba(255,255,255,0.45)', border: '1px solid ' + (active ? 'rgba(142,14,34,0.7)' : 'rgba(0,0,0,0.08)'), color: active ? '#8E0E22' : '#5B616B' }}
+                style={{ cursor: 'pointer', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 600, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid ' + (active ? 'rgba(142,14,34,0.7)' : 'rgba(0,0,0,0.08)'), color: active ? '#8E0E22' : 'var(--mute-2)' }}
               >
                 {active ? l + ' · enlarged' : l}
               </button>
             );
           })}
-          <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>click a still to enlarge</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>click a still to enlarge</span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderTop: '1px solid rgba(0,0,0,0.05)', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 14, color: '#5B616B' }}>{fromFlag ? 'Supervisor decision — releases or keeps the refund hold.' : 'Verdict feeds the accept / flag decision.'}</span>
+          <span style={{ fontSize: 14, color: 'var(--mute-2)' }}>{fromFlag ? 'Supervisor decision — releases or keeps the refund hold.' : 'Verdict feeds the accept / flag decision.'}</span>
           <div style={{ flex: 1 }} />
-          <button className="hv-red05" onClick={verdictNeg} style={{ background: '#FFFFFF', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: '11px 22px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-red05" onClick={verdictNeg} style={{ background: 'var(--surface)', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: '11px 22px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
             {fromFlag ? 'Uphold flag — keep hold' : 'Mismatch suspected'}
           </button>
           <button className="hv-brighten" onClick={verdictPos} style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '11px 22px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>

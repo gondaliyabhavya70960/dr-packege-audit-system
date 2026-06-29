@@ -31,7 +31,7 @@ export default function PrevStepClip({ ctx, id, fallbackLabel = 'Previous step' 
         className="prev-clip"
         onClick={() => setOpen(true)}
         title={'Previous step — ' + prev.label + ' · tap to review'}
-        style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', textAlign: 'left', cursor: 'pointer', borderRadius: 14, padding: 8, border: '1px solid rgba(0,0,0,0.08)', background: 'rgba(255,255,255,0.45)' }}
+        style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', textAlign: 'left', cursor: 'pointer', borderRadius: 14, padding: 8, border: '1px solid rgba(0,0,0,0.08)', background: 'rgba(var(--surf-rgb),0.45)' }}
       >
         <span style={{ position: 'relative', width: 104, height: 62, flex: 'none', borderRadius: 10, overflow: 'hidden', ...feedBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <span style={{ position: 'absolute', top: 4, left: 5, fontFamily: MONO, fontSize: 7.5, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.8)', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: 4 }}>◦ PREV STEP</span>
@@ -39,7 +39,7 @@ export default function PrevStepClip({ ctx, id, fallbackLabel = 'Previous step' 
         </span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
           <span style={{ fontSize: 14, fontWeight: 700 }}>Previous step · {prev.label}</span>
-          <span style={{ fontFamily: MONO, fontSize: 11, color: '#5B616B' }}>tap to review the clip — spot any issue</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute-2)' }}>tap to review the clip — spot any issue</span>
         </div>
         <span style={{ marginLeft: 'auto', flex: 'none', display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', color: '#8E0E22', borderRadius: 999, padding: '7px 14px', fontSize: 12.5, fontWeight: 700 }}>Review ▸</span>
       </button>
@@ -51,7 +51,7 @@ export default function PrevStepClip({ ctx, id, fallbackLabel = 'Previous step' 
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', background: 'rgba(0,0,0,0.62)' }}>
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.9)' }}>PREVIOUS STEP · {prev.label.toUpperCase()}</span>
         <span style={{ fontFamily: MONO, fontSize: 9.5, color: 'rgba(255,255,255,0.5)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{prev.time} · {prev.who}</span>
-        <button onClick={() => { setOpen(false); setPlaying(false); }} title="Close" aria-label="Close previous-step clip" style={{ marginLeft: 'auto', flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.18)', border: 'none', color: '#FFFFFF', borderRadius: '50%', width: 24, height: 24, cursor: 'pointer' }}><X size={13} aria-hidden="true" /></button>
+        <button onClick={() => { setOpen(false); setPlaying(false); }} title="Close" aria-label="Close previous-step clip" style={{ marginLeft: 'auto', flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(var(--surf-rgb),0.18)', border: 'none', color: '#FFFFFF', borderRadius: '50%', width: 24, height: 24, cursor: 'pointer' }}><X size={13} aria-hidden="true" /></button>
       </div>
       <div style={{ position: 'relative', minHeight: 168, ...feedBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(255,255,255,0.45)' }}>[ {prev.label} — filed clip · {id} ]</span>

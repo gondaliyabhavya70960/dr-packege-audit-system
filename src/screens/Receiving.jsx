@@ -66,12 +66,12 @@ export default function Receiving({ ctx }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <span style={{ fontSize: 17, fontWeight: 700 }}>Expected items — scan each RFID to tick</span>
-              <span style={{ fontFamily: MONO, fontSize: 12, color: '#6B7280' }}>Challan {s.recvChallan}</span>
+              <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute)' }}>Challan {s.recvChallan}</span>
             </div>
-            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.45)', color: '#5B616B' }}>GATI · CHALLAN</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--surf-rgb),0.45)', color: 'var(--mute-2)' }}>GATI · CHALLAN</span>
           </div>
           {rows.map((row) => (
-            <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14 }}>
+            <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(var(--surf-rgb),0.55)', borderRadius: 14 }}>
               {row.captured ? (
                 <CapturedThumb size={34} label={row.name + ' — captured on video'} />
               ) : (
@@ -79,7 +79,7 @@ export default function Receiving({ ctx }) {
               )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 <span style={{ fontFamily: MONO, fontSize: 14 }}>{row.rfid}</span>
-                <span style={{ fontSize: 13, color: '#5B616B' }}>{row.name}</span>
+                <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>{row.name}</span>
               </div>
               <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 12, letterSpacing: '0.06em', color: row.dotColor }}>{row.stateLabel}</span>
             </div>
@@ -92,14 +92,14 @@ export default function Receiving({ ctx }) {
               Scan unknown RFID (demo)
             </button>
           </div>
-          <div style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(27,29,33,0.7)', padding: '10px 14px', background: 'rgba(255,255,255,0.45)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.55)' }}>{summary}</div>
+          <div style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(var(--ink-rgb),0.7)', padding: '10px 14px', background: 'rgba(var(--surf-rgb),0.45)', borderRadius: 12, border: '1px solid rgba(var(--surf-rgb),0.55)' }}>{summary}</div>
           <PrevStepClip ctx={ctx} id={s.recvChallan} fallbackLabel="Pack clip · warehouse" />
         </div>
 
         <div style={{ borderRadius: 16, padding: '13px 16px', fontSize: 14, fontWeight: 600, lineHeight: 1.45, border: '1px solid ' + bt.border, background: bt.bg, color: bt.color }}>{banner.msg}</div>
 
         <div style={{ display: 'flex', gap: 12 }}>
-          <button className="hv-red05" onClick={flagRecv} style={{ flex: 1, background: '#FFFFFF', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-red05" onClick={flagRecv} style={{ flex: 1, background: 'var(--surface)', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
             Flag short / extra
           </button>
           <button className="hv-brighten" onClick={confirmRecv} disabled={matched === 0} style={{ flex: 1, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer', opacity: matched === 0 ? 0.4 : 1, boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>
@@ -114,9 +114,9 @@ export default function Receiving({ ctx }) {
       <div style={{ ...glass, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 18px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
           <span style={{ width: 10, height: 10, borderRadius: '50%', background: rec ? '#E53E3E' : '#9AA0A6', animation: rec ? 'pulse 1.4s ease-in-out infinite' : 'none' }} />
-          <span style={{ fontFamily: MONO, fontSize: 12, color: rec ? '#C62B22' : '#6B7280', letterSpacing: '0.18em' }}>{rec ? 'REC' : 'PAUSED'}</span>
-          <span style={{ fontFamily: MONO, fontSize: 14, color: '#1B1D21' }}>Arrival · {s.recvChallan}</span>
-          <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 17, color: '#1B1D21' }}>{fmt(s.recSec)}</span>
+          <span style={{ fontFamily: MONO, fontSize: 12, color: rec ? '#C62B22' : 'var(--mute)', letterSpacing: '0.18em' }}>{rec ? 'REC' : 'PAUSED'}</span>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: 'var(--ink-2)' }}>Arrival · {s.recvChallan}</span>
+          <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 17, color: 'var(--ink-2)' }}>{fmt(s.recSec)}</span>
         </div>
         <div role="img" aria-label={rec ? 'Live arrival camera feed, store receiving point' : 'Arrival camera paused'} style={{ flex: 1, margin: 13, borderRadius: 16, position: 'relative', ...feedBg, animation: rec ? 'feedDrift 6s linear infinite' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
           <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>{rec ? '[ live feed — arrival · store webcam ]' : '[ recording paused — press start ]'}</span>
@@ -124,7 +124,7 @@ export default function Receiving({ ctx }) {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '0 13px 13px', flexWrap: 'wrap' }}>
           <RecordButton recording={rec} onToggle={toggleRec} />
-          <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>arrival video retained with the pack video · both attach to any flag</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>arrival video retained with the pack video · both attach to any flag</span>
         </div>
       </div>
     </div>

@@ -51,8 +51,8 @@ export default function NewOrderMenu({ onPick }) {
                 <o.Icon size={19} aria-hidden="true" />
               </span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: '#1B1D21' }}>{o.label}</span>
-                <span style={{ fontSize: 12, color: '#6B7280' }}>{o.sub}</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink-2)' }}>{o.label}</span>
+                <span style={{ fontSize: 12, color: 'var(--mute)' }}>{o.sub}</span>
               </div>
             </button>
           ))}

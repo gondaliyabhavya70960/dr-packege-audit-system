@@ -66,9 +66,9 @@ export default function PackRecord({ ctx }) {
       <div style={{ ...glass, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 18px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
           <span style={{ width: 10, height: 10, borderRadius: '50%', background: rec ? '#E53E3E' : '#9AA0A6', animation: rec ? 'pulse 1.4s ease-in-out infinite' : 'none' }} />
-          <span style={{ fontFamily: MONO, fontSize: 12, color: rec ? '#C62B22' : '#6B7280', letterSpacing: '0.18em' }}>{rec ? 'REC' : 'PAUSED'}</span>
-          <span style={{ fontFamily: MONO, fontSize: 14, color: '#1B1D21' }}>Session {s.packId}</span>
-          <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 17, color: '#1B1D21' }}>{fmt(s.recSec)}</span>
+          <span style={{ fontFamily: MONO, fontSize: 12, color: rec ? '#C62B22' : 'var(--mute)', letterSpacing: '0.18em' }}>{rec ? 'REC' : 'PAUSED'}</span>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: 'var(--ink-2)' }}>Session {s.packId}</span>
+          <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 17, color: 'var(--ink-2)' }}>{fmt(s.recSec)}</span>
         </div>
         <div role="img" aria-label={rec ? 'Live pack-bench camera feed, top view' : 'Pack-bench camera paused'} style={{ flex: 1, margin: 13, borderRadius: 16, position: 'relative', ...feedBg, animation: rec ? 'feedDrift 6s linear infinite' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
           <span style={{ fontFamily: MONO, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>{rec ? '[ live feed — top-view · pack bench ]' : '[ recording paused — press start ]'}</span>
@@ -76,11 +76,11 @@ export default function PackRecord({ ctx }) {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '0 13px 13px', flexWrap: 'wrap' }}>
           <RecordButton recording={rec} onToggle={toggleRec} />
-          <button className="hv-border-accent" onClick={() => set({ packStills: s.packStills + 1 })} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.06)', color: '#1B1D21', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+          <button className="hv-border-accent" onClick={() => set({ packStills: s.packStills + 1 })} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.06)', color: 'var(--ink-2)', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
             <Camera size={16} strokeWidth={2} aria-hidden="true" /> Capture still
           </button>
-          <span style={{ fontFamily: MONO, fontSize: 12, color: '#5B616B' }}>stills: {s.packStills}</span>
-          <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{rec ? 'chunks hashed at capture · uploading' : 'paused — timer held'}</span>
+          <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute-2)' }}>stills: {s.packStills}</span>
+          <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{rec ? 'chunks hashed at capture · uploading' : 'paused — timer held'}</span>
         </div>
       </div>
 
@@ -89,10 +89,10 @@ export default function PackRecord({ ctx }) {
         <div style={{ ...glass, padding: 16, display: 'flex', flexDirection: 'column', gap: 10, flex: 1, minHeight: 0, overflow: 'auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
             <span data-tour="packlist" style={{ fontSize: 17, fontWeight: 700 }}>Expected vs scanned</span>
-            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.45)', color: '#5B616B' }}>GATI · LIVE</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--surf-rgb),0.45)', color: 'var(--mute-2)' }}>GATI · LIVE</span>
           </div>
           {rows.map((row) => (
-            <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.55)', borderRadius: 14 }}>
+            <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(var(--surf-rgb),0.55)', borderRadius: 14 }}>
               {row.captured ? (
                 <CapturedThumb size={34} label={row.name + ' — captured on video'} />
               ) : (
@@ -100,7 +100,7 @@ export default function PackRecord({ ctx }) {
               )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
                 <span style={{ fontSize: 15, fontWeight: 600 }}>{row.name}</span>
-                <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{row.sku}</span>
+                <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{row.sku}</span>
               </div>
               <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 13, color: row.dotColor }}>{row.count}</span>
             </div>
@@ -113,7 +113,7 @@ export default function PackRecord({ ctx }) {
               Scan wrong item (demo)
             </button>
             {unknown && (
-              <button onClick={() => set({ packUnknown: false })} style={{ background: 'rgba(255,255,255,0.45)', border: '1px solid rgba(0,0,0,0.1)', color: '#1B1D21', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+              <button onClick={() => set({ packUnknown: false })} style={{ background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.1)', color: 'var(--ink-2)', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
                 Remove unknown — resolve
               </button>
             )}
@@ -121,7 +121,7 @@ export default function PackRecord({ ctx }) {
           {allScanned && !unknown && s.packCond !== 'confirmed' && (
             <div style={{ border: '1px solid rgba(217,142,4,0.35)', background: 'rgba(217,142,4,0.06)', borderRadius: 16, padding: 13, display: 'flex', flexDirection: 'column', gap: 8 }}>
               <span style={{ fontSize: 14, color: '#9A6A00', fontWeight: 700 }}>Condition check</span>
-              <span style={{ fontSize: 14, color: 'rgba(27,29,33,0.7)', lineHeight: 1.45, textWrap: 'pretty' }}>
+              <span style={{ fontSize: 14, color: 'rgba(var(--ink-rgb),0.7)', lineHeight: 1.45, textWrap: 'pretty' }}>
                 Show each piece to the camera, capture a close-up still (stone · hallmark · certificate), then confirm. YOLO count: 3 in frame ✓
               </span>
               <button className="hv-brighten" onClick={() => set({ packCond: 'confirmed' })} style={{ background: '#D98E04', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '10px 18px', fontSize: 14, fontWeight: 700, cursor: 'pointer', alignSelf: 'flex-start' }}>
@@ -134,7 +134,7 @@ export default function PackRecord({ ctx }) {
         <div style={{ borderRadius: 16, padding: '13px 16px', fontSize: 14, fontWeight: 600, lineHeight: 1.45, border: '1px solid ' + bt.border, background: bt.bg, color: bt.color }}>{banner.msg}</div>
 
         <div style={{ display: 'flex', gap: 12 }}>
-          <button data-tour="packactions" className="hv-red05" onClick={flagPack} style={{ flex: 1, background: '#FFFFFF', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
+          <button data-tour="packactions" className="hv-red05" onClick={flagPack} style={{ flex: 1, background: 'var(--surface)', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
             Flag with evidence
           </button>
           <button className="hv-brighten" onClick={closePack} disabled={!pass} style={{ flex: 1, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer', opacity: pass ? 1 : 0.4, boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>

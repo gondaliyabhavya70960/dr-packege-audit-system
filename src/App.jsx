@@ -108,6 +108,28 @@ export default function App() {
   const tourMeasureT = useRef();
   const tourAutoT = useRef();
 
+  // load the saved design variation once on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('pa_theme');
+      if (saved && saved !== sRef.current.theme) set({ theme: saved });
+    } catch (e) {
+      /* storage unavailable */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // apply + persist the active theme on <html data-theme> so every surface
+  // (including fixed modals) re-skins via CSS variables
+  useEffect(() => {
+    if (typeof document !== 'undefined') document.documentElement.dataset.theme = s.theme || 'glass';
+    try {
+      localStorage.setItem('pa_theme', s.theme || 'glass');
+    } catch (e) {
+      /* storage unavailable */
+    }
+  }, [s.theme]);
+
   // 1s heartbeat: session recording timer + player sync-play progress
   useEffect(() => {
     const iv = setInterval(() => {
@@ -308,7 +330,7 @@ export default function App() {
       style={{
         minHeight: '100vh',
         background: 'transparent',
-        color: '#1B1D21',
+        color: 'var(--ink-2)',
         fontFamily: "-apple-system,BlinkMacSystemFont,'Figtree','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif",
         position: 'relative',
       }}

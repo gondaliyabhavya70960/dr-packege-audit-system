@@ -101,18 +101,18 @@ function StatusStage({ order, stage }) {
             return (
               <div key={m.key} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, position: 'relative' }}>
                 {i < JOURNEY.length - 1 && (
-                  <span style={{ position: 'absolute', top: 9, left: '50%', width: '100%', height: 2, background: done ? '#8E0E22' : 'rgba(27,29,33,0.12)' }} />
+                  <span style={{ position: 'absolute', top: 9, left: '50%', width: '100%', height: 2, background: done ? '#8E0E22' : 'rgba(var(--ink-rgb),0.12)' }} />
                 )}
-                <span style={{ position: 'relative', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: active ? '#8E0E22' : done ? 'rgba(142,14,34,0.15)' : '#FFFFFF', border: '2px solid ' + (reached ? '#8E0E22' : 'rgba(27,29,33,0.2)') }}>
-                  {active && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#FFFFFF', animation: 'pulse 1.4s ease-in-out infinite' }} />}
+                <span style={{ position: 'relative', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: active ? '#8E0E22' : done ? 'rgba(142,14,34,0.15)' : 'var(--surface)', border: '2px solid ' + (reached ? '#8E0E22' : 'rgba(var(--ink-rgb),0.2)') }}>
+                  {active && <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--surface)', animation: 'pulse 1.4s ease-in-out infinite' }} />}
                 </span>
-                <span style={{ fontSize: 12, fontWeight: active ? 700 : 600, color: reached ? '#8E0E22' : 'rgba(27,29,33,0.4)', textAlign: 'center' }}>{m.label}</span>
+                <span style={{ fontSize: 12, fontWeight: active ? 700 : 600, color: reached ? '#8E0E22' : 'rgba(var(--ink-rgb),0.4)', textAlign: 'center' }}>{m.label}</span>
               </div>
             );
           })}
         </div>
 
-        <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '14px 16px', fontSize: 13.5, color: '#5B616B', lineHeight: 1.5 }}>{sub}</div>
+        <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '14px 16px', fontSize: 13.5, color: 'var(--mute-2)', lineHeight: 1.5 }}>{sub}</div>
       </div>
     </div>
   );
@@ -150,7 +150,7 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
               display: 'flex', alignItems: 'center', gap: 7, border: 'none', cursor: 'pointer', borderRadius: 11,
               padding: '9px 18px', fontSize: 13.5, fontWeight: 700,
               background: on ? '#8E0E22' : 'transparent',
-              color: on ? '#FFFFFF' : isEmpty ? 'rgba(27,29,33,0.4)' : 'rgba(27,29,33,0.65)',
+              color: on ? '#FFFFFF' : isEmpty ? 'rgba(var(--ink-rgb),0.4)' : 'rgba(var(--ink-rgb),0.65)',
               boxShadow: on ? '0 4px 14px rgba(142,14,34,0.25)' : 'none',
             }}
           >
@@ -166,12 +166,12 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
 }
 
 const inputStyle = {
-  background: 'rgba(255,255,255,0.6)',
+  background: 'rgba(var(--surf-rgb),0.6)',
   border: '1px solid rgba(0,0,0,0.1)',
   borderRadius: 10,
   padding: '9px 13px',
   fontSize: 14,
-  color: '#1B1D21',
+  color: 'var(--ink-2)',
   outline: 'none',
   width: '100%',
   fontFamily: 'inherit',
@@ -193,7 +193,7 @@ function DetectedThumb({ item }) {
       role="img"
       aria-label={'Scan frame · ' + item.name + ' detected'}
       title={'Detected on scan video · ' + item.name}
-      style={{ position: 'relative', width: 44, height: 44, flex: 'none', borderRadius: 9, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', ...feedBg, boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.08)' }}
+      style={{ position: 'relative', width: 44, height: 44, flex: 'none', borderRadius: 9, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', ...feedBg, boxShadow: 'inset 0 0 0 1px rgba(var(--surf-rgb),0.08)' }}
     >
       <Gem size={19} aria-hidden="true" style={{ color: 'rgba(255,255,255,0.9)' }} />
       <span style={{ position: 'absolute', inset: 7, border: '1.5px solid ' + ct.color, borderRadius: 4 }} />
@@ -205,7 +205,7 @@ function DetectedThumb({ item }) {
 function Field({ label, children }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: '#6B7280' }}>{label}</span>
+      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: 'var(--mute)' }}>{label}</span>
       {children}
     </div>
   );
@@ -222,7 +222,7 @@ function CustomEditor({ draft, upd }) {
         <Field label="GIFT WRAP">
           <button
             onClick={() => upd('giftWrap', !draft.giftWrap)}
-            style={{ ...inputStyle, cursor: 'pointer', textAlign: 'left', fontWeight: 700, color: draft.giftWrap ? '#0E8A50' : '#6B7280' }}
+            style={{ ...inputStyle, cursor: 'pointer', textAlign: 'left', fontWeight: 700, color: draft.giftWrap ? '#0E8A50' : 'var(--mute)' }}
           >
             {draft.giftWrap ? 'Yes · gift wrap' : 'No'}
           </button>
@@ -268,13 +268,13 @@ function PackingCapture({ orderId, videos, setVideos }) {
         </span>
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{list.length} CLIP{list.length === 1 ? '' : 'S'}</span>
       </div>
-      <span style={{ fontSize: 13, color: '#5B616B' }}>Record the pack at the bench — start, capture stills, then stop to file each clip against this order. Filed clips appear in the list below.</span>
+      <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>Record the pack at the bench — start, capture stills, then stop to file each clip against this order. Filed clips appear in the list below.</span>
 
       <VideoCaptureCard id={orderId || 'NEW-ORDER'} label="Pack capture" camLabel="CAM-01 · pack bench" feedText="[ live feed — top-view · pack bench ]" onCapture={addClip} minHeight={210} />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {list.length === 0 ? (
-          <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '14px 16px', fontSize: 13, color: '#6B7280' }}>No clips captured yet — press <strong style={{ color: '#8E0E22' }}>Start recording</strong> above to film the pack.</div>
+          <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '14px 16px', fontSize: 13, color: 'var(--mute)' }}>No clips captured yet — press <strong style={{ color: '#8E0E22' }}>Start recording</strong> above to film the pack.</div>
         ) : (
           list.map((v, i) => {
             const open = openIdx === i;
@@ -387,7 +387,7 @@ export function CreateOrderForm({ ctx, onClose }) {
         </span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: 1, minWidth: 0 }}>
           <span style={{ fontSize: 20, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>{meta.title}</span>
-          <span style={{ fontSize: 14, color: '#5B616B' }}>{meta.sub}</span>
+          <span style={{ fontSize: 14, color: 'var(--mute-2)' }}>{meta.sub}</span>
         </div>
         <button onClick={testFill} className="hv-border-accent" style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 'none', background: 'rgba(142,14,34,0.06)', border: '1px solid rgba(142,14,34,0.25)', color: '#8E0E22', borderRadius: 999, padding: '7px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
           <Sparkles size={14} aria-hidden="true" /> Test fill
@@ -399,7 +399,7 @@ export function CreateOrderForm({ ctx, onClose }) {
         {NEW_ORDER_TYPES.map((t) => {
           const on = t.type === d.orderType;
           return (
-            <button key={t.type} onClick={() => pickType(t.type)} style={{ display: 'flex', alignItems: 'center', gap: 7, borderRadius: 10, padding: '8px 13px', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: '1px solid ' + (on ? t.color : 'rgba(0,0,0,0.1)'), background: on ? t.color + '14' : 'rgba(255,255,255,0.5)', color: on ? t.color : '#5B616B' }}>
+            <button key={t.type} onClick={() => pickType(t.type)} style={{ display: 'flex', alignItems: 'center', gap: 7, borderRadius: 10, padding: '8px 13px', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: '1px solid ' + (on ? t.color : 'rgba(0,0,0,0.1)'), background: on ? t.color + '14' : 'rgba(var(--surf-rgb),0.5)', color: on ? t.color : 'var(--mute-2)' }}>
               <t.Icon size={15} aria-hidden="true" /> {t.label}
             </button>
           );
@@ -429,12 +429,12 @@ export function CreateOrderForm({ ctx, onClose }) {
       {/* items / products editor */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: '#6B7280' }}>ITEMS *</span>
+          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: 'var(--mute)' }}>ITEMS *</span>
           <button onClick={addItem} className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '6px 13px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>
             <Plus size={14} aria-hidden="true" /> Add item
           </button>
         </div>
-        {items.length === 0 && <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '12px 14px', fontSize: 13, color: '#6B7280' }}>No items yet — add at least one product.</div>}
+        {items.length === 0 && <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '12px 14px', fontSize: 13, color: 'var(--mute)' }}>No items yet — add at least one product.</div>}
         {items.map((it, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(142,14,34,0.08)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Gem size={16} aria-hidden="true" /></span>
@@ -460,7 +460,7 @@ export function CreateOrderForm({ ctx, onClose }) {
       <PackingCapture orderId={d.id} videos={d.packVideos} setVideos={(v) => upd('packVideos', v)} />
 
       <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
-        <button className="hv-white75" onClick={cancel} style={{ background: 'rgba(255,255,255,0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(27,29,33,0.7)', borderRadius: 10, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+        <button className="hv-white75" onClick={cancel} style={{ background: 'rgba(var(--surf-rgb),0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: 10, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
           Cancel
         </button>
         <div style={{ flex: 1 }} />
@@ -544,7 +544,7 @@ export default function OrderDetails({ ctx }) {
         )}
         {editing ? (
           <>
-            <button className="hv-white75" onClick={cancelEdit} style={{ background: 'rgba(255,255,255,0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(27,29,33,0.7)', borderRadius: 10, padding: '10px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
+            <button className="hv-white75" onClick={cancelEdit} style={{ background: 'rgba(var(--surf-rgb),0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: 10, padding: '10px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
               Cancel
             </button>
             <button className="hv-brighten" onClick={saveEdit} style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '10px 20px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>
@@ -552,7 +552,7 @@ export default function OrderDetails({ ctx }) {
             </button>
           </>
         ) : (
-          <button className="hv-border-accent" onClick={startEdit} style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.75)', color: '#8E0E22', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-border-accent" onClick={startEdit} style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: '#8E0E22', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
             <SquarePen size={15} aria-hidden="true" />
             Edit custom details
           </button>
@@ -569,16 +569,16 @@ export default function OrderDetails({ ctx }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Items</span>
-            {order.items.length === 0 && <span style={{ fontSize: 13, color: '#6B7280' }}>No line items recorded for this entry.</span>}
+            {order.items.length === 0 && <span style={{ fontSize: 13, color: 'var(--mute)' }}>No line items recorded for this entry.</span>}
             {order.items.map((it, i) => {
               const ct = condTone(it.condition);
               return (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, ...surfaceSubtle, borderRadius: 12, padding: '12px 14px' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                     <span style={{ fontSize: 15, fontWeight: 600 }}>{it.name}</span>
-                    <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{it.sku}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{it.sku}</span>
                   </div>
-                  <span style={{ fontFamily: MONO, fontSize: 13, color: '#5B616B' }}>×{it.qty}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: 'var(--mute-2)' }}>×{it.qty}</span>
                   <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + ct.border, color: ct.color }}>{it.condition}</span>
                   <DetectedThumb item={it} />
                 </div>
@@ -605,7 +605,7 @@ export default function OrderDetails({ ctx }) {
                         </button>
                       )}
                     </div>
-                    <span style={{ fontFamily: MONO, fontSize: 11, color: '#6B7280' }}>{e.time} · {e.who}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{e.time} · {e.who}</span>
                   </div>
                 </div>
               );
@@ -647,7 +647,7 @@ export default function OrderDetails({ ctx }) {
 
           <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Linked evidence</span>
-            {clips.length === 0 && <span style={{ fontSize: 13, color: '#6B7280' }}>No video filed yet.</span>}
+            {clips.length === 0 && <span style={{ fontSize: 13, color: 'var(--mute)' }}>No video filed yet.</span>}
             {clips.map((e, i) => (
               <button
                 key={i}
@@ -695,8 +695,8 @@ function Breadcrumb({ onBack, crumb, back }) {
       <button className="hv-text-dark" onClick={onBack} style={{ background: 'none', border: 'none', color: '#8E0E22', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
         ← {back || 'Orders'}
       </button>
-      <span style={{ color: '#6B7280' }}>/</span>
-      <span style={{ fontFamily: MONO, color: '#5B616B' }}>{crumb}</span>
+      <span style={{ color: 'var(--mute)' }}>/</span>
+      <span style={{ fontFamily: MONO, color: 'var(--mute-2)' }}>{crumb}</span>
     </div>
   );
 }

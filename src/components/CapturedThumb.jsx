@@ -12,7 +12,7 @@ export default function CapturedThumb({ size = 34, label }) {
       role="img"
       aria-label={label || 'Captured product frame'}
       title={label || 'Captured on video'}
-      style={{ position: 'relative', width: size, height: size, flex: 'none', borderRadius: 9, overflow: 'hidden', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', ...feedBg, boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.1)' }}
+      style={{ position: 'relative', width: size, height: size, flex: 'none', borderRadius: 9, overflow: 'hidden', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', ...feedBg, boxShadow: 'inset 0 0 0 1px rgba(var(--surf-rgb),0.1)' }}
     >
       <Gem size={Math.round(size * 0.46)} aria-hidden="true" style={{ color: 'rgba(255,255,255,0.92)' }} />
       <span style={{ position: 'absolute', inset, border: '1.5px solid #17A35F', borderRadius: 4 }} />

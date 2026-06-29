@@ -43,7 +43,7 @@ function StatusOverlay({ kind }) {
   const danger = kind === 'error';
   return (
     <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(10,8,14,0.45)' }}>
-      <span style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.06em', color: danger ? '#FF8B8B' : 'rgba(255,255,255,0.85)' }}>
+      <span style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.06em', color: danger ? '#FF8B8B' : 'rgba(var(--surf-rgb),0.85)' }}>
         {danger ? 'clip unavailable — retry' : 'buffering…'}
       </span>
     </div>

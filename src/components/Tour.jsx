@@ -55,11 +55,11 @@ export default function Tour({ ctx }) {
           ))}
           <div style={{ flex: 1 }} />
           {s.tourStep > 0 && (
-            <button className="hv-border-accent-strong" onClick={() => tourGo(s.tourStep - 1)} style={{ background: '#FFFFFF', border: '1px solid rgba(110,100,108,0.35)', color: '#374151', borderRadius: 10, padding: '10px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
+            <button className="hv-border-accent-strong" onClick={() => tourGo(s.tourStep - 1)} style={{ background: 'var(--surface)', border: '1px solid rgba(110,100,108,0.35)', color: '#374151', borderRadius: 10, padding: '10px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
               Back
             </button>
           )}
-          <button className="hv-border-accent-strong" onClick={endTour} style={{ background: '#FFFFFF', border: '1px solid rgba(110,100,108,0.35)', color: '#374151', borderRadius: 10, padding: '10px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-border-accent-strong" onClick={endTour} style={{ background: 'var(--surface)', border: '1px solid rgba(110,100,108,0.35)', color: '#374151', borderRadius: 10, padding: '10px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
             Skip
           </button>
           <button className="hv-dark" onClick={() => tourGo(s.tourStep + 1)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '8px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
