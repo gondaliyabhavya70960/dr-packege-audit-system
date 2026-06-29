@@ -29,6 +29,10 @@
   --accent: #8e0e22;
   --accent-2: #7a0b1c;
   --accent-rgb: 142, 14, 34;
+  /* card surface — themeable so Material-style themes can opt into flat white
+     cards with a softer elevation. Defaults reproduce the original glass card. */
+  --card-bg: rgba(var(--surf-rgb), 0.5);
+  --card-shadow: 0 10px 34px -10px rgba(30, 22, 40, 0.2), 0 2px 8px rgba(30, 22, 40, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 0 0 0.5px rgba(255, 255, 255, 0.3);
 }
 
 /* flat, no-blur light variant */
@@ -42,56 +46,29 @@
   --glass-blur: saturate(1.02);
 }
 
-/* dark variant — same maroon accent over dark surfaces */
-[data-theme='midnight'] {
-  --app-bg:
-    radial-gradient(900px 600px at 85% -10%, rgba(211, 43, 71, 0.2), transparent 60%),
-    radial-gradient(800px 600px at -10% 30%, rgba(64, 110, 220, 0.16), transparent 55%),
-    linear-gradient(160deg, #14161c, #0d0e13);
-  --ink: #f3f4f7;
-  --ink-2: #e7e9ee;
-  --mute: #9aa3af;
-  --mute-2: #aab2bd;
-  --surface: #191c22;
-  --surface-border: #2b313b;
-  --surface-soft: #20242c;
-  --surface-soft-border: #2b313b;
-  --hairline: #262b33;
-  --surf-rgb: 41, 46, 56;
-  --ink-rgb: 231, 233, 238;
-  --glass-blur: blur(40px) saturate(1.3);
-}
-
-/* Devias / MUI-store look — clean light SaaS, indigo accent, flat cards */
-[data-theme='devias'] {
-  --app-bg: linear-gradient(180deg, #f8f9fb, #f1f3f7);
-  --surface: #ffffff;
-  --surface-border: #e6e8ee;
-  --surface-soft: #f4f6f9;
-  --surface-soft-border: #e9ecf2;
-  --hairline: #eef0f4;
-  --glass-blur: saturate(1.02);
-  --accent: #635bff;
-  --accent-2: #4f46e5;
-  --accent-rgb: 99, 91, 255;
-}
-
-/* Materialize — Material Design admin, purple primary, soft elevation */
+/* Materialize — Material Design admin (pixinvent), purple primary, light
+   vertical menu + floating navbar, flat white cards with soft elevation. */
 [data-theme='materialize'] {
-  --app-bg: linear-gradient(180deg, #f8f7fa, #f1f0f7);
+  --app-bg: #f8f7fa;
+  --ink: #2f2b3d;
+  --ink-2: #444050;
+  --mute: #6f6b7d;
+  --mute-2: #5d596c;
   --surface: #ffffff;
-  --surface-border: #e7e6ef;
-  --surface-soft: #f5f4f9;
+  --surface-border: #e9e7f1;
+  --surface-soft: #f5f4fa;
   --surface-soft-border: #ebeaf3;
   --hairline: #eeedf6;
   --glass-blur: saturate(1.02);
   --accent: #7367f0;
   --accent-2: #5e50ee;
   --accent-rgb: 115, 103, 240;
+  --card-bg: #ffffff;
+  --card-shadow: 0 3px 12px 0 rgba(47, 43, 61, 0.14);
 }
 
-/* Devias Pro: same clean light content as Devias, paired with a permanent
-   dark navy sidebar (the layout rules live in the .devias-* block below). */
+/* Devias Pro palette: clean light content paired with a permanent dark navy
+   sidebar (the shared vertical-menu layout lives in the .sb-* block below). */
 [data-theme='devias-pro'] {
   --app-bg: #f8f9fb;
   --surface: #ffffff;
@@ -105,13 +82,18 @@
   --accent-rgb: 99, 91, 255;
 }
 
-/* ---- Devias Pro sidebar layout ---- */
-.devias-shell {
+/* ============================================================
+   Vertical-menu layout — shared by Devias Pro (dark sidebar) and
+   Materialize (light vertical menu). The base rules below style the
+   dark Devias Pro skin; the Materialize skin overrides come after the
+   media queries. Sizing/structure is identical for both.
+   ============================================================ */
+.sb-shell {
   display: flex;
   align-items: stretch;
   min-height: 100vh;
 }
-.devias-sidebar {
+.sb-aside {
   width: 280px;
   flex: none;
   height: 100vh;
@@ -126,7 +108,7 @@
   color: rgba(255, 255, 255, 0.86);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
-.dv-brand {
+.sb-brand {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -135,7 +117,7 @@
   cursor: pointer;
   padding: 6px 8px 14px;
 }
-.dv-brand-mark {
+.sb-brand-mark {
   width: 38px;
   height: 38px;
   flex: none;
@@ -146,13 +128,13 @@
   justify-content: center;
   box-shadow: 0 6px 16px -6px rgba(var(--accent-rgb), 0.7);
 }
-.dv-brand-name {
+.sb-brand-name {
   font-size: 19px;
   font-weight: 800;
   letter-spacing: -0.01em;
   color: #fff;
 }
-.dv-workspace {
+.sb-ws {
   display: flex;
   align-items: center;
   gap: 11px;
@@ -162,7 +144,7 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.07);
 }
-.dv-ws-avatar {
+.sb-ws-avatar {
   width: 34px;
   height: 34px;
   flex: none;
@@ -175,27 +157,27 @@
   font-size: 14px;
   font-weight: 800;
 }
-.dv-ws-text {
+.sb-ws-text {
   display: flex;
   flex-direction: column;
   line-height: 1.25;
   flex: 1;
   min-width: 0;
 }
-.dv-ws-label {
+.sb-ws-label {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.5);
 }
-.dv-ws-name {
+.sb-ws-name {
   font-size: 14px;
   font-weight: 700;
   color: #fff;
 }
-.dv-ws-chev {
+.sb-ws-chev {
   flex: none;
   color: rgba(255, 255, 255, 0.5);
 }
-.dv-section {
+.sb-section {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -203,12 +185,12 @@
   color: rgba(255, 255, 255, 0.38);
   padding: 14px 12px 6px;
 }
-.dv-nav-group {
+.sb-nav-group {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
-.dv-nav {
+.sb-nav {
   position: relative;
   display: flex;
   align-items: center;
@@ -225,18 +207,18 @@
   color: rgba(255, 255, 255, 0.55);
   transition: background 0.16s ease, color 0.16s ease;
 }
-.dv-nav:hover {
+.sb-nav:hover {
   background: rgba(255, 255, 255, 0.04);
   color: rgba(255, 255, 255, 0.9);
 }
-.dv-nav.is-active {
+.sb-nav.is-active {
   background: rgba(255, 255, 255, 0.06);
   color: #fff;
 }
-.dv-nav.is-active .dv-nav-icon {
+.sb-nav.is-active .sb-nav-icon {
   color: var(--accent);
 }
-.dv-nav.is-active::before {
+.sb-nav.is-active::before {
   content: '';
   position: absolute;
   left: -16px;
@@ -247,18 +229,18 @@
   border-radius: 0 3px 3px 0;
   background: var(--accent);
 }
-.dv-nav-icon {
+.sb-nav-icon {
   flex: none;
   color: rgba(255, 255, 255, 0.55);
 }
-.dv-nav-label {
+.sb-nav-label {
   flex: 1;
   min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.dv-nav-badge {
+.sb-nav-badge {
   font-size: 11px;
   font-weight: 700;
   padding: 1px 8px;
@@ -266,7 +248,7 @@
   background: rgba(var(--accent-rgb), 0.22);
   color: #c7c3ff;
 }
-.dv-side-foot {
+.sb-foot {
   margin-top: auto;
   padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -274,14 +256,14 @@
   flex-direction: column;
   gap: 3px;
 }
-.devias-main {
+.sb-main {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
-.devias-header {
+.sb-header {
   flex: none;
   height: 64px;
   display: flex;
@@ -294,7 +276,7 @@
   background: var(--surface);
   border-bottom: 1px solid var(--surface-border);
 }
-.dv-search {
+.sb-search {
   display: flex;
   align-items: center;
   gap: 9px;
@@ -306,7 +288,7 @@
   background: var(--surface-soft);
   border: 1px solid var(--surface-soft-border);
 }
-.dv-search input {
+.sb-search input {
   flex: 1;
   min-width: 0;
   border: none;
@@ -315,7 +297,7 @@
   font-size: 14px;
   color: var(--ink-2);
 }
-.dv-icon-btn {
+.sb-icon-btn {
   position: relative;
   width: 40px;
   height: 40px;
@@ -329,7 +311,7 @@
   background: var(--surface);
   border: 1px solid var(--surface-border);
 }
-.dv-dot {
+.sb-dot {
   position: absolute;
   top: 9px;
   right: 10px;
@@ -339,7 +321,7 @@
   background: #f43f5e;
   border: 2px solid var(--surface);
 }
-.devias-content {
+.sb-content {
   flex: 1;
   min-height: 0;
   overflow: auto;
@@ -347,41 +329,106 @@
 
 /* collapse the sidebar to icons on smaller screens */
 @media (max-width: 1024px) {
-  .devias-sidebar {
+  .sb-aside {
     width: 74px;
     padding: 18px 12px;
   }
-  .dv-brand {
+  .sb-brand {
     justify-content: center;
     padding: 6px 0 14px;
   }
-  .dv-brand-name,
-  .dv-ws-text,
-  .dv-ws-chev,
-  .dv-nav-label,
-  .dv-section,
-  .dv-nav-badge {
+  .sb-brand-name,
+  .sb-ws-text,
+  .sb-ws-chev,
+  .sb-nav-label,
+  .sb-section,
+  .sb-nav-badge {
     display: none;
   }
-  .dv-workspace {
+  .sb-ws {
     justify-content: center;
     padding: 8px;
   }
-  .dv-nav {
+  .sb-nav {
     justify-content: center;
     padding: 11px 0;
   }
-  .dv-nav.is-active::before {
+  .sb-nav.is-active::before {
     left: -12px;
   }
 }
 @media (max-width: 640px) {
-  .dv-search {
+  .sb-search {
     display: none;
   }
-  .devias-header {
+  .sb-header {
     padding: 0 14px;
   }
+}
+
+/* ---- Materialize skin: light vertical menu, purple gradient pills, floating navbar ---- */
+[data-theme='materialize'] .sb-aside {
+  background: #ffffff;
+  color: var(--mute);
+  border-right: 1px solid var(--surface-border);
+}
+[data-theme='materialize'] .sb-brand-name {
+  color: var(--mute-2);
+}
+[data-theme='materialize'] .sb-ws {
+  background: rgba(47, 43, 61, 0.06);
+  border-color: transparent;
+}
+[data-theme='materialize'] .sb-ws-avatar {
+  background: linear-gradient(72deg, #9e95f5, #7367f0);
+}
+[data-theme='materialize'] .sb-ws-label,
+[data-theme='materialize'] .sb-ws-chev {
+  color: #a8a5b3;
+}
+[data-theme='materialize'] .sb-ws-name {
+  color: var(--mute-2);
+}
+[data-theme='materialize'] .sb-section {
+  color: #a8a5b3;
+}
+[data-theme='materialize'] .sb-nav,
+[data-theme='materialize'] .sb-nav-icon {
+  color: var(--mute);
+}
+[data-theme='materialize'] .sb-nav:hover {
+  background: rgba(47, 43, 61, 0.06);
+  color: var(--mute-2);
+}
+[data-theme='materialize'] .sb-nav.is-active {
+  background: linear-gradient(72deg, #9e95f5, #7367f0);
+  color: #ffffff;
+  box-shadow: 0 2px 6px 0 rgba(115, 103, 240, 0.48);
+}
+[data-theme='materialize'] .sb-nav.is-active .sb-nav-icon {
+  color: #ffffff;
+}
+[data-theme='materialize'] .sb-nav.is-active::before {
+  display: none;
+}
+[data-theme='materialize'] .sb-nav-badge {
+  background: rgba(var(--accent-rgb), 0.16);
+  color: var(--accent);
+}
+[data-theme='materialize'] .sb-foot {
+  border-top: 1px solid var(--surface-border);
+}
+/* detached, floating navbar (the Materialize default) */
+[data-theme='materialize'] .sb-header {
+  margin: 14px 16px 0;
+  height: 60px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px 0 rgba(47, 43, 61, 0.14);
+}
+[data-theme='materialize'] .sb-icon-btn {
+  background: var(--surface-soft);
+  border-color: var(--surface-soft-border);
 }
 
 html,
