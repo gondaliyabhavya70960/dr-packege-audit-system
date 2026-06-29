@@ -102,7 +102,7 @@ export default function Home({ ctx }) {
     const mix = mixOf(lst);
     const total = lst.length;
     return (
-      <div style={{ ...glass, padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ ...glass, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon size={22} aria-hidden="true" />
@@ -116,7 +116,7 @@ export default function Home({ ctx }) {
             <ChevronRight size={14} aria-hidden="true" />
           </button>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
           <Donut data={mix} total={total} />
           <div style={{ flex: 1, minWidth: 180, display: 'flex', flexDirection: 'column', gap: 2 }}>
             {mix.length === 0 && <span style={{ fontSize: 13, color: MUTE }}>No orders in this list yet.</span>}
@@ -157,8 +157,8 @@ export default function Home({ ctx }) {
         <KpiCard accent="#2563EB" title="In transit" value={transitLabel} sub="value on the move" Icon={Truck} />
       </div>
 
-      {/* two working lists with status-mix donuts */}
-      <div className="config-grid">
+      {/* two working lists with status-mix donuts (stretched to equal height) */}
+      <div className="config-grid" style={{ alignItems: 'stretch' }}>
         <DonutCard kind="packaging" label="Packaging orders" sub="Customer orders to pack &amp; dispatch" Icon={Package} lst={packaging} />
         <DonutCard kind="transfer" label="Transferring goods" sub="Inter-branch challans &amp; consignments" Icon={Truck} lst={transfer} />
       </div>
