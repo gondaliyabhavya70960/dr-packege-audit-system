@@ -1,5 +1,6 @@
 import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, Flag, TriangleAlert } from 'lucide-react';
 import { MONO, MUTE, glass, fillTone, ORDER_STATUSES, isTransferOrder } from '../data.js';
+import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 
 // a vector per order status — gives each card a fill cue matching its stage
 const STATUS_ICONS = {
@@ -75,7 +76,7 @@ function KpiCard({ accent, title, value, unit, sub, subColor, Icon }) {
 // Post-login landing: an at-a-glance count of the order book, with the two
 // working lists (packaging vs transferring goods) one tap away.
 export default function Home({ ctx }) {
-  const { s, openList } = ctx;
+  const { s, openList, newOrder } = ctx;
   const sideLabel = s.side === 'store' ? 'Store' : 'Warehouse';
   const orders = s.orders;
 
@@ -161,6 +162,30 @@ export default function Home({ ctx }) {
       <div className="config-grid" style={{ alignItems: 'stretch' }}>
         <DonutCard kind="packaging" label="Packaging orders" sub="Customer orders to pack &amp; dispatch" Icon={Package} lst={packaging} />
         <DonutCard kind="transfer" label="Transferring goods" sub="Inter-branch challans &amp; consignments" Icon={Truck} lst={transfer} />
+      </div>
+
+      {/* quick create — typed new-order shortcuts */}
+      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <span style={{ fontSize: 16, fontWeight: 700 }}>Create a new order</span>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
+          {NEW_ORDER_TYPES.map((o) => (
+            <button
+              key={o.type}
+              onClick={() => newOrder(o.type)}
+              className="hv-border-accent"
+              style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
+            >
+              <span style={{ width: 42, height: 42, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
+                <o.Icon size={21} aria-hidden="true" />
+              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+                <span style={{ fontSize: 15, fontWeight: 700, color: '#1B1D21' }}>{o.label}</span>
+                <span style={{ fontSize: 12.5, color: MUTE }}>{o.sub}</span>
+              </div>
+              <ChevronRight size={18} aria-hidden="true" style={{ color: '#8E0E22', flex: 'none' }} />
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* counts by status */}

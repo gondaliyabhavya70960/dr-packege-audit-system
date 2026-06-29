@@ -1,7 +1,8 @@
 import { MONO, glass, tabMode, fillTone, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
-import { Search, Plus, ChevronRight, ArrowRight, SearchX } from 'lucide-react';
+import { Search, ChevronRight, ArrowRight, SearchX } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
+import NewOrderMenu from '../components/NewOrderMenu.jsx';
 
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
@@ -41,7 +42,7 @@ function StageBadge({ label, mode }) {
 }
 
 export default function Orders({ ctx }) {
-  const { s, set, openOrder, newCustomOrder } = ctx;
+  const { s, set, openOrder, newOrder } = ctx;
 
   const sideLabel = s.side === 'store' ? 'Store' : 'Warehouse';
   const isTransfer = s.listKind === 'transfer';
@@ -86,15 +87,7 @@ export default function Orders({ ctx }) {
           <span style={{ fontSize: 13, color: '#5B616B' }}>{isTransfer ? 'Inter-branch challans & consignments — open one to receive, return or view its detail.' : 'Customer orders to pack & dispatch — open one to pack, return or view its detail.'}</span>
         </div>
         <div style={{ flex: 1 }} />
-        <button
-          data-tour="customorder"
-          className="hv-brighten"
-          onClick={newCustomOrder}
-          style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '11px 18px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}
-        >
-          <Plus size={16} aria-hidden="true" />
-          Custom order details
-        </button>
+        <NewOrderMenu onPick={newOrder} />
       </div>
 
       {/* toolbar: search + filters (raised so the glass dropdowns overlay the table) */}

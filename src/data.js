@@ -694,25 +694,44 @@ export const seedOrders = [...curatedOrders, ...generateOrders(104)];
 
 export const PRIORITY_OPTIONS = ['Standard', 'Express', 'White-glove'];
 
-export function emptyCustomOrder() {
-  return { id: '', channel: 'Online', customer: '', value: '', station: 'AUDIT-BENCH-1', packVideos: [], ...blankCustom };
+// default channel for each "new order" type the create menu offers
+export const ORDER_TYPE_CHANNEL = { ecommerce: 'Online', custom: 'Online', bulk: 'B2B', transfer: 'Store' };
+export function emptyCustomOrder(type) {
+  const orderType = type || 'custom';
+  return { id: '', channel: ORDER_TYPE_CHANNEL[orderType] || 'Online', customer: '', value: '', station: 'AUDIT-BENCH-1', packVideos: [], orderType, items: [{ sku: '', name: '', qty: 1, value: 0 }], ...blankCustom };
+}
+
+// format a rupee amount as the app's compact "₹X.XXL" / "₹n" label
+export function fmtMoney(n) {
+  const v = Number(n) || 0;
+  return v >= 100000 ? '₹' + (v / 100000).toFixed(2) + 'L' : '₹' + v.toLocaleString('en-IN');
+}
+
+// total value of a draft's line items: Σ(qty × unit value)
+export function draftItemsValue(items) {
+  return (items || []).reduce((n, it) => n + (Number(it.qty) || 0) * (Number(it.value) || 0), 0);
 }
 
 // Build an order record from a custom-order draft. Shared by the create form and
 // the leave-and-save dialog so both file an identical order. A pack clip captured
-// in the draft files it as Packed; otherwise it lands as a Draft.
+// in the draft files it as Packed; otherwise it lands as a Draft. The order value
+// is auto-summed from the line items.
 export function buildCustomOrder(d, who) {
   const id = (d.id || '').trim().toUpperCase();
   const op = who || 'admin';
   const packed = (d.packVideos || []).length > 0;
   const timeline = [{ label: 'Custom order created', time: 'today', who: op, clip: false }];
   if (packed) timeline.push({ label: 'Packed · Warehouse', time: 'today', who: op + ' · ' + d.station, clip: true });
+  const src = (d.items || []).filter((it) => (it.sku || '').trim() || (it.name || '').trim());
+  const items = src.map((it) => ({ sku: (it.sku || '').trim() || '—', name: (it.name || '').trim() || 'Item', qty: Number(it.qty) || 1, condition: 'pending' }));
+  const valNum = draftItemsValue(src);
+  const value = valNum > 0 ? fmtMoney(valNum) : (d.value || '').trim() || '—';
   return {
     id, channel: d.channel, customer: (d.customer || '').trim(), phone: '—', address: '—',
     placed: 'today · custom entry', ts: Date.now(),
     statusKey: packed ? 'packed' : 'draft', status: packed ? 'Packed' : 'Draft',
-    tone: 'plain', station: d.station, value: (d.value || '').trim() || '—', valNum: 0,
-    items: [], timeline,
+    tone: 'plain', station: d.station, value, valNum,
+    items, timeline,
     custom: { priority: d.priority, giftWrap: d.giftWrap, insured: d.insured, slot: d.slot, instructions: d.instructions, notes: d.notes },
   };
 }

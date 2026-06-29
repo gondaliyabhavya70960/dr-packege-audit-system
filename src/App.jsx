@@ -266,7 +266,7 @@ export default function App() {
   const signOut = useCallback(() => set({ screen: 'login', password: '', profileMenuOpen: false, adminMenuOpen: false }), [set]);
 
   const openOrder = useCallback((id) => set({ screen: 'order', orderId: id, orderTab: 'detail', orderEditing: false, orderDraft: null, adminMenuOpen: false }), [set]);
-  const newCustomOrder = useCallback(() => set({ createOpen: true, orderDraft: emptyCustomOrder(), adminMenuOpen: false }), [set]);
+  const newOrder = useCallback((type) => set({ createOpen: true, orderDraft: emptyCustomOrder(type), adminMenuOpen: false }), [set]);
 
   // append a remark (comment) to an order — username + timestamp + text,
   // surfaced on the order's Detail/overview thread.
@@ -287,7 +287,7 @@ export default function App() {
     [set]
   );
 
-  const ctx = { s, set, showToast, openSession, logOrderEvent, openPlayer, openList, addRemark, tourGo, openTour, endTour, signOut, openOrder, newCustomOrder };
+  const ctx = { s, set, showToast, openSession, logOrderEvent, openPlayer, openList, addRemark, tourGo, openTour, endTour, signOut, openOrder, newOrder };
 
   const screen = s.screen;
   const isShared = SHARED_SCREENS.includes(screen);
