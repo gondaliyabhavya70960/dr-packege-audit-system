@@ -17,6 +17,7 @@ import Home from './screens/Home.jsx';
 import { emptyCustomOrder } from './data.js';
 import TopBar from './components/TopBar.jsx';
 import TabBar from './components/TabBar.jsx';
+import DeviasShell from './components/DeviasShell.jsx';
 import BackConfirm from './components/BackConfirm.jsx';
 import LeaveConfirm from './components/LeaveConfirm.jsx';
 import CreateOrderModal from './components/CreateOrderModal.jsx';
@@ -325,6 +326,25 @@ export default function App() {
     </>
   );
 
+  // the full set of authenticated screens, role-gated by navigation. The Devias
+  // sidebar layout renders this directly (only the screen matching `screen` shows).
+  const authedContent = (
+    <>
+      {screen === 'kiosk' && <KioskHome ctx={ctx} />}
+      {screen === 'pack' && <PackRecord ctx={ctx} />}
+      {screen === 'recv' && <Receiving ctx={ctx} />}
+      {screen === 'ret' && <ReturnInspection ctx={ctx} />}
+      {screen === 'search' && <SearchPlayback ctx={ctx} />}
+      {DASH_SCREENS.includes(screen) && <Dashboard ctx={ctx} />}
+      {screen === 'config' && <UsersConfig ctx={ctx} />}
+      {sharedScreens}
+    </>
+  );
+
+  // "Devias Pro" swaps the top-bar + floating-tab chrome for a permanent dark
+  // sidebar (login keeps its own full-screen split layout).
+  const useDevias = s.theme === 'devias-pro' && screen !== 'login';
+
   return (
     <div
       style={{
@@ -337,7 +357,9 @@ export default function App() {
     >
       {screen === 'login' && <Login ctx={ctx} />}
 
-      {isOpSurface && (
+      {useDevias && <DeviasShell ctx={ctx}>{authedContent}</DeviasShell>}
+
+      {!useDevias && isOpSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="operator" />
           <div style={{ flex: 1, minHeight: 0, position: 'relative', paddingBottom: 74, overflow: 'auto' }}>
@@ -350,7 +372,7 @@ export default function App() {
         </div>
       )}
 
-      {isAdminSurface && (
+      {!useDevias && isAdminSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="admin" />
           <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 120 }}>
@@ -362,7 +384,7 @@ export default function App() {
         </div>
       )}
 
-      {screen !== 'login' && <TabBar ctx={ctx} />}
+      {screen !== 'login' && !useDevias && <TabBar ctx={ctx} />}
       {s.playerOpen && <SideBySidePlayer ctx={ctx} />}
       {s.backConfirm && <BackConfirm ctx={ctx} />}
       {s.leaveConfirm && <LeaveConfirm ctx={ctx} />}
