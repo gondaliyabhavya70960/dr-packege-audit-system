@@ -5,6 +5,8 @@ const SWATCH = {
   glass: 'linear-gradient(135deg, #f4eef1, #e9eaf3)',
   paper: '#f3f5f8',
   midnight: 'linear-gradient(135deg, #14161c, #2b313b)',
+  devias: 'linear-gradient(135deg, #f4f6f9, #635bff)',
+  materialize: 'linear-gradient(135deg, #f5f4f9, #7367f0)',
 };
 
 // segmented control for the design variation. Renders correctly on every theme
@@ -26,9 +28,9 @@ export default function ThemePicker({ value, onPick, compact }) {
               gap: 2,
               alignItems: 'flex-start',
               flex: compact ? '0 0 auto' : 1,
-              border: '1px solid ' + (on ? '#8E0E22' : 'rgba(var(--ink-rgb),0.15)'),
-              background: on ? 'rgba(142,14,34,0.08)' : 'rgba(var(--surf-rgb),0.5)',
-              color: on ? '#8E0E22' : 'var(--ink-2)',
+              border: '1px solid ' + (on ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.15)'),
+              background: on ? 'rgba(var(--accent-rgb),0.08)' : 'rgba(var(--surf-rgb),0.5)',
+              color: on ? 'var(--accent)' : 'var(--ink-2)',
               borderRadius: 10,
               padding: compact ? '7px 11px' : '9px 12px',
               cursor: 'pointer',

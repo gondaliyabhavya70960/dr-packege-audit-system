@@ -87,7 +87,7 @@ function StatusStage({ order, stage }) {
 
       <div style={{ ...cardLight, padding: 22, display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap', fontSize: 14, color: INK }}>
-          <MapPin size={15} aria-hidden="true" style={{ color: '#8E0E22', flex: 'none' }} />
+          <MapPin size={15} aria-hidden="true" style={{ color: 'var(--accent)', flex: 'none' }} />
           <span style={{ fontWeight: 700 }}>{route.from}</span>
           <ChevronRight size={15} aria-hidden="true" style={{ color: MUTE, flex: 'none' }} />
           <span style={{ fontWeight: 700 }}>{route.to}</span>
@@ -101,12 +101,12 @@ function StatusStage({ order, stage }) {
             return (
               <div key={m.key} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, position: 'relative' }}>
                 {i < JOURNEY.length - 1 && (
-                  <span style={{ position: 'absolute', top: 9, left: '50%', width: '100%', height: 2, background: done ? '#8E0E22' : 'rgba(var(--ink-rgb),0.12)' }} />
+                  <span style={{ position: 'absolute', top: 9, left: '50%', width: '100%', height: 2, background: done ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.12)' }} />
                 )}
-                <span style={{ position: 'relative', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: active ? '#8E0E22' : done ? 'rgba(142,14,34,0.15)' : 'var(--surface)', border: '2px solid ' + (reached ? '#8E0E22' : 'rgba(var(--ink-rgb),0.2)') }}>
+                <span style={{ position: 'relative', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: active ? 'var(--accent)' : done ? 'rgba(var(--accent-rgb),0.15)' : 'var(--surface)', border: '2px solid ' + (reached ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.2)') }}>
                   {active && <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--surface)', animation: 'pulse 1.4s ease-in-out infinite' }} />}
                 </span>
-                <span style={{ fontSize: 12, fontWeight: active ? 700 : 600, color: reached ? '#8E0E22' : 'rgba(var(--ink-rgb),0.4)', textAlign: 'center' }}>{m.label}</span>
+                <span style={{ fontSize: 12, fontWeight: active ? 700 : 600, color: reached ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.4)', textAlign: 'center' }}>{m.label}</span>
               </div>
             );
           })}
@@ -149,12 +149,12 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
             style={{
               display: 'flex', alignItems: 'center', gap: 7, border: 'none', cursor: 'pointer', borderRadius: 11,
               padding: '9px 18px', fontSize: 13.5, fontWeight: 700,
-              background: on ? '#8E0E22' : 'transparent',
+              background: on ? 'var(--accent)' : 'transparent',
               color: on ? '#FFFFFF' : isEmpty ? 'rgba(var(--ink-rgb),0.4)' : 'rgba(var(--ink-rgb),0.65)',
-              boxShadow: on ? '0 4px 14px rgba(142,14,34,0.25)' : 'none',
+              boxShadow: on ? '0 4px 14px rgba(var(--accent-rgb),0.25)' : 'none',
             }}
           >
-            {isEdit && <span style={{ width: 7, height: 7, borderRadius: '50%', background: on ? '#FFFFFF' : '#8E0E22', animation: 'pulse 1.4s ease-in-out infinite' }} />}
+            {isEdit && <span style={{ width: 7, height: 7, borderRadius: '50%', background: on ? '#FFFFFF' : 'var(--accent)', animation: 'pulse 1.4s ease-in-out infinite' }} />}
             {isView && <Lock size={12} aria-hidden="true" style={{ opacity: on ? 0.9 : 0.7 }} />}
             {isStatus && <Truck size={13} aria-hidden="true" style={{ opacity: on ? 0.95 : 0.75 }} />}
             {tb.label}
@@ -264,9 +264,9 @@ function PackingCapture({ orderId, videos, setVideos }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>
-          <Video size={17} aria-hidden="true" style={{ color: '#8E0E22' }} /> Packing video capture
+          <Video size={17} aria-hidden="true" style={{ color: 'var(--accent)' }} /> Packing video capture
         </span>
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{list.length} CLIP{list.length === 1 ? '' : 'S'}</span>
+        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{list.length} CLIP{list.length === 1 ? '' : 'S'}</span>
       </div>
       <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>Record the pack at the bench — start, capture stills, then stop to file each clip against this order. Filed clips appear in the list below.</span>
 
@@ -274,7 +274,7 @@ function PackingCapture({ orderId, videos, setVideos }) {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {list.length === 0 ? (
-          <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '14px 16px', fontSize: 13, color: 'var(--mute)' }}>No clips captured yet — press <strong style={{ color: '#8E0E22' }}>Start recording</strong> above to film the pack.</div>
+          <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '14px 16px', fontSize: 13, color: 'var(--mute)' }}>No clips captured yet — press <strong style={{ color: 'var(--accent)' }}>Start recording</strong> above to film the pack.</div>
         ) : (
           list.map((v, i) => {
             const open = openIdx === i;
@@ -285,7 +285,7 @@ function PackingCapture({ orderId, videos, setVideos }) {
                     onClick={() => setOpenIdx(open ? -1 : i)}
                     aria-label={open ? 'Hide clip' : 'Play clip'}
                     className="hv-accent14"
-                    style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer' }}
+                    style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer' }}
                   >
                     <Play size={15} aria-hidden="true" />
                   </button>
@@ -315,7 +315,7 @@ function ReadRow({ label, value, accent }) {
   return (
     <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, padding: '9px 0', borderBottom: '1px solid ' + HAIRLINE }}>
       <span style={{ fontSize: 13, color: MUTE, width: 130, flex: 'none' }}>{label}</span>
-      <span style={{ fontSize: 14, fontWeight: accent ? 700 : 600, color: accent ? '#8E0E22' : INK, textWrap: 'pretty' }}>{value || '—'}</span>
+      <span style={{ fontSize: 14, fontWeight: accent ? 700 : 600, color: accent ? 'var(--accent)' : INK, textWrap: 'pretty' }}>{value || '—'}</span>
     </div>
   );
 }
@@ -325,7 +325,7 @@ const ORDER_TYPE_META = {
   ecommerce: { title: 'New e-commerce order', sub: 'An online customer order — add its products, handling and pack video. It joins the orders list under the same ID.', Icon: ShoppingCart, color: '#2563EB' },
   bulk: { title: 'New bulk order', sub: 'A wholesale / B2B consignment — add its products, handling and audit notes, then file the pack video.', Icon: Boxes, color: '#9A6A00' },
   transfer: { title: 'New transfer order', sub: 'An inter-branch challan — add its products and notes. It joins the orders list and links to any video filed under the same ID.', Icon: Truck, color: '#0E8A50' },
-  custom: { title: 'Custom order details', sub: 'Record a bespoke order with its products, handling and audit notes. It joins the orders list and links to any video filed under the same ID.', Icon: Sparkles, color: '#8E0E22' },
+  custom: { title: 'Custom order details', sub: 'Record a bespoke order with its products, handling and audit notes. It joins the orders list and links to any video filed under the same ID.', Icon: Sparkles, color: 'var(--accent)' },
 };
 
 const STATION_OPTS = ['AUDIT-BENCH-1', 'PACK-BENCH-1', 'PACK-BENCH-2', 'STORE-RECV-1', 'STORE-RECV-2', 'RETURNS-1'].map((v) => ({ value: v, label: v }));
@@ -386,10 +386,10 @@ export function CreateOrderForm({ ctx, onClose }) {
           <meta.Icon size={23} aria-hidden="true" />
         </span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: 1, minWidth: 0 }}>
-          <span style={{ fontSize: 20, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>{meta.title}</span>
+          <span style={{ fontSize: 20, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.01em' }}>{meta.title}</span>
           <span style={{ fontSize: 14, color: 'var(--mute-2)' }}>{meta.sub}</span>
         </div>
-        <button onClick={testFill} className="hv-border-accent" style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 'none', background: 'rgba(142,14,34,0.06)', border: '1px solid rgba(142,14,34,0.25)', color: '#8E0E22', borderRadius: 999, padding: '7px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+        <button onClick={testFill} className="hv-border-accent" style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 'none', background: 'rgba(var(--accent-rgb),0.06)', border: '1px solid rgba(var(--accent-rgb),0.25)', color: 'var(--accent)', borderRadius: 999, padding: '7px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
           <Sparkles size={14} aria-hidden="true" /> Test fill
         </button>
       </div>
@@ -430,14 +430,14 @@ export function CreateOrderForm({ ctx, onClose }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: 'var(--mute)' }}>ITEMS *</span>
-          <button onClick={addItem} className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '6px 13px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>
+          <button onClick={addItem} className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '6px 13px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>
             <Plus size={14} aria-hidden="true" /> Add item
           </button>
         </div>
         {items.length === 0 && <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '12px 14px', fontSize: 13, color: 'var(--mute)' }}>No items yet — add at least one product.</div>}
         {items.map((it, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(142,14,34,0.08)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Gem size={16} aria-hidden="true" /></span>
+            <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Gem size={16} aria-hidden="true" /></span>
             <input className="fc-accent" value={it.sku} onChange={(e) => updItem(i, 'sku', e.target.value)} placeholder="SKU" style={{ ...inputStyle, fontFamily: MONO, flex: '0 0 128px', minWidth: 0 }} />
             <input className="fc-accent" value={it.name} onChange={(e) => updItem(i, 'name', e.target.value)} placeholder="Item name · detail" style={{ ...inputStyle, flex: 1, minWidth: 0 }} />
             <input className="fc-accent" value={it.qty} onChange={(e) => updItem(i, 'qty', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" aria-label="Quantity" style={{ ...inputStyle, flex: '0 0 52px', textAlign: 'center', padding: '9px 6px' }} />
@@ -464,7 +464,7 @@ export function CreateOrderForm({ ctx, onClose }) {
           Cancel
         </button>
         <div style={{ flex: 1 }} />
-        <button className="hv-brighten" onClick={saveCreate} style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '12px 24px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>
+        <button className="hv-brighten" onClick={saveCreate} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '12px 24px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
           Save custom order
         </button>
       </div>
@@ -530,7 +530,7 @@ export default function OrderDetails({ ctx }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
             <span style={{ fontFamily: MONO, fontSize: 20, fontWeight: 500 }}>{order.id}</span>
             <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', padding: '5px 12px', borderRadius: 999, background: t.bg, color: t.color, border: '1px solid ' + t.border }}>{order.status}</span>
-            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{order.channel.toUpperCase()}</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{order.channel.toUpperCase()}</span>
           </div>
           <span style={{ fontSize: 14, color: MUTE }}>{order.customer} · {order.value} · placed {order.placed}</span>
         </div>
@@ -538,7 +538,7 @@ export default function OrderDetails({ ctx }) {
         {activeTab === 'detail' && (
           <>
         {hasPair && (
-          <button className="hv-accent14" onClick={() => openPlayer(order.id, -1, 'order')} style={{ background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-accent14" onClick={() => openPlayer(order.id, -1, 'order')} style={{ background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
             Open side-by-side ▸
           </button>
         )}
@@ -547,12 +547,12 @@ export default function OrderDetails({ ctx }) {
             <button className="hv-white75" onClick={cancelEdit} style={{ background: 'rgba(var(--surf-rgb),0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: 10, padding: '10px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
               Cancel
             </button>
-            <button className="hv-brighten" onClick={saveEdit} style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '10px 20px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>
+            <button className="hv-brighten" onClick={saveEdit} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '10px 20px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
               Save changes
             </button>
           </>
         ) : (
-          <button className="hv-border-accent" onClick={startEdit} style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: '#8E0E22', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-border-accent" onClick={startEdit} style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: 'var(--accent)', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
             <SquarePen size={15} aria-hidden="true" />
             Edit custom details
           </button>
@@ -593,14 +593,14 @@ export default function OrderDetails({ ctx }) {
               return (
                 <div key={i} style={{ display: 'flex', gap: 12 }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 'none' }}>
-                    <span style={{ width: 12, height: 12, borderRadius: '50%', background: last ? '#8E0E22' : 'rgba(142,14,34,0.25)', border: '2px solid #fff', boxShadow: '0 0 0 1px rgba(142,14,34,0.25)' }} />
-                    {!last && <span style={{ width: 2, flex: 1, minHeight: 28, background: 'rgba(142,14,34,0.15)' }} />}
+                    <span style={{ width: 12, height: 12, borderRadius: '50%', background: last ? 'var(--accent)' : 'rgba(var(--accent-rgb),0.25)', border: '2px solid #fff', boxShadow: '0 0 0 1px rgba(var(--accent-rgb),0.25)' }} />
+                    {!last && <span style={{ width: 2, flex: 1, minHeight: 28, background: 'rgba(var(--accent-rgb),0.15)' }} />}
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2, paddingBottom: last ? 0 : 14 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{ fontSize: 14, fontWeight: 600 }}>{e.label}</span>
                       {e.clip && (
-                        <button onClick={() => openPlayer(order.id, -1, 'order')} aria-label="Play clip" className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '2px 9px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
+                        <button onClick={() => openPlayer(order.id, -1, 'order')} aria-label="Play clip" className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '2px 9px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
                           <Play size={11} aria-hidden="true" /> clip
                         </button>
                       )}
@@ -626,10 +626,10 @@ export default function OrderDetails({ ctx }) {
             <ReadRow label="Station" value={order.station} />
           </div>
 
-          <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 12, border: editing ? '1px solid rgba(142,14,34,0.4)' : cardLight.border }}>
+          <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 12, border: editing ? '1px solid rgba(var(--accent-rgb),0.4)' : cardLight.border }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Custom order details</span>
-              {editing && <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(142,14,34,0.1)', color: '#8E0E22' }}>EDITING</span>}
+              {editing && <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)' }}>EDITING</span>}
             </div>
             {editing ? (
               <CustomEditor draft={c} upd={upd} />
@@ -655,7 +655,7 @@ export default function OrderDetails({ ctx }) {
                 className="hv-chip"
                 style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', ...surfaceSubtle, borderRadius: 12, padding: '12px 14px' }}
               >
-                <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Play size={15} aria-hidden="true" /></span>
+                <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Play size={15} aria-hidden="true" /></span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                   <span style={{ fontSize: 14, fontWeight: 600 }}>{e.label}</span>
                   <span style={{ fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>sha-256 · {order.id.replace(/[^a-z0-9]/gi, '').slice(-4).toLowerCase()}{(i + 7).toString(16)}c1…f{i}2 ✓</span>
@@ -692,7 +692,7 @@ export default function OrderDetails({ ctx }) {
 function Breadcrumb({ onBack, crumb, back }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
-      <button className="hv-text-dark" onClick={onBack} style={{ background: 'none', border: 'none', color: '#8E0E22', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
+      <button className="hv-text-dark" onClick={onBack} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
         ← {back || 'Orders'}
       </button>
       <span style={{ color: 'var(--mute)' }}>/</span>

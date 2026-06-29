@@ -21,10 +21,10 @@ export default function KioskHome({ ctx }) {
 
   return (
     <div data-screen-label="02 Kiosk home" style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, padding: 28, overflow: 'auto' }}>
-      <div style={{ width: 100, height: 100, flex: 'none', borderRadius: '50%', background: 'rgba(var(--surf-rgb),0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(142,14,34,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'ringPulse 2.6s ease-out infinite' }}>
+      <div style={{ width: 100, height: 100, flex: 'none', borderRadius: '50%', background: 'rgba(var(--surf-rgb),0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(var(--accent-rgb),0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'ringPulse 2.6s ease-out infinite' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 3, height: 30 }}>
           {bars.map(([w, h], i) => (
-            <div key={i} style={{ width: w, height: h, background: '#8E0E22' }} />
+            <div key={i} style={{ width: w, height: h, background: 'var(--accent)' }} />
           ))}
         </div>
       </div>
@@ -45,7 +45,7 @@ export default function KioskHome({ ctx }) {
             <button
               key={m.id}
               onClick={() => set({ mode: m.id })}
-              style={{ border: 'none', cursor: 'pointer', borderRadius: 10, padding: '9px 22px', fontSize: 14, fontWeight: 700, background: on ? '#8E0E22' : 'transparent', color: on ? '#FFFFFF' : 'rgba(var(--ink-rgb),0.65)', boxShadow: on ? '0 4px 14px rgba(142,14,34,0.25)' : 'none' }}
+              style={{ border: 'none', cursor: 'pointer', borderRadius: 10, padding: '9px 22px', fontSize: 14, fontWeight: 700, background: on ? 'var(--accent)' : 'transparent', color: on ? '#FFFFFF' : 'rgba(var(--ink-rgb),0.65)', boxShadow: on ? '0 4px 14px rgba(var(--accent-rgb),0.25)' : 'none' }}
             >
               {m.label}
             </button>
@@ -54,7 +54,7 @@ export default function KioskHome({ ctx }) {
       </div>
 
       <div data-tour="scanner" style={{ ...glass, width: 700, maxWidth: '94%', padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <div style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: '#8E0E22' }}>DEMO SCANNER — TAP TO SIMULATE A HID SCAN</div>
+        <div style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: 'var(--accent)' }}>DEMO SCANNER — TAP TO SIMULATE A HID SCAN</div>
         <div className="demo-chip-grid">
           {demoChips.map((d) => (
             <button
@@ -79,7 +79,7 @@ export default function KioskHome({ ctx }) {
             placeholder="…or type any ID and press Enter (ORD-… / RFID-… / DC-…)"
             style={{ flex: 1, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.06)', borderRadius: 10, padding: '11px 18px', color: 'var(--ink-2)', fontSize: 13, outline: 'none', fontFamily: MONO }}
           />
-          <button className="hv-brighten" onClick={doScan} style={{ background: '#8E0E22', border: 'none', color: '#FFFFFF', borderRadius: 14, padding: '11px 26px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 8px 22px -8px rgba(142,14,34,0.6), inset 0 1px 0 rgba(var(--surf-rgb),0.25)' }}>
+          <button className="hv-brighten" onClick={doScan} style={{ background: 'var(--accent)', border: 'none', color: '#FFFFFF', borderRadius: 14, padding: '11px 26px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 8px 22px -8px rgba(var(--accent-rgb),0.6), inset 0 1px 0 rgba(var(--surf-rgb),0.25)' }}>
             Scan
           </button>
         </div>

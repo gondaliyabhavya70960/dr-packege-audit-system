@@ -40,7 +40,7 @@ export default function ReturnInspection({ ctx }) {
         <span style={{ fontFamily: MONO, fontSize: 16, color: 'var(--ink-2)', marginLeft: 8 }}>{fmt(s.recSec)}</span>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
           <RecordButton recording={rec} onToggle={toggleRec} size="sm" />
-          <button className="hv-accent14" onClick={() => openPlayer(s.retId, -1, 'ret')} style={{ background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-accent14" onClick={() => openPlayer(s.retId, -1, 'ret')} style={{ background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
             Open side-by-side
           </button>
         </div>
@@ -70,7 +70,7 @@ export default function ReturnInspection({ ctx }) {
             <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, padding: '3px 9px', borderRadius: 999, background: 'rgba(var(--surf-rgb),0.45)', color: 'var(--mute)' }}>packed 12 Jun · PACK-BENCH-1</span>
           </div>
           <div style={{ flex: 1, margin: 12, borderRadius: 14, ...feedBg, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 180, position: 'relative' }}>
-            <span style={{ width: 54, height: 54, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', fontSize: 18, background: 'rgba(142,14,34,0.9)' }}>▶</span>
+            <span style={{ width: 54, height: 54, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', fontSize: 18, background: 'rgba(var(--accent-rgb),0.9)' }}>▶</span>
             <span style={{ position: 'absolute', bottom: 10, left: 12, fontFamily: MONO, fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>[ pack video — same order ID ]</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', padding: '0 12px 12px' }}>
@@ -87,7 +87,7 @@ export default function ReturnInspection({ ctx }) {
             <button
               key={r}
               onClick={() => set({ retReason: r, retNeedReason: false })}
-              style={{ cursor: 'pointer', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, border: '1px solid ' + (active ? 'rgba(142,14,34,0.7)' : 'rgba(0,0,0,0.14)'), background: active ? 'rgba(142,14,34,0.1)' : 'transparent', color: active ? '#8E0E22' : 'var(--mute-2)' }}
+              style={{ cursor: 'pointer', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, border: '1px solid ' + (active ? 'rgba(var(--accent-rgb),0.7)' : 'rgba(0,0,0,0.14)'), background: active ? 'rgba(var(--accent-rgb),0.1)' : 'transparent', color: active ? 'var(--accent)' : 'var(--mute-2)' }}
             >
               {r}
             </button>
@@ -98,7 +98,7 @@ export default function ReturnInspection({ ctx }) {
         <button className="hv-red05" onClick={flagRet} style={{ background: 'var(--surface)', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: '12px 24px', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
           Flag → hold refund
         </button>
-        <button className="hv-brighten" onClick={acceptRet} style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '12px 24px', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>
+        <button className="hv-brighten" onClick={acceptRet} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '12px 24px', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
           Accept → restock
         </button>
       </div>

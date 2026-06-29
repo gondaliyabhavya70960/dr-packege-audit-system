@@ -1,6 +1,6 @@
 // Seed data, palette tones and shared helpers ported from the design prototype.
 
-export const ACCENT = '#8E0E22';
+export const ACCENT = 'var(--accent)';
 export const RED = '#C62B22';
 export const GREEN = '#0E8A50';
 export const PLAIN = '#1B1D21';
@@ -746,11 +746,15 @@ export function synthOrder(id) {
   };
 }
 
-// selectable UI design variations (the brand colour is constant across all)
+// selectable UI design variations. Glass / Paper / Midnight keep the brand
+// maroon; Devias and Materialize re-skin the accent (indigo / purple) to match
+// those design systems. All accents are driven by the --accent CSS variables.
 export const THEMES = [
   { key: 'glass', label: 'Liquid Glass', sub: 'Light · frosted' },
   { key: 'paper', label: 'Paper', sub: 'Light · flat' },
   { key: 'midnight', label: 'Midnight', sub: 'Dark' },
+  { key: 'devias', label: 'Devias', sub: 'Light · indigo' },
+  { key: 'materialize', label: 'Materialize', sub: 'Material · purple' },
 ];
 
 export const initialState = {

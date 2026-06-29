@@ -30,9 +30,9 @@ export default function UsersConfig({ ctx }) {
             const isAd = u.role === 'admin';
             return (
               <div key={u.name} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(var(--surf-rgb),0.55)', borderRadius: 14, padding: '11px 14px' }}>
-                <span style={{ width: 28, height: 28, flex: 'none', borderRadius: '50%', background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>{u.name.charAt(0).toUpperCase()}</span>
+                <span style={{ width: 28, height: 28, flex: 'none', borderRadius: '50%', background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>{u.name.charAt(0).toUpperCase()}</span>
                 <span style={{ fontSize: 15, fontWeight: 600, flex: 1 }}>{u.name}</span>
-                <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 10px', borderRadius: 999, border: '1px solid ' + (isAd ? 'rgba(142,14,34,0.5)' : 'rgba(0,0,0,0.16)'), color: isAd ? '#8E0E22' : 'var(--mute-2)' }}>{u.role}</span>
+                <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 10px', borderRadius: 999, border: '1px solid ' + (isAd ? 'rgba(var(--accent-rgb),0.5)' : 'rgba(0,0,0,0.16)'), color: isAd ? 'var(--accent)' : 'var(--mute-2)' }}>{u.role}</span>
               </div>
             );
           })}
@@ -47,7 +47,7 @@ export default function UsersConfig({ ctx }) {
               placeholder="name…"
               style={{ flex: 1, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.06)', borderRadius: 10, padding: '10px 16px', color: 'var(--ink-2)', fontSize: 14, outline: 'none' }}
             />
-            <button className="hv-accent14" onClick={addUser} style={{ background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+            <button className="hv-accent14" onClick={addUser} style={{ background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 10, padding: '10px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
               + Add operator
             </button>
           </div>
@@ -73,9 +73,9 @@ export default function UsersConfig({ ctx }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
               <span style={{ fontSize: 12, color: 'var(--mute)' }}>Storage by tier · monthly growth +38 GB</span>
               <div style={{ display: 'flex', height: 10, borderRadius: 999, overflow: 'hidden', gap: 2 }}>
-                <div style={{ width: '22%', background: '#8E0E22' }} />
-                <div style={{ width: '33%', background: 'rgba(142,14,34,0.45)' }} />
-                <div style={{ width: '45%', background: 'rgba(142,14,34,0.15)' }} />
+                <div style={{ width: '22%', background: 'var(--accent)' }} />
+                <div style={{ width: '33%', background: 'rgba(var(--accent-rgb),0.45)' }} />
+                <div style={{ width: '45%', background: 'rgba(var(--accent-rgb),0.15)' }} />
               </div>
               <div style={{ display: 'flex', gap: 14, fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>
                 <span>hot 96 GB</span>
@@ -91,7 +91,7 @@ export default function UsersConfig({ ctx }) {
             {thresholds.map(([label, value]) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(var(--surf-rgb),0.55)', borderRadius: 14, padding: '11px 14px' }}>
                 <span style={{ fontSize: 14, fontWeight: 600, flex: 1 }}>{label}</span>
-                <span style={{ fontFamily: MONO, fontSize: 13, color: '#8E0E22' }}>{value}</span>
+                <span style={{ fontFamily: MONO, fontSize: 13, color: 'var(--accent)' }}>{value}</span>
               </div>
             ))}
           </div>

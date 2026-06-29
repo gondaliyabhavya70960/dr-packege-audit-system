@@ -45,7 +45,7 @@ export default function TabBar({ ctx }) {
     padding: '10px 18px',
     fontSize: 13.5,
     fontWeight: 700,
-    background: active ? '#8E0E22' : 'transparent',
+    background: active ? 'var(--accent)' : 'transparent',
     color: active ? '#FFFFFF' : 'rgba(40,32,38,0.7)',
     transition: 'background 0.18s ease, color 0.18s ease',
   });
@@ -119,11 +119,11 @@ export default function TabBar({ ctx }) {
                               set({ screen: n.id, adminMenuOpen: false });
                             }
                           }}
-                          style={{ display: 'flex', alignItems: 'center', gap: 8, textAlign: 'left', border: 'none', cursor: 'pointer', borderRadius: 11, padding: '10px 12px', fontSize: 14, fontWeight: 600, background: active ? 'rgba(142,14,34,0.14)' : 'transparent', color: active ? '#8E0E22' : 'var(--ink-2)' }}
+                          style={{ display: 'flex', alignItems: 'center', gap: 8, textAlign: 'left', border: 'none', cursor: 'pointer', borderRadius: 11, padding: '10px 12px', fontSize: 14, fontWeight: 600, background: active ? 'rgba(var(--accent-rgb),0.14)' : 'transparent', color: active ? 'var(--accent)' : 'var(--ink-2)' }}
                         >
                           <span style={{ flex: 1 }}>{n.label}</span>
                           {n.badge && (
-                            <span style={{ fontFamily: MONO, fontSize: 11, padding: '1px 8px', borderRadius: 999, background: 'rgba(142,14,34,0.14)', color: '#8E0E22' }}>{n.badge}</span>
+                            <span style={{ fontFamily: MONO, fontSize: 11, padding: '1px 8px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.14)', color: 'var(--accent)' }}>{n.badge}</span>
                           )}
                         </button>
                       );

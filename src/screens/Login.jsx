@@ -22,7 +22,7 @@ export default function Login({ ctx }) {
 
   return (
     <div data-screen-label="01 Login" className="login-split">
-      <div style={{ background: 'radial-gradient(900px 600px at 80% 20%, #A81330, #7C0A1A 70%)', color: '#FFFFFF', padding: '44px 48px', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ background: 'radial-gradient(900px 600px at 80% 20%, var(--accent), var(--accent-2) 70%)', color: '#FFFFFF', padding: '44px 48px', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
           <span style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(var(--surf-rgb),0.14)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <PackageIcon size={20} color="#FFFFFF" />
@@ -43,10 +43,10 @@ export default function Login({ ctx }) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ width: 44, height: 44, borderRadius: 11, background: '#FBE5E8', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
-              <PackageIcon size={20} color="#8E0E22" />
+              <PackageIcon size={20} color="var(--accent)" />
             </span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: '#8E0E22' }}>Order ORD-2026-4471</span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--accent)' }}>Order ORD-2026-4471</span>
               <span style={{ fontSize: 13, color: 'var(--mute)' }}>3 items · Top + Front cameras</span>
             </div>
           </div>
@@ -77,7 +77,7 @@ export default function Login({ ctx }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
         <div style={{ width: 420, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span style={{ fontSize: 30, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>Sign in</span>
+            <span style={{ fontSize: 30, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.01em' }}>Sign in</span>
             <span style={{ fontSize: 15, color: '#4B5563' }}>Enter your credentials to access the console.</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
@@ -116,7 +116,7 @@ export default function Login({ ctx }) {
                     key={o.id}
                     type="button"
                     onClick={() => set({ side: o.id })}
-                    style={{ flex: 1, cursor: 'pointer', borderRadius: 12, padding: '12px 10px', fontSize: 14.5, fontWeight: 700, border: '1px solid ' + (on ? '#8E0E22' : 'rgba(110,100,108,0.35)'), background: on ? '#8E0E22' : 'var(--surface)', color: on ? '#FFFFFF' : 'var(--ink-2)' }}
+                    style={{ flex: 1, cursor: 'pointer', borderRadius: 12, padding: '12px 10px', fontSize: 14.5, fontWeight: 700, border: '1px solid ' + (on ? 'var(--accent)' : 'rgba(110,100,108,0.35)'), background: on ? 'var(--accent)' : 'var(--surface)', color: on ? '#FFFFFF' : 'var(--ink-2)' }}
                   >
                     {o.label}
                   </button>
@@ -133,7 +133,7 @@ export default function Login({ ctx }) {
             data-tour="login"
             className="hv-dark"
             onClick={doLogin}
-            style={{ background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 14, padding: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer', marginTop: 4, boxShadow: '0 8px 22px -8px rgba(142,14,34,0.6), inset 0 1px 0 rgba(var(--surf-rgb),0.25)' }}
+            style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 14, padding: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer', marginTop: 4, boxShadow: '0 8px 22px -8px rgba(var(--accent-rgb),0.6), inset 0 1px 0 rgba(var(--surf-rgb),0.25)' }}
           >
             Sign in
           </button>
@@ -147,7 +147,7 @@ export default function Login({ ctx }) {
           </div>
           <button
             onClick={openTour}
-            style={{ background: 'none', border: 'none', color: '#8E0E22', fontSize: 14, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', alignSelf: 'center' }}
+            style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: 14, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', alignSelf: 'center' }}
           >
             Take a quick tour
           </button>

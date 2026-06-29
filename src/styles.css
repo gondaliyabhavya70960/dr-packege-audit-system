@@ -26,6 +26,9 @@
   --surf-rgb: 255, 255, 255;
   --ink-rgb: 27, 29, 33;
   --glass-blur: blur(40px) saturate(1.8);
+  --accent: #8e0e22;
+  --accent-2: #7a0b1c;
+  --accent-rgb: 142, 14, 34;
 }
 
 /* flat, no-blur light variant */
@@ -57,6 +60,34 @@
   --surf-rgb: 41, 46, 56;
   --ink-rgb: 231, 233, 238;
   --glass-blur: blur(40px) saturate(1.3);
+}
+
+/* Devias / MUI-store look — clean light SaaS, indigo accent, flat cards */
+[data-theme='devias'] {
+  --app-bg: linear-gradient(180deg, #f8f9fb, #f1f3f7);
+  --surface: #ffffff;
+  --surface-border: #e6e8ee;
+  --surface-soft: #f4f6f9;
+  --surface-soft-border: #e9ecf2;
+  --hairline: #eef0f4;
+  --glass-blur: saturate(1.02);
+  --accent: #635bff;
+  --accent-2: #4f46e5;
+  --accent-rgb: 99, 91, 255;
+}
+
+/* Materialize — Material Design admin, purple primary, soft elevation */
+[data-theme='materialize'] {
+  --app-bg: linear-gradient(180deg, #f8f7fa, #f1f0f7);
+  --surface: #ffffff;
+  --surface-border: #e7e6ef;
+  --surface-soft: #f5f4f9;
+  --surface-soft-border: #ebeaf3;
+  --hairline: #eeedf6;
+  --glass-blur: saturate(1.02);
+  --accent: #7367f0;
+  --accent-2: #5e50ee;
+  --accent-rgb: 115, 103, 240;
 }
 
 html,
@@ -115,7 +146,7 @@ textarea {
 }
 
 ::selection {
-  background: rgba(142, 14, 34, 0.18);
+  background: rgba(var(--accent-rgb), 0.18);
 }
 
 @keyframes pulse {
@@ -129,13 +160,13 @@ textarea {
 }
 @keyframes ringPulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(142, 14, 34, 0.25);
+    box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.25);
   }
   70% {
-    box-shadow: 0 0 0 26px rgba(142, 14, 34, 0);
+    box-shadow: 0 0 0 26px rgba(var(--accent-rgb), 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(142, 14, 34, 0);
+    box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0);
   }
 }
 @keyframes feedDrift {
@@ -162,7 +193,7 @@ textarea {
   filter: brightness(1.06);
 }
 .hv-dark:hover {
-  background: #7a0b1c !important;
+  background: var(--accent-2) !important;
 }
 .hv-white65:hover {
   background: rgba(var(--surf-rgb), 0.65) !important;
@@ -177,7 +208,7 @@ textarea {
   background: rgba(var(--surf-rgb), 0.85) !important;
 }
 .hv-accent14:hover {
-  background: rgba(142, 14, 34, 0.14) !important;
+  background: rgba(var(--accent-rgb), 0.14) !important;
 }
 .hv-red05:hover {
   background: rgba(229, 62, 62, 0.05) !important;
@@ -186,13 +217,13 @@ textarea {
   background: rgba(229, 62, 62, 0.08) !important;
 }
 .hv-border-accent:hover {
-  border-color: rgba(142, 14, 34, 0.5) !important;
+  border-color: rgba(var(--accent-rgb), 0.5) !important;
 }
 .hv-border-accent-strong:hover {
-  border-color: #8e0e22 !important;
+  border-color: var(--accent) !important;
 }
 .hv-chip:hover {
-  border-color: rgba(142, 14, 34, 0.5) !important;
+  border-color: rgba(var(--accent-rgb), 0.5) !important;
   background: #eff5fe !important;
 }
 .hv-text-dark:hover {
@@ -202,10 +233,10 @@ textarea {
   color: rgba(var(--ink-rgb), 0.65) !important;
 }
 .fc-accent:focus {
-  border-color: #8e0e22 !important;
+  border-color: var(--accent) !important;
 }
 .fc-accent-white:focus {
-  border-color: #8e0e22 !important;
+  border-color: var(--accent) !important;
   background: #ffffff !important;
 }
 
@@ -273,7 +304,7 @@ textarea {
   align-items: start;
 }
 .order-row:hover {
-  background: rgba(142, 14, 34, 0.05) !important;
+  background: rgba(var(--accent-rgb), 0.05) !important;
 }
 
 /* Pack / Receive / Return tools rendered inline as a tab on a single order:
@@ -289,7 +320,7 @@ textarea {
 
 /* inline "previous step" mini clip at the bottom of the receive checklist */
 .prev-clip:hover {
-  border-color: rgba(142, 14, 34, 0.5) !important;
+  border-color: rgba(var(--accent-rgb), 0.5) !important;
   box-shadow: 0 8px 20px -10px rgba(30, 22, 40, 0.3) !important;
 }
 
@@ -375,13 +406,13 @@ textarea {
 button:focus-visible,
 a:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(142, 14, 34, 0.35);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.35);
 }
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(142, 14, 34, 0.28);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.28);
 }
 
 /* glassy hover lift for opt-in cards/chips */
@@ -402,7 +433,7 @@ textarea:focus-visible {
 input[type='range'] {
   height: 6px;
   border-radius: 999px !important;
-  accent-color: #8e0e22;
+  accent-color: var(--accent);
 }
 
 /* ---- mobile pass ---- */

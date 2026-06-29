@@ -106,7 +106,7 @@ export default function PackRecord({ ctx }) {
             </div>
           ))}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <button onClick={scanPackItem} disabled={allScanned} style={{ background: 'rgba(142,14,34,0.07)', border: '1px dashed rgba(142,14,34,0.45)', color: '#8E0E22', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer', opacity: allScanned ? 0.4 : 1 }}>
+            <button onClick={scanPackItem} disabled={allScanned} style={{ background: 'rgba(var(--accent-rgb),0.07)', border: '1px dashed rgba(var(--accent-rgb),0.45)', color: 'var(--accent)', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer', opacity: allScanned ? 0.4 : 1 }}>
               Scan item RFID (demo)
             </button>
             <button onClick={() => set({ packUnknown: true })} style={{ background: 'rgba(229,62,62,0.05)', border: '1px dashed rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
@@ -137,7 +137,7 @@ export default function PackRecord({ ctx }) {
           <button data-tour="packactions" className="hv-red05" onClick={flagPack} style={{ flex: 1, background: 'var(--surface)', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
             Flag with evidence
           </button>
-          <button className="hv-brighten" onClick={closePack} disabled={!pass} style={{ flex: 1, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer', opacity: pass ? 1 : 0.4, boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>
+          <button className="hv-brighten" onClick={closePack} disabled={!pass} style={{ flex: 1, background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer', opacity: pass ? 1 : 0.4, boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
             Close session
           </button>
         </div>

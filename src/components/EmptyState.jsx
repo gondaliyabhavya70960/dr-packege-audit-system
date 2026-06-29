@@ -5,7 +5,7 @@ export default function EmptyState({ icon: Icon, title, sub, action }) {
   return (
     <div style={{ ...cardLight, padding: '40px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, textAlign: 'center' }}>
       {Icon && (
-        <span style={{ width: 52, height: 52, borderRadius: 16, background: 'rgba(142,14,34,0.08)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ width: 52, height: 52, borderRadius: 16, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Icon size={26} aria-hidden="true" />
         </span>
       )}
