@@ -147,7 +147,7 @@ export default function Dashboard({ ctx }) {
               <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{r.sub}</span>
             </div>
             <span style={{ fontFamily: MONO, fontSize: 12, color: r.rightColor }}>{r.right}</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, flex: 'none', fontSize: 13, fontWeight: 700, color: '#8E0E22' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, flex: 'none', fontSize: 13, fontWeight: 700, color: 'var(--accent)' }}>
               {r.action === '→' ? (
                 <ArrowRight size={16} aria-hidden="true" />
               ) : (

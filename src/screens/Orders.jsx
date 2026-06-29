@@ -82,7 +82,7 @@ export default function Orders({ ctx }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>{listLabel}</h1>
-            <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{sideLabel.toUpperCase()}</span>
+            <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{sideLabel.toUpperCase()}</span>
           </div>
           <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>{isTransfer ? 'Inter-branch challans & consignments — open one to receive, return or view its detail.' : 'Customer orders to pack & dispatch — open one to pack, return or view its detail.'}</span>
         </div>
@@ -125,9 +125,9 @@ export default function Orders({ ctx }) {
 
       {/* bulk action bar */}
       {s.oSel.length > 0 && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(142,14,34,0.06)', border: '1px solid rgba(142,14,34,0.25)', borderRadius: 14, padding: '10px 16px' }}>
-          <span style={{ fontSize: 14, fontWeight: 700, color: '#8E0E22' }}>{s.oSel.length} selected</span>
-          <button className="hv-accent14" onClick={() => ctx.showToast('Exported ' + s.oSel.length + ' order' + (s.oSel.length === 1 ? '' : 's') + ' to CSV (prototype).')} style={{ background: 'rgba(142,14,34,0.1)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '7px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--accent-rgb),0.06)', border: '1px solid rgba(var(--accent-rgb),0.25)', borderRadius: 14, padding: '10px 16px' }}>
+          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)' }}>{s.oSel.length} selected</span>
+          <button className="hv-accent14" onClick={() => ctx.showToast('Exported ' + s.oSel.length + ' order' + (s.oSel.length === 1 ? '' : 's') + ' to CSV (prototype).')} style={{ background: 'rgba(var(--accent-rgb),0.1)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '7px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
             Export CSV
           </button>
           <div style={{ flex: 1 }} />
@@ -143,7 +143,7 @@ export default function Orders({ ctx }) {
           <div style={{ minWidth: 1200 }}>
             {/* header row */}
             <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 12, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid rgba(0,0,0,0.06)', fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', color: 'var(--mute)' }}>
-              <input type="checkbox" checked={allSel} onChange={toggleAll} style={{ accentColor: '#8E0E22', cursor: 'pointer', width: 15, height: 15 }} />
+              <input type="checkbox" checked={allSel} onChange={toggleAll} style={{ accentColor: 'var(--accent)', cursor: 'pointer', width: 15, height: 15 }} />
               <span>ORDER</span>
               <span>ROUTE</span>
               <span>ITEMS</span>
@@ -164,10 +164,10 @@ export default function Orders({ ctx }) {
                 <div
                   key={o.id}
                   className="order-row"
-                  style={{ display: 'grid', gridTemplateColumns: COLS, gap: 12, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid rgba(0,0,0,0.04)', background: sel ? 'rgba(142,14,34,0.04)' : 'transparent', cursor: 'pointer' }}
+                  style={{ display: 'grid', gridTemplateColumns: COLS, gap: 12, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid rgba(0,0,0,0.04)', background: sel ? 'rgba(var(--accent-rgb),0.04)' : 'transparent', cursor: 'pointer' }}
                   onClick={() => openOrder(o.id)}
                 >
-                  <input type="checkbox" checked={sel} onClick={(e) => e.stopPropagation()} onChange={() => toggleOne(o.id)} style={{ accentColor: '#8E0E22', cursor: 'pointer', width: 15, height: 15 }} />
+                  <input type="checkbox" checked={sel} onClick={(e) => e.stopPropagation()} onChange={() => toggleOne(o.id)} style={{ accentColor: 'var(--accent)', cursor: 'pointer', width: 15, height: 15 }} />
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
                     <span style={{ fontFamily: MONO, fontSize: 14, color: 'var(--ink-2)' }}>{o.id}</span>
                     <span style={{ fontSize: 13, color: 'var(--mute-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o.customer}</span>
@@ -175,7 +175,7 @@ export default function Orders({ ctx }) {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
                     <span title={'From ' + route.from} style={{ fontSize: 12.5, color: 'var(--mute)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{route.from}</span>
                     <span title={'To ' + route.to} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: 'var(--ink-2)', minWidth: 0 }}>
-                      <ArrowRight size={12} aria-hidden="true" style={{ flex: 'none', color: '#8E0E22' }} />
+                      <ArrowRight size={12} aria-hidden="true" style={{ flex: 'none', color: 'var(--accent)' }} />
                       <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{route.to}</span>
                     </span>
                   </div>
@@ -195,7 +195,7 @@ export default function Orders({ ctx }) {
                     <button
                       className="hv-accent14"
                       onClick={(e) => { e.stopPropagation(); openOrder(o.id); }}
-                      style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '7px 16px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '7px 16px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
                     >
                       Open
                       <ChevronRight size={14} aria-hidden="true" />
@@ -212,7 +212,7 @@ export default function Orders({ ctx }) {
                   title="No orders match"
                   sub={'Nothing in ' + listLabel.toLowerCase() + ' matches these filters.'}
                   action={
-                    <button onClick={resetFilters} style={{ marginTop: 4, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                    <button onClick={resetFilters} style={{ marginTop: 4, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
                       Clear filters
                     </button>
                   }

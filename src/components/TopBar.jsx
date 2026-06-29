@@ -6,7 +6,7 @@ const SCREEN_CHIPS = { home: 'OVERVIEW', kiosk: 'STATION READY', pack: 'PACK & R
 
 function SideChip({ side }) {
   return (
-    <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.14em', padding: '4px 11px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>
+    <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.14em', padding: '4px 11px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>
       {side === 'store' ? 'STORE' : 'WAREHOUSE'}
     </span>
   );
@@ -63,16 +63,16 @@ function ProfileMenu({ ctx, roleChip, roleLine }) {
         onClick={() => set({ profileMenuOpen: !s.profileMenuOpen })}
         style={{ display: 'flex', alignItems: 'center', gap: 9, height: 42, padding: '3px 14px 3px 5px', background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', borderRadius: 999, cursor: 'pointer' }}
       >
-        <span style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(142,14,34,0.14)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700 }}>{userInitial}</span>
+        <span style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(var(--accent-rgb),0.14)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700 }}>{userInitial}</span>
         <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink-2)' }}>{userLabel}</span>
-        <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', padding: '3px 8px', borderRadius: 999, background: 'rgba(142,14,34,0.14)', color: '#8E0E22' }}>{roleChip}</span>
+        <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', padding: '3px 8px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.14)', color: 'var(--accent)' }}>{roleChip}</span>
         <span style={{ fontSize: 9, color: 'rgba(40,32,38,0.55)' }}>{s.profileMenuOpen ? '▲' : '▼'}</span>
       </button>
       {s.profileMenuOpen && (
         <div style={{ ...glassPopover, position: 'absolute', right: 0, top: 54, width: 264, borderRadius: 22, padding: 8, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '8px 12px 10px', borderBottom: '1px solid rgba(var(--ink-rgb),0.1)', marginBottom: 4 }}>
             <span style={{ fontSize: 14, fontWeight: 700 }}>{userLabel}</span>
-            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: '#8E0E22' }}>{roleLine}</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: 'var(--accent)' }}>{roleLine}</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 7, padding: '4px 8px 8px' }}>
             <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: 'var(--mute)' }}>THEME</span>
@@ -104,7 +104,7 @@ function TourButton({ onClick }) {
       className="hv-white85"
       onClick={onClick}
       title="App guide"
-      style={{ display: 'flex', alignItems: 'center', gap: 7, height: 38, padding: '0 16px', background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: '#8E0E22', borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+      style={{ display: 'flex', alignItems: 'center', gap: 7, height: 38, padding: '0 16px', background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: 'var(--accent)', borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
     >
       <img src="/assets/app-guide.svg" alt="App guide" style={{ width: 18, height: 18 }} />
       Tour
@@ -166,7 +166,7 @@ export default function TopBar({ ctx, variant }) {
             <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(var(--ink-rgb),0.7)', letterSpacing: '0.06em' }}>AUDIT-BENCH-1</span>
             <SideChip side={s.side} />
             {SCREEN_CHIPS[s.screen] && (
-              <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.1em', padding: '4px 11px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{SCREEN_CHIPS[s.screen]}</span>
+              <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.1em', padding: '4px 11px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{SCREEN_CHIPS[s.screen]}</span>
             )}
           </>
         )}

@@ -41,8 +41,8 @@ export default function Tour({ ctx }) {
 
       <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="tour-title" tabIndex={-1} style={{ ...glassPopover, position: 'absolute', width: 390, maxWidth: '92vw', borderRadius: 24, padding: 22, display: 'flex', flexDirection: 'column', gap: 11, transition: 'all 0.35s ease', top: cardTop, left: cardLeft, transform: cardTransform, outline: 'none' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
-          <span style={{ width: 36, height: 36, flex: 'none', borderRadius: '50%', background: '#FBE5E8', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800 }}>{s.tourStep + 1}</span>
-          <span id="tour-title" style={{ fontSize: 19, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em', flex: 1 }}>{step.t}</span>
+          <span style={{ width: 36, height: 36, flex: 'none', borderRadius: '50%', background: '#FBE5E8', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800 }}>{s.tourStep + 1}</span>
+          <span id="tour-title" style={{ fontSize: 19, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.01em', flex: 1 }}>{step.t}</span>
           <button className="hv-text-dark" onClick={endTour} aria-label="Close tour" style={{ display: 'inline-flex', background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', padding: 2 }}>
             <X size={17} aria-hidden="true" />
           </button>
@@ -51,7 +51,7 @@ export default function Tour({ ctx }) {
         <div style={{ height: 1, background: '#F0F1F3' }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           {tourDefs.map((_, i) => (
-            <span key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: i === s.tourStep ? '#8E0E22' : '#E5E7EB' }} />
+            <span key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: i === s.tourStep ? 'var(--accent)' : '#E5E7EB' }} />
           ))}
           <div style={{ flex: 1 }} />
           {s.tourStep > 0 && (
@@ -62,7 +62,7 @@ export default function Tour({ ctx }) {
           <button className="hv-border-accent-strong" onClick={endTour} style={{ background: 'var(--surface)', border: '1px solid rgba(110,100,108,0.35)', color: '#374151', borderRadius: 10, padding: '10px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
             Skip
           </button>
-          <button className="hv-dark" onClick={() => tourGo(s.tourStep + 1)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '8px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-dark" onClick={() => tourGo(s.tourStep + 1)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '8px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
             <span>{isLast ? 'Finish' : 'Next'}</span>
             <span style={{ fontSize: 10.5, fontWeight: 600, opacity: 0.8 }}>{s.tourStep + 1} / {tourDefs.length}</span>
           </button>

@@ -52,7 +52,7 @@ export default function GlassSelect({ value, onChange, options, label, minWidth 
       <div ref={wrapRef} style={{ position: 'relative', minWidth }}>
         <button type="button" className="fc-accent" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((v) => !v)} style={triggerStyle}>
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sel ? sel.label : ''}</span>
-          <ChevronDown size={15} aria-hidden="true" style={{ flex: 'none', color: '#8E0E22', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.16s ease' }} />
+          <ChevronDown size={15} aria-hidden="true" style={{ flex: 'none', color: 'var(--accent)', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.16s ease' }} />
         </button>
         {open && (
           <div
@@ -69,7 +69,7 @@ export default function GlassSelect({ value, onChange, options, label, minWidth 
                   aria-selected={on}
                   className="hv-white7"
                   onClick={() => { onChange(o.value); setOpen(false); }}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, textAlign: 'left', border: 'none', background: on ? 'rgba(142,14,34,0.08)' : 'transparent', color: on ? '#8E0E22' : 'var(--ink-2)', borderRadius: 9, padding: '9px 11px', fontSize: 13.5, fontWeight: on ? 700 : 600, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, textAlign: 'left', border: 'none', background: on ? 'rgba(var(--accent-rgb),0.08)' : 'transparent', color: on ? 'var(--accent)' : 'var(--ink-2)', borderRadius: 9, padding: '9px 11px', fontSize: 13.5, fontWeight: on ? 700 : 600, cursor: 'pointer', whiteSpace: 'nowrap' }}
                 >
                   {o.label}
                   {on && <Check size={14} aria-hidden="true" />}

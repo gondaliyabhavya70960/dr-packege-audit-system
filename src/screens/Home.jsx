@@ -105,14 +105,14 @@ export default function Home({ ctx }) {
     return (
       <div style={{ ...glass, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(142,14,34,0.1)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon size={22} aria-hidden="true" />
           </span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
             <span style={{ fontSize: 17, fontWeight: 700 }}>{label}</span>
             <span style={{ fontSize: 12.5, color: MUTE }}>{sub}</span>
           </div>
-          <button className="hv-accent14" onClick={() => openList(kind)} style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '8px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>
+          <button className="hv-accent14" onClick={() => openList(kind)} style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '8px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>
             Open
             <ChevronRight size={14} aria-hidden="true" />
           </button>
@@ -145,7 +145,7 @@ export default function Home({ ctx }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em' }}>{sideLabel} · Overview</h1>
-            <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{sideLabel.toUpperCase()}</span>
+            <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{sideLabel.toUpperCase()}</span>
           </div>
           <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>Welcome{s.userLabel ? ', ' + s.userLabel : ''} — your order book at a glance. Pick a list to start.</span>
         </div>
@@ -153,7 +153,7 @@ export default function Home({ ctx }) {
 
       {/* KPI row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
-        <KpiCard accent="#8E0E22" title="Total orders" value={orders.length} unit="orders" sub="across packaging & transfers" Icon={Package} />
+        <KpiCard accent="var(--accent)" title="Total orders" value={orders.length} unit="orders" sub="across packaging & transfers" Icon={Package} />
         <KpiCard accent={flaggedCount ? '#E53E3E' : '#17A35F'} title="Flagged" value={flaggedCount} unit="flagged" sub={flaggedCount ? 'need attention' : 'all clear'} subColor={flaggedCount ? '#C62B22' : '#0E8A50'} Icon={TriangleAlert} />
         <KpiCard accent="#2563EB" title="In transit" value={transitLabel} sub="value on the move" Icon={Truck} />
       </div>
@@ -182,7 +182,7 @@ export default function Home({ ctx }) {
                 <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink-2)' }}>{o.label}</span>
                 <span style={{ fontSize: 12.5, color: MUTE }}>{o.sub}</span>
               </div>
-              <ChevronRight size={18} aria-hidden="true" style={{ color: '#8E0E22', flex: 'none' }} />
+              <ChevronRight size={18} aria-hidden="true" style={{ color: 'var(--accent)', flex: 'none' }} />
             </button>
           ))}
         </div>

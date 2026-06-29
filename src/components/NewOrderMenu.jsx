@@ -5,7 +5,7 @@ import { Plus, ChevronDown, ShoppingCart, Sparkles, Boxes, Truck } from 'lucide-
 // the order types the "New order" actions can create, each with a creative icon
 export const NEW_ORDER_TYPES = [
   { type: 'ecommerce', label: 'E-commerce order', sub: 'Online customer order', Icon: ShoppingCart, color: '#2563EB' },
-  { type: 'custom', label: 'Custom order', sub: 'Bespoke · made to order', Icon: Sparkles, color: '#8E0E22' },
+  { type: 'custom', label: 'Custom order', sub: 'Bespoke · made to order', Icon: Sparkles, color: 'var(--accent)' },
   { type: 'bulk', label: 'Bulk order', sub: 'Wholesale · B2B consignment', Icon: Boxes, color: '#9A6A00' },
   { type: 'transfer', label: 'Transfer order', sub: 'Inter-branch challan', Icon: Truck, color: '#0E8A50' },
 ];
@@ -31,7 +31,7 @@ export default function NewOrderMenu({ onPick }) {
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '11px 16px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}
+        style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '11px 16px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}
       >
         <Plus size={16} aria-hidden="true" />
         New order

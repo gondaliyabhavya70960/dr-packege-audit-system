@@ -85,7 +85,7 @@ export default function Receiving({ ctx }) {
             </div>
           ))}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <button onClick={scanItem} disabled={short === 0} style={{ background: 'rgba(142,14,34,0.07)', border: '1px dashed rgba(142,14,34,0.45)', color: '#8E0E22', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer', opacity: short === 0 ? 0.4 : 1 }}>
+            <button onClick={scanItem} disabled={short === 0} style={{ background: 'rgba(var(--accent-rgb),0.07)', border: '1px dashed rgba(var(--accent-rgb),0.45)', color: 'var(--accent)', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer', opacity: short === 0 ? 0.4 : 1 }}>
               Scan item RFID (demo)
             </button>
             <button onClick={scanUnknown} style={{ background: 'rgba(229,62,62,0.05)', border: '1px dashed rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
@@ -102,7 +102,7 @@ export default function Receiving({ ctx }) {
           <button className="hv-red05" onClick={flagRecv} style={{ flex: 1, background: 'var(--surface)', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
             Flag short / extra
           </button>
-          <button className="hv-brighten" onClick={confirmRecv} disabled={matched === 0} style={{ flex: 1, background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer', opacity: matched === 0 ? 0.4 : 1, boxShadow: '0 4px 14px rgba(142,14,34,0.25)' }}>
+          <button className="hv-brighten" onClick={confirmRecv} disabled={matched === 0} style={{ flex: 1, background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: 13, fontSize: 15, fontWeight: 700, cursor: 'pointer', opacity: matched === 0 ? 0.4 : 1, boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
             Confirm received
           </button>
         </div>

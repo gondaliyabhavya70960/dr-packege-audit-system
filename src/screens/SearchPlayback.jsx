@@ -45,7 +45,7 @@ export default function SearchPlayback({ ctx }) {
                 key={r.id}
                 className="hv-border-accent"
                 onClick={() => set({ selId: r.id })}
-                style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', background: 'rgba(var(--surf-rgb),0.65)', backdropFilter: 'blur(22px) saturate(1.4)', borderRadius: 18, padding: '13px 15px', border: '1px solid ' + (active ? 'rgba(142,14,34,0.6)' : 'rgba(0,0,0,0.05)'), boxShadow: '0 2px 8px rgba(15,30,60,0.04)' }}
+                style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', cursor: 'pointer', background: 'rgba(var(--surf-rgb),0.65)', backdropFilter: 'blur(22px) saturate(1.4)', borderRadius: 18, padding: '13px 15px', border: '1px solid ' + (active ? 'rgba(var(--accent-rgb),0.6)' : 'rgba(0,0,0,0.05)'), boxShadow: '0 2px 8px rgba(15,30,60,0.04)' }}
               >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0, flex: 1 }}>
                   <span style={{ fontFamily: MONO, fontSize: 14, color: 'var(--ink-2)' }}>{r.id}</span>
@@ -63,7 +63,7 @@ export default function SearchPlayback({ ctx }) {
         {sel && (
           <div style={{ ...glass, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <div style={{ height: 280, position: 'relative', ...feedBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span role="button" aria-label="Play record" style={{ width: 58, height: 58, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', background: 'rgba(142,14,34,0.9)', cursor: 'pointer' }}><Play size={22} aria-hidden="true" /></span>
+              <span role="button" aria-label="Play record" style={{ width: 58, height: 58, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', background: 'rgba(var(--accent-rgb),0.9)', cursor: 'pointer' }}><Play size={22} aria-hidden="true" /></span>
               <span style={{ position: 'absolute', top: 12, left: 14, fontFamily: MONO, fontSize: 11, color: 'rgba(255,255,255,0.55)' }}>selected record · streamed from S3 via signed URL</span>
             </div>
             <div style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -71,11 +71,11 @@ export default function SearchPlayback({ ctx }) {
                 <span style={{ fontFamily: MONO, fontSize: 18 }}>{sel.id}</span>
                 <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.06em', padding: '4px 11px', borderRadius: 999, border: '1px solid ' + selTone.border, color: selTone.color }}>{sel.outcome}</span>
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  <button className="hv-border-accent" onClick={() => openOrder(sel.id)} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                  <button className="hv-border-accent" onClick={() => openOrder(sel.id)} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: 'var(--accent)', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
                     Custom order details <ChevronRight size={15} aria-hidden="true" />
                   </button>
                   {sel.pair && (
-                    <button className="hv-accent14" onClick={() => openPlayer(sel.id, -1, 'search')} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                    <button className="hv-accent14" onClick={() => openPlayer(sel.id, -1, 'search')} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
                       Open side-by-side <ChevronRight size={15} aria-hidden="true" />
                     </button>
                   )}

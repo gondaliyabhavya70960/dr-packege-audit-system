@@ -69,7 +69,7 @@ export default function ClipPlayer({ src, poster, label, t = 0, height = 230, ra
       >
         <EvidenceTag id={id} ts={ts} hash={hash} />
         <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>{label || '[ clip ]'}</span>
-        {t ? <div style={{ position: 'absolute', left: 0, bottom: 0, height: 4, background: '#8E0E22', width: t + '%' }} /> : null}
+        {t ? <div style={{ position: 'absolute', left: 0, bottom: 0, height: 4, background: 'var(--accent)', width: t + '%' }} /> : null}
       </div>
     );
   }

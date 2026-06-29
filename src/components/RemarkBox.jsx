@@ -32,7 +32,7 @@ export default function RemarkBox({ ctx, id, variant = 'input', readOnly = false
         className="hv-brighten"
         onClick={submit}
         disabled={!text.trim()}
-        style={{ flex: 'none', background: '#8E0E22', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '10px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', opacity: text.trim() ? 1 : 0.45 }}
+        style={{ flex: 'none', background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '10px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', opacity: text.trim() ? 1 : 0.45 }}
       >
         Add
       </button>
@@ -56,12 +56,12 @@ export default function RemarkBox({ ctx, id, variant = 'input', readOnly = false
     <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Remarks</span>
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(142,14,34,0.08)', color: '#8E0E22' }}>{remarks.length}</span>
+        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{remarks.length}</span>
       </div>
       {remarks.length === 0 && <span style={{ fontSize: 13, color: 'var(--mute)' }}>{readOnly ? 'No remarks on this order.' : 'No remarks yet — add one from any step.'}</span>}
       {remarks.map((r, i) => (
         <div key={i} style={{ display: 'flex', gap: 10 }}>
-          <span style={{ width: 30, height: 30, flex: 'none', borderRadius: '50%', background: 'rgba(142,14,34,0.12)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>
+          <span style={{ width: 30, height: 30, flex: 'none', borderRadius: '50%', background: 'rgba(var(--accent-rgb),0.12)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>
             {(r.who || '?').charAt(0).toUpperCase()}
           </span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
