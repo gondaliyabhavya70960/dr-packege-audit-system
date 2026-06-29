@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes } from 'lucide-react';
-import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, ORDER_CHANNELS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmt } from '../data.js';
+import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus } from 'lucide-react';
+import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmtMoney, draftItemsValue, ORDER_TYPE_CHANNEL, fmt } from '../data.js';
+import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
@@ -321,10 +322,19 @@ function ReadRow({ label, value, accent }) {
 
 // header copy + creative icon per new-order type
 const ORDER_TYPE_META = {
-  ecommerce: { title: 'New e-commerce order', sub: 'An online customer order — capture its handling, insurance and pack video. It joins the orders list under the same ID.', Icon: ShoppingCart, color: '#2563EB' },
-  bulk: { title: 'New bulk order', sub: 'A wholesale / B2B consignment — record its handling, insurance and audit notes, then file the pack video.', Icon: Boxes, color: '#9A6A00' },
-  custom: { title: 'Custom order details', sub: 'Record a bespoke order with its handling, insurance and audit notes. It joins the orders list and links to any video filed under the same ID.', Icon: Sparkles, color: '#8E0E22' },
+  ecommerce: { title: 'New e-commerce order', sub: 'An online customer order — add its products, handling and pack video. It joins the orders list under the same ID.', Icon: ShoppingCart, color: '#2563EB' },
+  bulk: { title: 'New bulk order', sub: 'A wholesale / B2B consignment — add its products, handling and audit notes, then file the pack video.', Icon: Boxes, color: '#9A6A00' },
+  transfer: { title: 'New transfer order', sub: 'An inter-branch challan — add its products and notes. It joins the orders list and links to any video filed under the same ID.', Icon: Truck, color: '#0E8A50' },
+  custom: { title: 'Custom order details', sub: 'Record a bespoke order with its products, handling and audit notes. It joins the orders list and links to any video filed under the same ID.', Icon: Sparkles, color: '#8E0E22' },
 };
+
+const STATION_OPTS = ['AUDIT-BENCH-1', 'PACK-BENCH-1', 'PACK-BENCH-2', 'STORE-RECV-1', 'STORE-RECV-2', 'RETURNS-1'].map((v) => ({ value: v, label: v }));
+
+// two believable demo line items for the "Test fill" shortcut
+const TEST_ITEMS = [
+  { sku: 'BG-GLD-0031', name: 'Gold bangle pair · 22K', qty: 2, value: 156000 },
+  { sku: 'ER-DIA-0088', name: 'Diamond stud earrings · 0.40ct pair · 18K', qty: 3, value: 62000 },
+];
 
 // The custom-order create form — shared by the page route and the popup modal.
 // Reads/writes the draft on ctx state; calls onClose(savedId) after save, or
@@ -334,7 +344,23 @@ export function CreateOrderForm({ ctx, onClose }) {
   const d = s.orderDraft;
   if (!d) return null;
   const meta = ORDER_TYPE_META[d.orderType] || ORDER_TYPE_META.custom;
+  const items = d.items || [];
+  const subtotal = draftItemsValue(items);
+  const idHint = d.orderType === 'transfer' || d.orderType === 'bulk' ? 'DC-… / RFID-… / ORD-…' : 'ORD-…';
+
   const upd = (k, v) => set({ orderDraft: { ...s.orderDraft, [k]: v } });
+  const pickType = (t) => set({ orderDraft: { ...s.orderDraft, orderType: t, channel: ORDER_TYPE_CHANNEL[t] || s.orderDraft.channel } });
+  const setItems = (next) => upd('items', next);
+  const addItem = () => setItems([...items, { sku: '', name: '', qty: 1, value: 0 }]);
+  const updItem = (i, k, v) => setItems(items.map((it, idx) => (idx === i ? { ...it, [k]: v } : it)));
+  const delItem = (i) => setItems(items.filter((_, idx) => idx !== i));
+  const testFill = () => {
+    const prefix = d.orderType === 'transfer' || d.orderType === 'bulk' ? 'DC-' : 'ORD-';
+    const id = prefix + String(Date.now()).slice(-4);
+    const customer = d.orderType === 'bulk' || d.orderType === 'transfer' ? 'Jaipur Branch' : 'Aarav Shah';
+    set({ orderDraft: { ...s.orderDraft, id, customer, items: TEST_ITEMS.map((it) => ({ ...it })) } });
+  };
+
   const cancel = () => { set({ orderDraft: null }); onClose && onClose(null); };
   const saveCreate = () => {
     const id = (d.id || '').trim().toUpperCase();
@@ -345,40 +371,86 @@ export function CreateOrderForm({ ctx, onClose }) {
     const newOrder = buildCustomOrder(d, s.userLabel || 'admin'); // captured a pack clip -> Packed, else Draft
     const packed = newOrder.statusKey === 'packed';
     set({ orders: [newOrder, ...s.orders], orderDraft: null });
-    showToast(packed ? 'Custom order ' + id + ' filed with pack video — saved to the orders list.' : 'Draft order ' + id + ' saved to the orders list.');
+    showToast(packed ? 'Order ' + id + ' filed with pack video — saved to the orders list.' : 'Order ' + id + ' saved to the orders list.');
     onClose && onClose(id);
   };
 
+  const roField = { ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: 'rgba(0,0,0,0.03)' };
+  const roHint = { fontFamily: MONO, fontSize: 9, letterSpacing: '0.08em', color: '#9AA0A6', flex: 'none' };
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {/* header + test fill */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
         <span style={{ width: 46, height: 46, flex: 'none', borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', background: meta.color + '1a', color: meta.color }}>
           <meta.Icon size={23} aria-hidden="true" />
         </span>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: 1, minWidth: 0 }}>
           <span style={{ fontSize: 20, fontWeight: 800, color: '#8E0E22', letterSpacing: '-0.01em' }}>{meta.title}</span>
           <span style={{ fontSize: 14, color: '#5B616B' }}>{meta.sub}</span>
         </div>
+        <button onClick={testFill} className="hv-border-accent" style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 'none', background: 'rgba(142,14,34,0.06)', border: '1px solid rgba(142,14,34,0.25)', color: '#8E0E22', borderRadius: 999, padding: '7px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+          <Sparkles size={14} aria-hidden="true" /> Test fill
+        </button>
+      </div>
+
+      {/* order-type tabs */}
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        {NEW_ORDER_TYPES.map((t) => {
+          const on = t.type === d.orderType;
+          return (
+            <button key={t.type} onClick={() => pickType(t.type)} style={{ display: 'flex', alignItems: 'center', gap: 7, borderRadius: 10, padding: '8px 13px', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: '1px solid ' + (on ? t.color : 'rgba(0,0,0,0.1)'), background: on ? t.color + '14' : 'rgba(255,255,255,0.5)', color: on ? t.color : '#5B616B' }}>
+              <t.Icon size={15} aria-hidden="true" /> {t.label}
+            </button>
+          );
+        })}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         <Field label="ORDER ID *">
-          <input className="fc-accent" value={d.id} onChange={(e) => upd('id', e.target.value)} placeholder="ORD-… / DC-… / RFID-…" style={{ ...inputStyle, fontFamily: MONO }} />
+          <input className="fc-accent" value={d.id} onChange={(e) => upd('id', e.target.value)} placeholder={idHint} style={{ ...inputStyle, fontFamily: MONO }} />
         </Field>
         <Field label="CUSTOMER *">
           <input className="fc-accent" value={d.customer} onChange={(e) => upd('customer', e.target.value)} placeholder="name or store" style={inputStyle} />
         </Field>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-        <Field label="CHANNEL">
-          <GlassSelect value={d.channel} onChange={(v) => upd('channel', v)} options={ORDER_CHANNELS.map((c) => ({ value: c, label: c }))} minWidth={0} />
+        <Field label="CHANNEL *">
+          <div style={roField}><span style={{ fontWeight: 700 }}>{d.channel}</span><span style={roHint}>FROM TAB</span></div>
         </Field>
         <Field label="STATION">
-          <input className="fc-accent" value={d.station} onChange={(e) => upd('station', e.target.value)} style={{ ...inputStyle, fontFamily: MONO }} />
+          <GlassSelect value={d.station} onChange={(v) => upd('station', v)} options={STATION_OPTS} minWidth={0} />
         </Field>
-        <Field label="ORDER VALUE">
-          <input className="fc-accent" value={d.value} onChange={(e) => upd('value', e.target.value)} placeholder="₹0.00L" style={inputStyle} />
+        <Field label="ORDER VALUE *">
+          <div style={roField}><span style={{ fontWeight: 700 }}>{fmtMoney(subtotal)}</span><span style={roHint}>AUTO · SUM OF ITEMS</span></div>
         </Field>
+      </div>
+
+      {/* items / products editor */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: '#6B7280' }}>ITEMS *</span>
+          <button onClick={addItem} className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(142,14,34,0.08)', border: 'none', color: '#8E0E22', borderRadius: 999, padding: '6px 13px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>
+            <Plus size={14} aria-hidden="true" /> Add item
+          </button>
+        </div>
+        {items.length === 0 && <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '12px 14px', fontSize: 13, color: '#6B7280' }}>No items yet — add at least one product.</div>}
+        {items.map((it, i) => (
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(142,14,34,0.08)', color: '#8E0E22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Gem size={16} aria-hidden="true" /></span>
+            <input className="fc-accent" value={it.sku} onChange={(e) => updItem(i, 'sku', e.target.value)} placeholder="SKU" style={{ ...inputStyle, fontFamily: MONO, flex: '0 0 128px', minWidth: 0 }} />
+            <input className="fc-accent" value={it.name} onChange={(e) => updItem(i, 'name', e.target.value)} placeholder="Item name · detail" style={{ ...inputStyle, flex: 1, minWidth: 0 }} />
+            <input className="fc-accent" value={it.qty} onChange={(e) => updItem(i, 'qty', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" aria-label="Quantity" style={{ ...inputStyle, flex: '0 0 52px', textAlign: 'center', padding: '9px 6px' }} />
+            <input className="fc-accent" value={it.value} onChange={(e) => updItem(i, 'value', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" placeholder="₹ unit" aria-label="Unit value" style={{ ...inputStyle, flex: '0 0 96px', textAlign: 'right' }} />
+            <button onClick={() => delItem(i)} aria-label="Remove item" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
+              <Trash2 size={14} aria-hidden="true" />
+            </button>
+          </div>
+        ))}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'baseline', gap: 10, paddingTop: 2 }}>
+          <span style={{ fontSize: 13, color: MUTE }}>Subtotal</span>
+          <span style={{ fontSize: 15, fontWeight: 700, color: INK }}>{fmtMoney(subtotal)}</span>
+        </div>
       </div>
 
       <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
