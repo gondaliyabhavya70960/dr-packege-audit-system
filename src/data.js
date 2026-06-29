@@ -754,6 +754,7 @@ export const THEMES = [
   { key: 'paper', label: 'Paper', sub: 'Light · flat' },
   { key: 'devias-pro', label: 'Devias Pro', sub: 'Dark sidebar · indigo' },
   { key: 'materialize', label: 'Materialize', sub: 'Material · vertical menu' },
+  { key: 'materialize-2', label: 'Materialize 2', sub: 'Material · icon rail' },
 ];
 
 export const initialState = {

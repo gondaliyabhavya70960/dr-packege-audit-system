@@ -6,6 +6,7 @@ const SWATCH = {
   paper: '#f3f5f8',
   'devias-pro': 'linear-gradient(135deg, #111927 60%, #635bff)',
   materialize: 'linear-gradient(135deg, #ece9fb 55%, #7367f0)',
+  'materialize-2': 'linear-gradient(90deg, #ffffff 34%, #7367f0 34% 46%, #f3f1fc 46%)',
 };
 
 // segmented control for the design variation. Renders correctly on every theme
