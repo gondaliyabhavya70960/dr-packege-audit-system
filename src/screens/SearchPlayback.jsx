@@ -1,6 +1,7 @@
-import { Play, Search, ChevronRight, FileSearch } from 'lucide-react';
-import { MONO, glass, feedBg, tone } from '../data.js';
+import { Search, ChevronRight, FileSearch } from 'lucide-react';
+import { MONO, glass, tone } from '../data.js';
 import EmptyState from '../components/EmptyState.jsx';
+import PlaybackFrame from '../components/PlaybackFrame.jsx';
 
 export default function SearchPlayback({ ctx }) {
   const { s, set, openPlayer, openOrder } = ctx;
@@ -62,10 +63,7 @@ export default function SearchPlayback({ ctx }) {
 
         {sel && (
           <div style={{ ...glass, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ height: 280, position: 'relative', ...feedBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span role="button" aria-label="Play record" style={{ width: 58, height: 58, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', background: 'rgba(var(--accent-rgb),0.9)', cursor: 'pointer' }}><Play size={22} aria-hidden="true" /></span>
-              <span style={{ position: 'absolute', top: 12, left: 14, fontFamily: MONO, fontSize: 11, color: 'rgba(255,255,255,0.55)' }}>selected record · streamed from S3 via signed URL</span>
-            </div>
+            <PlaybackFrame />
             <div style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                 <span style={{ fontFamily: MONO, fontSize: 18 }}>{sel.id}</span>
