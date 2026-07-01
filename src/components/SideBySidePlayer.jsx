@@ -1,6 +1,6 @@
 import { Rewind, FastForward, Play, Pause } from 'lucide-react';
 import { MONO, glass, fmt } from '../data.js';
-import ClipPlayer from './ClipPlayer.jsx';
+import PlaybackFrame from './PlaybackFrame.jsx';
 
 const STILL_LABELS = ['stone', 'hallmark', 'certificate'];
 
@@ -34,15 +34,14 @@ export default function SideBySidePlayer({ ctx }) {
     }
   };
 
-  const clipPane = (label, meta, text) => (
+  const clipPane = (label, meta, streamLabel) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: MONO, fontSize: 11, color: 'var(--mute-2)' }}>
         <span style={{ color: 'var(--accent)' }}>{label}</span>
         <span>{meta}</span>
       </div>
-      {/* real <video> pipeline (poster + MP4/WebM + lazy); falls back to the
-          placeholder until a clip source is wired in — see ClipPlayer. */}
-      <ClipPlayer label={text} id={s.playerId} ts={meta.replace(/^·\s*/, '')} hash={playerRec && playerRec.hash} t={s.t} height={230} radius={18} />
+      {/* same evidence frame as Search & playback (dark feed + accent play + S3 label) */}
+      <PlaybackFrame label={streamLabel} height={250} radius={18} progress={s.t} onPlay={() => set({ playing: true })} />
     </div>
   );
 
@@ -63,8 +62,8 @@ export default function SideBySidePlayer({ ctx }) {
         {/* media + transport + stills */}
         <div style={{ ...glass, display: 'flex', flexDirection: 'column' }}>
           <div className="player-grid">
-            {clipPane('PACK CLIP', '· packed 12 Jun · PACK-BENCH-1', '[ pack video ]')}
-            {clipPane('RETURN CLIP', '· returned 24 Jun · RETURNS-1', '[ return video ]')}
+            {clipPane('PACK CLIP', '· packed 12 Jun · PACK-BENCH-1', 'pack clip · streamed from S3 via signed URL')}
+            {clipPane('RETURN CLIP', '· returned 24 Jun · RETURNS-1', 'return clip · streamed from S3 via signed URL')}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 20px' }}>
@@ -100,16 +99,22 @@ export default function SideBySidePlayer({ ctx }) {
           </div>
         </div>
 
-        {/* verdict */}
-        <div style={{ ...glass, display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 14, color: 'var(--mute-2)' }}>{fromFlag ? 'Supervisor decision — releases or keeps the refund hold.' : 'Verdict feeds the accept / flag decision.'}</span>
-          <div style={{ flex: 1 }} />
-          <button className="hv-red05" onClick={verdictNeg} style={{ background: 'var(--surface)', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: '11px 22px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-            {fromFlag ? 'Uphold flag — keep hold' : 'Mismatch suspected'}
-          </button>
-          <button className="hv-brighten" onClick={verdictPos} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '11px 22px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
-            {fromFlag ? 'Approve accept — release refund' : 'Same item — confirm'}
-          </button>
+        {/* record evidence + verdict */}
+        <div style={{ ...glass, display: 'flex', flexDirection: 'column', gap: 12, padding: '14px 20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(var(--surf-rgb),0.55)', borderRadius: 12, padding: '11px 14px' }}>
+            <span style={{ fontSize: 12, color: 'var(--mute)' }}>File hash — tamper evidence (re-verified on arrival)</span>
+            <span style={{ fontFamily: MONO, fontSize: 13, color: '#0E8A50' }}>sha-256 · {playerRec ? playerRec.hash : '9f2c41aa…6b7a1'} ✓ verified</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 14, color: 'var(--mute-2)' }}>{fromFlag ? 'Supervisor decision — releases or keeps the refund hold.' : 'Verdict feeds the accept / flag decision.'}</span>
+            <div style={{ flex: 1 }} />
+            <button className="hv-red05" onClick={verdictNeg} style={{ background: 'var(--surface)', border: '1px solid rgba(229,62,62,0.45)', color: '#C62B22', borderRadius: 10, padding: '11px 22px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+              {fromFlag ? 'Uphold flag — keep hold' : 'Mismatch suspected'}
+            </button>
+            <button className="hv-brighten" onClick={verdictPos} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '11px 22px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
+              {fromFlag ? 'Approve accept — release refund' : 'Same item — confirm'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
