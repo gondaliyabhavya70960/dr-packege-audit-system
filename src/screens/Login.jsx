@@ -2,6 +2,7 @@ import { Check } from 'lucide-react';
 import { MONO } from '../data.js';
 import { PackageIcon } from '../components/icons.jsx';
 import ThemePicker from '../components/ThemePicker.jsx';
+import AccentPicker from '../components/AccentPicker.jsx';
 
 export default function Login({ ctx }) {
   const { s, set, openTour } = ctx;
@@ -128,6 +129,10 @@ export default function Login({ ctx }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
             <label style={{ fontSize: 14, fontWeight: 700 }}>Theme</label>
             <ThemePicker value={s.theme} onPick={(k) => set({ theme: k })} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+            <label style={{ fontSize: 14, fontWeight: 700 }}>Accent color</label>
+            <AccentPicker value={s.accent} onPick={(c) => set({ accent: c })} />
           </div>
           <button
             data-tour="login"
