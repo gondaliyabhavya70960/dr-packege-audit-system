@@ -781,6 +781,9 @@ export const initialState = {
   screen: 'login',
   theme: 'glass', // active design variation (persisted to localStorage)
   accent: '', // custom brand accent hex; '' = theme default (persisted to localStorage)
+  showWelcome: false, // first-run welcome screen (shown once after login)
+  gsDone: [], // completed getting-started checklist step keys (persisted)
+  gsDismissed: false, // getting-started checklist dismissed (persisted)
   username: '',
   password: '',
   userLabel: '',
