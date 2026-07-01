@@ -60,9 +60,7 @@
   --surface-soft-border: #ebeaf3;
   --hairline: #eeedf6;
   --glass-blur: saturate(1.02);
-  --accent: #7367f0;
-  --accent-2: #5e50ee;
-  --accent-rgb: 115, 103, 240;
+  /* accent inherits the brand red (:root); the user can override it in settings */
   --card-bg: #ffffff;
   --card-shadow: 0 3px 12px 0 rgba(47, 43, 61, 0.14);
 }
@@ -77,9 +75,7 @@
   --surface-soft-border: #e9ecf2;
   --hairline: #eef0f4;
   --glass-blur: saturate(1.02);
-  --accent: #635bff;
-  --accent-2: #4f46e5;
-  --accent-rgb: 99, 91, 255;
+  /* accent inherits the brand red (:root); the user can override it in settings */
 }
 
 /* ============================================================
@@ -380,7 +376,7 @@
   border-color: transparent;
 }
 [data-theme^='materialize'] .sb-ws-avatar {
-  background: linear-gradient(72deg, #9e95f5, #7367f0);
+  background: linear-gradient(72deg, var(--accent), var(--accent-2));
 }
 [data-theme^='materialize'] .sb-ws-label,
 [data-theme^='materialize'] .sb-ws-chev {
@@ -401,9 +397,9 @@
   color: var(--mute-2);
 }
 [data-theme^='materialize'] .sb-nav.is-active {
-  background: linear-gradient(72deg, #9e95f5, #7367f0);
+  background: linear-gradient(72deg, var(--accent), var(--accent-2));
   color: #ffffff;
-  box-shadow: 0 2px 6px 0 rgba(115, 103, 240, 0.48);
+  box-shadow: 0 2px 6px 0 rgba(var(--accent-rgb), 0.48);
 }
 [data-theme^='materialize'] .sb-nav.is-active .sb-nav-icon {
   color: #ffffff;
