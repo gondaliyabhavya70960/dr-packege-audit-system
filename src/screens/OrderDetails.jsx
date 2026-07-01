@@ -11,7 +11,7 @@ import VideoCaptureCard from '../components/VideoCaptureCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
 
-const STAGE_TITLES = { pack: 'Packing', recv: 'Receiving', ret: 'Return inspection' };
+const STAGE_TITLES = { pack: 'Packaging', recv: 'Receiving', ret: 'Return inspection' };
 
 // A completed stage is locked to a read-only evidence view: the filed clip +
 // the order's remarks. No live recording controls.
@@ -45,7 +45,7 @@ function CompletedStage({ order, stage, ctx }) {
 // A stage the order hasn't reached yet ('empty' mode) — a read-only zero-state
 // explaining when the step will unlock.
 const EMPTY_COPY = {
-  pack: { icon: Package, title: 'Packing not started', sub: 'This order has not been packed yet. The Packing step is editable while the order is a draft.' },
+  pack: { icon: Package, title: 'Packaging not started', sub: 'This order has not been packed yet. The Packaging step is editable while the order is a draft.' },
   recv: { icon: Inbox, title: 'Receiving not started', sub: 'This order has not reached store receiving yet. The Receive step unlocks when the consignment arrives and is scanned in.' },
   ret: { icon: RotateCcw, title: 'No return on this order', sub: 'Nothing has been returned. The Return step unlocks if the customer raises a return and it is inspected at the desk.' },
 };
@@ -123,7 +123,7 @@ function StatusStage({ order, stage }) {
 // stage opens its tool inline; completed stages lock to a read-only clip view.
 const ORDER_TABS = [
   { id: 'detail', label: 'Detail' },
-  { id: 'pack', label: 'Packing' },
+  { id: 'pack', label: 'Packaging' },
   { id: 'recv', label: 'Receive' },
   { id: 'ret', label: 'Return' },
 ];
@@ -133,7 +133,7 @@ const ORDER_TABS = [
 // dimmed (not started). Detail carries no badge.
 function OrderTabs({ tabs, active, onPick, modeOf }) {
   return (
-    <div style={{ ...cardLight, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 14, alignSelf: 'flex-start', flexWrap: 'wrap', maxWidth: '100%' }}>
+    <div style={{ ...cardLight, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 14, alignSelf: 'center', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%' }}>
       {tabs.map((tb) => {
         const on = tb.id === active;
         const mode = modeOf(tb.id);
@@ -264,7 +264,7 @@ function PackingCapture({ orderId, videos, setVideos }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>
-          <Video size={17} aria-hidden="true" style={{ color: 'var(--accent)' }} /> Packing video capture
+          <Video size={17} aria-hidden="true" style={{ color: 'var(--accent)' }} /> Packaging video capture
         </span>
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{list.length} CLIP{list.length === 1 ? '' : 'S'}</span>
       </div>

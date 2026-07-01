@@ -17,7 +17,7 @@ export default function Dashboard({ ctx }) {
   if (screen === 'dash-coverage')
     dash = {
       label: '08 Dashboard coverage',
-      title: 'Dashboard · Packing coverage',
+      title: 'Dashboard · Packaging coverage',
       chip: 'DRILLS TO VIDEO',
       kpis: [
         { num: '418', label: 'packed today', color: PLAIN },

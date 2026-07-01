@@ -217,7 +217,7 @@ const curatedOrders = [
       { label: 'Order placed', time: '15 Jun · 09:30', who: 'web checkout', clip: false },
       { label: 'Draft saved', time: '15 Jun · 09:32', who: 'Mira · PACK-BENCH-1', clip: false },
     ],
-    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.10L', slot: 'awaiting pack', instructions: 'Draft order — pack video not yet captured.', notes: 'Created as a draft; open the Packing tab to record and file.' },
+    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.10L', slot: 'awaiting pack', instructions: 'Draft order — pack video not yet captured.', notes: 'Created as a draft; open the Packaging tab to record and file.' },
     remarks: [{ who: 'Mira', time: '15 Jun · 09:33', text: 'Held as draft — awaiting the pack-bench video before dispatch.' }],
   },
   {
