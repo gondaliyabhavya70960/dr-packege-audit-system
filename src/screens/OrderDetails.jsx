@@ -133,7 +133,7 @@ const ORDER_TABS = [
 // dimmed (not started). Detail carries no badge.
 function OrderTabs({ tabs, active, onPick, modeOf }) {
   return (
-    <div style={{ ...cardLight, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 14, alignSelf: 'flex-start', flexWrap: 'wrap', maxWidth: '100%' }}>
+    <div style={{ ...cardLight, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 14, alignSelf: 'center', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%' }}>
       {tabs.map((tb) => {
         const on = tb.id === active;
         const mode = modeOf(tb.id);
