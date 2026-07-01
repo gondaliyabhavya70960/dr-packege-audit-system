@@ -11,7 +11,13 @@ export default function Login({ ctx }) {
     const uname = (s.username || 'admin').trim().toLowerCase();
     const isAd = uname === 'admin' || uname === 'manager' || uname === 'auditor';
     const label = uname === 'admin' ? 'System Admin' : uname.charAt(0).toUpperCase() + uname.slice(1);
-    set({ screen: 'home', userLabel: label, role: isAd ? 'admin' : 'operator' });
+    let seenWelcome = false;
+    try {
+      seenWelcome = !!localStorage.getItem('pa_welcome_seen');
+    } catch (e) {
+      /* storage unavailable */
+    }
+    set({ screen: 'home', userLabel: label, role: isAd ? 'admin' : 'operator', showWelcome: !seenWelcome });
   };
   const onKey = (e) => {
     if (e.key === 'Enter') doLogin();

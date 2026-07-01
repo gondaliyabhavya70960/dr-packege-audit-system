@@ -1,6 +1,7 @@
 import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, Flag, TriangleAlert } from 'lucide-react';
 import { MONO, MUTE, glass, fillTone, ORDER_STATUSES, isTransferOrder } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
+import GettingStarted from '../components/GettingStarted.jsx';
 
 // a vector per order status — gives each card a fill cue matching its stage
 const STATUS_ICONS = {
@@ -150,6 +151,9 @@ export default function Home({ ctx }) {
           <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>Welcome{s.userLabel ? ', ' + s.userLabel : ''} — your order book at a glance. Pick a list to start.</span>
         </div>
       </div>
+
+      {/* first-run getting-started checklist (dismissible) */}
+      <GettingStarted ctx={ctx} />
 
       {/* KPI row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>

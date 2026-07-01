@@ -23,6 +23,7 @@ import LeaveConfirm from './components/LeaveConfirm.jsx';
 import CreateOrderModal from './components/CreateOrderModal.jsx';
 import Tour from './components/Tour.jsx';
 import Toast from './components/Toast.jsx';
+import Welcome from './components/Welcome.jsx';
 
 // the heavy side-by-side video player is only needed on demand — keep it out of
 // the initial bundle.
@@ -118,6 +119,12 @@ export default function App() {
       else if (saved && !known) localStorage.setItem('pa_theme', sRef.current.theme || 'glass');
       const savedAccent = localStorage.getItem('pa_accent');
       if (savedAccent) set({ accent: savedAccent });
+      const gsDone = localStorage.getItem('pa_gs_done');
+      if (gsDone) {
+        const arr = JSON.parse(gsDone);
+        if (Array.isArray(arr)) set({ gsDone: arr });
+      }
+      if (localStorage.getItem('pa_gs_dismissed')) set({ gsDismissed: true });
     } catch (e) {
       /* storage unavailable */
     }
@@ -415,6 +422,7 @@ export default function App() {
       {s.backConfirm && <BackConfirm ctx={ctx} />}
       {s.leaveConfirm && <LeaveConfirm ctx={ctx} />}
       {s.createOpen && <CreateOrderModal ctx={ctx} />}
+      {s.showWelcome && screen !== 'login' && <Welcome ctx={ctx} />}
       {s.tourOpen && <Tour ctx={ctx} />}
       {s.toast && <Toast msg={s.toast} />}
     </div>
