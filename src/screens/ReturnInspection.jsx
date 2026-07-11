@@ -1,5 +1,5 @@
 import { Camera } from 'lucide-react';
-import { MONO, glass, feedBg, fmt } from '../data.js';
+import { MONO, glass, feedBg, fmt, withOrderFlags } from '../data.js';
 import RemarkBox from '../components/RemarkBox.jsx';
 import RecordButton from '../components/RecordButton.jsx';
 
@@ -25,7 +25,9 @@ export default function ReturnInspection({ ctx }) {
     }
     const flag = { id: s.retId, reason: s.retReason, age: 'now', amt: '₹1.2L' };
     const rec = { id: s.retId, kinds: 'return', outcome: 'flagged', tone: 'red', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'e2' + Math.random().toString(16).slice(2, 8) + '…3f77', pair: true };
-    set({ ...exitNav, lastSession: s.retId + ' · flagged · refund held', flags: [flag, ...s.flags], records: [rec, ...s.records], orders: logOrderEvent(s.retId, 'Return flagged · refund held') });
+    // the return flag also lands on the order's flagged-items list (Detail tab)
+    const entries = [{ name: 'Returned shipment', sku: s.retId, step: 'Return', remark: s.retReason, time: 'today', who: s.userLabel || 'operator' }];
+    set({ ...exitNav, lastSession: s.retId + ' · flagged · refund held', flags: [flag, ...s.flags], records: [rec, ...s.records], orders: withOrderFlags(logOrderEvent(s.retId, 'Return flagged · refund held'), s.retId, entries) });
     showToast('Refund held — flag (' + s.retReason + ') awaits supervisor approval.');
   };
 

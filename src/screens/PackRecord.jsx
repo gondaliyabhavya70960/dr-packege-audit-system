@@ -1,13 +1,17 @@
-import { Camera } from 'lucide-react';
-import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
+import { useState } from 'react';
+import { Camera, Flag } from 'lucide-react';
+import { MONO, glass, feedBg, bannerTones, dotFor, fmt, withOrderFlags } from '../data.js';
 import RemarkBox from '../components/RemarkBox.jsx';
 import RecordButton from '../components/RecordButton.jsx';
 import CapturedThumb from '../components/CapturedThumb.jsx';
+import FlagRemarksModal from '../components/FlagRemarksModal.jsx';
 
 export default function PackRecord({ ctx }) {
   const { s, set, showToast, logOrderEvent } = ctx;
   const rec = s.recActive;
   const toggleRec = () => set({ recActive: !s.recActive });
+  // which save action is waiting on flagged-product remarks: 'close' | 'flag' | null
+  const [remarksFor, setRemarksFor] = useState(null);
 
   // where the session goes when it closes: back to the order's Detail tab when run
   // inline on a single order, otherwise back to the kiosk.
@@ -27,14 +31,16 @@ export default function PackRecord({ ctx }) {
   else banner = { msg: 'PASS — item, quantity and condition verified. Seal the box and close the session.', tone: 'green' };
   const bt = bannerTones[banner.tone];
 
+  const flaggedItems = items.filter((i) => i.flagged);
+
   const rows = items.map((i) => {
     const got = i.got >= i.need;
     const d = dotFor(got ? 'ok' : 'wait');
-    return { ...d, key: i.sku, name: i.name, sku: i.sku, captured: got, count: i.got + '/' + i.need + (got ? ' ✓' : ' ···') };
+    return { ...d, key: i.sku, name: i.name, sku: i.sku, captured: got, flagged: !!i.flagged, flaggable: true, count: i.got + '/' + i.need + (got ? ' ✓' : ' ···') };
   });
   if (unknown) {
     const d = dotFor('bad');
-    rows.push({ ...d, key: 'unknown', name: 'UNKNOWN ITEM', sku: 'RFID-9920 · not on this order', captured: false, count: 'extra !' });
+    rows.push({ ...d, key: 'unknown', name: 'UNKNOWN ITEM', sku: 'RFID-9920 · not on this order', captured: false, flagged: false, flaggable: false, count: 'extra !' });
   }
 
   const scanPackItem = () => {
@@ -46,18 +52,37 @@ export default function PackRecord({ ctx }) {
     }
   };
 
-  const closePack = () => {
-    if (!pass) return;
+  // flag / unflag a product mid-scan — scanning continues normally afterwards
+  const toggleFlag = (sku) => set({ packItems: items.map((i) => (i.sku === sku ? { ...i, flagged: !i.flagged } : i)) });
+
+  // flagged products become order-level flag entries once their remark is in
+  const flagEntries = (remarks) => flaggedItems.map((i) => ({ name: i.name, sku: i.sku, step: 'Packaging', remark: (remarks[i.sku] || '').trim(), time: 'today', who: s.userLabel || 'operator' }));
+
+  const finishClose = (remarks) => {
+    const entries = flagEntries(remarks);
     const rec = { id: s.packId, kinds: 'pack', outcome: 'PASS', tone: 'green', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today · ' + fmt(s.recSec) + ' session', hash: 'a1' + Math.random().toString(16).slice(2, 8) + '…e4f2', pair: false };
-    set({ ...exitNav, lastSession: s.packId + ' · sealed · PASS', records: [rec, ...s.records], orders: logOrderEvent(s.packId, 'Packed · Warehouse') });
-    showToast('Pack video filed under ' + s.packId + ' — dispatch confirmed → Gati');
+    const label = 'Packed · Warehouse' + (entries.length ? ' · ' + entries.length + ' flagged' : '');
+    set({ ...exitNav, lastSession: s.packId + ' · sealed · PASS', records: [rec, ...s.records], orders: withOrderFlags(logOrderEvent(s.packId, label), s.packId, entries) });
+    showToast('Pack video filed under ' + s.packId + ' — dispatch confirmed → Gati' + (entries.length ? ' · ' + entries.length + ' product flag(s) recorded' : ''));
   };
 
-  const flagPack = () => {
+  const finishFlag = (remarks) => {
+    const entries = flagEntries(remarks);
     const flag = { id: s.packId, reason: 'pack mismatch', age: 'now', amt: '—' };
     const rec = { id: s.packId, kinds: 'pack', outcome: 'HOLD', tone: 'red', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'b3' + Math.random().toString(16).slice(2, 8) + '…7c01', pair: false };
-    set({ ...exitNav, lastSession: s.packId + ' · HOLD · flagged', flags: [flag, ...s.flags], records: [rec, ...s.records], orders: logOrderEvent(s.packId, 'Pack flagged · hold') });
+    set({ ...exitNav, lastSession: s.packId + ' · HOLD · flagged', flags: [flag, ...s.flags], records: [rec, ...s.records], orders: withOrderFlags(logOrderEvent(s.packId, 'Pack flagged · hold'), s.packId, entries) });
     showToast('Session held — flag raised with video evidence. Supervisor notified.');
+  };
+
+  // saving with flagged products requires a remark per product first
+  const closePack = () => {
+    if (!pass) return;
+    if (flaggedItems.length) return setRemarksFor('close');
+    finishClose({});
+  };
+  const flagPack = () => {
+    if (flaggedItems.length) return setRemarksFor('flag');
+    finishFlag({});
   };
 
   return (
@@ -92,7 +117,7 @@ export default function PackRecord({ ctx }) {
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--surf-rgb),0.45)', color: 'var(--mute-2)' }}>GATI · LIVE</span>
           </div>
           {rows.map((row) => (
-            <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(var(--surf-rgb),0.55)', borderRadius: 14 }}>
+            <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid ' + (row.flagged ? 'rgba(229,62,62,0.4)' : 'rgba(var(--surf-rgb),0.55)'), borderRadius: 14 }}>
               {row.captured ? (
                 <CapturedThumb size={34} label={row.name + ' — captured on video'} />
               ) : (
@@ -103,8 +128,32 @@ export default function PackRecord({ ctx }) {
                 <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{row.sku}</span>
               </div>
               <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 13, color: row.dotColor }}>{row.count}</span>
+              {row.flaggable && (
+                <button
+                  onClick={() => toggleFlag(row.sku)}
+                  title={row.flagged ? 'Remove flag from this product' : 'Flag this product'}
+                  aria-pressed={row.flagged}
+                  style={{ width: 30, height: 30, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', cursor: 'pointer', background: row.flagged ? 'rgba(229,62,62,0.12)' : 'transparent', color: row.flagged ? '#C62B22' : 'var(--mute)', border: '1px solid ' + (row.flagged ? 'rgba(229,62,62,0.45)' : 'rgba(0,0,0,0.08)') }}
+                >
+                  <Flag size={13} fill={row.flagged ? 'currentColor' : 'none'} aria-hidden="true" />
+                </button>
+              )}
             </div>
           ))}
+          {flaggedItems.length > 0 && (
+            <div style={{ border: '1px solid rgba(229,62,62,0.3)', background: 'rgba(229,62,62,0.05)', borderRadius: 14, padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, color: '#C62B22' }}>
+                <Flag size={13} fill="currentColor" aria-hidden="true" /> Flagged products · {flaggedItems.length}
+              </span>
+              {flaggedItems.map((i) => (
+                <div key={i.sku} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>{i.name}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{i.sku}</span>
+                  <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, color: '#C62B22' }}>remark at save</span>
+                </div>
+              ))}
+            </div>
+          )}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <button onClick={scanPackItem} disabled={allScanned} style={{ background: 'rgba(var(--accent-rgb),0.07)', border: '1px dashed rgba(var(--accent-rgb),0.45)', color: 'var(--accent)', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer', opacity: allScanned ? 0.4 : 1 }}>
               Scan item RFID (demo)
@@ -144,6 +193,20 @@ export default function PackRecord({ ctx }) {
 
         <RemarkBox ctx={ctx} id={s.packId} />
       </div>
+
+      {remarksFor && (
+        <FlagRemarksModal
+          items={flaggedItems.map((i) => ({ key: i.sku, name: i.name, sku: i.sku }))}
+          step="Packaging"
+          cta={remarksFor === 'close' ? 'Save & close session' : 'Save & flag session'}
+          onCancel={() => setRemarksFor(null)}
+          onSave={(remarks) => {
+            const act = remarksFor;
+            setRemarksFor(null);
+            (act === 'close' ? finishClose : finishFlag)(remarks);
+          }}
+        />
+      )}
     </div>
   );
 }

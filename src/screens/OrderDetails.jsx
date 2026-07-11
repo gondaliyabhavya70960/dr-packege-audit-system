@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus } from 'lucide-react';
+import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag } from 'lucide-react';
 import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmtMoney, draftItemsValue, ORDER_TYPE_CHANNEL, fmt } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import PackRecord from './PackRecord.jsx';
@@ -585,6 +585,33 @@ export default function OrderDetails({ ctx }) {
               );
             })}
           </div>
+
+          {(order.flagged || []).length > 0 && (
+            <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 10, border: '1px solid rgba(229,62,62,0.3)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Flag size={15} fill="currentColor" aria-hidden="true" style={{ color: '#C62B22' }} />
+                <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Flagged items</span>
+                <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 9px', borderRadius: 999, background: 'rgba(229,62,62,0.1)', color: '#C62B22' }}>{order.flagged.length}</span>
+              </div>
+              {order.flagged.map((f, i) => {
+                const stepTone = f.step === 'Return' ? { bg: 'rgba(229,62,62,0.08)', color: '#C62B22' } : f.step === 'Receive' ? { bg: 'rgba(217,142,4,0.1)', color: '#9A6A00' } : { bg: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' };
+                return (
+                  <div key={i} style={{ ...surfaceSubtle, borderRadius: 12, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: 14.5, fontWeight: 700 }}>{f.name}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{f.sku}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.08em', padding: '3px 10px', borderRadius: 999, background: stepTone.bg, color: stepTone.color }}>{f.step.toUpperCase()}</span>
+                      <button onClick={() => openPlayer(order.id, -1, 'order')} className="hv-accent14" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '4px 12px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+                        <Play size={12} aria-hidden="true" /> video
+                      </button>
+                    </div>
+                    {f.remark && <span style={{ fontSize: 13.5, color: 'rgba(var(--ink-rgb),0.75)', lineHeight: 1.45 }}>“{f.remark}”</span>}
+                    <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{f.time} · {f.who}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 4 }}>
             <span style={{ fontSize: 16, fontWeight: 700, marginBottom: 6, color: INK, letterSpacing: '-0.01em' }}>Timeline</span>
