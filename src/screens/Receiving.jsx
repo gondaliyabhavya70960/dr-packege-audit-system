@@ -1,20 +1,27 @@
-import { MONO, glass, feedBg, bannerTones, dotFor, fmt } from '../data.js';
+import { useState } from 'react';
+import { Flag } from 'lucide-react';
+import { MONO, glass, feedBg, bannerTones, dotFor, fmt, withOrderFlags } from '../data.js';
 import PrevStepClip from '../components/PrevStepClip.jsx';
 import RemarkBox from '../components/RemarkBox.jsx';
 import RecordButton from '../components/RecordButton.jsx';
 import CapturedThumb from '../components/CapturedThumb.jsx';
+import FlagRemarksModal from '../components/FlagRemarksModal.jsx';
 
 export default function Receiving({ ctx }) {
   const { s, set, showToast, logOrderEvent } = ctx;
   const rec = s.recActive;
   const toggleRec = () => set({ recActive: !s.recActive });
+  // which save action is waiting on flagged-product remarks: 'confirm' | 'flag' | null
+  const [remarksFor, setRemarksFor] = useState(null);
 
   const exitNav = s.sessionReturn === 'order' ? { screen: 'order', orderTab: 'detail' } : { screen: 'kiosk' };
+
+  const flaggedRows = s.recvRows.filter((r) => r.flagged);
 
   const rows = s.recvRows.map((r) => {
     const st = r.state === 'received' ? 'ok' : r.state === 'extra' ? 'bad' : 'wait';
     const d = dotFor(st);
-    return { ...d, key: r.rfid, rfid: r.rfid, name: r.name, stateLabel: r.state, captured: r.state === 'received' };
+    return { ...d, key: r.rfid, rfid: r.rfid, name: r.name, stateLabel: r.state, captured: r.state === 'received', flagged: !!r.flagged };
   });
 
   const matched = s.recvRows.filter((r) => r.state === 'received').length;
@@ -44,18 +51,37 @@ export default function Receiving({ ctx }) {
     set({ recvRows: [...s.recvRows, { rfid: 'RFID-1099', name: 'not on challan', state: 'extra' }] });
   };
 
-  const confirmRecv = () => {
-    if (matched === 0) return;
+  // flag / unflag a product mid-scan — scanning continues normally afterwards
+  const toggleFlag = (rfid) => set({ recvRows: s.recvRows.map((r) => (r.rfid === rfid ? { ...r, flagged: !r.flagged } : r)) });
+
+  // flagged products become order-level flag entries once their remark is in
+  const flagEntries = (remarks) => flaggedRows.map((r) => ({ name: r.name, sku: r.rfid, step: 'Receive', remark: (remarks[r.rfid] || '').trim(), time: 'today', who: s.userLabel || 'operator' }));
+
+  const finishConfirm = (remarks) => {
+    const entries = flagEntries(remarks);
     const out = short === 0 && extras === 0 ? 'received' : 'partial';
     const rec = { id: s.recvChallan, kinds: 'challan · receive', outcome: out, tone: out === 'received' ? 'green' : 'amber', operator: s.userLabel, station: 'AUDIT-BENCH-1', ts: 'today', hash: 'c7' + Math.random().toString(16).slice(2, 8) + '…1b22', pair: false };
-    set({ ...exitNav, lastSession: s.recvChallan + ' · ' + out, records: [rec, ...s.records], orders: logOrderEvent(s.recvChallan, 'Received · reconciled (' + out + ')') });
-    showToast('Reconcile result (' + out + ') pushed to Gati — arrival video retained.');
+    const label = 'Received · reconciled (' + out + ')' + (entries.length ? ' · ' + entries.length + ' flagged' : '');
+    set({ ...exitNav, lastSession: s.recvChallan + ' · ' + out, records: [rec, ...s.records], orders: withOrderFlags(logOrderEvent(s.recvChallan, label), s.recvChallan, entries) });
+    showToast('Reconcile result (' + out + ') pushed to Gati — arrival video retained.' + (entries.length ? ' ' + entries.length + ' product flag(s) recorded.' : ''));
   };
 
-  const flagRecv = () => {
+  const finishFlag = (remarks) => {
+    const entries = flagEntries(remarks);
     const flag = { id: s.recvChallan, reason: short > 0 ? 'short ' + short : 'extra ' + extras, age: 'now', amt: '—' };
-    set({ ...exitNav, lastSession: s.recvChallan + ' · flagged', flags: [flag, ...s.flags], orders: logOrderEvent(s.recvChallan, 'Receive flagged · short/extra') });
+    set({ ...exitNav, lastSession: s.recvChallan + ' · flagged', flags: [flag, ...s.flags], orders: withOrderFlags(logOrderEvent(s.recvChallan, 'Receive flagged · short/extra'), s.recvChallan, entries) });
     showToast('Consignment flagged — both videos attached as proof.');
+  };
+
+  // saving with flagged products requires a remark per product first
+  const confirmRecv = () => {
+    if (matched === 0) return;
+    if (flaggedRows.length) return setRemarksFor('confirm');
+    finishConfirm({});
+  };
+  const flagRecv = () => {
+    if (flaggedRows.length) return setRemarksFor('flag');
+    finishFlag({});
   };
 
   return (
@@ -71,7 +97,7 @@ export default function Receiving({ ctx }) {
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--surf-rgb),0.45)', color: 'var(--mute-2)' }}>GATI · CHALLAN</span>
           </div>
           {rows.map((row) => (
-            <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(var(--surf-rgb),0.55)', borderRadius: 14 }}>
+            <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid ' + (row.flagged ? 'rgba(229,62,62,0.4)' : 'rgba(var(--surf-rgb),0.55)'), borderRadius: 14 }}>
               {row.captured ? (
                 <CapturedThumb size={34} label={row.name + ' — captured on video'} />
               ) : (
@@ -82,8 +108,30 @@ export default function Receiving({ ctx }) {
                 <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>{row.name}</span>
               </div>
               <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 12, letterSpacing: '0.06em', color: row.dotColor }}>{row.stateLabel}</span>
+              <button
+                onClick={() => toggleFlag(row.rfid)}
+                title={row.flagged ? 'Remove flag from this product' : 'Flag this product'}
+                aria-pressed={row.flagged}
+                style={{ width: 30, height: 30, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', cursor: 'pointer', background: row.flagged ? 'rgba(229,62,62,0.12)' : 'transparent', color: row.flagged ? '#C62B22' : 'var(--mute)', border: '1px solid ' + (row.flagged ? 'rgba(229,62,62,0.45)' : 'rgba(0,0,0,0.08)') }}
+              >
+                <Flag size={13} fill={row.flagged ? 'currentColor' : 'none'} aria-hidden="true" />
+              </button>
             </div>
           ))}
+          {flaggedRows.length > 0 && (
+            <div style={{ border: '1px solid rgba(229,62,62,0.3)', background: 'rgba(229,62,62,0.05)', borderRadius: 14, padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, color: '#C62B22' }}>
+                <Flag size={13} fill="currentColor" aria-hidden="true" /> Flagged products · {flaggedRows.length}
+              </span>
+              {flaggedRows.map((r) => (
+                <div key={r.rfid} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>{r.name}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{r.rfid}</span>
+                  <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, color: '#C62B22' }}>remark at save</span>
+                </div>
+              ))}
+            </div>
+          )}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <button onClick={scanItem} disabled={short === 0} style={{ background: 'rgba(var(--accent-rgb),0.07)', border: '1px dashed rgba(var(--accent-rgb),0.45)', color: 'var(--accent)', borderRadius: 999, padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer', opacity: short === 0 ? 0.4 : 1 }}>
               Scan item RFID (demo)
@@ -108,6 +156,20 @@ export default function Receiving({ ctx }) {
         </div>
 
         <RemarkBox ctx={ctx} id={s.recvChallan} />
+
+        {remarksFor && (
+          <FlagRemarksModal
+            items={flaggedRows.map((r) => ({ key: r.rfid, name: r.name, sku: r.rfid }))}
+            step="Receive"
+            cta={remarksFor === 'confirm' ? 'Save & confirm received' : 'Save & flag session'}
+            onCancel={() => setRemarksFor(null)}
+            onSave={(remarks) => {
+              const act = remarksFor;
+              setRemarksFor(null);
+              (act === 'confirm' ? finishConfirm : finishFlag)(remarks);
+            }}
+          />
+        )}
       </div>
 
       {/* arrival feed */}

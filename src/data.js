@@ -247,6 +247,9 @@ const curatedOrders = [
     address: '7 Koregaon Park, Pune 411001', placed: '13 Jun 2026 · 10:05', ts: Date.parse('2026-06-13T10:05:00'),
     statusKey: 'returned', status: 'Returned · flagged', tone: 'red', station: 'RETURNS-1', value: '₹1.20L', valNum: 120000,
     items: [{ sku: 'SKU 4490', name: 'Emerald drop earrings', qty: 1, condition: 'disputed' }],
+    flagged: [
+      { name: 'Emerald drop earrings', sku: 'SKU 4490', step: 'Return', remark: 'Stone colour differs from the pack video — possible swap.', time: '13 Jun · 16:24', who: 'Sana' },
+    ],
     timeline: [
       { label: 'Order placed', time: '06 Jun · 12:30', who: 'web checkout', clip: false },
       { label: 'Packed · Warehouse', time: '06 Jun · 15:10', who: 'Mira · PACK-BENCH-1', clip: true },
@@ -744,6 +747,18 @@ export function synthOrder(id) {
     value: '—', valNum: 0, items: [], timeline: [{ label: 'Session filed', time: 'today', who: 'auto', clip: true }],
     custom: { ...blankCustom },
   };
+}
+
+// Append per-product flag entries to an order's flagged list. Entries carry the
+// step they were raised in (Packaging / Receive / Return), the operator's remark
+// and enough metadata for the Detail tab to link back to the session video.
+// Kiosk sessions can run against ids that aren't in the order book (any typed
+// id) — those persist onto a synthesized stub so the mandated remarks are never
+// silently dropped; opening /orders/<id> then finds the stored flags.
+export function withOrderFlags(orders, id, entries) {
+  if (!entries || !entries.length) return orders;
+  if (!orders.some((o) => o.id === id)) return [{ ...synthOrder(id), flagged: entries }, ...orders];
+  return orders.map((o) => (o.id === id ? { ...o, flagged: [...(o.flagged || []), ...entries] } : o));
 }
 
 // selectable UI design variations. Glass / Paper use the floating top-bar
