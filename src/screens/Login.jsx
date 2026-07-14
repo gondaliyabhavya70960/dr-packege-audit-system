@@ -1,7 +1,6 @@
 import { Check } from 'lucide-react';
 import { MONO } from '../data.js';
 import { PackageIcon } from '../components/icons.jsx';
-import AccentPicker from '../components/AccentPicker.jsx';
 
 export default function Login({ ctx }) {
   const { s, set, openTour } = ctx;
@@ -130,10 +129,6 @@ export default function Login({ ctx }) {
               })}
             </div>
             <span style={{ fontSize: 12.5, color: 'var(--mute)' }}>Warehouse can pack, receive &amp; return; Store packs &amp; returns.</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-            <label style={{ fontSize: 14, fontWeight: 700 }}>Accent color</label>
-            <AccentPicker value={s.accent} onPick={(c) => set({ accent: c })} />
           </div>
           <button
             data-tour="login"

@@ -761,29 +761,8 @@ export function withOrderFlags(orders, id, entries) {
   return orders.map((o) => (o.id === id ? { ...o, flagged: [...(o.flagged || []), ...entries] } : o));
 }
 
-// ---- custom accent helpers ----
-// The brand accent is CSS-variable driven (--accent / --accent-2 / --accent-rgb).
-// A user-picked colour is applied as an inline override on <html>, which beats
-// every theme's stylesheet value. These derive the companion tokens from one hex.
-function expandHex(hex) {
-  const h = (hex || '').replace('#', '');
-  return h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
-}
-export function hexToRgbTriplet(hex) {
-  const h = expandHex(hex);
-  if (h.length !== 6) return '170, 24, 44';
-  return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)).join(', ');
-}
-export function darkenHex(hex, amt = 0.82) {
-  const h = expandHex(hex);
-  if (h.length !== 6) return hex;
-  const to2 = (x) => Math.max(0, Math.min(255, Math.round(x))).toString(16).padStart(2, '0');
-  return '#' + [0, 2, 4].map((i) => to2(parseInt(h.slice(i, i + 2), 16) * amt)).join('');
-}
-
 export const initialState = {
   screen: 'login',
-  accent: '', // custom brand accent hex; '' = Liquid Glass default #AA182C (persisted)
   showWelcome: false, // first-run welcome screen (shown once after login)
   gsDone: [], // completed getting-started checklist step keys (persisted)
   gsDismissed: false, // getting-started checklist dismissed (persisted)
