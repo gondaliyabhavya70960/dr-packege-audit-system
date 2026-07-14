@@ -761,17 +761,6 @@ export function withOrderFlags(orders, id, entries) {
   return orders.map((o) => (o.id === id ? { ...o, flagged: [...(o.flagged || []), ...entries] } : o));
 }
 
-// selectable UI design variations. Glass / Paper use the floating top-bar
-// chrome; Devias Pro (dark sidebar) and Materialize (light vertical menu) use
-// the sidebar layout. All accents are driven by the --accent CSS variables.
-export const THEMES = [
-  { key: 'glass', label: 'Liquid Glass', sub: 'Light · frosted' },
-  { key: 'paper', label: 'Paper', sub: 'Light · flat' },
-  { key: 'devias-pro', label: 'Devias Pro', sub: 'Dark sidebar · indigo' },
-  { key: 'materialize', label: 'Materialize', sub: 'Material · vertical menu' },
-  { key: 'materialize-2', label: 'Materialize 2', sub: 'Material · icon rail' },
-];
-
 // ---- custom accent helpers ----
 // The brand accent is CSS-variable driven (--accent / --accent-2 / --accent-rgb).
 // A user-picked colour is applied as an inline override on <html>, which beats
@@ -782,7 +771,7 @@ function expandHex(hex) {
 }
 export function hexToRgbTriplet(hex) {
   const h = expandHex(hex);
-  if (h.length !== 6) return '142, 14, 34';
+  if (h.length !== 6) return '170, 24, 44';
   return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)).join(', ');
 }
 export function darkenHex(hex, amt = 0.82) {
@@ -794,8 +783,7 @@ export function darkenHex(hex, amt = 0.82) {
 
 export const initialState = {
   screen: 'login',
-  theme: 'glass', // active design variation (persisted to localStorage)
-  accent: '', // custom brand accent hex; '' = theme default (persisted to localStorage)
+  accent: '', // custom brand accent hex; '' = Liquid Glass default #AA182C (persisted)
   showWelcome: false, // first-run welcome screen (shown once after login)
   gsDone: [], // completed getting-started checklist step keys (persisted)
   gsDismissed: false, // getting-started checklist dismissed (persisted)

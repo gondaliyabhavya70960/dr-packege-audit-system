@@ -1,11 +1,11 @@
 import { Check } from 'lucide-react';
 
-// Brand-accent picker. Ruby (#8e0e22) is the theme default across every theme —
-// selecting it clears the override (value ''), so themes fall back to their CSS
-// var. Any other preset, or the custom colour well, sets an explicit hex that is
-// applied as an inline override on <html> and persisted.
+// Brand-accent picker. Crimson (#aa182c) is the Liquid Glass default —
+// selecting it clears the override (value ''), so it falls back to the :root
+// value. Any other preset, or the custom colour well, sets an explicit hex that
+// is applied as an inline override on <html> and persisted.
 const PRESETS = [
-  { name: 'Ruby (default)', hex: '#8e0e22' },
+  { name: 'Crimson (default)', hex: '#aa182c' },
   { name: 'Indigo', hex: '#635bff' },
   { name: 'Violet', hex: '#7367f0' },
   { name: 'Blue', hex: '#2563eb' },
@@ -15,7 +15,7 @@ const PRESETS = [
   { name: 'Rose', hex: '#e11d48' },
 ];
 
-const DEFAULT_HEX = '#8e0e22';
+const DEFAULT_HEX = '#aa182c';
 
 export default function AccentPicker({ value, onPick, compact }) {
   const current = (value || DEFAULT_HEX).toLowerCase();
