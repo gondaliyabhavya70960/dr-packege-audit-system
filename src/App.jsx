@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { initialState, tourDefs, nowStamp, THEMES, hexToRgbTriplet, darkenHex } from './data.js';import Login from './screens/Login.jsx';
+import { initialState, tourDefs, nowStamp, hexToRgbTriplet, darkenHex } from './data.js';import Login from './screens/Login.jsx';
 import KioskHome from './screens/KioskHome.jsx';
 import PackRecord from './screens/PackRecord.jsx';
 import Receiving from './screens/Receiving.jsx';
@@ -17,7 +17,6 @@ import Home from './screens/Home.jsx';
 import { emptyCustomOrder } from './data.js';
 import TopBar from './components/TopBar.jsx';
 import TabBar from './components/TabBar.jsx';
-import SidebarShell from './components/SidebarShell.jsx';
 import BackConfirm from './components/BackConfirm.jsx';
 import LeaveConfirm from './components/LeaveConfirm.jsx';
 import CreateOrderModal from './components/CreateOrderModal.jsx';
@@ -110,13 +109,9 @@ export default function App() {
   const tourMeasureT = useRef();
   const tourAutoT = useRef();
 
-  // load the saved design variation once on mount
+  // load persisted settings once on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('pa_theme');
-      const known = THEMES.some((t) => t.key === saved);
-      if (saved && known && saved !== sRef.current.theme) set({ theme: saved });
-      else if (saved && !known) localStorage.setItem('pa_theme', sRef.current.theme || 'glass');
       const savedAccent = localStorage.getItem('pa_accent');
       if (savedAccent) set({ accent: savedAccent });
       const gsDone = localStorage.getItem('pa_gs_done');
@@ -131,20 +126,9 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // apply + persist the active theme on <html data-theme> so every surface
-  // (including fixed modals) re-skins via CSS variables
-  useEffect(() => {
-    if (typeof document !== 'undefined') document.documentElement.dataset.theme = s.theme || 'glass';
-    try {
-      localStorage.setItem('pa_theme', s.theme || 'glass');
-    } catch (e) {
-      /* storage unavailable */
-    }
-  }, [s.theme]);
-
   // apply + persist the custom brand accent as inline vars on <html>. Inline
-  // properties beat the theme's stylesheet values, so one colour re-skins every
-  // theme; clearing it (accent === '') falls back to the theme default (red).
+  // properties beat the :root values; clearing it (accent === '') falls back to
+  // the Liquid Glass default (#AA182C).
   useEffect(() => {
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
@@ -359,25 +343,6 @@ export default function App() {
     </>
   );
 
-  // the full set of authenticated screens, role-gated by navigation. The Devias
-  // sidebar layout renders this directly (only the screen matching `screen` shows).
-  const authedContent = (
-    <>
-      {screen === 'kiosk' && <KioskHome ctx={ctx} />}
-      {screen === 'pack' && <PackRecord ctx={ctx} />}
-      {screen === 'recv' && <Receiving ctx={ctx} />}
-      {screen === 'ret' && <ReturnInspection ctx={ctx} />}
-      {screen === 'search' && <SearchPlayback ctx={ctx} />}
-      {DASH_SCREENS.includes(screen) && <Dashboard ctx={ctx} />}
-      {screen === 'config' && <UsersConfig ctx={ctx} />}
-      {sharedScreens}
-    </>
-  );
-
-  // The sidebar themes (Devias Pro, Materialize) swap the top-bar + floating-tab
-  // chrome for a permanent vertical menu (login keeps its full-screen split).
-  const useSidebar = (s.theme === 'devias-pro' || (s.theme || '').startsWith('materialize')) && screen !== 'login';
-
   return (
     <div
       style={{
@@ -390,9 +355,7 @@ export default function App() {
     >
       {screen === 'login' && <Login ctx={ctx} />}
 
-      {useSidebar && <SidebarShell ctx={ctx}>{authedContent}</SidebarShell>}
-
-      {!useSidebar && isOpSurface && (
+      {isOpSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="operator" />
           <div style={{ flex: 1, minHeight: 0, position: 'relative', paddingBottom: 74, overflow: 'auto' }}>
@@ -405,7 +368,7 @@ export default function App() {
         </div>
       )}
 
-      {!useSidebar && isAdminSurface && (
+      {isAdminSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="admin" />
           <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 120 }}>
@@ -417,7 +380,7 @@ export default function App() {
         </div>
       )}
 
-      {screen !== 'login' && !useSidebar && <TabBar ctx={ctx} />}
+      {screen !== 'login' && <TabBar ctx={ctx} />}
       {s.playerOpen && <SideBySidePlayer ctx={ctx} />}
       {s.backConfirm && <BackConfirm ctx={ctx} />}
       {s.leaveConfirm && <LeaveConfirm ctx={ctx} />}
