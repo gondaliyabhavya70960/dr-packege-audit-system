@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { initialState, tourDefs, nowStamp, hexToRgbTriplet, darkenHex } from './data.js';import Login from './screens/Login.jsx';
+import { initialState, tourDefs, nowStamp } from './data.js';import Login from './screens/Login.jsx';
 import KioskHome from './screens/KioskHome.jsx';
 import PackRecord from './screens/PackRecord.jsx';
 import Receiving from './screens/Receiving.jsx';
@@ -112,8 +112,6 @@ export default function App() {
   // load persisted settings once on mount
   useEffect(() => {
     try {
-      const savedAccent = localStorage.getItem('pa_accent');
-      if (savedAccent) set({ accent: savedAccent });
       const gsDone = localStorage.getItem('pa_gs_done');
       if (gsDone) {
         const arr = JSON.parse(gsDone);
@@ -125,28 +123,6 @@ export default function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // apply + persist the custom brand accent as inline vars on <html>. Inline
-  // properties beat the :root values; clearing it (accent === '') falls back to
-  // the Liquid Glass default (#AA182C).
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    const root = document.documentElement;
-    if (s.accent) {
-      root.style.setProperty('--accent', s.accent);
-      root.style.setProperty('--accent-2', darkenHex(s.accent));
-      root.style.setProperty('--accent-rgb', hexToRgbTriplet(s.accent));
-    } else {
-      root.style.removeProperty('--accent');
-      root.style.removeProperty('--accent-2');
-      root.style.removeProperty('--accent-rgb');
-    }
-    try {
-      localStorage.setItem('pa_accent', s.accent || '');
-    } catch (e) {
-      /* storage unavailable */
-    }
-  }, [s.accent]);
 
   // 1s heartbeat: session recording timer + player sync-play progress
   useEffect(() => {

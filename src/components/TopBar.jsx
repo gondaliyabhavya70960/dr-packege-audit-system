@@ -1,6 +1,5 @@
 import { MONO, glassFloat, glassPopover } from '../data.js';
 import { User, Settings, LogOut } from 'lucide-react';
-import AccentPicker from './AccentPicker.jsx';
 
 const SCREEN_CHIPS = { home: 'OVERVIEW', kiosk: 'STATION READY', pack: 'PACK & RECORD', recv: 'STORE RECEIVING', ret: 'RETURN INSPECTION' };
 
@@ -73,10 +72,6 @@ export function ProfileMenu({ ctx, roleChip, roleLine }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '8px 12px 10px', borderBottom: '1px solid rgba(var(--ink-rgb),0.1)', marginBottom: 4 }}>
             <span style={{ fontSize: 14, fontWeight: 700 }}>{userLabel}</span>
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: 'var(--accent)' }}>{roleLine}</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 7, padding: '4px 8px 8px' }}>
-            <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', color: 'var(--mute)' }}>ACCENT</span>
-            <AccentPicker value={s.accent} onPick={(c) => set({ accent: c })} compact />
           </div>
           <div style={{ height: 1, background: 'rgba(var(--ink-rgb),0.08)', margin: '4px 6px' }} />
           <button className="hv-white7" onClick={goProfile} style={itemStyle}>
