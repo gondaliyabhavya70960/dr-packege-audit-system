@@ -115,7 +115,7 @@ function NotificationsBell({ ctx }) {
       </button>
       {s.notifOpen && (
         <div style={{ ...cardLight, borderRadius: 14, position: 'absolute', right: 0, top: 52, width: 380, maxWidth: '86vw', padding: '14px 6px 8px', display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
-          <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.16em', color: 'var(--mute-2)', padding: '0 14px 8px' }}>NOTIFICATIONS</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', color: 'var(--ink)', padding: '0 14px 8px' }}>NOTIFICATIONS</span>
           {items.length === 0 && <span style={{ fontSize: 13, color: 'var(--mute)', padding: '4px 14px 10px' }}>You're all caught up.</span>}
           {items.map((n) => (
             <button key={n.key} className="hv-white7" onClick={n.go} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', textAlign: 'left', background: 'transparent', border: 'none', borderRadius: 10, padding: '9px 14px', cursor: 'pointer' }}>

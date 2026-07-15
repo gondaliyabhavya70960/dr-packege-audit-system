@@ -111,7 +111,7 @@ export default function TabBar({ ctx }) {
                       zIndex: 42,
                     }}
                   >
-                    <div style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.18em', color: 'rgba(40,32,38,0.55)', padding: '8px 12px 6px' }}>ADMIN TOOLS</div>
+                    <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', color: 'var(--ink)', padding: '8px 12px 6px' }}>ADMIN TOOLS</div>
                     {adminMenuItems.map((n) => {
                       const active = screen === n.id;
                       return (

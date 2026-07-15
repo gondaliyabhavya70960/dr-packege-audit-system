@@ -102,10 +102,10 @@ export default function Orders({ ctx }) {
       <button
         onClick={() => set({ oSort: isDesc || !active ? asc : desc })}
         title={'Sort by ' + label.toLowerCase()}
-        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', color: active ? 'var(--accent)' : 'var(--mute)' }}
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: active ? 'var(--accent)' : 'var(--ink)' }}
       >
         {label}
-        <Icon size={12} aria-hidden="true" style={{ flex: 'none', opacity: active ? 1 : 0.55 }} />
+        <Icon size={12} aria-hidden="true" style={{ flex: 'none', opacity: active ? 1 : 0.7 }} />
       </button>
     );
   };
@@ -150,7 +150,7 @@ export default function Orders({ ctx }) {
       {/* toolbar: search + filters (raised so the glass dropdowns overlay the table) */}
       <div style={{ ...glass, padding: 14, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 220 }}>
-          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', color: 'var(--mute)' }}>SEARCH</span>
+          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>SEARCH</span>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <span style={{ position: 'absolute', left: 13, color: 'var(--mute)', display: 'flex' }}>
               <Search size={16} aria-hidden="true" />
@@ -199,7 +199,7 @@ export default function Orders({ ctx }) {
         <div style={{ overflowX: 'auto' }}>
           <div style={{ minWidth: showValue ? 1060 : 980 }}>
             {/* header row */}
-            <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 14, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid var(--surface-border)', fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', color: 'var(--mute)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 14, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid var(--surface-border)', fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>
               <input type="checkbox" checked={allSel} onChange={toggleAll} style={{ accentColor: 'var(--accent)', cursor: 'pointer', width: 15, height: 15 }} />
               <SortHeader label="ORDER" asc="orderaz" desc="orderza" />
               <span>ROUTE</span>
