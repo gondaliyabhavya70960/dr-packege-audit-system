@@ -1,4 +1,4 @@
-import { Rewind, FastForward, Play, Pause } from 'lucide-react';
+import { Rewind, FastForward, Play, Pause, ChevronLeft } from 'lucide-react';
 import { MONO, glass, fmt } from '../data.js';
 import PlaybackFrame from './PlaybackFrame.jsx';
 
@@ -51,7 +51,7 @@ export default function SideBySidePlayer({ ctx }) {
         {/* page header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           <button className="hv-white75" onClick={closePlayer} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(var(--surf-rgb),0.5)', border: '1px solid rgba(var(--surf-rgb),0.6)', color: 'var(--ink-2)', borderRadius: 999, padding: '8px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
-            ← Back
+            <ChevronLeft size={15} aria-hidden="true" /> Back
           </button>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, letterSpacing: '-0.01em' }}>
             Side-by-side · <span style={{ fontFamily: MONO, fontWeight: 500 }}>{s.playerId}</span>

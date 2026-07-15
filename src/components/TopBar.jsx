@@ -1,5 +1,5 @@
 import { MONO, glassFloat, glassPopover } from '../data.js';
-import { User, Settings, LogOut } from 'lucide-react';
+import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft } from 'lucide-react';
 
 const SCREEN_CHIPS = { home: 'OVERVIEW', kiosk: 'STATION READY', pack: 'PACK & RECORD', recv: 'STORE RECEIVING', ret: 'RETURN INSPECTION' };
 
@@ -22,9 +22,10 @@ const barStyle = {
   margin: '14px 16px 0',
   borderRadius: 999,
   // the backdrop-filter creates a stacking context; without an explicit
-  // z-index the profile dropdown would paint under the screen content
+  // z-index the profile dropdown would paint under the screen content — and it
+  // must also beat the top nav band below (zIndex 40) so the open menu wins
   position: 'relative',
-  zIndex: 10,
+  zIndex: 50,
 };
 
 function StatusChip({ label }) {
@@ -65,7 +66,7 @@ export function ProfileMenu({ ctx, roleChip, roleLine }) {
         <span style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(var(--accent-rgb),0.14)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700 }}>{userInitial}</span>
         <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink-2)' }}>{userLabel}</span>
         <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em', padding: '3px 8px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.14)', color: 'var(--accent)' }}>{roleChip}</span>
-        <span style={{ fontSize: 9, color: 'rgba(40,32,38,0.55)' }}>{s.profileMenuOpen ? '▲' : '▼'}</span>
+        <span style={{ display: 'flex', color: 'rgba(40,32,38,0.55)' }}>{s.profileMenuOpen ? <ChevronUp size={13} aria-hidden="true" /> : <ChevronDown size={13} aria-hidden="true" />}</span>
       </button>
       {s.profileMenuOpen && (
         <div style={{ ...glassPopover, position: 'absolute', right: 0, top: 54, width: 264, borderRadius: 22, padding: 8, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
@@ -152,7 +153,7 @@ export default function TopBar({ ctx, variant }) {
             onClick={() => set({ backConfirm: true })}
             style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.06)', color: 'var(--ink-2)', borderRadius: 999, padding: '7px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
           >
-            ← Back
+            <ChevronLeft size={15} aria-hidden="true" /> Back
           </button>
         )}
         {showStation && (

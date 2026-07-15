@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag } from 'lucide-react';
+import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag } from 'lucide-react';
 import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmtMoney, draftItemsValue, ORDER_TYPE_CHANNEL, fmt } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import PackRecord from './PackRecord.jsx';
@@ -10,6 +10,7 @@ import ClipPlayer from '../components/ClipPlayer.jsx';
 import VideoCaptureCard from '../components/VideoCaptureCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
+import StatusBadge from '../components/StatusBadge.jsx';
 
 const STAGE_TITLES = { pack: 'Packaging', recv: 'Receiving', ret: 'Return inspection' };
 
@@ -45,9 +46,9 @@ function CompletedStage({ order, stage, ctx }) {
 // A stage the order hasn't reached yet ('empty' mode) — a read-only zero-state
 // explaining when the step will unlock.
 const EMPTY_COPY = {
-  pack: { icon: Package, title: 'Packaging not started', sub: 'This order has not been packed yet. The Packaging step is editable while the order is a draft.' },
+  pack: { icon: Package, title: 'Packaging not started', sub: 'This order has not been packed yet. The Packaging step is editable while the order is Ready to Pack.' },
   recv: { icon: Inbox, title: 'Receiving not started', sub: 'This order has not reached store receiving yet. The Receive step unlocks when the consignment arrives and is scanned in.' },
-  ret: { icon: RotateCcw, title: 'No return on this order', sub: 'Nothing has been returned. The Return step unlocks if the customer raises a return and it is inspected at the desk.' },
+  ret: { icon: RotateCcw, title: 'No return on this order', sub: 'Nothing has been returned. If the customer raises a return it moves Requested → In Transit → Received, and the Return step unlocks for inspection at the desk.' },
 };
 
 function EmptyStage({ stage }) {
@@ -65,15 +66,26 @@ const JOURNEY = [
   { key: 'delivered', label: 'Delivered' },
 ];
 
+// the reverse journey for the Return tab — the full e-commerce return flow
+const RETURN_JOURNEY = [
+  { key: 'returning', label: 'Requested' },
+  { key: 'return-transit', label: 'In transit back' },
+  { key: 'return-received', label: 'Received at desk' },
+  { key: 'returned', label: 'Completed' },
+];
+
 const STATUS_COPY = {
   transit: 'The consignment has left the warehouse and is on its way. The Receive step unlocks when it arrives at the store and is scanned in.',
   delivery: 'The order is out for last-mile delivery. The Receive step unlocks once the consignment is checked in.',
+  returning: 'The customer has requested a return and a reverse pickup is being scheduled. The Return step unlocks for inspection once the item is back at the desk.',
+  'return-transit': 'The return shipment has been picked up and is on its way back. The Return step unlocks for inspection when it arrives at the desk.',
 };
 
 function StatusStage({ order, stage }) {
   const a = tone('amber');
   const route = orderRoute(order);
-  const curIdx = JOURNEY.findIndex((m) => m.key === order.statusKey);
+  const journey = stage === 'ret' ? RETURN_JOURNEY : JOURNEY;
+  const curIdx = journey.findIndex((m) => m.key === order.statusKey);
   const sub = STATUS_COPY[order.statusKey] || STATUS_COPY.transit;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -88,19 +100,19 @@ function StatusStage({ order, stage }) {
       <div style={{ ...cardLight, padding: 22, display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap', fontSize: 14, color: INK }}>
           <MapPin size={15} aria-hidden="true" style={{ color: 'var(--accent)', flex: 'none' }} />
-          <span style={{ fontWeight: 700 }}>{route.from}</span>
+          <span style={{ fontWeight: 700 }}>{stage === 'ret' ? route.to : route.from}</span>
           <ChevronRight size={15} aria-hidden="true" style={{ color: MUTE, flex: 'none' }} />
-          <span style={{ fontWeight: 700 }}>{route.to}</span>
+          <span style={{ fontWeight: 700 }}>{stage === 'ret' ? route.from : route.to}</span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-          {JOURNEY.map((m, i) => {
+          {journey.map((m, i) => {
             const done = curIdx >= 0 && i < curIdx;
             const active = i === curIdx;
             const reached = done || active;
             return (
               <div key={m.key} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, position: 'relative' }}>
-                {i < JOURNEY.length - 1 && (
+                {i < journey.length - 1 && (
                   <span style={{ position: 'absolute', top: 9, left: '50%', width: '100%', height: 2, background: done ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.12)' }} />
                 )}
                 <span style={{ position: 'relative', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: active ? 'var(--accent)' : done ? 'rgba(var(--accent-rgb),0.15)' : 'var(--surface)', border: '2px solid ' + (reached ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.2)') }}>
@@ -529,7 +541,7 @@ export default function OrderDetails({ ctx }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
             <span style={{ fontFamily: MONO, fontSize: 20, fontWeight: 500 }}>{order.id}</span>
-            <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', padding: '5px 12px', borderRadius: 999, background: t.bg, color: t.color, border: '1px solid ' + t.border }}>{order.status}</span>
+            <StatusBadge status={order.status} tone={order.tone} size="lg" />
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{order.channel.toUpperCase()}</span>
           </div>
           <span style={{ fontSize: 14, color: MUTE }}>{order.customer} · {order.value} · placed {order.placed}</span>
@@ -539,7 +551,7 @@ export default function OrderDetails({ ctx }) {
           <>
         {hasPair && (
           <button className="hv-accent14" onClick={() => openPlayer(order.id, -1, 'order')} style={{ background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-            Open side-by-side ▸
+            Open side-by-side <ChevronRight size={14} aria-hidden="true" style={{ display: 'inline', verticalAlign: '-2px' }} />
           </button>
         )}
         {editing ? (
@@ -613,26 +625,30 @@ export default function OrderDetails({ ctx }) {
             </div>
           )}
 
-          <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <span style={{ fontSize: 16, fontWeight: 700, marginBottom: 6, color: INK, letterSpacing: '-0.01em' }}>Timeline</span>
+          <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <span style={{ fontSize: 16, fontWeight: 700, marginBottom: 10, color: INK, letterSpacing: '-0.01em' }}>Timeline</span>
             {order.timeline.map((e, i) => {
               const last = i === order.timeline.length - 1;
               return (
-                <div key={i} style={{ display: 'flex', gap: 12 }}>
+                <div key={i} style={{ display: 'flex', gap: 14 }}>
+                  {/* node: check for completed steps, pulsing dot for the current one */}
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 'none' }}>
-                    <span style={{ width: 12, height: 12, borderRadius: '50%', background: last ? 'var(--accent)' : 'rgba(var(--accent-rgb),0.25)', border: '2px solid #fff', boxShadow: '0 0 0 1px rgba(var(--accent-rgb),0.25)' }} />
-                    {!last && <span style={{ width: 2, flex: 1, minHeight: 28, background: 'rgba(var(--accent-rgb),0.15)' }} />}
+                    <span style={{ width: 24, height: 24, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: last ? 'var(--accent)' : 'rgba(var(--accent-rgb),0.1)', color: last ? '#FFFFFF' : 'var(--accent)', border: '1px solid ' + (last ? 'var(--accent)' : 'rgba(var(--accent-rgb),0.3)') }}>
+                      {last ? <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#FFFFFF', animation: 'pulse 1.4s ease-in-out infinite' }} /> : <Check size={13} strokeWidth={3} aria-hidden="true" />}
+                    </span>
+                    {!last && <span style={{ width: 2, flex: 1, minHeight: 22, margin: '3px 0', borderRadius: 2, background: 'rgba(var(--accent-rgb),0.15)' }} />}
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 2, paddingBottom: last ? 0 : 14 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 14, fontWeight: 600 }}>{e.label}</span>
+                  <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3, paddingBottom: last ? 2 : 18 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: 14.5, fontWeight: 600, color: last ? INK : 'var(--ink-2)' }}>{e.label}</span>
                       {e.clip && (
-                        <button onClick={() => openPlayer(order.id, -1, 'order')} aria-label="Play clip" className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '2px 9px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
+                        <button onClick={() => openPlayer(order.id, -1, 'order')} aria-label="Play clip" className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '3px 10px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
                           <Play size={11} aria-hidden="true" /> clip
                         </button>
                       )}
+                      <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 11.5, color: 'var(--mute)', whiteSpace: 'nowrap' }}>{e.time}</span>
                     </div>
-                    <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{e.time} · {e.who}</span>
+                    <span style={{ fontSize: 12.5, color: 'var(--mute)' }}>{e.who}</span>
                   </div>
                 </div>
               );
@@ -719,8 +735,8 @@ export default function OrderDetails({ ctx }) {
 function Breadcrumb({ onBack, crumb, back }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
-      <button className="hv-text-dark" onClick={onBack} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
-        ← {back || 'Orders'}
+      <button className="hv-text-dark" onClick={onBack} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
+        <ChevronLeft size={15} aria-hidden="true" /> {back || 'Orders'}
       </button>
       <span style={{ color: 'var(--mute)' }}>/</span>
       <span style={{ fontFamily: MONO, color: 'var(--mute-2)' }}>{crumb}</span>

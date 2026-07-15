@@ -1,4 +1,5 @@
 import { MONO, glassFloat, glassPopover } from '../data.js';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 
@@ -51,8 +52,10 @@ export default function TabBar({ ctx }) {
   });
 
   return (
-    <div data-tour="nav" style={{ position: 'fixed', left: '50%', bottom: 18, transform: 'translateX(-50%)', zIndex: 40 }}>
-      <div style={{ ...glassFloat, display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999 }}>
+    // top-level navigation lives at the top of the app, directly under the top
+    // bar. data-tour sits on the pill itself so the tour spotlights it tightly.
+    <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 16px 0', position: 'relative', zIndex: 40 }}>
+      <div data-tour="nav" style={{ ...glassFloat, display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999 }}>
         {navTabs.map((t) => (
           <button key={t.id} onClick={() => navGo(t.id)} style={pillBtn(navActive(t.id))}>
             {t.label}
@@ -66,23 +69,23 @@ export default function TabBar({ ctx }) {
             <div style={{ position: 'relative' }}>
               <button onClick={() => set({ adminMenuOpen: !s.adminMenuOpen })} style={{ ...pillBtn(adminFilled), display: 'flex', alignItems: 'center', gap: 7 }}>
                 <span>Admin</span>
-                <span style={{ fontSize: 10 }}>{adminOpen ? '▾' : '▴'}</span>
+                {adminOpen ? <ChevronUp size={13} aria-hidden="true" /> : <ChevronDown size={13} aria-hidden="true" />}
               </button>
 
               {adminOpen && (
                 <>
-                  {/* pointer that visually ties the menu to the trigger, centred over the button */}
+                  {/* pointer that visually ties the menu to the trigger, centred under the button */}
                   <div
                     style={{
                       position: 'absolute',
-                      bottom: 'calc(100% + 5px)',
+                      top: 'calc(100% + 5px)',
                       left: '50%',
                       transform: 'translateX(-50%) rotate(45deg)',
                       width: 12,
                       height: 12,
                       background: MENU_BG,
-                      borderRight: MENU_BORDER,
-                      borderBottom: MENU_BORDER,
+                      borderLeft: MENU_BORDER,
+                      borderTop: MENU_BORDER,
                       backdropFilter: 'blur(30px) saturate(1.7)',
                       WebkitBackdropFilter: 'blur(30px) saturate(1.7)',
                       zIndex: 43,
@@ -92,7 +95,7 @@ export default function TabBar({ ctx }) {
                     style={{
                       ...glassPopover,
                       position: 'absolute',
-                      bottom: 'calc(100% + 11px)',
+                      top: 'calc(100% + 11px)',
                       right: 0,
                       width: 280,
                       maxWidth: '78vw',

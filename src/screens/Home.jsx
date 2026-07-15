@@ -1,7 +1,18 @@
-import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, Flag, TriangleAlert } from 'lucide-react';
-import { MONO, MUTE, glass, fillTone, ORDER_STATUSES, isTransferOrder } from '../data.js';
+import { useState } from 'react';
+import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, TriangleAlert } from 'lucide-react';
+import { MONO, MUTE, glass, fillTone, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import GettingStarted from '../components/GettingStarted.jsx';
+import GlassSelect from '../components/GlassSelect.jsx';
+
+const DAY = 86400000;
+const START_TODAY = Date.parse('2026-06-15T00:00:00');
+const RANGE_OPTS = [
+  { value: 'all', label: 'All time' },
+  { value: 'today', label: 'Today' },
+  { value: '7d', label: 'Last 7 days' },
+  { value: '30d', label: 'Last 30 days' },
+];
 
 // a vector per order status — gives each card a fill cue matching its stage
 const STATUS_ICONS = {
@@ -13,7 +24,9 @@ const STATUS_ICONS = {
   delivery: Send,
   delivered: CircleCheck,
   returning: RotateCcw,
-  returned: Undo2,
+  'return-transit': Undo2,
+  'return-received': PackageOpen,
+  returned: BadgeCheck,
   flagged: Flag,
 };
 
@@ -28,7 +41,9 @@ const STATUS_COLORS = {
   delivery: '#06B6D4',
   delivered: '#22C55E',
   returning: '#F97316',
-  returned: '#EF4444',
+  'return-transit': '#FB923C',
+  'return-received': '#A855F7',
+  returned: '#14B8A6',
   flagged: '#DC2626',
 };
 
@@ -79,7 +94,16 @@ function KpiCard({ accent, title, value, unit, sub, subColor, Icon }) {
 export default function Home({ ctx }) {
   const { s, openList, newOrder } = ctx;
   const sideLabel = s.side === 'store' ? 'Store' : 'Warehouse';
-  const orders = s.orders;
+
+  // time-based filter — every number on the page respects the selected window
+  const [range, setRange] = useState('all');
+  const inRange = (o) => {
+    if (range === 'today') return o.ts >= START_TODAY;
+    if (range === '7d') return (NOW_TS - o.ts) / DAY <= 7;
+    if (range === '30d') return (NOW_TS - o.ts) / DAY <= 30;
+    return true;
+  };
+  const orders = s.orders.filter(inRange);
 
   const transfer = orders.filter(isTransferOrder);
   const packaging = orders.filter((o) => !isTransferOrder(o));
@@ -113,7 +137,7 @@ export default function Home({ ctx }) {
             <span style={{ fontSize: 17, fontWeight: 700 }}>{label}</span>
             <span style={{ fontSize: 12.5, color: MUTE }}>{sub}</span>
           </div>
-          <button className="hv-accent14" onClick={() => openList(kind)} style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '8px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>
+          <button className="hv-accent14" onClick={() => openList(kind, null, range)} style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '8px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>
             Open
             <ChevronRight size={14} aria-hidden="true" />
           </button>
@@ -125,7 +149,7 @@ export default function Home({ ctx }) {
             {mix.map((d) => {
               const pct = total ? Math.round((d.value / total) * 100) : 0;
               return (
-                <button key={d.key} onClick={() => openList(kind, d.key)} className="hv-white7" style={{ display: 'flex', alignItems: 'center', gap: 10, border: 'none', background: 'transparent', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', textAlign: 'left' }}>
+                <button key={d.key} onClick={() => openList(kind, d.key, range)} className="hv-white7" style={{ display: 'flex', alignItems: 'center', gap: 10, border: 'none', background: 'transparent', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', textAlign: 'left' }}>
                   <span style={{ width: 9, height: 9, flex: 'none', borderRadius: '50%', background: d.color }} />
                   <span style={{ fontSize: 13.5, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
                   <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 600, color: 'var(--ink-2)' }}>{d.value}</span>
@@ -149,6 +173,11 @@ export default function Home({ ctx }) {
             <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{sideLabel.toUpperCase()}</span>
           </div>
           <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>Welcome{s.userLabel ? ', ' + s.userLabel : ''} — your order book at a glance. Pick a list to start.</span>
+        </div>
+        <div style={{ flex: 1 }} />
+        {/* time window for every figure on this page */}
+        <div style={{ position: 'relative', zIndex: 30 }}>
+          <GlassSelect label="PERIOD" value={range} onChange={setRange} options={RANGE_OPTS} minWidth={150} />
         </div>
       </div>
 
@@ -192,31 +221,38 @@ export default function Home({ ctx }) {
         </div>
       </div>
 
-      {/* counts by status */}
-      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <span style={{ fontSize: 16, fontWeight: 700 }}>Orders by status</span>
-        <div className="kpi-grid">
-          {statuses.map((st) => {
+      {/* counts by status — one clean column: icon · label · share bar · count */}
+      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+          <span style={{ fontSize: 16, fontWeight: 700 }}>Orders by status</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{orders.length}</span>
+        </div>
+        {(() => {
+          const max = Math.max(1, ...statuses.map((st) => st.n));
+          return statuses.map((st) => {
             const f = fillTone(st.tone);
             const Icon = STATUS_ICONS[st.key] || Package;
+            const color = STATUS_COLORS[st.key] || '#94A3B8';
             return (
               <button
                 key={st.key}
-                onClick={() => openList(st.kind, st.key)}
-                className="hv-border-accent"
-                style={{ background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10 }}
+                onClick={() => openList(st.kind, st.key, range)}
+                className="hv-white7"
+                style={{ display: 'grid', gridTemplateColumns: '34px minmax(150px, 0.9fr) 1.6fr 44px 18px', alignItems: 'center', gap: 12, background: 'transparent', border: 'none', borderRadius: 10, padding: '8px 10px', cursor: 'pointer', textAlign: 'left', opacity: st.n ? 1 : 0.55 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-                  <span style={{ width: 38, height: 38, flex: 'none', borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', background: f.bg, color: f.color, border: '1px solid ' + f.border }}>
-                    <Icon size={19} aria-hidden="true" />
-                  </span>
-                  <span style={{ fontFamily: MONO, fontSize: 30, fontWeight: 500, lineHeight: 1, color: st.n ? 'var(--ink-2)' : '#9AA0A6' }}>{st.n}</span>
-                </div>
-                <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', padding: '4px 11px', borderRadius: 999, alignSelf: 'flex-start', background: f.bg, color: f.color, border: '1px solid ' + f.border }}>{st.label}</span>
+                <span style={{ width: 32, height: 32, flex: 'none', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', background: f.bg, color: f.color, border: '1px solid ' + f.border }}>
+                  <Icon size={16} aria-hidden="true" />
+                </span>
+                <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--ink-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{st.label}</span>
+                <span style={{ height: 7, borderRadius: 999, background: 'rgba(var(--ink-rgb),0.07)', overflow: 'hidden' }}>
+                  <span style={{ display: 'block', height: '100%', width: (st.n / max) * 100 + '%', borderRadius: 999, background: color, transition: 'width 0.25s ease' }} />
+                </span>
+                <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, color: st.n ? 'var(--ink-2)' : 'var(--mute)', textAlign: 'right' }}>{st.n}</span>
+                <ChevronRight size={14} aria-hidden="true" style={{ color: 'var(--mute)' }} />
               </button>
             );
-          })}
-        </div>
+          });
+        })()}
       </div>
     </div>
   );
