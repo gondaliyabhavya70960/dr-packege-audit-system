@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag } from 'lucide-react';
+import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck } from 'lucide-react';
 import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmtMoney, draftItemsValue, ORDER_TYPE_CHANNEL, fmt } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import PackRecord from './PackRecord.jsx';
@@ -50,6 +50,24 @@ const EMPTY_COPY = {
   recv: { icon: Inbox, title: 'Receiving not started', sub: 'This order has not reached store receiving yet. The Receive step unlocks when the consignment arrives and is scanned in.' },
   ret: { icon: RotateCcw, title: 'No return on this order', sub: 'Nothing has been returned. If the customer raises a return it moves Requested → In Transit → Received, and the Return step unlocks for inspection at the desk.' },
 };
+
+// pick a timeline-event icon from the event label (order of checks matters:
+// flags and refunds win over the generic return/pack/receive words)
+function timelineIcon(label) {
+  const l = (label || '').toLowerCase();
+  if (l.includes('flag')) return Flag;
+  if (l.includes('refund') || l.includes('approved')) return BadgeCheck;
+  if (l.includes('pickup') || l.includes('picked up')) return Undo2;
+  if (l.includes('return')) return RotateCcw;
+  if (l.includes('dispatch') || l.includes('transit') || l.includes('delivery')) return Truck;
+  if (l.includes('delivered')) return CircleCheck;
+  if (l.includes('placed')) return ShoppingCart;
+  if (l.includes('pack')) return Package;
+  if (l.includes('receiv') || l.includes('arrived') || l.includes('shelved')) return Inbox;
+  if (l.includes('challan') || l.includes('draft')) return FileText;
+  if (l.includes('capture') || l.includes('record') || l.includes('session')) return Video;
+  return Check;
+}
 
 function EmptyStage({ stage }) {
   const c = EMPTY_COPY[stage] || EMPTY_COPY.recv;
@@ -532,12 +550,22 @@ export default function OrderDetails({ ctx }) {
   };
   const backLabel = s.listKind === 'transfer' ? 'Transferring goods' : 'Packaging';
 
+  const needsAttention = order.tone === 'red' || (order.flagged || []).length > 0;
+  const totalUnits = order.items.reduce((n, it) => n + it.qty, 0);
+
   return (
     <div data-screen-label="15 Custom order details" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, minHeight: '100%' }}>
-      <Breadcrumb onBack={backToList} crumb={order.id} back={backLabel} />
-
       {/* header card */}
       <div style={{ ...cardLight, padding: 20, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+        <button
+          className="hv-white75"
+          onClick={backToList}
+          title={'Back to ' + backLabel}
+          aria-label={'Back to ' + backLabel}
+          style={{ width: 42, height: 42, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--surface)', border: '1px solid var(--surface-border)', color: 'var(--accent)', borderRadius: '50%', cursor: 'pointer' }}
+        >
+          <ChevronLeft size={19} aria-hidden="true" />
+        </button>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
             <span style={{ fontFamily: MONO, fontSize: 20, fontWeight: 500 }}>{order.id}</span>
@@ -548,28 +576,20 @@ export default function OrderDetails({ ctx }) {
         </div>
         <div style={{ flex: 1 }} />
         {activeTab === 'detail' && (
-          <>
-        {hasPair && (
-          <button className="hv-accent14" onClick={() => openPlayer(order.id, -1, 'order')} style={{ background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '9px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-            Open side-by-side <ChevronRight size={14} aria-hidden="true" style={{ display: 'inline', verticalAlign: '-2px' }} />
-          </button>
-        )}
-        {editing ? (
-          <>
-            <button className="hv-white75" onClick={cancelEdit} style={{ background: 'rgba(var(--surf-rgb),0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: 10, padding: '10px 18px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}>
-              Cancel
-            </button>
-            <button className="hv-brighten" onClick={saveEdit} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '10px 20px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
-              Save changes
-            </button>
-          </>
-        ) : (
-          <button className="hv-border-accent" onClick={startEdit} style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: 'var(--accent)', borderRadius: 999, padding: '9px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-            <SquarePen size={15} aria-hidden="true" />
-            Edit custom details
-          </button>
-        )}
-          </>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5, minWidth: 0 }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13.5, fontWeight: 600, color: needsAttention ? '#C62B22' : '#0E8A50', textAlign: 'right' }}>
+              {needsAttention ? <Flag size={14} aria-hidden="true" style={{ flex: 'none' }} /> : <CircleCheck size={15} aria-hidden="true" style={{ flex: 'none' }} />}
+              {needsAttention ? 'Needs attention — this order has an open flag.' : 'All clear — nothing needs your attention on this order right now.'}
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 12.5, color: 'var(--mute)' }}>
+              <span>{order.station} · {order.items.length} SKU{order.items.length === 1 ? '' : 's'} · {totalUnits} unit{totalUnits === 1 ? '' : 's'}</span>
+              {hasPair && (
+                <button className="hv-accent14" onClick={() => openPlayer(order.id, -1, 'order')} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '5px 12px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+                  Open side-by-side <ChevronRight size={12} aria-hidden="true" />
+                </button>
+              )}
+            </span>
+          </div>
         )}
       </div>
 
@@ -629,21 +649,22 @@ export default function OrderDetails({ ctx }) {
             <span style={{ fontSize: 16, fontWeight: 700, marginBottom: 10, color: INK, letterSpacing: '-0.01em' }}>Timeline</span>
             {order.timeline.map((e, i) => {
               const last = i === order.timeline.length - 1;
+              const EvIcon = timelineIcon(e.label);
               return (
                 <div key={i} style={{ display: 'flex', gap: 14 }}>
-                  {/* node: check for completed steps, pulsing dot for the current one */}
+                  {/* node: an icon per event type, accent-tinted on the latest one */}
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 'none' }}>
-                    <span style={{ width: 24, height: 24, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: last ? 'var(--accent)' : 'rgba(var(--accent-rgb),0.1)', color: last ? '#FFFFFF' : 'var(--accent)', border: '1px solid ' + (last ? 'var(--accent)' : 'rgba(var(--accent-rgb),0.3)') }}>
-                      {last ? <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#FFFFFF', animation: 'pulse 1.4s ease-in-out infinite' }} /> : <Check size={13} strokeWidth={3} aria-hidden="true" />}
+                    <span style={{ width: 30, height: 30, flex: 'none', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', background: last ? 'rgba(var(--accent-rgb),0.12)' : 'var(--surface-soft)', color: last ? 'var(--accent)' : 'var(--mute-2)', border: '1px solid ' + (last ? 'rgba(var(--accent-rgb),0.35)' : 'var(--surface-soft-border)') }}>
+                      <EvIcon size={14} aria-hidden="true" />
                     </span>
-                    {!last && <span style={{ width: 2, flex: 1, minHeight: 22, margin: '3px 0', borderRadius: 2, background: 'rgba(var(--accent-rgb),0.15)' }} />}
+                    {!last && <span style={{ width: 2, flex: 1, minHeight: 18, margin: '3px 0', borderRadius: 2, background: 'rgba(var(--accent-rgb),0.15)' }} />}
                   </div>
                   <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3, paddingBottom: last ? 2 : 18 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                       <span style={{ fontSize: 14.5, fontWeight: 600, color: last ? INK : 'var(--ink-2)' }}>{e.label}</span>
                       {e.clip && (
-                        <button onClick={() => openPlayer(order.id, -1, 'order')} aria-label="Play clip" className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '3px 10px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
-                          <Play size={11} aria-hidden="true" /> clip
+                        <button onClick={() => openPlayer(order.id, -1, 'order')} aria-label="Play clip" className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '3px 10px', fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', cursor: 'pointer' }}>
+                          <Video size={11} aria-hidden="true" /> CLIP
                         </button>
                       )}
                       <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 11.5, color: 'var(--mute)', whiteSpace: 'nowrap' }}>{e.time}</span>
@@ -673,6 +694,21 @@ export default function OrderDetails({ ctx }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>Custom order details</span>
               {editing && <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)' }}>EDITING</span>}
+              <div style={{ flex: 1 }} />
+              {editing ? (
+                <>
+                  <button className="hv-text-dark" onClick={cancelEdit} style={{ background: 'none', border: 'none', color: 'var(--mute-2)', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                    Cancel
+                  </button>
+                  <button className="hv-brighten" onClick={saveEdit} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 9, padding: '7px 14px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>
+                    Save changes
+                  </button>
+                </>
+              ) : (
+                <button className="hv-accent14" onClick={startEdit} title="Edit custom details" aria-label="Edit custom details" style={{ width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', border: 'none', color: 'var(--accent)', borderRadius: 9, cursor: 'pointer' }}>
+                  <SquarePen size={16} aria-hidden="true" />
+                </button>
+              )}
             </div>
             {editing ? (
               <CustomEditor draft={c} upd={upd} />

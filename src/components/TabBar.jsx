@@ -1,5 +1,5 @@
-import { MONO, glassFloat, glassPopover } from '../data.js';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { MONO, glassPopover, cardLight } from '../data.js';
+import { ChevronDown, ChevronUp, LayoutGrid, Package, Truck } from 'lucide-react';
 
 const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 
@@ -13,9 +13,9 @@ export default function TabBar({ ctx }) {
   // primary nav: the overview dashboard plus the two working lists. The
   // warehouse/store side is chosen at login, not here.
   const navTabs = [
-    { id: 'home', label: 'Overview' },
-    { id: 'packaging', label: 'Packaging' },
-    { id: 'transfer', label: 'Transfers' },
+    { id: 'home', label: 'Overview', Icon: LayoutGrid },
+    { id: 'packaging', label: 'Packaging', Icon: Package },
+    { id: 'transfer', label: 'Transfers', Icon: Truck },
   ];
 
   const adminMenuItems = [
@@ -40,6 +40,9 @@ export default function TabBar({ ctx }) {
   const divider = <div style={{ width: 1, height: 22, background: 'rgba(40,32,38,0.15)', margin: '0 2px' }} />;
 
   const pillBtn = (active) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
     border: 'none',
     cursor: 'pointer',
     borderRadius: 999,
@@ -55,9 +58,10 @@ export default function TabBar({ ctx }) {
     // top-level navigation lives at the top of the app, directly under the top
     // bar. data-tour sits on the pill itself so the tour spotlights it tightly.
     <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 16px 0', position: 'relative', zIndex: 40 }}>
-      <div data-tour="nav" style={{ ...glassFloat, display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999 }}>
+      <div data-tour="nav" style={{ ...cardLight, display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999 }}>
         {navTabs.map((t) => (
           <button key={t.id} onClick={() => navGo(t.id)} style={pillBtn(navActive(t.id))}>
+            <t.Icon size={16} aria-hidden="true" style={{ flex: 'none' }} />
             {t.label}
           </button>
         ))}

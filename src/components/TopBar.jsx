@@ -1,15 +1,5 @@
-import { MONO, glassFloat, glassPopover } from '../data.js';
-import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft } from 'lucide-react';
-
-const SCREEN_CHIPS = { home: 'OVERVIEW', kiosk: 'STATION READY', pack: 'PACK & RECORD', recv: 'STORE RECEIVING', ret: 'RETURN INSPECTION' };
-
-function SideChip({ side }) {
-  return (
-    <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.14em', padding: '4px 11px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>
-      {side === 'store' ? 'STORE' : 'WAREHOUSE'}
-    </span>
-  );
-}
+import { MONO, glassFloat, glassPopover, cardLight } from '../data.js';
+import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell } from 'lucide-react';
 
 const barStyle = {
   ...glassFloat,
@@ -22,20 +12,11 @@ const barStyle = {
   margin: '14px 16px 0',
   borderRadius: 999,
   // the backdrop-filter creates a stacking context; without an explicit
-  // z-index the profile dropdown would paint under the screen content — and it
-  // must also beat the top nav band below (zIndex 40) so the open menu wins
+  // z-index the dropdowns would paint under the screen content — and it must
+  // also beat the top nav band below (zIndex 40) so open menus win
   position: 'relative',
   zIndex: 50,
 };
-
-function StatusChip({ label }) {
-  return (
-    <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: MONO, fontSize: 11, color: '#41464E', padding: '5px 11px', background: 'rgba(var(--surf-rgb),0.82)', border: '1px solid rgba(var(--surf-rgb),0.9)', borderRadius: 999 }}>
-      <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#17A35F' }} />
-      {label}
-    </span>
-  );
-}
 
 export function ProfileMenu({ ctx, roleChip, roleLine }) {
   const { s, set, showToast, signOut } = ctx;
@@ -60,7 +41,7 @@ export function ProfileMenu({ ctx, roleChip, roleLine }) {
     <div style={{ position: 'relative' }}>
       <button
         className="hv-white85"
-        onClick={() => set({ profileMenuOpen: !s.profileMenuOpen })}
+        onClick={() => set({ profileMenuOpen: !s.profileMenuOpen, notifOpen: false })}
         style={{ display: 'flex', alignItems: 'center', gap: 9, height: 42, padding: '3px 14px 3px 5px', background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', borderRadius: 999, cursor: 'pointer' }}
       >
         <span style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(var(--accent-rgb),0.14)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700 }}>{userInitial}</span>
@@ -94,6 +75,63 @@ export function ProfileMenu({ ctx, roleChip, roleLine }) {
   );
 }
 
+// Notification bell with a count badge; opens a solid white panel listing the
+// latest activity (newest order + open packing flags), each row navigating to
+// the thing it describes.
+function NotificationsBell({ ctx }) {
+  const { s, set, openOrder } = ctx;
+  const newest = [...s.orders].sort((a, b) => b.ts - a.ts)[0];
+  const items = [
+    ...(newest
+      ? [{ key: 'new-order', title: 'New order ' + newest.id + ' received', age: 'today', go: () => { set({ notifOpen: false }); openOrder(newest.id); } }]
+      : []),
+    ...s.flags.slice(0, 2).map((f, i) => ({
+      key: 'flag-' + i,
+      title: 'Packing flag (' + f.reason + ') on ' + f.id,
+      age: f.age,
+      go: () => {
+        if (s.role === 'admin') set({ notifOpen: false, screen: 'dash-flagged', profileMenuOpen: false });
+        else {
+          set({ notifOpen: false });
+          openOrder(f.id);
+        }
+      },
+    })),
+  ];
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <button
+        className="hv-white85"
+        onClick={() => set({ notifOpen: !s.notifOpen, profileMenuOpen: false })}
+        title="Notifications"
+        aria-label={'Notifications · ' + items.length + ' new'}
+        style={{ position: 'relative', width: 42, height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: 'var(--accent)', borderRadius: '50%', cursor: 'pointer' }}
+      >
+        <Bell size={18} aria-hidden="true" />
+        {items.length > 0 && (
+          <span style={{ position: 'absolute', top: -3, right: -3, minWidth: 18, height: 18, padding: '0 5px', borderRadius: 999, background: '#E02D3C', color: '#FFFFFF', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid rgba(255,255,255,0.9)' }}>{items.length}</span>
+        )}
+      </button>
+      {s.notifOpen && (
+        <div style={{ ...cardLight, borderRadius: 14, position: 'absolute', right: 0, top: 52, width: 380, maxWidth: '86vw', padding: '14px 6px 8px', display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
+          <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.16em', color: 'var(--mute-2)', padding: '0 14px 8px' }}>NOTIFICATIONS</span>
+          {items.length === 0 && <span style={{ fontSize: 13, color: 'var(--mute)', padding: '4px 14px 10px' }}>You're all caught up.</span>}
+          {items.map((n) => (
+            <button key={n.key} className="hv-white7" onClick={n.go} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', textAlign: 'left', background: 'transparent', border: 'none', borderRadius: 10, padding: '9px 14px', cursor: 'pointer' }}>
+              <span style={{ width: 7, height: 7, flex: 'none', borderRadius: '50%', background: 'var(--accent)', marginTop: 6 }} />
+              <span style={{ display: 'flex', flexDirection: 'column', gap: 3, minWidth: 0 }}>
+                <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink-2)', lineHeight: 1.35 }}>{n.title}</span>
+                <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{n.age}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function TourButton({ onClick }) {
   return (
     <button
@@ -108,12 +146,13 @@ function TourButton({ onClick }) {
   );
 }
 
-export default function TopBar({ ctx, variant }) {
+// One top bar for the whole app — logo, notifications, Tour and the profile.
+// Identical on every screen; only a Back button appears during a standalone
+// recording session (needed to exit it safely).
+export default function TopBar({ ctx }) {
   const { s, set, openTour } = ctx;
   const isSession = ['pack', 'recv', 'ret'].includes(s.screen);
-  // station id, side + live-health chips belong to a single order; everywhere
-  // else (overview, lists, kiosk) the top bar stays clean.
-  const showStation = s.screen === 'order';
+  const isAdmin = s.role === 'admin';
 
   // The Mayavé logo always routes home (the Overview dashboard). If the operator
   // is mid-edit — a live recording session or an order being created / edited —
@@ -122,62 +161,27 @@ export default function TopBar({ ctx, variant }) {
   const hasUnsaved = s.orderEditing || isSession || inOrderSession;
   const goDashboard = () => {
     if (hasUnsaved) return set({ leaveConfirm: true });
-    set({ screen: 'home', profileMenuOpen: false, adminMenuOpen: false });
+    set({ screen: 'home', profileMenuOpen: false, adminMenuOpen: false, notifOpen: false });
   };
-  const Logo = (
-    <button onClick={goDashboard} title="Go to dashboard" aria-label="Go to dashboard" className="hv-brighten" style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', borderRadius: 8 }}>
-      <img src="/assets/mayave-logo.png" alt="Mayavé" width={97} height={40} style={{ height: 40, width: 'auto', display: 'block' }} />
-    </button>
-  );
-
-  if (variant === 'admin') {
-    return (
-      <div className="topbar" style={barStyle}>
-        {Logo}
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.22em', color: 'rgba(40,32,38,0.55)' }}>ADMIN CONSOLE</span>
-        {showStation && <SideChip side={s.side} />}
-        <div style={{ flex: 1 }} />
-        <TourButton onClick={openTour} />
-        <ProfileMenu ctx={ctx} roleChip="ADMIN" roleLine="ADMIN · ALL ACCESS" />
-      </div>
-    );
-  }
 
   return (
-    <div data-tour="topbar" className="topbar" style={{ ...barStyle, justifyContent: 'space-between' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        {Logo}
-        {isSession && (
-          <button
-            className="hv-white75"
-            onClick={() => set({ backConfirm: true })}
-            style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.06)', color: 'var(--ink-2)', borderRadius: 999, padding: '7px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
-          >
-            <ChevronLeft size={15} aria-hidden="true" /> Back
-          </button>
-        )}
-        {showStation && (
-          <>
-            <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.1)' }} />
-            <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(var(--ink-rgb),0.7)', letterSpacing: '0.06em' }}>AUDIT-BENCH-1</span>
-            <SideChip side={s.side} />
-            {SCREEN_CHIPS[s.screen] && (
-              <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.1em', padding: '4px 11px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{SCREEN_CHIPS[s.screen]}</span>
-            )}
-          </>
-        )}
-      </div>
-      {showStation && (
-        <div className="status-chips" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <StatusChip label="Camera OK" />
-          <StatusChip label="Uploads · 0 pending" />
-          <StatusChip label="Online" />
-        </div>
+    <div data-tour="topbar" className="topbar" style={barStyle}>
+      <button onClick={goDashboard} title="Go to dashboard" aria-label="Go to dashboard" className="hv-brighten" style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', borderRadius: 8 }}>
+        <img src="/assets/mayave-logo.png" alt="Mayavé" width={97} height={40} style={{ height: 40, width: 'auto', display: 'block' }} />
+      </button>
+      {isSession && (
+        <button
+          className="hv-white75"
+          onClick={() => set({ backConfirm: true })}
+          style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.06)', color: 'var(--ink-2)', borderRadius: 999, padding: '7px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+        >
+          <ChevronLeft size={15} aria-hidden="true" /> Back
+        </button>
       )}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <TourButton onClick={openTour} />
-        <ProfileMenu ctx={ctx} roleChip="OPERATOR" roleLine="OPERATOR · PACK · RECEIVE · RETURNS" />
-      </div>
+      <div style={{ flex: 1 }} />
+      <NotificationsBell ctx={ctx} />
+      <TourButton onClick={openTour} />
+      <ProfileMenu ctx={ctx} roleChip={isAdmin ? 'ADMIN' : 'OPERATOR'} roleLine={isAdmin ? 'ADMIN · ALL ACCESS' : 'OPERATOR · PACK · RECEIVE · RETURNS'} />
     </div>
   );
 }

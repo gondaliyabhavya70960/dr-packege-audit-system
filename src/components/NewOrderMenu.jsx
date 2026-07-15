@@ -34,7 +34,7 @@ export default function NewOrderMenu({ onPick }) {
         style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '11px 16px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}
       >
         <Plus size={16} aria-hidden="true" />
-        New order
+        Create order
         <ChevronDown size={15} aria-hidden="true" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.16s ease' }} />
       </button>
       {open && (

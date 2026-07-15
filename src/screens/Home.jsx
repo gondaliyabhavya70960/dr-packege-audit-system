@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, TriangleAlert } from 'lucide-react';
-import { MONO, MUTE, glass, fillTone, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
+import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag } from 'lucide-react';
+import { MONO, MUTE, glass, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import GettingStarted from '../components/GettingStarted.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
@@ -28,6 +28,22 @@ const STATUS_ICONS = {
   'return-received': PackageOpen,
   returned: BadgeCheck,
   flagged: Flag,
+};
+
+// one-line description per status for the "Orders by status" tiles
+const STATUS_DESCS = {
+  draft: 'Not started yet — waiting to be packed.',
+  packed: 'Packed and saved, ready to dispatch.',
+  transit: 'Dispatched and on its way.',
+  receiving: 'Being received at the destination.',
+  received: 'Arrived and reconciled at the destination.',
+  delivery: 'Out for last-mile delivery.',
+  delivered: 'Delivered and confirmed by OTP.',
+  returning: 'A return has been requested.',
+  'return-transit': 'Return shipment on its way back.',
+  'return-received': 'A return is being inspected at the desk.',
+  returned: 'Return completed — refund issued.',
+  flagged: 'Has an open flag needing manager review.',
 };
 
 // a distinct donut-segment colour per status (the badges stay tone-based; the
@@ -107,7 +123,7 @@ export default function Home({ ctx }) {
 
   const transfer = orders.filter(isTransferOrder);
   const packaging = orders.filter((o) => !isTransferOrder(o));
-  const flaggedCount = orders.filter((o) => o.tone === 'red').length;
+  const completedCount = orders.filter((o) => ['received', 'delivered', 'returned'].includes(o.statusKey)).length;
   const transitVal = orders.filter((o) => o.statusKey === 'transit').reduce((n, o) => n + o.valNum, 0);
   const transitLabel = transitVal >= 100000 ? '₹' + (transitVal / 100000).toFixed(2) + 'L' : '₹' + transitVal.toLocaleString('en-IN');
 
@@ -186,9 +202,9 @@ export default function Home({ ctx }) {
 
       {/* KPI row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
-        <KpiCard accent="var(--accent)" title="Total orders" value={orders.length} unit="orders" sub="across packaging & transfers" Icon={Package} />
-        <KpiCard accent={flaggedCount ? '#E53E3E' : '#17A35F'} title="Flagged" value={flaggedCount} unit="flagged" sub={flaggedCount ? 'need attention' : 'all clear'} subColor={flaggedCount ? '#C62B22' : '#0E8A50'} Icon={TriangleAlert} />
-        <KpiCard accent="#2563EB" title="In transit" value={transitLabel} sub="value on the move" Icon={Truck} />
+        <KpiCard accent="var(--accent)" title="Total orders" value={orders.length} unit="orders" sub="Across packaging & transfers" Icon={Package} />
+        <KpiCard accent="#17A35F" title="Completed" value={completedCount} unit="orders" sub="Received & returned" subColor="#0E8A50" Icon={CircleCheck} />
+        <KpiCard accent="#F59E0B" title="In transit" value={transitLabel} sub="Value on the move" Icon={Truck} />
       </div>
 
       {/* two working lists with status-mix donuts (stretched to equal height) */}
@@ -221,38 +237,37 @@ export default function Home({ ctx }) {
         </div>
       </div>
 
-      {/* counts by status — one clean column: icon · label · share bar · count */}
-      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+      {/* counts by status — tiles: icon · big count · label · what it means */}
+      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{ fontSize: 16, fontWeight: 700 }}>Orders by status</span>
           <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{orders.length}</span>
         </div>
-        {(() => {
-          const max = Math.max(1, ...statuses.map((st) => st.n));
-          return statuses.map((st) => {
-            const f = fillTone(st.tone);
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 12 }}>
+          {statuses.map((st) => {
             const Icon = STATUS_ICONS[st.key] || Package;
             const color = STATUS_COLORS[st.key] || '#94A3B8';
             return (
               <button
                 key={st.key}
                 onClick={() => openList(st.kind, st.key, range)}
-                className="hv-white7"
-                style={{ display: 'grid', gridTemplateColumns: '34px minmax(150px, 0.9fr) 1.6fr 44px 18px', alignItems: 'center', gap: 12, background: 'transparent', border: 'none', borderRadius: 10, padding: '8px 10px', cursor: 'pointer', textAlign: 'left', opacity: st.n ? 1 : 0.55 }}
+                className="hv-border-accent"
+                style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', borderRadius: 16, padding: '16px 16px 14px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10, opacity: st.n ? 1 : 0.6 }}
               >
-                <span style={{ width: 32, height: 32, flex: 'none', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', background: f.bg, color: f.color, border: '1px solid ' + f.border }}>
-                  <Icon size={16} aria-hidden="true" />
-                </span>
-                <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--ink-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{st.label}</span>
-                <span style={{ height: 7, borderRadius: 999, background: 'rgba(var(--ink-rgb),0.07)', overflow: 'hidden' }}>
-                  <span style={{ display: 'block', height: '100%', width: (st.n / max) * 100 + '%', borderRadius: 999, background: color, transition: 'width 0.25s ease' }} />
-                </span>
-                <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, color: st.n ? 'var(--ink-2)' : 'var(--mute)', textAlign: 'right' }}>{st.n}</span>
-                <ChevronRight size={14} aria-hidden="true" style={{ color: 'var(--mute)' }} />
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
+                  <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: color + '1a', color }}>
+                    <Icon size={19} aria-hidden="true" />
+                  </span>
+                  <span style={{ fontSize: 28, fontWeight: 700, lineHeight: 1, color: st.n ? 'var(--ink-2)' : 'var(--mute)' }}>{st.n}</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink-2)' }}>{st.label}</span>
+                  <span style={{ fontSize: 12.5, color: 'var(--mute)', lineHeight: 1.4 }}>{STATUS_DESCS[st.key] || ''}</span>
+                </div>
               </button>
             );
-          });
-        })()}
+          })}
+        </div>
       </div>
     </div>
   );
