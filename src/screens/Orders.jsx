@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { MONO, cardLight, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
-import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, Check, CalendarDays } from 'lucide-react';
+import { MONO, cardLight, glassPopover, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
+import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, Check, CalendarDays, Flag, History } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
 import NewOrderMenu from '../components/NewOrderMenu.jsx';
@@ -10,6 +10,55 @@ const PAGE_SIZE = 15;
 
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
+
+// Last-change cell: the newest timeline entry's date/time; hovering shows the
+// last two timeline steps in a popover (the full history lives on the order's
+// Detail page). Popover opens downward on the first rows so it never clips.
+function LastUpdate({ order, openDown }) {
+  const [hov, setHov] = useState(false);
+  const tl = order.timeline || [];
+  const last = tl[tl.length - 1];
+  if (!last) return <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute-2)' }}>—</span>;
+  const [datePart, timePart] = (last.time || '').split(' · ');
+  const recent = tl.slice(-2).reverse();
+  return (
+    <div style={{ position: 'relative', minWidth: 0 }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 2, cursor: 'default' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: MONO, fontSize: 12, color: 'var(--ink-2)' }}>
+          <History size={11} aria-hidden="true" style={{ flex: 'none', color: 'var(--mute-2)' }} />
+          {datePart}
+        </span>
+        <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{timePart || last.who}</span>
+      </div>
+      {hov && (
+        <div style={{ ...glassPopover, position: 'absolute', left: 0, ...(openDown ? { top: 'calc(100% + 6px)' } : { bottom: 'calc(100% + 6px)' }), width: 272, borderRadius: 14, padding: '12px 14px', zIndex: 70, display: 'flex', flexDirection: 'column', gap: 9 }}>
+          <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', color: 'var(--ink)' }}>LATEST ACTIVITY</span>
+          {recent.map((e, i) => (
+            <div key={i} style={{ display: 'flex', gap: 9 }}>
+              <span style={{ width: 8, height: 8, flex: 'none', borderRadius: '50%', marginTop: 4, background: i === 0 ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.25)' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-2)', lineHeight: 1.3 }}>{e.label}</span>
+                <span style={{ fontFamily: MONO, fontSize: 10.5, color: 'var(--mute-2)' }}>{e.time}{e.who ? ' · ' + e.who : ''}</span>
+              </div>
+            </div>
+          ))}
+          <span style={{ fontSize: 11.5, color: 'var(--mute-2)', borderTop: '1px solid rgba(var(--ink-rgb),0.08)', paddingTop: 7 }}>Open the order for the full timeline.</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// which step(s) an order was flagged at — from its per-product flag entries,
+// falling back to the status wording for seed flagged orders
+function flagStepsOf(o) {
+  const steps = [...new Set((o.flagged || []).map((f) => (f.step || '').toUpperCase()).filter(Boolean))];
+  if (steps.length === 0 && o.statusKey === 'flagged') {
+    const st = (o.status || '').toLowerCase();
+    steps.push(st.includes('return') ? 'RETURN' : st.includes('receiv') ? 'RECEIVE' : 'PACKAGING');
+  }
+  return steps;
+}
 
 // dropdown option lists for the toolbar filters
 const STATUS_OPTS = [{ value: 'all', label: 'All statuses' }, ...ORDER_STATUSES.map((st) => ({ value: st.key, label: st.label }))];
@@ -69,7 +118,7 @@ export default function Orders({ ctx }) {
   const page = Math.min(Math.max(0, pageRaw), pages - 1);
   const paged = list.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
-  const COLS = ['30px', '1.4fr', '1.5fr', '0.55fr', ...(showValue ? ['0.75fr'] : []), '0.7fr', '0.75fr', '1.05fr', '0.85fr'].join(' ');
+  const COLS = ['30px', '1.4fr', '1.5fr', '0.55fr', ...(showValue ? ['0.75fr'] : []), '0.7fr', '0.75fr', '0.85fr', '1.05fr', '0.85fr'].join(' ');
 
   // clickable column header that toggles between an asc / desc sort key
   const SortHeader = ({ label, asc, desc }) => {
@@ -176,7 +225,7 @@ export default function Orders({ ctx }) {
       {/* table — clean white card (no translucent grey), tighter columns */}
       <div style={{ ...cardLight, padding: 0, overflow: 'hidden' }}>
         <div style={{ overflowX: 'auto' }}>
-          <div style={{ minWidth: showValue ? 940 : 860 }}>
+          <div style={{ minWidth: showValue ? 1040 : 960 }}>
             {/* header row */}
             <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 14, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid var(--surface-border)', fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>
               <input type="checkbox" checked={allSel} onChange={toggleAll} style={{ accentColor: 'var(--accent)', cursor: 'pointer', width: 15, height: 15 }} />
@@ -186,15 +235,17 @@ export default function Orders({ ctx }) {
               {showValue && <span>VALUE</span>}
               <span>TYPE</span>
               <SortHeader label="DATE" asc="old" desc="new" />
+              <span>UPDATED</span>
               <span>STATUS</span>
               <span style={{ textAlign: 'right' }}>ACTION</span>
             </div>
 
-            {paged.map((o) => {
+            {paged.map((o, ri) => {
               const items = o.items.reduce((n, it) => n + it.qty, 0);
               const route = orderRoute(o);
               const sel = s.oSel.includes(o.id);
               const isDone = ['received', 'delivered', 'returned'].includes(o.statusKey);
+              const flagSteps = flagStepsOf(o);
               return (
                 <div
                   key={o.id}
@@ -222,11 +273,17 @@ export default function Orders({ ctx }) {
                     <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--ink-2)' }}>{o.placed.split(' · ')[0]}</span>
                     <span style={{ fontFamily: MONO, fontSize: 11.5, color: 'var(--mute-2)' }}>{o.placed.split(' · ')[1] || ''}</span>
                   </div>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flexWrap: 'wrap' }}>
+                  <LastUpdate order={o} openDown={ri < 3} />
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0, flexWrap: 'wrap' }}>
                     <StatusBadge status={o.status} tone={o.tone} />
                     {isDone && (
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', color: '#0E8A50' }}>
                         <Check size={11} strokeWidth={3} aria-hidden="true" /> DONE
+                      </span>
+                    )}
+                    {flagSteps.length > 0 && (
+                      <span title={'Flagged at ' + flagSteps.join(' & ').toLowerCase()} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: MONO, fontSize: 9.5, fontWeight: 700, letterSpacing: '0.06em', padding: '3px 9px', borderRadius: 999, background: 'rgba(229,62,62,0.08)', border: '1px solid rgba(229,62,62,0.3)', color: '#C62B22', whiteSpace: 'nowrap' }}>
+                        <Flag size={10} aria-hidden="true" style={{ flex: 'none' }} /> {flagSteps.join(' · ')}
                       </span>
                     )}
                   </span>
