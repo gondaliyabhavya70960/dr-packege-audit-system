@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MONO, cardLight, tabMode, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
+import { MONO, cardLight, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
 import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, Check, CalendarDays } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
@@ -7,27 +7,6 @@ import NewOrderMenu from '../components/NewOrderMenu.jsx';
 import StatusBadge from '../components/StatusBadge.jsx';
 
 const PAGE_SIZE = 15;
-
-// one Pk / Rc / Rt stage chip, filled by that stage's per-status mode:
-// recorded (view) → green check, live (edit) → amber dot, otherwise → dim dot
-function StageBadge({ label, mode }) {
-  const sty =
-    mode === 'view'
-      ? { bg: 'rgba(23,163,95,0.14)', color: '#0E8A50', border: 'rgba(23,163,95,0.32)' }
-      : mode === 'edit'
-        ? { bg: 'rgba(217,142,4,0.16)', color: '#9A6A00', border: 'rgba(217,142,4,0.34)' }
-        : { bg: 'rgba(var(--ink-rgb),0.05)', color: 'rgba(var(--ink-rgb),0.55)', border: 'rgba(var(--ink-rgb),0.10)' };
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: MONO, fontSize: 10, fontWeight: 700, padding: '3px 7px', borderRadius: 7, whiteSpace: 'nowrap', background: sty.bg, color: sty.color, border: '1px solid ' + sty.border }}>
-      {label}
-      {mode === 'view' ? (
-        <Check size={10} strokeWidth={3.5} aria-hidden="true" style={{ flex: 'none' }} />
-      ) : (
-        <span style={{ width: 5, height: 5, flex: 'none', borderRadius: '50%', background: 'currentColor', opacity: mode === 'edit' ? 1 : 0.45 }} />
-      )}
-    </span>
-  );
-}
 
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
@@ -90,7 +69,7 @@ export default function Orders({ ctx }) {
   const page = Math.min(Math.max(0, pageRaw), pages - 1);
   const paged = list.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
-  const COLS = ['30px', '1.4fr', '1.5fr', '0.55fr', ...(showValue ? ['0.75fr'] : []), '0.7fr', '0.75fr', '1.05fr', '1.05fr', '0.85fr'].join(' ');
+  const COLS = ['30px', '1.4fr', '1.5fr', '0.55fr', ...(showValue ? ['0.75fr'] : []), '0.7fr', '0.75fr', '1.05fr', '0.85fr'].join(' ');
 
   // clickable column header that toggles between an asc / desc sort key
   const SortHeader = ({ label, asc, desc }) => {
@@ -197,7 +176,7 @@ export default function Orders({ ctx }) {
       {/* table — clean white card (no translucent grey), tighter columns */}
       <div style={{ ...cardLight, padding: 0, overflow: 'hidden' }}>
         <div style={{ overflowX: 'auto' }}>
-          <div style={{ minWidth: showValue ? 1060 : 980 }}>
+          <div style={{ minWidth: showValue ? 940 : 860 }}>
             {/* header row */}
             <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 14, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid var(--surface-border)', fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>
               <input type="checkbox" checked={allSel} onChange={toggleAll} style={{ accentColor: 'var(--accent)', cursor: 'pointer', width: 15, height: 15 }} />
@@ -207,7 +186,6 @@ export default function Orders({ ctx }) {
               {showValue && <span>VALUE</span>}
               <span>TYPE</span>
               <SortHeader label="DATE" asc="old" desc="new" />
-              <span>STAGES</span>
               <span>STATUS</span>
               <span style={{ textAlign: 'right' }}>ACTION</span>
             </div>
@@ -243,11 +221,6 @@ export default function Orders({ ctx }) {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--ink-2)' }}>{o.placed.split(' · ')[0]}</span>
                     <span style={{ fontFamily: MONO, fontSize: 11.5, color: 'var(--mute-2)' }}>{o.placed.split(' · ')[1] || ''}</span>
-                  </div>
-                  <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-                    <StageBadge label="Pk" mode={tabMode(o.statusKey, 'pack')} />
-                    <StageBadge label="Rc" mode={tabMode(o.statusKey, 'recv')} />
-                    <StageBadge label="Rt" mode={tabMode(o.statusKey, 'ret')} />
                   </div>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flexWrap: 'wrap' }}>
                     <StatusBadge status={o.status} tone={o.tone} />
