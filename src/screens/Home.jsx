@@ -63,9 +63,9 @@ const STATUS_COLORS = {
   flagged: '#DC2626',
 };
 
-// status-mix ring: arcs sized by value. Purely visual — no count in the centre;
-// the legend beside it carries the numbers.
-function Donut({ data, total, size = 108, thickness = 14 }) {
+// status-mix ring: arcs sized by value, with the list's total order count in
+// the centre.
+function Donut({ data, total, size = 118, thickness = 14 }) {
   const r = (size - thickness) / 2;
   let acc = 0;
   return (
@@ -81,6 +81,8 @@ function Donut({ data, total, size = 108, thickness = 14 }) {
           return seg;
         })}
       </g>
+      <text x="50%" y="47%" textAnchor="middle" dominantBaseline="middle" style={{ fontFamily: MONO, fontSize: size * 0.22, fontWeight: 700, fill: 'var(--ink-2)' }}>{total}</text>
+      <text x="50%" y="64%" textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 10, letterSpacing: '0.05em', fill: 'var(--mute)' }}>orders</text>
     </svg>
   );
 }
@@ -97,7 +99,7 @@ function SummaryStat({ color, bg, title, value, unit, sub, subColor, Icon }) {
         <span style={{ fontSize: 12, color: subColor || 'var(--mute)' }}>{sub}</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-        <span style={{ fontSize: 22, fontWeight: 800, color: 'var(--ink-2)', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</span>
+        <span style={{ fontSize: 24, fontWeight: 800, color: 'var(--ink-2)', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</span>
         {unit && <span style={{ fontSize: 12, color: 'var(--mute)' }}>{unit}</span>}
       </div>
     </div>
@@ -160,16 +162,16 @@ export default function Home({ ctx }) {
         {/* compact body: small ring + two-column status legend keeps the card short */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 16, minWidth: 0 }}>
           <Donut data={mix} total={total} />
-          <div style={{ flex: 1, minWidth: 0, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '2px 8px', alignContent: 'center' }}>
+          <div style={{ flex: 1, minWidth: 0, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '3px 10px', alignContent: 'center' }}>
             {mix.length === 0 && <span style={{ gridColumn: '1 / -1', fontSize: 13, color: MUTE }}>No orders in this list yet.</span>}
             {mix.map((d) => {
               const pct = total ? Math.round((d.value / total) * 100) : 0;
               return (
-                <button key={d.key} onClick={() => openList(kind, d.key, range)} title={d.label + ' · ' + d.value + ' (' + pct + '%)'} className="hv-ink04" style={{ display: 'flex', alignItems: 'center', gap: 7, border: 'none', background: 'transparent', borderRadius: 8, padding: '5px 7px', cursor: 'pointer', textAlign: 'left', minWidth: 0 }}>
+                <button key={d.key} onClick={() => openList(kind, d.key, range)} title={d.label + ' · ' + d.value + ' (' + pct + '%)'} className="hv-ink04" style={{ display: 'flex', alignItems: 'center', gap: 8, border: 'none', background: 'transparent', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', textAlign: 'left', minWidth: 0 }}>
                   <span style={{ width: 8, height: 8, flex: 'none', borderRadius: '50%', background: d.color }} />
-                  <span style={{ fontSize: 12.5, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: 'var(--ink-2)' }}>{d.value}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 11, color: MUTE, width: 30, textAlign: 'right', flex: 'none' }}>{pct}%</span>
+                  <span style={{ fontSize: 13, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: 'var(--ink-2)' }}>{d.value}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 11.5, color: MUTE, width: 32, textAlign: 'right', flex: 'none' }}>{pct}%</span>
                 </button>
               );
             })}
