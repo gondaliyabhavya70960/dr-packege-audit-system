@@ -1,5 +1,5 @@
 import { Check, ShieldCheck, Video, History } from 'lucide-react';
-import { MONO } from '../data.js';
+import { MONO, cardLight } from '../data.js';
 import { PackageIcon } from '../components/icons.jsx';
 
 export default function Login({ ctx }) {
@@ -37,7 +37,8 @@ export default function Login({ ctx }) {
         <div style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.18, letterSpacing: '-0.01em', maxWidth: 480, textWrap: 'pretty' }}>
           One ID. Every checkpoint. Video proof you can pull up in seconds.
         </div>
-        <div style={{ marginTop: 30, width: 430, maxWidth: '100%', background: 'rgba(var(--surf-rgb),0.96)', color: 'var(--ink-2)', borderRadius: 22, padding: 18, boxShadow: '0 30px 70px -20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(var(--surf-rgb),0.9)', display: 'flex', flexDirection: 'column', gap: 13 }}>
+        {/* mock tracking card in the app's shared card language (deep shadow lifts it off the red) */}
+        <div style={{ marginTop: 30, width: 430, maxWidth: '100%', ...cardLight, color: 'var(--ink-2)', padding: 18, boxShadow: '0 30px 70px -20px rgba(0,0,0,0.45)', display: 'flex', flexDirection: 'column', gap: 13 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 700 }}>DC-2026-00417</span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FBE5E8', color: '#C8102E', borderRadius: 999, padding: '4px 12px', fontSize: 11, fontWeight: 800, letterSpacing: '0.08em' }}>
@@ -46,7 +47,7 @@ export default function Login({ ctx }) {
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ width: 44, height: 44, borderRadius: 11, background: '#FBE5E8', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+            <span style={{ width: 44, height: 44, borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
               <PackageIcon size={20} color="var(--accent)" />
             </span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -54,7 +55,7 @@ export default function Login({ ctx }) {
               <span style={{ fontSize: 13, color: 'var(--mute)' }}>3 items · Top + Front cameras</span>
             </div>
           </div>
-          <div style={{ height: 1, background: '#F0F1F3' }} />
+          <div style={{ height: 1, background: 'var(--hairline)' }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 11 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               {check}
@@ -91,9 +92,11 @@ export default function Login({ ctx }) {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
-        <div style={{ width: 420, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {/* the page's single logo — large and centred above the form */}
+        <div style={{ width: 460, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 18 }}>
+          {/* the page's single logo — large and centred above the form card */}
           <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 100, width: 'auto', maxWidth: '100%', objectFit: 'contain', alignSelf: 'center' }} />
+          {/* the form itself is unchanged — it just sits on the app's shared white card now */}
+          <div style={{ ...cardLight, padding: 26, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <span style={{ fontSize: 30, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.01em' }}>Sign in</span>
             <span style={{ fontSize: 15, color: '#4B5563' }}>Enter your credentials to access the console.</span>
@@ -151,7 +154,7 @@ export default function Login({ ctx }) {
           >
             Sign in
           </button>
-          <div style={{ height: 1, background: '#E5E7EB', marginTop: 8 }} />
+          <div style={{ height: 1, background: 'var(--hairline)', marginTop: 8 }} />
           <div style={{ textAlign: 'center', fontSize: 13.5, color: 'var(--mute)', lineHeight: 1.6 }}>
             Demo accounts (change before real use):
             <br />
@@ -165,6 +168,7 @@ export default function Login({ ctx }) {
           >
             Take a quick tour
           </button>
+          </div>
         </div>
       </div>
     </div>

@@ -90,9 +90,9 @@ function Donut({ data, total, size = 118, thickness = 14 }) {
 // one stat line inside the combined summary widget: icon chip · title/sub · big value
 function SummaryStat({ color, bg, title, value, unit, sub, subColor, Icon }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 11, ...surfaceSubtle, borderRadius: 13, padding: '10px 13px' }}>
-      <span style={{ width: 36, height: 36, flex: 'none', borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg, color }}>
-        <Icon size={18} aria-hidden="true" />
+    <div style={{ display: 'flex', alignItems: 'center', gap: 11, ...surfaceSubtle, borderRadius: 14, padding: '10px 13px' }}>
+      <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg, color }}>
+        <Icon size={19} aria-hidden="true" />
       </span>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
         <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink-2)' }}>{title}</span>
@@ -247,7 +247,7 @@ export default function Home({ ctx }) {
                 key={st.key}
                 onClick={() => openList(st.kind, st.key, range)}
                 className="hv-border-accent"
-                style={{ ...surfaceSubtle, borderRadius: 16, padding: '16px 16px 14px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10, opacity: st.n ? 1 : 0.6 }}
+                style={{ ...surfaceSubtle, borderRadius: 14, padding: '16px 16px 14px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10, opacity: st.n ? 1 : 0.6 }}
               >
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
                   <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: color + '1a', color }}>
@@ -282,10 +282,10 @@ export default function Home({ ctx }) {
               key={o.type}
               onClick={() => newOrder(o.type)}
               className="hv-border-accent"
-              style={{ display: 'flex', alignItems: 'center', gap: 12, ...surfaceSubtle, borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, ...surfaceSubtle, borderRadius: 14, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
             >
-              <span style={{ width: 42, height: 42, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
-                <o.Icon size={21} aria-hidden="true" />
+              <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
+                <o.Icon size={19} aria-hidden="true" />
               </span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                 <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink-2)' }}>{o.label}</span>
