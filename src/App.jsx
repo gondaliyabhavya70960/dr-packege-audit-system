@@ -284,17 +284,22 @@ export default function App() {
   const openOrder = useCallback((id) => set({ screen: 'order', orderId: id, orderTab: 'detail', orderEditing: false, orderDraft: null, adminMenuOpen: false }), [set]);
   const newOrder = useCallback((type) => set({ createOpen: true, orderDraft: emptyCustomOrder(type), adminMenuOpen: false }), [set]);
 
-  // append a remark (comment) to an order — username + timestamp + text,
+  // append a remark (comment) to an order — username + timestamp + text plus
+  // the step it was added from (Packaging / Receiving / Return / Detail),
   // surfaced on the order's Detail/overview thread.
   const addRemark = useCallback((id, text) => {
     const t = (text || '').trim();
     if (!t || !id) return;
-    setS((cur) => ({
-      ...cur,
-      orders: cur.orders.map((o) =>
-        o.id === id ? { ...o, remarks: [...(o.remarks || []), { text: t, who: cur.userLabel || 'operator', time: nowStamp() }] } : o
-      ),
-    }));
+    setS((cur) => {
+      const at = ['pack', 'recv', 'ret'].includes(cur.screen) ? cur.screen : cur.screen === 'order' ? cur.orderTab : null;
+      const step = at === 'pack' ? 'PACKAGING' : at === 'recv' ? 'RECEIVING' : at === 'ret' ? 'RETURN' : 'DETAIL';
+      return {
+        ...cur,
+        orders: cur.orders.map((o) =>
+          o.id === id ? { ...o, remarks: [...(o.remarks || []), { text: t, who: cur.userLabel || 'operator', time: nowStamp(), step }] } : o
+        ),
+      };
+    });
   }, []);
 
   // open one of the two working lists, clearing filters so the switch is
@@ -336,8 +341,7 @@ export default function App() {
       {isOpSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="operator" />
-          <TabBar ctx={ctx} />
-          <div style={{ flex: 1, minHeight: 0, position: 'relative', paddingBottom: 24, overflow: 'auto' }}>
+          <div style={{ flex: 1, minHeight: 0, position: 'relative', paddingBottom: 74, overflow: 'auto' }}>
             {screen === 'kiosk' && <KioskHome ctx={ctx} />}
             {screen === 'pack' && <PackRecord ctx={ctx} />}
             {screen === 'recv' && <Receiving ctx={ctx} />}
@@ -350,8 +354,7 @@ export default function App() {
       {isAdminSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="admin" />
-          <TabBar ctx={ctx} />
-          <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 24 }}>
+          <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 120 }}>
             {screen === 'search' && <SearchPlayback ctx={ctx} />}
             {DASH_SCREENS.includes(screen) && <Dashboard ctx={ctx} />}
             {screen === 'config' && <UsersConfig ctx={ctx} />}
@@ -360,6 +363,7 @@ export default function App() {
         </div>
       )}
 
+      {screen !== 'login' && <TabBar ctx={ctx} />}
       {s.playerOpen && <SideBySidePlayer ctx={ctx} />}
       {s.backConfirm && <BackConfirm ctx={ctx} />}
       {s.leaveConfirm && <LeaveConfirm ctx={ctx} />}

@@ -64,10 +64,13 @@ export default function RemarkBox({ ctx, id, variant = 'input', readOnly = false
           <span style={{ width: 30, height: 30, flex: 'none', borderRadius: '50%', background: 'rgba(var(--accent-rgb),0.12)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>
             {(r.who || '?').charAt(0).toUpperCase()}
           </span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0, flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
               <span style={{ fontSize: 13.5, fontWeight: 700 }}>{r.who}</span>
               <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{r.time}</span>
+              {r.step && (
+                <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 9, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: 999, background: 'rgba(var(--ink-rgb),0.05)', color: 'var(--mute-2)' }}>{r.step}</span>
+              )}
             </div>
             <span style={{ fontSize: 14, color: 'rgba(var(--ink-rgb),0.8)', textWrap: 'pretty' }}>{r.text}</span>
           </div>

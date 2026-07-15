@@ -1,9 +1,28 @@
-import { MONO, glass, cardLight, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
-import { Search, ChevronRight, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX } from 'lucide-react';
+import { useState } from 'react';
+import { MONO, glass, cardLight, tabMode, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
+import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, Check } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
 import NewOrderMenu from '../components/NewOrderMenu.jsx';
 import StatusBadge from '../components/StatusBadge.jsx';
+
+const PAGE_SIZE = 15;
+
+// one Pk / Rc / Rt stage chip, filled by that stage's per-status mode:
+// recorded (view) → green ✓, live (edit) → amber •, otherwise → grey ·
+function StageBadge({ label, mode }) {
+  const sty =
+    mode === 'view'
+      ? { bg: 'rgba(23,163,95,0.14)', color: '#0E8A50', border: 'rgba(23,163,95,0.32)', mark: '✓' }
+      : mode === 'edit'
+        ? { bg: 'rgba(217,142,4,0.16)', color: '#9A6A00', border: 'rgba(217,142,4,0.34)', mark: '•' }
+        : { bg: 'rgba(var(--ink-rgb),0.05)', color: 'rgba(var(--ink-rgb),0.42)', border: 'rgba(var(--ink-rgb),0.10)', mark: '·' };
+  return (
+    <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, padding: '3px 7px', borderRadius: 7, whiteSpace: 'nowrap', background: sty.bg, color: sty.color, border: '1px solid ' + sty.border }}>
+      {label} {sty.mark}
+    </span>
+  );
+}
 
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
@@ -28,6 +47,7 @@ const SORT_OPTS = [
 
 export default function Orders({ ctx }) {
   const { s, set, openOrder, newOrder } = ctx;
+  const [pageRaw, setPage] = useState(0);
 
   const sideLabel = s.side === 'store' ? 'Store' : 'Warehouse';
   const isTransfer = s.listKind === 'transfer';
@@ -59,7 +79,13 @@ export default function Orders({ ctx }) {
     if (oSort === 'vallow') return a.valNum - b.valNum;
     return b.ts - a.ts; // new
   });
-  const COLS = ['30px', '1.5fr', '1.7fr', '0.6fr', ...(showValue ? ['0.8fr'] : []), '0.8fr', '0.8fr', '1.15fr', '0.9fr'].join(' ');
+
+  // page through the book 15 at a time; the raw index self-clamps when filters shrink the list
+  const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  const page = Math.min(Math.max(0, pageRaw), pages - 1);
+  const paged = list.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+
+  const COLS = ['30px', '1.4fr', '1.5fr', '0.55fr', ...(showValue ? ['0.75fr'] : []), '0.7fr', '0.75fr', '1.05fr', '1.05fr', '0.85fr'].join(' ');
 
   // clickable column header that toggles between an asc / desc sort key
   const SortHeader = ({ label, asc, desc }) => {
@@ -99,6 +125,20 @@ export default function Orders({ ctx }) {
           <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>{isTransfer ? 'Inter-branch challans & consignments — open one to receive, return or view its detail.' : 'Customer orders to pack & dispatch — open one to pack, return or view its detail.'}</span>
         </div>
         <div style={{ flex: 1 }} />
+        <button
+          className="hv-white85"
+          onClick={() => ctx.showToast('Pulled latest tracking updates from Gati (prototype).')}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--surface)', border: '1px solid var(--surface-border)', color: 'var(--ink-2)', borderRadius: 10, padding: '11px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}
+        >
+          <RefreshCw size={15} aria-hidden="true" /> Pull from Gati
+        </button>
+        <button
+          className="hv-white85"
+          onClick={() => ctx.showToast('Exported ' + kindOrders.length + ' orders to CSV (prototype).')}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--surface)', border: '1px solid var(--surface-border)', color: 'var(--ink-2)', borderRadius: 10, padding: '11px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer' }}
+        >
+          <Download size={15} aria-hidden="true" /> Export CSV
+        </button>
         <NewOrderMenu onPick={newOrder} />
       </div>
 
@@ -114,7 +154,7 @@ export default function Orders({ ctx }) {
               className="fc-accent"
               value={s.oq}
               onChange={(e) => set({ oq: e.target.value })}
-              placeholder="order ID, customer, channel…"
+              placeholder="Search by tracking ID, order or delivery challan…"
               style={{ width: '100%', background: 'rgba(var(--surf-rgb),0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(var(--surf-rgb),0.65)', borderRadius: 10, padding: '10px 14px 10px 38px', color: 'var(--ink-2)', fontSize: 14, outline: 'none' }}
             />
           </div>
@@ -122,9 +162,9 @@ export default function Orders({ ctx }) {
 
         <GlassSelect label="STATUS" value={s.oStatus} onChange={(v) => set({ oStatus: v })} options={STATUS_OPTS} minWidth={150} />
 
-        <GlassSelect label="CHANNEL" value={s.oChannel} onChange={(v) => set({ oChannel: v })} options={CHANNEL_OPTS} minWidth={140} />
+        <GlassSelect label="TYPE" value={s.oChannel} onChange={(v) => set({ oChannel: v })} options={CHANNEL_OPTS} minWidth={140} />
 
-        <GlassSelect label="DATE" value={s.oDate} onChange={(v) => set({ oDate: v })} options={DATE_OPTS} minWidth={130} />
+        <GlassSelect label="PLACED" value={s.oDate} onChange={(v) => set({ oDate: v })} options={DATE_OPTS} minWidth={130} />
 
         <GlassSelect label="SORT" value={oSort} onChange={(v) => set({ oSort: v })} options={sortOpts} minWidth={150} />
 
@@ -160,16 +200,18 @@ export default function Orders({ ctx }) {
               <span>ROUTE</span>
               <span>ITEMS</span>
               {showValue && <span>VALUE</span>}
-              <span>CHANNEL</span>
+              <span>TYPE</span>
               <SortHeader label="DATE" asc="old" desc="new" />
+              <span>STAGES</span>
               <span>STATUS</span>
               <span style={{ textAlign: 'right' }}>ACTION</span>
             </div>
 
-            {list.map((o) => {
+            {paged.map((o) => {
               const items = o.items.reduce((n, it) => n + it.qty, 0);
               const route = orderRoute(o);
               const sel = s.oSel.includes(o.id);
+              const isDone = ['received', 'delivered', 'returned'].includes(o.statusKey);
               return (
                 <div
                   key={o.id}
@@ -182,18 +224,33 @@ export default function Orders({ ctx }) {
                     <span style={{ fontFamily: MONO, fontSize: 14, color: 'var(--ink-2)' }}>{o.id}</span>
                     <span style={{ fontSize: 13, color: 'var(--mute-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o.customer}</span>
                   </div>
-                  {/* route on a single line: from → to */}
-                  <span title={route.from + ' → ' + route.to} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--ink-2)', minWidth: 0 }}>
-                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--mute-2)' }}>{route.from}</span>
-                    <ArrowRight size={13} aria-hidden="true" style={{ flex: 'none', color: 'var(--accent)' }} />
-                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 600 }}>{route.to}</span>
-                  </span>
+                  {/* route: origin above, arrowed destination below */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+                    <span title={'From ' + route.from} style={{ fontSize: 12.5, color: 'var(--mute)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{route.from}</span>
+                    <span title={'To ' + route.to} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: 'var(--ink-2)', minWidth: 0 }}>
+                      <ArrowRight size={12} aria-hidden="true" style={{ flex: 'none', color: 'var(--accent)' }} />
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 600 }}>{route.to}</span>
+                    </span>
+                  </div>
                   <span style={{ fontSize: 14, color: 'rgba(var(--ink-rgb),0.7)' }}>{items} pc{items === 1 ? '' : 's'}</span>
                   {showValue && <span style={{ fontSize: 14, fontWeight: 600 }}>{o.value}</span>}
                   <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>{o.channel}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute-2)' }}>{o.placed.split(' · ')[0]}</span>
-                  <span style={{ minWidth: 0 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--ink-2)' }}>{o.placed.split(' · ')[0]}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 10.5, color: 'var(--mute)' }}>{o.placed.split(' · ')[1] || ''}</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+                    <StageBadge label="Pk" mode={tabMode(o.statusKey, 'pack')} />
+                    <StageBadge label="Rc" mode={tabMode(o.statusKey, 'recv')} />
+                    <StageBadge label="Rt" mode={tabMode(o.statusKey, 'ret')} />
+                  </div>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flexWrap: 'wrap' }}>
                     <StatusBadge status={o.status} tone={o.tone} />
+                    {isDone && (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', color: '#0E8A50' }}>
+                        <Check size={11} strokeWidth={3} aria-hidden="true" /> DONE
+                      </span>
+                    )}
                   </span>
                   <span style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <button
@@ -225,10 +282,30 @@ export default function Orders({ ctx }) {
             )}
           </div>
         </div>
-      </div>
 
-      <div style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>
-        showing {list.length} of {kindOrders.length} {listLabel.toLowerCase()} · every row opens the single order with its linked video evidence
+        {/* pagination footer */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 18px', borderTop: '1px solid var(--hairline)' }}>
+          <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute)' }}>
+            {list.length === 0 ? '0 orders' : page * PAGE_SIZE + 1 + '-' + Math.min(list.length, (page + 1) * PAGE_SIZE) + ' of ' + list.length + ' orders'}
+          </span>
+          <div style={{ flex: 1 }} />
+          <button
+            className="hv-white85"
+            onClick={() => setPage(page - 1)}
+            disabled={page === 0}
+            style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'var(--surface)', border: '1px solid var(--surface-border)', color: 'var(--ink-2)', borderRadius: 999, padding: '7px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer', opacity: page === 0 ? 0.4 : 1 }}
+          >
+            <ChevronLeft size={14} aria-hidden="true" /> Prev
+          </button>
+          <button
+            className="hv-white85"
+            onClick={() => setPage(page + 1)}
+            disabled={page >= pages - 1}
+            style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'var(--surface)', border: '1px solid var(--surface-border)', color: 'var(--ink-2)', borderRadius: 999, padding: '7px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer', opacity: page >= pages - 1 ? 0.4 : 1 }}
+          >
+            Next <ChevronRight size={14} aria-hidden="true" />
+          </button>
+        </div>
       </div>
     </div>
   );
