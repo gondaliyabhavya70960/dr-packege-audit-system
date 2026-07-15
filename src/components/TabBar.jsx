@@ -46,8 +46,8 @@ export default function TabBar({ ctx }) {
     border: 'none',
     cursor: 'pointer',
     borderRadius: 999,
-    padding: '10px 18px',
-    fontSize: 13.5,
+    padding: '8px 14px',
+    fontSize: 13,
     fontWeight: 700,
     background: active ? 'var(--accent)' : 'transparent',
     color: active ? '#FFFFFF' : 'rgba(40,32,38,0.7)',
@@ -55,10 +55,10 @@ export default function TabBar({ ctx }) {
   });
 
   return (
-    // top-level navigation lives at the top of the app, directly under the top
-    // bar. data-tour sits on the pill itself so the tour spotlights it tightly.
-    <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 16px 0', position: 'relative', zIndex: 40 }}>
-      <div data-tour="nav" style={{ ...cardLight, display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999 }}>
+    // top-level navigation lives INSIDE the top bar (rendered by TopBar,
+    // centred between the logo and the right-side actions). data-tour sits on
+    // the pill itself so the tour spotlights it tightly.
+    <div data-tour="nav" style={{ ...cardLight, display: 'flex', gap: 4, alignItems: 'center', padding: 4, borderRadius: 999 }}>
         {navTabs.map((t) => (
           <button key={t.id} onClick={() => navGo(t.id)} style={pillBtn(navActive(t.id))}>
             <t.Icon size={16} aria-hidden="true" style={{ flex: 'none' }} />
@@ -141,7 +141,6 @@ export default function TabBar({ ctx }) {
             </div>
           </>
         )}
-      </div>
     </div>
   );
 }

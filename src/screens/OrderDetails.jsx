@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck } from 'lucide-react';
+import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck, Gift } from 'lucide-react';
 import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmtMoney, draftItemsValue, ORDER_TYPE_CHANNEL, fmt } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import PackRecord from './PackRecord.jsx';
@@ -382,8 +382,22 @@ export function CreateOrderForm({ ctx, onClose }) {
   const pickType = (t) => set({ orderDraft: { ...s.orderDraft, orderType: t, channel: ORDER_TYPE_CHANNEL[t] || s.orderDraft.channel } });
   const setItems = (next) => upd('items', next);
   const addItem = () => setItems([...items, { sku: '', name: '', qty: 1, value: 0 }]);
+  const addGift = () => setItems([...items, { sku: 'GIFT-', name: '', qty: 1, value: 0, gift: true }]);
   const updItem = (i, k, v) => setItems(items.map((it, idx) => (idx === i ? { ...it, [k]: v } : it)));
   const delItem = (i) => setItems(items.filter((_, idx) => idx !== i));
+
+  // the order id is entered as digits behind a fixed type prefix (ORD- / DC-)
+  const idPrefix = d.orderType === 'transfer' || d.orderType === 'bulk' ? 'DC-' : 'ORD-';
+  const idBody = (d.id || '').replace(/^(ORD-|DC-|RFID-)/i, '');
+  const setIdBody = (v) => upd('id', v.trim() ? idPrefix + v.trim().toUpperCase() : '');
+
+  const products = items.filter((it) => !it.gift);
+  const gifts = items.filter((it) => it.gift);
+  // demo packing plan derived from unit count: 1 jewellery box per order,
+  // a small box per 2 units, a big box per 6 units
+  const units = products.reduce((n, it) => n + (parseInt(it.qty, 10) || 0), 0);
+  const boxes = units > 0 ? { big: Math.ceil(units / 6), small: Math.ceil(units / 2), jewel: 1 } : null;
+  const boxTotal = boxes ? boxes.big + boxes.small + boxes.jewel : 0;
   const testFill = () => {
     const prefix = d.orderType === 'transfer' || d.orderType === 'bulk' ? 'DC-' : 'ORD-';
     const id = prefix + String(Date.now()).slice(-4);
@@ -410,13 +424,28 @@ export function CreateOrderForm({ ctx, onClose }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* header + test fill */}
+      {/* modal heading */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <span style={{ fontSize: 21, fontWeight: 800, color: INK, letterSpacing: '-0.01em' }}>Create a new order</span>
+        <span style={{ fontSize: 14, color: 'var(--mute-2)' }}>Pick the order type, fill in the details, and a draft order is created for the packaging bench.</span>
+      </div>
+
+      {/* order-type segmented buttons */}
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {NEW_ORDER_TYPES.map((t) => {
+          const on = t.type === d.orderType;
+          return (
+            <button key={t.type} onClick={() => pickType(t.type)} style={{ display: 'flex', alignItems: 'center', gap: 8, borderRadius: 11, padding: '10px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', border: '1px solid ' + (on ? 'rgba(var(--accent-rgb),0.45)' : 'var(--surface-border)'), background: on ? 'rgba(var(--accent-rgb),0.07)' : 'var(--surface)', color: on ? 'var(--accent)' : 'var(--mute-2)' }}>
+              <t.Icon size={16} aria-hidden="true" /> {t.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* type heading + test fill */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-        <span style={{ width: 46, height: 46, flex: 'none', borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', background: meta.color + '1a', color: meta.color }}>
-          <meta.Icon size={23} aria-hidden="true" />
-        </span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: 1, minWidth: 0 }}>
-          <span style={{ fontSize: 20, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.01em' }}>{meta.title}</span>
+          <span style={{ fontSize: 19, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.01em' }}>{meta.title}</span>
           <span style={{ fontSize: 14, color: 'var(--mute-2)' }}>{meta.sub}</span>
         </div>
         <button onClick={testFill} className="hv-border-accent" style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 'none', background: 'rgba(var(--accent-rgb),0.06)', border: '1px solid rgba(var(--accent-rgb),0.25)', color: 'var(--accent)', borderRadius: 999, padding: '7px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
@@ -424,21 +453,12 @@ export function CreateOrderForm({ ctx, onClose }) {
         </button>
       </div>
 
-      {/* order-type tabs */}
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-        {NEW_ORDER_TYPES.map((t) => {
-          const on = t.type === d.orderType;
-          return (
-            <button key={t.type} onClick={() => pickType(t.type)} style={{ display: 'flex', alignItems: 'center', gap: 7, borderRadius: 10, padding: '8px 13px', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: '1px solid ' + (on ? t.color : 'rgba(0,0,0,0.1)'), background: on ? t.color + '14' : 'rgba(var(--surf-rgb),0.5)', color: on ? t.color : 'var(--mute-2)' }}>
-              <t.Icon size={15} aria-hidden="true" /> {t.label}
-            </button>
-          );
-        })}
-      </div>
-
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         <Field label="ORDER ID *">
-          <input className="fc-accent" value={d.id} onChange={(e) => upd('id', e.target.value)} placeholder={idHint} style={{ ...inputStyle, fontFamily: MONO }} />
+          <div style={{ ...inputStyle, display: 'flex', alignItems: 'center', gap: 2, padding: '0 13px' }}>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: 'var(--mute-2)', flex: 'none' }}>{idPrefix}</span>
+            <input className="fc-accent" value={idBody} onChange={(e) => setIdBody(e.target.value)} placeholder="1234" aria-label="Order ID" style={{ flex: 1, minWidth: 0, border: 'none', outline: 'none', background: 'transparent', fontFamily: MONO, fontSize: 14, color: 'var(--ink-2)', padding: '9px 0' }} />
+          </div>
         </Field>
         <Field label="CUSTOMER *">
           <input className="fc-accent" value={d.customer} onChange={(e) => upd('customer', e.target.value)} placeholder="name or store" style={inputStyle} />
@@ -456,31 +476,73 @@ export function CreateOrderForm({ ctx, onClose }) {
         </Field>
       </div>
 
-      {/* items / products editor */}
+      {/* items / products editor (+ free gift extras) */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
           <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: 'var(--mute)' }}>ITEMS *</span>
-          <button onClick={addItem} className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '6px 13px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>
-            <Plus size={14} aria-hidden="true" /> Add item
-          </button>
-        </div>
-        {items.length === 0 && <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '12px 14px', fontSize: 13, color: 'var(--mute)' }}>No items yet — add at least one product.</div>}
-        {items.map((it, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Gem size={16} aria-hidden="true" /></span>
-            <input className="fc-accent" value={it.sku} onChange={(e) => updItem(i, 'sku', e.target.value)} placeholder="SKU" style={{ ...inputStyle, fontFamily: MONO, flex: '0 0 128px', minWidth: 0 }} />
-            <input className="fc-accent" value={it.name} onChange={(e) => updItem(i, 'name', e.target.value)} placeholder="Item name · detail" style={{ ...inputStyle, flex: 1, minWidth: 0 }} />
-            <input className="fc-accent" value={it.qty} onChange={(e) => updItem(i, 'qty', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" aria-label="Quantity" style={{ ...inputStyle, flex: '0 0 52px', textAlign: 'center', padding: '9px 6px' }} />
-            <input className="fc-accent" value={it.value} onChange={(e) => updItem(i, 'value', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" placeholder="₹ unit" aria-label="Unit value" style={{ ...inputStyle, flex: '0 0 96px', textAlign: 'right' }} />
-            <button onClick={() => delItem(i)} aria-label="Remove item" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
-              <Trash2 size={14} aria-hidden="true" />
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={addGift} className="hv-border-accent" style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.06)', border: '1px solid rgba(var(--accent-rgb),0.3)', color: 'var(--accent)', borderRadius: 999, padding: '6px 13px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>
+              <Gift size={13} aria-hidden="true" /> Add gift
+            </button>
+            <button onClick={addItem} className="hv-accent14" style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', border: 'none', color: 'var(--accent)', borderRadius: 999, padding: '6px 13px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>
+              <Plus size={14} aria-hidden="true" /> Add item
             </button>
           </div>
-        ))}
+        </div>
+        {products.length === 0 && <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '12px 14px', fontSize: 13, color: 'var(--mute)' }}>No items yet — add at least one product.</div>}
+        {items.map((it, i) =>
+          it.gift ? null : (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Gem size={16} aria-hidden="true" /></span>
+              <input className="fc-accent" value={it.sku} onChange={(e) => updItem(i, 'sku', e.target.value)} placeholder="SKU" style={{ ...inputStyle, fontFamily: MONO, flex: '0 0 128px', minWidth: 0 }} />
+              <input className="fc-accent" value={it.name} onChange={(e) => updItem(i, 'name', e.target.value)} placeholder="Item name · detail" style={{ ...inputStyle, flex: 1, minWidth: 0 }} />
+              <input className="fc-accent" value={it.qty} onChange={(e) => updItem(i, 'qty', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" aria-label="Quantity" style={{ ...inputStyle, flex: '0 0 52px', textAlign: 'center', padding: '9px 6px' }} />
+              <input className="fc-accent" value={it.value} onChange={(e) => updItem(i, 'value', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" placeholder="₹ unit" aria-label="Unit value" style={{ ...inputStyle, flex: '0 0 96px', textAlign: 'right' }} />
+              <button onClick={() => delItem(i)} aria-label="Remove item" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
+                <Trash2 size={14} aria-hidden="true" />
+              </button>
+            </div>
+          )
+        )}
+        {gifts.length > 0 && (
+          <>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>
+              <Gift size={14} aria-hidden="true" /> Gifts (free extras)
+            </span>
+            {items.map((it, i) =>
+              !it.gift ? null : (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Gift size={15} aria-hidden="true" /></span>
+                  <input className="fc-accent" value={it.sku} onChange={(e) => updItem(i, 'sku', e.target.value)} placeholder="GIFT-SKU" style={{ ...inputStyle, fontFamily: MONO, flex: '0 0 128px', minWidth: 0 }} />
+                  <input className="fc-accent" value={it.name} onChange={(e) => updItem(i, 'name', e.target.value)} placeholder="Gift name" style={{ ...inputStyle, flex: 1, minWidth: 0 }} />
+                  <input className="fc-accent" value={it.qty} onChange={(e) => updItem(i, 'qty', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" aria-label="Quantity" style={{ ...inputStyle, flex: '0 0 52px', textAlign: 'center', padding: '9px 6px' }} />
+                  <span style={{ flex: '0 0 96px', textAlign: 'right', fontFamily: MONO, fontSize: 13, color: 'var(--mute)' }}>₹0</span>
+                  <button onClick={() => delItem(i)} aria-label="Remove gift" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
+                    <Trash2 size={14} aria-hidden="true" />
+                  </button>
+                </div>
+              )
+            )}
+          </>
+        )}
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'baseline', gap: 10, paddingTop: 2 }}>
           <span style={{ fontSize: 13, color: MUTE }}>Subtotal</span>
           <span style={{ fontSize: 15, fontWeight: 700, color: INK }}>{fmtMoney(subtotal)}</span>
         </div>
+        {boxes && (
+          <div style={{ ...surfaceSubtle, borderRadius: 14, padding: '13px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+              <span style={{ fontSize: 14.5, fontWeight: 700, color: INK }}>Packaging boxes</span>
+              <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute-2)' }}>{boxTotal} boxes total</span>
+            </div>
+            {[['Big box', boxes.big], ['Small box', boxes.small], ['Jewellery box', boxes.jewel]].map(([label, n]) => (
+              <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13.5 }}>
+                <span style={{ color: 'var(--ink-2)' }}>{label}</span>
+                <span style={{ fontFamily: MONO, color: 'var(--mute-2)' }}>×{n}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />

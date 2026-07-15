@@ -1,5 +1,6 @@
 import { MONO, glassFloat, glassPopover, cardLight } from '../data.js';
 import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell } from 'lucide-react';
+import TabBar from './TabBar.jsx';
 
 const barStyle = {
   ...glassFloat,
@@ -178,6 +179,9 @@ export default function TopBar({ ctx }) {
           <ChevronLeft size={15} aria-hidden="true" /> Back
         </button>
       )}
+      <div style={{ flex: 1 }} />
+      {/* primary navigation lives in the bar itself; the admin menu opens downward */}
+      <TabBar ctx={ctx} />
       <div style={{ flex: 1 }} />
       <NotificationsBell ctx={ctx} />
       <TourButton onClick={openTour} />
