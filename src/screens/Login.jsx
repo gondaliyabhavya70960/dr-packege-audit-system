@@ -27,14 +27,14 @@ export default function Login({ ctx }) {
 
   return (
     <div data-screen-label="01 Login" className="login-split">
-      <div style={{ background: 'radial-gradient(900px 600px at 80% 20%, var(--accent), var(--accent-2) 70%)', color: '#FFFFFF', padding: '44px 48px', display: 'flex', flexDirection: 'column' }}>
+      <div className="login-hero" style={{ background: 'radial-gradient(900px 600px at 80% 20%, var(--accent), var(--accent-2) 70%)', color: '#FFFFFF', padding: '44px 48px', display: 'flex', flexDirection: 'column' }}>
         {/* wordmark only — the single logo image lives beside the sign-in form */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.01em' }}>Packaging Audit</span>
           <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.72)' }}>MAYAVÉ JEWELLERY</span>
         </div>
         <div style={{ flex: 1 }} />
-        <div style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.18, letterSpacing: '-0.01em', maxWidth: 480, textWrap: 'pretty' }}>
+        <div className="login-headline" style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.18, letterSpacing: '-0.01em', maxWidth: 480, textWrap: 'pretty' }}>
           One ID. Every checkpoint. Video proof you can pull up in seconds.
         </div>
         {/* mock tracking card in the app's shared card language (deep shadow lifts it off the red) */}
@@ -91,10 +91,10 @@ export default function Login({ ctx }) {
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
+      <div className="login-form-col" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
         <div style={{ width: 460, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 18 }}>
           {/* the page's single logo — large and centred above the form card */}
-          <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 100, width: 'auto', maxWidth: '100%', objectFit: 'contain', alignSelf: 'center' }} />
+          <img className="login-logo" src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 100, width: 'auto', maxWidth: '100%', objectFit: 'contain', alignSelf: 'center' }} />
           {/* the form itself is unchanged — it just sits on the app's shared white card now */}
           <div style={{ ...cardLight, padding: 26, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>

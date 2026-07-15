@@ -339,7 +339,7 @@ export default function App() {
       {screen === 'login' && <Login ctx={ctx} />}
 
       {isOpSurface && (
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="app-surface">
           <TopBar ctx={ctx} variant="operator" />
           <div style={{ flex: 1, minHeight: 0, position: 'relative', paddingBottom: 74, overflow: 'auto' }}>
             {screen === 'kiosk' && <KioskHome ctx={ctx} />}
@@ -352,7 +352,7 @@ export default function App() {
       )}
 
       {isAdminSurface && (
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="app-surface">
           <TopBar ctx={ctx} variant="admin" />
           <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 120 }}>
             {screen === 'search' && <SearchPlayback ctx={ctx} />}

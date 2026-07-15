@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, Gauge, ListChecks, PackagePlus } from 'lucide-react';
 import { MONO, MUTE, cardLight, surfaceSubtle, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
@@ -144,6 +144,9 @@ export default function Home({ ctx }) {
   const DonutCard = ({ kind, label, sub, Icon, lst }) => {
     const mix = mixOf(lst);
     const total = lst.length;
+    // legend as two explicit columns with a hairline between them
+    const half = Math.ceil(mix.length / 2);
+    const legendCols = [mix.slice(0, half), mix.slice(half)].filter((c) => c.length > 0);
     return (
       <div style={{ ...cardLight, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -162,19 +165,25 @@ export default function Home({ ctx }) {
         {/* compact body: small ring + two-column status legend keeps the card short */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 16, minWidth: 0 }}>
           <Donut data={mix} total={total} />
-          <div style={{ flex: 1, minWidth: 0, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '3px 10px', alignContent: 'center' }}>
-            {mix.length === 0 && <span style={{ gridColumn: '1 / -1', fontSize: 13, color: MUTE }}>No orders in this list yet.</span>}
-            {mix.map((d) => {
-              const pct = total ? Math.round((d.value / total) * 100) : 0;
-              return (
-                <button key={d.key} onClick={() => openList(kind, d.key, range)} title={d.label + ' · ' + d.value + ' (' + pct + '%)'} className="hv-ink04" style={{ display: 'flex', alignItems: 'center', gap: 8, border: 'none', background: 'transparent', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', textAlign: 'left', minWidth: 0 }}>
-                  <span style={{ width: 8, height: 8, flex: 'none', borderRadius: '50%', background: d.color }} />
-                  <span style={{ fontSize: 13, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: 'var(--ink-2)' }}>{d.value}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 11.5, color: MUTE, width: 32, textAlign: 'right', flex: 'none' }}>{pct}%</span>
-                </button>
-              );
-            })}
+          <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'stretch', gap: 12 }}>
+            {mix.length === 0 && <span style={{ fontSize: 13, color: MUTE, alignSelf: 'center' }}>No orders in this list yet.</span>}
+            {legendCols.map((col, ci) => (
+              <Fragment key={ci}>
+                {ci > 0 && <div style={{ width: 1, flex: 'none', background: 'var(--hairline)' }} />}
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3, justifyContent: 'center' }}>
+                  {col.map((d) => {
+                    const pct = total ? Math.round((d.value / total) * 100) : 0;
+                    return (
+                      <button key={d.key} onClick={() => openList(kind, d.key, range)} title={d.label + ' · ' + d.value + ' order' + (d.value === 1 ? '' : 's') + ' (' + pct + '%)'} className="hv-ink04" style={{ display: 'flex', alignItems: 'center', gap: 8, border: 'none', background: 'transparent', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', textAlign: 'left', minWidth: 0 }}>
+                        <span style={{ width: 8, height: 8, flex: 'none', borderRadius: '50%', background: d.color }} />
+                        <span style={{ fontSize: 13, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
+                        <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: 'var(--mute-2)', flex: 'none' }}>{pct}%</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </Fragment>
+            ))}
           </div>
         </div>
       </div>
