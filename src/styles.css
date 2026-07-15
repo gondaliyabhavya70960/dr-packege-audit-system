@@ -192,6 +192,10 @@ textarea {
 .hv-accent14:hover {
   background: rgba(var(--accent-rgb), 0.14) !important;
 }
+/* row hover for solid-white menus/cards where a white hover would vanish */
+.hv-ink04:hover {
+  background: rgba(var(--ink-rgb), 0.045) !important;
+}
 .hv-red05:hover {
   background: rgba(229, 62, 62, 0.05) !important;
 }

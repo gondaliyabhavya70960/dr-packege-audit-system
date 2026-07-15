@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { MONO, glass, cardLight, tabMode, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
-import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, Check } from 'lucide-react';
+import { MONO, cardLight, tabMode, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
+import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, Check, CalendarDays } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
 import NewOrderMenu from '../components/NewOrderMenu.jsx';
@@ -32,18 +32,18 @@ function StageBadge({ label, mode }) {
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
 
-// dropdown option lists for the glass filters
+// dropdown option lists for the toolbar filters
 const STATUS_OPTS = [{ value: 'all', label: 'All statuses' }, ...ORDER_STATUSES.map((st) => ({ value: st.key, label: st.label }))];
-const CHANNEL_OPTS = [{ value: 'all', label: 'All channels' }, ...ORDER_CHANNELS.map((c) => ({ value: c, label: c }))];
+const CHANNEL_OPTS = [{ value: 'all', label: 'All types' }, ...ORDER_CHANNELS.map((c) => ({ value: c, label: c }))];
 const DATE_OPTS = [
-  { value: 'all', label: 'Any time' },
+  { value: 'all', label: 'All dates' },
   { value: 'today', label: 'Today' },
   { value: '7d', label: 'Last 7 days' },
   { value: '30d', label: 'Last 30 days' },
 ];
 const SORT_OPTS = [
-  { value: 'new', label: 'Date · newest first' },
-  { value: 'old', label: 'Date · oldest first' },
+  { value: 'new', label: 'Newest first' },
+  { value: 'old', label: 'Oldest first' },
   { value: 'orderaz', label: 'Order · A → Z' },
   { value: 'orderza', label: 'Order · Z → A' },
   { value: 'valhigh', label: 'Value · high → low' },
@@ -147,12 +147,12 @@ export default function Orders({ ctx }) {
         <NewOrderMenu onPick={newOrder} />
       </div>
 
-      {/* toolbar: search + filters (raised so the glass dropdowns overlay the table) */}
-      <div style={{ ...glass, padding: 14, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
+      {/* toolbar: search + filters on a solid card (raised so the dropdowns overlay the table) */}
+      <div style={{ ...cardLight, padding: 16, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 220 }}>
           <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>SEARCH</span>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-            <span style={{ position: 'absolute', left: 13, color: 'var(--mute)', display: 'flex' }}>
+            <span style={{ position: 'absolute', left: 14, color: 'var(--mute)', display: 'flex' }}>
               <Search size={16} aria-hidden="true" />
             </span>
             <input
@@ -160,7 +160,7 @@ export default function Orders({ ctx }) {
               value={s.oq}
               onChange={(e) => set({ oq: e.target.value })}
               placeholder="Search by tracking ID, order or delivery challan…"
-              style={{ width: '100%', background: 'rgba(var(--surf-rgb),0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(var(--surf-rgb),0.65)', borderRadius: 10, padding: '10px 14px 10px 38px', color: 'var(--ink-2)', fontSize: 14, outline: 'none' }}
+              style={{ width: '100%', background: 'var(--surface-soft)', border: '1px solid var(--surface-soft-border)', borderRadius: 12, padding: '12px 14px 12px 40px', color: 'var(--ink-2)', fontSize: 14.5, outline: 'none' }}
             />
           </div>
         </label>
@@ -169,12 +169,12 @@ export default function Orders({ ctx }) {
 
         <GlassSelect label="TYPE" value={s.oChannel} onChange={(v) => set({ oChannel: v })} options={CHANNEL_OPTS} minWidth={140} />
 
-        <GlassSelect label="PLACED" value={s.oDate} onChange={(v) => set({ oDate: v })} options={DATE_OPTS} minWidth={130} />
+        <GlassSelect label="PLACED" value={s.oDate} onChange={(v) => set({ oDate: v })} options={DATE_OPTS} minWidth={150} Icon={CalendarDays} />
 
         <GlassSelect label="SORT" value={oSort} onChange={(v) => set({ oSort: v })} options={sortOpts} minWidth={150} />
 
         {filtersActive && (
-          <button className="hv-border-accent" onClick={resetFilters} style={{ background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: 10, padding: '10px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-ink04" onClick={resetFilters} style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', color: 'var(--ink-2)', borderRadius: 12, padding: '12px 20px', fontSize: 14.5, fontWeight: 700, cursor: 'pointer' }}>
             Clear
           </button>
         )}

@@ -253,12 +253,12 @@ function StationHealth({ ctx }) {
         <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 999, background: 'rgba(var(--surf-rgb),0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(var(--surf-rgb),0.65)', color: 'var(--mute-2)' }}>TELEMETRY</span>
       </div>
 
-      {/* toolbar: search + filter + sort */}
-      <div style={{ ...glass, padding: 14, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
+      {/* toolbar: search + filter + sort on a solid card, matching the orders list */}
+      <div style={{ ...cardLight, padding: 16, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 220 }}>
           <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>SEARCH</span>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-            <span style={{ position: 'absolute', left: 13, color: 'var(--mute)', display: 'flex' }}>
+            <span style={{ position: 'absolute', left: 14, color: 'var(--mute)', display: 'flex' }}>
               <Search size={16} aria-hidden="true" />
             </span>
             <input
@@ -266,7 +266,7 @@ function StationHealth({ ctx }) {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="station name…"
-              style={{ width: '100%', background: 'rgba(var(--surf-rgb),0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(var(--surf-rgb),0.65)', borderRadius: 10, padding: '10px 14px 10px 38px', color: 'var(--ink-2)', fontSize: 14, outline: 'none' }}
+              style={{ width: '100%', background: 'var(--surface-soft)', border: '1px solid var(--surface-soft-border)', borderRadius: 12, padding: '12px 14px 12px 40px', color: 'var(--ink-2)', fontSize: 14.5, outline: 'none' }}
             />
           </div>
         </label>
@@ -274,9 +274,9 @@ function StationHealth({ ctx }) {
         <GlassSelect label="SORT BY" value={sort} onChange={setSort} options={STATION_SORTS} minWidth={160} />
         {dirty && (
           <button
-            className="hv-border-accent"
+            className="hv-ink04"
             onClick={() => { setQ(''); setFilt('all'); setSort('records'); }}
-            style={{ background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: 10, padding: '10px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+            style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', color: 'var(--ink-2)', borderRadius: 12, padding: '12px 20px', fontSize: 14.5, fontWeight: 700, cursor: 'pointer' }}
           >
             Clear
           </button>

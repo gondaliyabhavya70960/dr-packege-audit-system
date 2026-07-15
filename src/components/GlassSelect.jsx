@@ -1,31 +1,30 @@
 import { useEffect, useRef, useState } from 'react';
-import { MONO, glassPopover } from '../data.js';
+import { MONO } from '../data.js';
 import { ChevronDown, Check } from 'lucide-react';
 
-// Custom dropdown matching the app's liquid-glass theme — the native <select>
-// menu can't be styled, so this renders a blurred glass popover instead.
+// Custom dropdown — the native <select> menu can't be styled, so this renders
+// a solid white trigger + menu matching the app's card language. An optional
+// leading `Icon` (e.g. a calendar on date filters) sits before the value.
 // options: [{ value, label }]. Closes on outside-click or Esc.
 const triggerStyle = {
   appearance: 'none',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 8,
+  gap: 10,
   width: '100%',
-  background: 'rgba(var(--surf-rgb),0.5)',
-  backdropFilter: 'blur(14px) saturate(1.6)',
-  WebkitBackdropFilter: 'blur(14px) saturate(1.6)',
-  border: '1px solid rgba(var(--surf-rgb),0.65)',
-  borderRadius: 10,
-  padding: '10px 12px 10px 14px',
-  fontSize: 13.5,
+  background: 'var(--surface)',
+  border: '1px solid var(--surface-border)',
+  borderRadius: 12,
+  padding: '12px 13px 12px 15px',
+  fontSize: 14.5,
   fontWeight: 600,
   color: 'var(--ink-2)',
   outline: 'none',
   cursor: 'pointer',
 };
 
-export default function GlassSelect({ value, onChange, options, label, minWidth = 150 }) {
+export default function GlassSelect({ value, onChange, options, label, minWidth = 150, Icon }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef(null);
   const sel = options.find((o) => o.value === value) || options[0];
@@ -51,13 +50,16 @@ export default function GlassSelect({ value, onChange, options, label, minWidth 
       {label && <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>{label}</span>}
       <div ref={wrapRef} style={{ position: 'relative', minWidth }}>
         <button type="button" className="fc-accent" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((v) => !v)} style={triggerStyle}>
-          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sel ? sel.label : ''}</span>
-          <ChevronDown size={15} aria-hidden="true" style={{ flex: 'none', color: 'var(--accent)', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.16s ease' }} />
+          <span style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+            {Icon && <Icon size={17} aria-hidden="true" style={{ flex: 'none', color: 'var(--ink-2)' }} />}
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sel ? sel.label : ''}</span>
+          </span>
+          <ChevronDown size={16} aria-hidden="true" style={{ flex: 'none', color: 'var(--mute-2)', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.16s ease' }} />
         </button>
         {open && (
           <div
             role="listbox"
-            style={{ ...glassPopover, position: 'absolute', top: 'calc(100% + 6px)', left: 0, minWidth: '100%', width: 'max-content', maxWidth: 300, borderRadius: 14, padding: 6, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 80, maxHeight: 300, overflowY: 'auto' }}
+            style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', boxShadow: '0 18px 44px -14px rgba(15,17,21,0.28), 0 2px 8px rgba(15,17,21,0.06)', position: 'absolute', top: 'calc(100% + 6px)', left: 0, minWidth: '100%', width: 'max-content', maxWidth: 300, borderRadius: 14, padding: 6, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 80, maxHeight: 300, overflowY: 'auto' }}
           >
             {options.map((o) => {
               const on = o.value === value;
@@ -67,7 +69,7 @@ export default function GlassSelect({ value, onChange, options, label, minWidth 
                   type="button"
                   role="option"
                   aria-selected={on}
-                  className="hv-white7"
+                  className="hv-ink04"
                   onClick={() => { onChange(o.value); setOpen(false); }}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, textAlign: 'left', border: 'none', background: on ? 'rgba(var(--accent-rgb),0.08)' : 'transparent', color: on ? 'var(--accent)' : 'var(--ink-2)', borderRadius: 9, padding: '9px 11px', fontSize: 13.5, fontWeight: on ? 700 : 600, cursor: 'pointer', whiteSpace: 'nowrap' }}
                 >

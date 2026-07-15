@@ -1,5 +1,5 @@
 import { MONO, glassFloat, glassPopover, cardLight } from '../data.js';
-import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell } from 'lucide-react';
+import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell, WandSparkles } from 'lucide-react';
 
 const barStyle = {
   ...glassFloat,
@@ -140,7 +140,7 @@ function TourButton({ onClick }) {
       title="App guide"
       style={{ display: 'flex', alignItems: 'center', gap: 7, height: 38, padding: '0 16px', background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: 'var(--accent)', borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
     >
-      <img src="/assets/app-guide.svg" alt="App guide" style={{ width: 18, height: 18 }} />
+      <WandSparkles size={16} aria-hidden="true" style={{ flex: 'none' }} />
       Tour
     </button>
   );
