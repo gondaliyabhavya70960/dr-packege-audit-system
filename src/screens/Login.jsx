@@ -28,11 +28,15 @@ export default function Login({ ctx }) {
   return (
     <div data-screen-label="01 Login" className="login-split">
       <div style={{ background: 'radial-gradient(900px 600px at 80% 20%, var(--accent), var(--accent-2) 70%)', color: '#FFFFFF', padding: '44px 48px', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
-          <span style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(var(--surf-rgb),0.14)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <PackageIcon size={20} color="#FFFFFF" />
+        {/* brand lockup: the Mayavé logo on a light chip so it reads on the deep red */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <span style={{ background: '#FFFFFF', borderRadius: 12, padding: '8px 14px', display: 'inline-flex', alignItems: 'center', boxShadow: '0 8px 24px -10px rgba(0,0,0,0.4)' }}>
+            <img src="/assets/mayave-logo.png" alt="Mayavé Jewellery" style={{ height: 34, width: 'auto', display: 'block' }} />
           </span>
-          <span style={{ fontSize: 21, fontWeight: 700, letterSpacing: '-0.01em' }}>Packaging Audit</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.01em' }}>Packaging Audit</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.7)' }}>MAYAVÉ JEWELLERY</span>
+          </div>
         </div>
         <div style={{ flex: 1 }} />
         <div style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.18, letterSpacing: '-0.01em', maxWidth: 480, textWrap: 'pretty' }}>
@@ -81,6 +85,7 @@ export default function Login({ ctx }) {
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
         <div style={{ width: 420, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 46, width: 'auto', alignSelf: 'flex-start' }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <span style={{ fontSize: 30, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.01em' }}>Sign in</span>
             <span style={{ fontSize: 15, color: '#4B5563' }}>Enter your credentials to access the console.</span>

@@ -14,15 +14,19 @@ export const NOW_TS = Date.parse('2026-06-15T10:00:00');
 // "Draft" is the earliest state — a bespoke / not-yet-packed order whose
 // packing video is still pending.
 export const ORDER_STATUSES = [
-  { key: 'draft', label: 'Draft', tone: 'plain' },
+  { key: 'draft', label: 'Ready to Pack', tone: 'plain' },
   { key: 'packed', label: 'Packed', tone: 'plain' },
   { key: 'transit', label: 'In transit', tone: 'amber' },
   { key: 'receiving', label: 'Receiving', tone: 'amber' },
   { key: 'received', label: 'Received', tone: 'green' },
   { key: 'delivery', label: 'Out for delivery', tone: 'amber' },
   { key: 'delivered', label: 'Delivered', tone: 'green' },
-  { key: 'returning', label: 'Return', tone: 'amber' },
-  { key: 'returned', label: 'Returned', tone: 'red' },
+  // full e-commerce return flow: requested -> in transit back -> received at the
+  // desk (inspection) -> completed (refund issued / restocked)
+  { key: 'returning', label: 'Return Requested', tone: 'amber' },
+  { key: 'return-transit', label: 'Return In Transit', tone: 'amber' },
+  { key: 'return-received', label: 'Return Received', tone: 'amber' },
+  { key: 'returned', label: 'Return Completed', tone: 'green' },
   { key: 'flagged', label: 'Flagged', tone: 'red' },
 ];
 
@@ -99,7 +103,9 @@ const TAB_MODES = {
   received: { pack: 'view', recv: 'edit', ret: 'empty' },
   delivery: { pack: 'view', recv: 'status', ret: 'empty' },
   delivered: { pack: 'view', recv: 'view', ret: 'empty' },
-  returning: { pack: 'view', recv: 'view', ret: 'edit' },
+  returning: { pack: 'view', recv: 'view', ret: 'status' },
+  'return-transit': { pack: 'view', recv: 'view', ret: 'status' },
+  'return-received': { pack: 'view', recv: 'view', ret: 'edit' },
   returned: { pack: 'view', recv: 'view', ret: 'view' },
   flagged: { pack: 'view', recv: 'view', ret: 'view' },
 };
@@ -127,14 +133,15 @@ const XFER_STATUS = ['transit', 'received', 'received', 'transit', 'delivered'];
 
 function statusMeta(k) {
   const m = {
-    draft: ['Draft', 'plain'], packed: ['Packed', 'plain'], transit: ['In transit', 'amber'], receiving: ['Receiving', 'amber'], received: ['Received', 'green'],
-    delivery: ['Out for delivery', 'amber'], delivered: ['Delivered', 'green'], returning: ['Return', 'amber'], returned: ['Returned', 'red'], flagged: ['Flagged', 'red'],
+    draft: ['Ready to Pack', 'plain'], packed: ['Packed', 'plain'], transit: ['In transit', 'amber'], receiving: ['Receiving', 'amber'], received: ['Received', 'green'],
+    delivery: ['Out for delivery', 'amber'], delivered: ['Delivered', 'green'], returning: ['Return Requested', 'amber'], 'return-transit': ['Return In Transit', 'amber'],
+    'return-received': ['Return Received', 'amber'], returned: ['Return Completed', 'green'], flagged: ['Flagged', 'red'],
   };
   return m[k] || ['On record', 'plain'];
 }
 function condFor(k) {
-  if (k === 'returned' || k === 'flagged') return 'disputed';
-  if (k === 'delivered' || k === 'received') return 'verified';
+  if (k === 'flagged') return 'disputed';
+  if (k === 'delivered' || k === 'received' || k === 'returned') return 'verified';
   return 'pending';
 }
 function genTimeline(k, transfer, op, dm) {
@@ -156,7 +163,10 @@ function genTimeline(k, transfer, op, dm) {
   if (k === 'returned' || k === 'flagged') {
     T.push({ label: 'Delivered', time: dm + ' · 13:00', who: 'OTP confirmed', clip: false });
     T.push({ label: 'Return requested', time: dm + ' · 09:20', who: 'customer', clip: false });
+    T.push({ label: 'Pickup scheduled', time: dm + ' · 10:05', who: 'auto · Gati reverse', clip: false });
+    T.push({ label: 'Return received at desk', time: dm + ' · 15:40', who: op + ' · RETURNS-1', clip: false });
     T.push({ label: 'Return inspected', time: dm + ' · 16:21', who: op + ' · RETURNS-1', clip: true });
+    if (k === 'returned') T.push({ label: 'Refund issued', time: dm + ' · 17:05', who: 'auto · payment gateway', clip: false });
   }
   return T;
 }
@@ -208,7 +218,7 @@ const curatedOrders = [
   {
     id: 'ORD-10350', channel: 'Online', customer: 'Tanvi Desai', phone: '+91 98250 41200',
     address: '18 CG Road, Ahmedabad 380009', placed: '15 Jun 2026 · 09:30', ts: Date.parse('2026-06-15T09:30:00'),
-    statusKey: 'draft', status: 'Draft', tone: 'plain', station: 'PACK-BENCH-1', value: '₹1.05L', valNum: 105000,
+    statusKey: 'draft', status: 'Ready to Pack', tone: 'plain', station: 'PACK-BENCH-1', value: '₹1.05L', valNum: 105000,
     items: [
       { sku: 'SKU 4471', name: 'Solitaire ring', qty: 1, condition: 'pending' },
       { sku: 'SKU 4490', name: 'Emerald drop earrings', qty: 1, condition: 'pending' },
@@ -245,7 +255,7 @@ const curatedOrders = [
   {
     id: 'ORD-10311', channel: 'Online', customer: 'Isha Verma', phone: '+91 99300 55678',
     address: '7 Koregaon Park, Pune 411001', placed: '13 Jun 2026 · 10:05', ts: Date.parse('2026-06-13T10:05:00'),
-    statusKey: 'returned', status: 'Returned · flagged', tone: 'red', station: 'RETURNS-1', value: '₹1.20L', valNum: 120000,
+    statusKey: 'flagged', status: 'Return flagged', tone: 'red', station: 'RETURNS-1', value: '₹1.20L', valNum: 120000,
     items: [{ sku: 'SKU 4490', name: 'Emerald drop earrings', qty: 1, condition: 'disputed' }],
     flagged: [
       { name: 'Emerald drop earrings', sku: 'SKU 4490', step: 'Return', remark: 'Stone colour differs from the pack video — possible swap.', time: '13 Jun · 16:24', who: 'Sana' },
@@ -296,13 +306,15 @@ const curatedOrders = [
   {
     id: 'ORD-10318', channel: 'Online', customer: 'Kavya Reddy', phone: '+91 90000 88776',
     address: '18 Jubilee Hills, Hyderabad 500033', placed: '08 Jun 2026 · 12:30', ts: Date.parse('2026-06-08T12:30:00'),
-    statusKey: 'returning', status: 'Return', tone: 'amber', station: 'RETURNS-1', value: '₹1.35L', valNum: 135000,
+    statusKey: 'return-received', status: 'Return Received', tone: 'amber', station: 'RETURNS-1', value: '₹1.35L', valNum: 135000,
     items: [{ sku: 'SKU 4590', name: 'Pearl drop pendant', qty: 1, condition: 'pending' }],
     timeline: [
       { label: 'Order placed', time: '08 Jun · 12:30', who: 'web checkout', clip: false },
       { label: 'Packed · Warehouse', time: '08 Jun · 15:10', who: 'Mira · PACK-BENCH-1', clip: true },
       { label: 'Delivered', time: '10 Jun · 13:00', who: 'OTP confirmed', clip: false },
       { label: 'Return requested', time: '14 Jun · 09:20', who: 'customer · "size issue"', clip: false },
+      { label: 'Picked up · Gati reverse', time: '14 Jun · 11:10', who: 'auto', clip: false },
+      { label: 'Return received at desk', time: '14 Jun · 12:20', who: 'Sana · RETURNS-1', clip: false },
       { label: 'Return inspection started', time: '14 Jun · 12:30', who: 'Sana · RETURNS-1', clip: false },
     ],
     custom: { priority: 'Standard', giftWrap: false, insured: '₹1.40L', slot: '—', instructions: 'Inspect at the returns desk and record the verdict.', notes: 'Return inspection in progress.' },
@@ -311,7 +323,7 @@ const curatedOrders = [
   {
     id: 'ORD-10362', channel: 'Online', customer: 'Rhea Malhotra', phone: '+91 98330 21145',
     address: '12 Linking Rd, Mumbai 400050', placed: '15 Jun 2026 · 11:20', ts: Date.parse('2026-06-15T11:20:00'),
-    statusKey: 'draft', status: 'Draft', tone: 'plain', station: 'PACK-BENCH-2', value: '₹3.20L', valNum: 320000,
+    statusKey: 'draft', status: 'Ready to Pack', tone: 'plain', station: 'PACK-BENCH-2', value: '₹3.20L', valNum: 320000,
     items: [
       { sku: 'SKU 4550', name: 'Kundan necklace set', qty: 1, condition: 'pending' },
       { sku: 'SKU 4560', name: 'Diamond stud earrings', qty: 1, condition: 'pending' },
@@ -327,7 +339,7 @@ const curatedOrders = [
   {
     id: 'ORD-10365', channel: 'Store', customer: 'Imran Qureshi', phone: '+91 99860 55410',
     address: '3 Commercial St, Bengaluru 560001', placed: '15 Jun 2026 · 12:05', ts: Date.parse('2026-06-15T12:05:00'),
-    statusKey: 'draft', status: 'Draft', tone: 'plain', station: 'PACK-BENCH-1', value: '₹1.15L', valNum: 115000,
+    statusKey: 'draft', status: 'Ready to Pack', tone: 'plain', station: 'PACK-BENCH-1', value: '₹1.15L', valNum: 115000,
     items: [
       { sku: 'SKU 4471', name: 'Solitaire ring', qty: 1, condition: 'pending' },
       { sku: 'SKU 4540', name: 'Gold coin · 8g', qty: 2, condition: 'pending' },
@@ -377,7 +389,7 @@ const curatedOrders = [
   {
     id: 'ORD-10324', channel: 'Online', customer: 'Farah Sheikh', phone: '+91 90040 33218',
     address: '9 Adyar, Chennai 600020', placed: '06 Jun 2026 · 10:10', ts: Date.parse('2026-06-06T10:10:00'),
-    statusKey: 'returning', status: 'Return', tone: 'amber', station: 'RETURNS-1', value: '₹1.85L', valNum: 185000,
+    statusKey: 'return-transit', status: 'Return In Transit', tone: 'amber', station: 'RETURNS-1', value: '₹1.85L', valNum: 185000,
     items: [
       { sku: 'SKU 4490', name: 'Emerald drop earrings', qty: 1, condition: 'pending' },
       { sku: 'SKU 4571', name: 'Ruby cocktail ring', qty: 1, condition: 'pending' },
@@ -387,24 +399,24 @@ const curatedOrders = [
       { label: 'Packed · Warehouse', time: '06 Jun · 13:25', who: 'Rahul · PACK-BENCH-1', clip: true },
       { label: 'Delivered', time: '09 Jun · 12:40', who: 'OTP confirmed', clip: false },
       { label: 'Return requested', time: '14 Jun · 10:05', who: 'customer · "colour mismatch"', clip: false },
-      { label: 'Return inspection started', time: '15 Jun · 11:30', who: 'Sana · RETURNS-1', clip: false },
+      { label: 'Picked up · Gati reverse', time: '15 Jun · 09:35', who: 'auto', clip: false },
     ],
-    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.90L', slot: '—', instructions: 'Verify stones against the pack clip before verdict.', notes: 'Return inspection in progress.' },
-    remarks: [{ who: 'Sana', time: '15 Jun · 11:32', text: 'Comparing emerald hue with the dispatch still now.' }],
+    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.90L', slot: '—', instructions: 'Verify stones against the pack clip on arrival.', notes: 'Return shipment on its way back to the desk.' },
+    remarks: [{ who: 'Sana', time: '15 Jun · 11:32', text: 'Will compare emerald hue with the dispatch still on arrival.' }],
   },
   {
     id: 'ORD-10327', channel: 'Online', customer: 'Aditya Banerjee', phone: '+91 98300 77451',
     address: '21 Salt Lake, Kolkata 700064', placed: '05 Jun 2026 · 18:30', ts: Date.parse('2026-06-05T18:30:00'),
-    statusKey: 'returning', status: 'Return', tone: 'amber', station: 'RETURNS-1', value: '₹1.30L', valNum: 130000,
+    statusKey: 'returning', status: 'Return Requested', tone: 'amber', station: 'RETURNS-1', value: '₹1.30L', valNum: 130000,
     items: [{ sku: 'SKU 4502', name: 'Tennis bracelet', qty: 1, condition: 'pending' }],
     timeline: [
       { label: 'Order placed', time: '05 Jun · 18:30', who: 'web checkout', clip: false },
       { label: 'Packed · Warehouse', time: '06 Jun · 09:40', who: 'Mira · PACK-BENCH-2', clip: true },
       { label: 'Delivered', time: '08 Jun · 14:10', who: 'OTP confirmed', clip: false },
       { label: 'Return requested', time: '14 Jun · 16:20', who: 'customer · "clasp loose"', clip: false },
-      { label: 'Return inspection started', time: '15 Jun · 09:50', who: 'Devang · RETURNS-1', clip: false },
+      { label: 'Pickup scheduled · Gati reverse', time: '15 Jun · 09:50', who: 'auto', clip: false },
     ],
-    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.35L', slot: '—', instructions: 'Check the clasp and weigh against dispatch.', notes: 'Return inspection underway.' },
+    custom: { priority: 'Standard', giftWrap: false, insured: '₹1.35L', slot: '—', instructions: 'Check the clasp and weigh against dispatch on arrival.', notes: 'Awaiting reverse pickup from the customer.' },
   },
   {
     id: 'RFID-1066', channel: 'Store', customer: 'Kochi Marine', phone: '+91 484 401 5500',
@@ -634,14 +646,17 @@ const curatedOrders = [
   {
     id: 'ORD-10333', channel: 'Online', customer: 'Meera Joshi', phone: '+91 99875 12390',
     address: '21 Aundh, Pune 411007', placed: '08 Jun 2026 · 14:05', ts: Date.parse('2026-06-08T14:05:00'),
-    statusKey: 'returned', status: 'Returned', tone: 'red', station: 'RETURNS-1', value: '₹1.65L', valNum: 165000,
-    items: [{ sku: 'SKU 4571', name: 'Ruby cocktail ring', qty: 1, condition: 'disputed' }],
+    statusKey: 'returned', status: 'Return Completed', tone: 'green', station: 'RETURNS-1', value: '₹1.65L', valNum: 165000,
+    items: [{ sku: 'SKU 4571', name: 'Ruby cocktail ring', qty: 1, condition: 'verified' }],
     timeline: [
       { label: 'Order placed', time: '02 Jun · 11:00', who: 'web checkout', clip: false },
       { label: 'Packed · Warehouse', time: '02 Jun · 16:20', who: 'Rahul · PACK-BENCH-2', clip: true },
       { label: 'Delivered', time: '04 Jun · 12:40', who: 'OTP confirmed', clip: false },
       { label: 'Return requested', time: '07 Jun · 10:15', who: 'customer · "size issue"', clip: false },
+      { label: 'Picked up · Gati reverse', time: '07 Jun · 15:30', who: 'auto', clip: false },
+      { label: 'Return received at desk', time: '08 Jun · 13:50', who: 'Sana · RETURNS-1', clip: false },
       { label: 'Return inspected', time: '08 Jun · 14:05', who: 'Sana · RETURNS-1', clip: true },
+      { label: 'Exchange approved · refund released', time: '08 Jun · 15:00', who: 'Arjun · supervisor', clip: false },
     ],
     custom: { priority: 'Standard', giftWrap: false, insured: '₹1.70L', slot: '—', instructions: 'Customer wants exchange for larger size.', notes: 'Item matches pack clip — exchange approved.' },
     remarks: [
@@ -732,7 +747,7 @@ export function buildCustomOrder(d, who) {
   return {
     id, channel: d.channel, customer: (d.customer || '').trim(), phone: '—', address: '—',
     placed: 'today · custom entry', ts: Date.now(),
-    statusKey: packed ? 'packed' : 'draft', status: packed ? 'Packed' : 'Draft',
+    statusKey: packed ? 'packed' : 'draft', status: packed ? 'Packed' : 'Ready to Pack',
     tone: 'plain', station: d.station, value, valNum,
     items, timeline,
     custom: { priority: d.priority, giftWrap: d.giftWrap, insured: d.insured, slot: d.slot, instructions: d.instructions, notes: d.notes },

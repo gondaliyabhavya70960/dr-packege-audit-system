@@ -419,17 +419,14 @@ input[type='range'] {
 
 /* ---- mobile pass ---- */
 @media (max-width: 560px) {
-  /* floating bottom bar must never exceed the viewport — let it scroll */
+  /* the top nav pill must never exceed the viewport — let it scroll */
   [data-tour='nav'] {
-    max-width: 96vw;
-  }
-  [data-tour='nav'] > div {
     max-width: 96vw;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
-  [data-tour='nav'] > div::-webkit-scrollbar {
+  [data-tour='nav']::-webkit-scrollbar {
     display: none;
   }
   [data-tour='nav'] button {

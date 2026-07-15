@@ -297,9 +297,11 @@ export default function App() {
     }));
   }, []);
 
-  // open one of the two working lists, clearing filters so the switch is predictable
+  // open one of the two working lists, clearing filters so the switch is
+  // predictable. `date` lets the Overview pass its active time window through,
+  // so the list that opens matches the count the user clicked.
   const openList = useCallback(
-    (kind, status) => set({ screen: 'orders', listKind: kind, oStatus: status || 'all', oChannel: 'all', oDate: 'all', oq: '', oSel: [], adminMenuOpen: false }),
+    (kind, status, date) => set({ screen: 'orders', listKind: kind, oStatus: status || 'all', oChannel: 'all', oDate: date || 'all', oq: '', oSel: [], adminMenuOpen: false }),
     [set]
   );
 
@@ -334,7 +336,8 @@ export default function App() {
       {isOpSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="operator" />
-          <div style={{ flex: 1, minHeight: 0, position: 'relative', paddingBottom: 74, overflow: 'auto' }}>
+          <TabBar ctx={ctx} />
+          <div style={{ flex: 1, minHeight: 0, position: 'relative', paddingBottom: 24, overflow: 'auto' }}>
             {screen === 'kiosk' && <KioskHome ctx={ctx} />}
             {screen === 'pack' && <PackRecord ctx={ctx} />}
             {screen === 'recv' && <Receiving ctx={ctx} />}
@@ -347,7 +350,8 @@ export default function App() {
       {isAdminSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="admin" />
-          <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 120 }}>
+          <TabBar ctx={ctx} />
+          <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 24 }}>
             {screen === 'search' && <SearchPlayback ctx={ctx} />}
             {DASH_SCREENS.includes(screen) && <Dashboard ctx={ctx} />}
             {screen === 'config' && <UsersConfig ctx={ctx} />}
@@ -356,7 +360,6 @@ export default function App() {
         </div>
       )}
 
-      {screen !== 'login' && <TabBar ctx={ctx} />}
       {s.playerOpen && <SideBySidePlayer ctx={ctx} />}
       {s.backConfirm && <BackConfirm ctx={ctx} />}
       {s.leaveConfirm && <LeaveConfirm ctx={ctx} />}
