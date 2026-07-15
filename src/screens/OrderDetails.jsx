@@ -196,7 +196,7 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
 
 const inputStyle = {
   background: 'var(--surface)',
-  border: '1px solid #E2E4E9',
+  border: '1px solid #D6DAE1',
   borderRadius: 12,
   padding: '10px 13px',
   fontSize: 14,
@@ -251,7 +251,7 @@ function CustomEditor({ draft, upd }) {
         <Field label="GIFT WRAP">
           <button
             onClick={() => upd('giftWrap', !draft.giftWrap)}
-            style={{ ...inputStyle, cursor: 'pointer', textAlign: 'left', fontWeight: 700, color: draft.giftWrap ? '#0E8A50' : 'var(--mute)' }}
+            style={{ ...inputStyle, cursor: 'pointer', textAlign: 'left', fontWeight: 700, color: draft.giftWrap ? '#0E8A50' : 'var(--mute-2)' }}
           >
             {draft.giftWrap ? 'Yes · gift wrap' : 'No'}
           </button>
@@ -353,8 +353,8 @@ export function CreateOrderForm({ ctx, onClose }) {
     onClose && onClose(id);
   };
 
-  const roField = { ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: 'var(--surface-soft)', borderColor: 'var(--surface-soft-border)' };
-  const roHint = { fontFamily: MONO, fontSize: 9, letterSpacing: '0.08em', color: '#9AA0A6', flex: 'none' };
+  const roField = { ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: 'var(--surface-soft)', borderColor: '#DDE0E6' };
+  const roHint = { fontFamily: MONO, fontSize: 10, letterSpacing: '0.08em', color: 'var(--mute-2)', flex: 'none' };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -379,7 +379,7 @@ export function CreateOrderForm({ ctx, onClose }) {
               onClick={() => pickType(t.type)}
               aria-pressed={on}
               className={on ? '' : 'hv-border-accent'}
-              style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', borderRadius: 14, padding: '12px 14px', cursor: 'pointer', border: '1px solid ' + (on ? 'rgba(var(--accent-rgb),0.5)' : '#E2E4E9'), background: on ? 'rgba(var(--accent-rgb),0.06)' : 'var(--surface)' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', borderRadius: 14, padding: '12px 14px', cursor: 'pointer', border: '1px solid ' + (on ? 'rgba(var(--accent-rgb),0.5)' : '#D6DAE1'), background: on ? 'rgba(var(--accent-rgb),0.06)' : 'var(--surface)' }}
             >
               <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: t.color + '1a', color: t.color }}>
                 <t.Icon size={19} aria-hidden="true" />
@@ -443,7 +443,7 @@ export function CreateOrderForm({ ctx, onClose }) {
             </button>
           </div>
         </div>
-        {products.length === 0 && <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '12px 14px', fontSize: 13, color: 'var(--mute)' }}>No items yet — add at least one product.</div>}
+        {products.length === 0 && <div style={{ background: 'var(--surface-soft)', border: '1px solid #DDE0E6', borderRadius: 12, padding: '12px 14px', fontSize: 13, color: 'var(--mute-2)' }}>No items yet — add at least one product.</div>}
         {items.map((it, i) =>
           it.gift ? null : (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -452,7 +452,7 @@ export function CreateOrderForm({ ctx, onClose }) {
               <input className="fc-accent" value={it.name} onChange={(e) => updItem(i, 'name', e.target.value)} placeholder="Item name · detail" style={{ ...inputStyle, flex: 1, minWidth: 0 }} />
               <input className="fc-accent" value={it.qty} onChange={(e) => updItem(i, 'qty', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" aria-label="Quantity" style={{ ...inputStyle, flex: '0 0 52px', textAlign: 'center', padding: '9px 6px' }} />
               <input className="fc-accent" value={it.value} onChange={(e) => updItem(i, 'value', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" placeholder="₹ unit" aria-label="Unit value" style={{ ...inputStyle, flex: '0 0 96px', textAlign: 'right' }} />
-              <button onClick={() => delItem(i)} aria-label="Remove item" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
+              <button onClick={() => delItem(i)} aria-label="Remove item" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(198,43,34,0.35)', color: '#C62B22', cursor: 'pointer' }}>
                 <Trash2 size={14} aria-hidden="true" />
               </button>
             </div>
@@ -470,8 +470,8 @@ export function CreateOrderForm({ ctx, onClose }) {
                   <input className="fc-accent" value={it.sku} onChange={(e) => updItem(i, 'sku', e.target.value)} placeholder="GIFT-SKU" style={{ ...inputStyle, fontFamily: MONO, flex: '0 0 128px', minWidth: 0 }} />
                   <input className="fc-accent" value={it.name} onChange={(e) => updItem(i, 'name', e.target.value)} placeholder="Gift name" style={{ ...inputStyle, flex: 1, minWidth: 0 }} />
                   <input className="fc-accent" value={it.qty} onChange={(e) => updItem(i, 'qty', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" aria-label="Quantity" style={{ ...inputStyle, flex: '0 0 52px', textAlign: 'center', padding: '9px 6px' }} />
-                  <span style={{ flex: '0 0 96px', textAlign: 'right', fontFamily: MONO, fontSize: 13, color: 'var(--mute)' }}>₹0</span>
-                  <button onClick={() => delItem(i)} aria-label="Remove gift" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
+                  <span style={{ flex: '0 0 96px', textAlign: 'right', fontFamily: MONO, fontSize: 13, color: 'var(--mute-2)' }}>₹0</span>
+                  <button onClick={() => delItem(i)} aria-label="Remove gift" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(198,43,34,0.35)', color: '#C62B22', cursor: 'pointer' }}>
                     <Trash2 size={14} aria-hidden="true" />
                   </button>
                 </div>
@@ -484,7 +484,7 @@ export function CreateOrderForm({ ctx, onClose }) {
           <span style={{ fontSize: 15, fontWeight: 700, color: INK }}>{fmtMoney(subtotal)}</span>
         </div>
         {boxes && (
-          <div style={{ ...surfaceSubtle, borderRadius: 14, padding: '13px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ background: 'var(--surface-soft)', border: '1px solid #DDE0E6', borderRadius: 14, padding: '13px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
               <span style={{ fontSize: 14.5, fontWeight: 700, color: INK }}>Packaging boxes</span>
               <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute-2)' }}>{boxTotal} boxes total</span>
@@ -499,7 +499,7 @@ export function CreateOrderForm({ ctx, onClose }) {
         )}
       </div>
 
-      <div style={{ height: 1, background: 'rgba(var(--ink-rgb),0.08)' }} />
+      <div style={{ height: 1, background: 'rgba(var(--ink-rgb),0.12)' }} />
       <CustomEditor draft={d} upd={upd} />
 
       <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>

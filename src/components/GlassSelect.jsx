@@ -15,7 +15,7 @@ const triggerStyle = {
   gap: 10,
   width: '100%',
   background: 'var(--surface)',
-  border: '1px solid var(--surface-border)',
+  border: '1px solid #D6DAE1',
   borderRadius: 12,
   padding: '12px 13px 12px 15px',
   fontSize: 14.5,
