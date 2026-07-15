@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Flag } from 'lucide-react';
+import { Flag, Check } from 'lucide-react';
 import { MONO, glass, feedBg, bannerTones, dotFor, fmt, withOrderFlags } from '../data.js';
 import PrevStepClip from '../components/PrevStepClip.jsx';
 import RemarkBox from '../components/RemarkBox.jsx';
@@ -101,7 +101,9 @@ export default function Receiving({ ctx }) {
               {row.captured ? (
                 <CapturedThumb size={34} label={row.name + ' — captured on video'} />
               ) : (
-                <span style={{ width: 26, height: 26, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, border: '1px solid ' + row.dotBorder, color: row.dotColor, background: row.dotBg }}>{row.dot}</span>
+                <span style={{ width: 26, height: 26, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, border: '1px solid ' + row.dotBorder, color: row.dotColor, background: row.dotBg }}>
+                  {row.dot === 'check' ? <Check size={13} strokeWidth={3} aria-hidden="true" /> : row.dot}
+                </span>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 <span style={{ fontFamily: MONO, fontSize: 14 }}>{row.rfid}</span>

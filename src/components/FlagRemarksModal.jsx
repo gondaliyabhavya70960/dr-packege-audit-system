@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Flag } from 'lucide-react';
+import { Flag, Check } from 'lucide-react';
 import { MONO, glassSheet } from '../data.js';
 import useDialog from './useDialog.js';
 
@@ -42,7 +42,7 @@ export default function FlagRemarksModal({ items, step, cta, onCancel, onSave })
               <span style={{ fontSize: 14.5, fontWeight: 700 }}>{i.name}</span>
               <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{i.sku}</span>
               {val(i.key) ? (
-                <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, color: '#0E8A50' }}>✓ remark added</span>
+                <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: MONO, fontSize: 10, color: '#0E8A50' }}><Check size={11} strokeWidth={3} aria-hidden="true" style={{ flex: 'none' }} /> remark added</span>
               ) : (
                 <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, color: '#C62B22' }}>remark required</span>
               )}

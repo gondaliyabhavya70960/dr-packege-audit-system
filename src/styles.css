@@ -13,8 +13,9 @@
     linear-gradient(160deg, #f4eef1, #e9eaf3);
   --ink: #0f1115;
   --ink-2: #1b1d21;
-  --mute: #6b7280;
-  --mute-2: #5b616b;
+  /* muted text kept dark enough to stay readable on white and glass cards */
+  --mute: #596070;
+  --mute-2: #444a56;
   --surface: #ffffff;
   --surface-border: #ecedf0;
   --surface-soft: #f7f8fa;
@@ -98,7 +99,7 @@ body {
 }
 
 input::placeholder {
-  color: rgba(var(--ink-rgb), 0.35);
+  color: rgba(var(--ink-rgb), 0.48);
 }
 
 button,

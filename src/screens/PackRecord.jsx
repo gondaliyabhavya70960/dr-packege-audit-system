@@ -97,7 +97,7 @@ export default function PackRecord({ ctx }) {
   let banner;
   if (unknown) banner = { msg: '⚠ Unknown item on the bench — remove it, or close to save & flag for the manager.', tone: 'red' };
   else if (!allScanned) banner = { msg: '⚠ ' + missing + ' item' + (missing === 1 ? '' : 's') + ' not yet scanned — keep scanning, or close to save & flag for the manager.', tone: 'red' };
-  else if (!condOk) banner = { msg: 'Items match ✓ — verify condition to unlock Close. Show each piece to the camera.', tone: 'amber' };
+  else if (!condOk) banner = { msg: 'Items match — verify condition to unlock Close. Show each piece to the camera.', tone: 'amber' };
   else banner = { msg: 'PASS — item, quantity and condition verified. Seal the box and close the session.', tone: 'green' };
   const bt = bannerTones[banner.tone];
 
@@ -338,7 +338,7 @@ export default function PackRecord({ ctx }) {
             <div style={{ border: '1px solid rgba(217,142,4,0.35)', background: 'rgba(217,142,4,0.06)', borderRadius: 16, padding: 13, display: 'flex', flexDirection: 'column', gap: 8 }}>
               <span style={{ fontSize: 14, color: '#9A6A00', fontWeight: 700 }}>Condition check</span>
               <span style={{ fontSize: 14, color: 'rgba(var(--ink-rgb),0.7)', lineHeight: 1.45, textWrap: 'pretty' }}>
-                Show each piece to the camera, capture a close-up still (stone · hallmark · certificate), then confirm. YOLO count: 3 in frame ✓
+                Show each piece to the camera, capture a close-up still (stone · hallmark · certificate), then confirm. YOLO count: 3 in frame.
               </span>
               <button className="hv-brighten" onClick={() => set({ packCond: 'confirmed' })} style={{ background: '#D98E04', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '10px 18px', fontSize: 14, fontWeight: 700, cursor: 'pointer', alignSelf: 'flex-start' }}>
                 Confirm condition OK

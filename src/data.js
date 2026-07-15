@@ -914,10 +914,12 @@ export function fillTone(t) {
   return FILL_TONES[t] || FILL_TONES.plain;
 }
 
+// scan-state circle recipe: 'ok' renders a check (consumers use an icon), 'bad'
+// a bold "!", 'wait' an empty outline — matching the pack-session row circles.
 export function dotFor(st) {
-  if (st === 'ok') return { dot: '✓', dotColor: '#0E8A50', dotBorder: 'rgba(23,163,95,0.5)', dotBg: 'rgba(23,163,95,0.08)' };
+  if (st === 'ok') return { dot: 'check', dotColor: '#0E8A50', dotBorder: 'rgba(23,163,95,0.5)', dotBg: 'rgba(23,163,95,0.08)' };
   if (st === 'bad') return { dot: '!', dotColor: '#C62B22', dotBorder: 'rgba(229,62,62,0.5)', dotBg: 'rgba(229,62,62,0.06)' };
-  return { dot: '···', dotColor: 'var(--mute)', dotBorder: 'rgba(var(--ink-rgb),0.2)', dotBg: 'transparent' };
+  return { dot: '', dotColor: 'var(--mute)', dotBorder: 'rgba(var(--ink-rgb),0.2)', dotBg: 'transparent' };
 }
 
 export function fmt(sec) {

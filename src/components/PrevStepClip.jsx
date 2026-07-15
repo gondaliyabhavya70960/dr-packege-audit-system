@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Play, Pause, X } from 'lucide-react';
+import { Play, Pause, X, ChevronRight } from 'lucide-react';
 import { MONO, feedBg } from '../data.js';
 
 // Inline mini player of the order's previously-recorded step (e.g. the
@@ -41,7 +41,7 @@ export default function PrevStepClip({ ctx, id, fallbackLabel = 'Previous step' 
           <span style={{ fontSize: 14, fontWeight: 700 }}>Previous step · {prev.label}</span>
           <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute-2)' }}>tap to review the clip — spot any issue</span>
         </div>
-        <span style={{ marginLeft: 'auto', flex: 'none', display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)', borderRadius: 999, padding: '7px 14px', fontSize: 12.5, fontWeight: 700 }}>Review ▸</span>
+        <span style={{ marginLeft: 'auto', flex: 'none', display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)', borderRadius: 999, padding: '7px 14px', fontSize: 12.5, fontWeight: 700 }}>Review <ChevronRight size={13} aria-hidden="true" style={{ flex: 'none' }} /></span>
       </button>
     );
   }
@@ -55,7 +55,7 @@ export default function PrevStepClip({ ctx, id, fallbackLabel = 'Previous step' 
       </div>
       <div style={{ position: 'relative', minHeight: 168, ...feedBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <span style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(255,255,255,0.45)' }}>[ {prev.label} — filed clip · {id} ]</span>
-        <span style={{ position: 'absolute', top: 10, right: 12, fontFamily: MONO, fontSize: 9, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.45)' }}>FILED ▸ tamper-evident</span>
+        <span style={{ position: 'absolute', top: 10, right: 12, fontFamily: MONO, fontSize: 9, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.45)' }}>FILED · TAMPER-EVIDENT</span>
         <div style={{ position: 'absolute', left: 0, bottom: 0, height: 4, background: 'var(--accent)', width: t + '%' }} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: 'rgba(0,0,0,0.62)' }}>

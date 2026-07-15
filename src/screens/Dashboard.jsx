@@ -93,7 +93,7 @@ export default function Dashboard({ ctx }) {
         sub: 'age ' + f.age + ' · ' + (f.amt === '—' ? 'no refund hold' : f.amt + ' on hold'),
         right: f.amt,
         rightColor: f.amt === '—' ? 'var(--mute)' : ACCENT,
-        action: 'Review ▸',
+        action: 'Review',
         go: () => openPlayer(f.id, i, 'dash-flagged'),
       })),
       foot: 'decision recorded with operator + timestamp + video reference · ageing flags escalate to the supervisor',
@@ -141,7 +141,7 @@ export default function Dashboard({ ctx }) {
                 <ArrowRight size={16} aria-hidden="true" />
               ) : (
                 <>
-                  {r.action.replace(/\s*▸\s*$/, '')}
+                  {r.action}
                   <ChevronRight size={15} aria-hidden="true" />
                 </>
               )}

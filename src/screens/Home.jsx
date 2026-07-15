@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, Gauge } from 'lucide-react';
-import { MONO, MUTE, glass, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
+import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, Gauge, ListChecks, PackagePlus } from 'lucide-react';
+import { MONO, MUTE, cardLight, surfaceSubtle, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import GettingStarted from '../components/GettingStarted.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
@@ -89,7 +89,7 @@ function Donut({ data, total, size = 132, thickness = 16 }) {
 // one stat line inside the combined summary widget: icon chip · title/sub · big value
 function SummaryStat({ color, bg, title, value, unit, sub, subColor, Icon }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--surf-rgb),0.5)', border: '1px solid rgba(var(--surf-rgb),0.6)', borderRadius: 14, padding: '12px 14px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, ...surfaceSubtle, borderRadius: 14, padding: '12px 14px' }}>
       <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg, color }}>
         <Icon size={19} aria-hidden="true" />
       </span>
@@ -144,7 +144,7 @@ export default function Home({ ctx }) {
     const mix = mixOf(lst);
     const total = lst.length;
     return (
-      <div style={{ ...glass, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ ...cardLight, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon size={22} aria-hidden="true" />
@@ -202,7 +202,7 @@ export default function Home({ ctx }) {
 
       {/* widget row: the combined order summary + the two working lists, three across */}
       <div className="home-widgets">
-        <div style={{ ...glass, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ ...cardLight, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Gauge size={22} aria-hidden="true" />
@@ -223,10 +223,18 @@ export default function Home({ ctx }) {
       </div>
 
       {/* counts by status — tiles: icon · big count · label · what it means */}
-      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 16, fontWeight: 700 }}>Orders by status</span>
-          <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{orders.length}</span>
+      <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ListChecks size={22} aria-hidden="true" />
+          </span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 17, fontWeight: 700 }}>Orders by status</span>
+              <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{orders.length}</span>
+            </div>
+            <span style={{ fontSize: 12.5, color: MUTE }}>Every stage across packaging &amp; transfers — tap a tile to open that list</span>
+          </div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 12 }}>
           {statuses.map((st) => {
@@ -237,7 +245,7 @@ export default function Home({ ctx }) {
                 key={st.key}
                 onClick={() => openList(st.kind, st.key, range)}
                 className="hv-border-accent"
-                style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', borderRadius: 16, padding: '16px 16px 14px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10, opacity: st.n ? 1 : 0.6 }}
+                style={{ ...surfaceSubtle, borderRadius: 16, padding: '16px 16px 14px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10, opacity: st.n ? 1 : 0.6 }}
               >
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
                   <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: color + '1a', color }}>
@@ -256,15 +264,23 @@ export default function Home({ ctx }) {
       </div>
 
       {/* quick create — typed new-order shortcuts, the last card on the page */}
-      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <span style={{ fontSize: 16, fontWeight: 700 }}>Create a new order</span>
+      <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <PackagePlus size={22} aria-hidden="true" />
+          </span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+            <span style={{ fontSize: 17, fontWeight: 700 }}>Create a new order</span>
+            <span style={{ fontSize: 12.5, color: MUTE }}>Pick a type — the order form opens in a popup</span>
+          </div>
+        </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
           {NEW_ORDER_TYPES.map((o) => (
             <button
               key={o.type}
               onClick={() => newOrder(o.type)}
               className="hv-border-accent"
-              style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, ...surfaceSubtle, borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
             >
               <span style={{ width: 42, height: 42, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
                 <o.Icon size={21} aria-hidden="true" />

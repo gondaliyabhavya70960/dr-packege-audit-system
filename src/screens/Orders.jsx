@@ -9,17 +9,22 @@ import StatusBadge from '../components/StatusBadge.jsx';
 const PAGE_SIZE = 15;
 
 // one Pk / Rc / Rt stage chip, filled by that stage's per-status mode:
-// recorded (view) → green ✓, live (edit) → amber •, otherwise → grey ·
+// recorded (view) → green check, live (edit) → amber dot, otherwise → dim dot
 function StageBadge({ label, mode }) {
   const sty =
     mode === 'view'
-      ? { bg: 'rgba(23,163,95,0.14)', color: '#0E8A50', border: 'rgba(23,163,95,0.32)', mark: '✓' }
+      ? { bg: 'rgba(23,163,95,0.14)', color: '#0E8A50', border: 'rgba(23,163,95,0.32)' }
       : mode === 'edit'
-        ? { bg: 'rgba(217,142,4,0.16)', color: '#9A6A00', border: 'rgba(217,142,4,0.34)', mark: '•' }
-        : { bg: 'rgba(var(--ink-rgb),0.05)', color: 'rgba(var(--ink-rgb),0.42)', border: 'rgba(var(--ink-rgb),0.10)', mark: '·' };
+        ? { bg: 'rgba(217,142,4,0.16)', color: '#9A6A00', border: 'rgba(217,142,4,0.34)' }
+        : { bg: 'rgba(var(--ink-rgb),0.05)', color: 'rgba(var(--ink-rgb),0.55)', border: 'rgba(var(--ink-rgb),0.10)' };
   return (
-    <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, padding: '3px 7px', borderRadius: 7, whiteSpace: 'nowrap', background: sty.bg, color: sty.color, border: '1px solid ' + sty.border }}>
-      {label} {sty.mark}
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: MONO, fontSize: 10, fontWeight: 700, padding: '3px 7px', borderRadius: 7, whiteSpace: 'nowrap', background: sty.bg, color: sty.color, border: '1px solid ' + sty.border }}>
+      {label}
+      {mode === 'view' ? (
+        <Check size={10} strokeWidth={3.5} aria-hidden="true" style={{ flex: 'none' }} />
+      ) : (
+        <span style={{ width: 5, height: 5, flex: 'none', borderRadius: '50%', background: 'currentColor', opacity: mode === 'edit' ? 1 : 0.45 }} />
+      )}
     </span>
   );
 }
@@ -145,7 +150,7 @@ export default function Orders({ ctx }) {
       {/* toolbar: search + filters (raised so the glass dropdowns overlay the table) */}
       <div style={{ ...glass, padding: 14, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 220 }}>
-          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: 'var(--mute)' }}>SEARCH</span>
+          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', color: 'var(--mute)' }}>SEARCH</span>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <span style={{ position: 'absolute', left: 13, color: 'var(--mute)', display: 'flex' }}>
               <Search size={16} aria-hidden="true" />
@@ -226,7 +231,7 @@ export default function Orders({ ctx }) {
                   </div>
                   {/* route: origin above, arrowed destination below */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
-                    <span title={'From ' + route.from} style={{ fontSize: 12.5, color: 'var(--mute)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{route.from}</span>
+                    <span title={'From ' + route.from} style={{ fontSize: 13, color: 'var(--mute-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{route.from}</span>
                     <span title={'To ' + route.to} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: 'var(--ink-2)', minWidth: 0 }}>
                       <ArrowRight size={12} aria-hidden="true" style={{ flex: 'none', color: 'var(--accent)' }} />
                       <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 600 }}>{route.to}</span>
@@ -237,7 +242,7 @@ export default function Orders({ ctx }) {
                   <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>{o.channel}</span>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--ink-2)' }}>{o.placed.split(' · ')[0]}</span>
-                    <span style={{ fontFamily: MONO, fontSize: 10.5, color: 'var(--mute)' }}>{o.placed.split(' · ')[1] || ''}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 11.5, color: 'var(--mute-2)' }}>{o.placed.split(' · ')[1] || ''}</span>
                   </div>
                   <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                     <StageBadge label="Pk" mode={tabMode(o.statusKey, 'pack')} />

@@ -136,7 +136,7 @@ function StatusStage({ order, stage }) {
                 <span style={{ position: 'relative', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: active ? 'var(--accent)' : done ? 'rgba(var(--accent-rgb),0.15)' : 'var(--surface)', border: '2px solid ' + (reached ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.2)') }}>
                   {active && <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--surface)', animation: 'pulse 1.4s ease-in-out infinite' }} />}
                 </span>
-                <span style={{ fontSize: 12, fontWeight: active ? 700 : 600, color: reached ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.4)', textAlign: 'center' }}>{m.label}</span>
+                <span style={{ fontSize: 12, fontWeight: active ? 700 : 600, color: reached ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.52)', textAlign: 'center' }}>{m.label}</span>
               </div>
             );
           })}
@@ -180,7 +180,7 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
               display: 'flex', alignItems: 'center', gap: 7, border: 'none', cursor: 'pointer', borderRadius: 999,
               padding: '8px 16px', fontSize: 13.5, fontWeight: 700,
               background: on ? 'var(--accent)' : 'transparent',
-              color: on ? '#FFFFFF' : isEmpty ? 'rgba(var(--ink-rgb),0.4)' : 'rgba(var(--ink-rgb),0.65)',
+              color: on ? '#FFFFFF' : isEmpty ? 'rgba(var(--ink-rgb),0.5)' : 'rgba(var(--ink-rgb),0.7)',
               boxShadow: on ? '0 4px 14px rgba(var(--accent-rgb),0.25)' : 'none',
             }}
           >
@@ -321,7 +321,7 @@ function PackingCapture({ orderId, videos, setVideos }) {
                   </button>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                     <span style={{ fontSize: 14, fontWeight: 600 }}>Pack clip {i + 1} · {fmt(v.dur)}{v.stills ? ' · ' + v.stills + ' still' + (v.stills === 1 ? '' : 's') : ''}</span>
-                    <span style={{ fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>{v.time} · sha {v.hash} ✓</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>{v.time} · sha {v.hash} <Check size={11} strokeWidth={3} aria-hidden="true" style={{ flex: 'none' }} /></span>
                   </div>
                   <button onClick={() => removeClip(i)} aria-label="Remove clip" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
                     <Trash2 size={14} aria-hidden="true" />
@@ -800,7 +800,7 @@ export default function OrderDetails({ ctx }) {
                 <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Play size={15} aria-hidden="true" /></span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                   <span style={{ fontSize: 14, fontWeight: 600 }}>{e.label}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>sha-256 · {order.id.replace(/[^a-z0-9]/gi, '').slice(-4).toLowerCase()}{(i + 7).toString(16)}c1…f{i}2 ✓</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>sha-256 · {order.id.replace(/[^a-z0-9]/gi, '').slice(-4).toLowerCase()}{(i + 7).toString(16)}c1…f{i}2 <Check size={11} strokeWidth={3} aria-hidden="true" style={{ flex: 'none' }} /></span>
                 </div>
                 <ChevronRight size={16} aria-hidden="true" />
               </button>

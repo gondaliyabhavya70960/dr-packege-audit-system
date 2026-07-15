@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+import { Check, ShieldCheck, Video, History } from 'lucide-react';
 import { MONO } from '../data.js';
 import { PackageIcon } from '../components/icons.jsx';
 
@@ -28,15 +28,10 @@ export default function Login({ ctx }) {
   return (
     <div data-screen-label="01 Login" className="login-split">
       <div style={{ background: 'radial-gradient(900px 600px at 80% 20%, var(--accent), var(--accent-2) 70%)', color: '#FFFFFF', padding: '44px 48px', display: 'flex', flexDirection: 'column' }}>
-        {/* brand lockup: the Mayavé logo on a light chip so it reads on the deep red */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <span style={{ background: '#FFFFFF', borderRadius: 12, padding: '8px 14px', display: 'inline-flex', alignItems: 'center', boxShadow: '0 8px 24px -10px rgba(0,0,0,0.4)' }}>
-            <img src="/assets/mayave-logo.png" alt="Mayavé Jewellery" style={{ height: 34, width: 'auto', display: 'block' }} />
-          </span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.01em' }}>Packaging Audit</span>
-            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.7)' }}>MAYAVÉ JEWELLERY</span>
-          </div>
+        {/* wordmark only — the single logo image lives beside the sign-in form */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.01em' }}>Packaging Audit</span>
+          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.72)' }}>MAYAVÉ JEWELLERY</span>
         </div>
         <div style={{ flex: 1 }} />
         <div style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.18, letterSpacing: '-0.01em', maxWidth: 480, textWrap: 'pretty' }}>
@@ -80,12 +75,25 @@ export default function Login({ ctx }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#E3F5EC', color: '#11704B', borderRadius: 10, padding: '10px 14px', fontSize: 13.5, fontWeight: 600 }}><Check size={15} strokeWidth={3} aria-hidden="true" /> Detected 3 / 3 SKUs — matches challan</div>
         </div>
         <div style={{ flex: 1 }} />
-        <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.04em', color: 'rgba(255,255,255,0.75)' }}>SOC-2 governance · RBAC · configurable retention</div>
+        {/* trust markers as icon pills instead of a plain mono line */}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {[
+            { Icon: ShieldCheck, label: 'SOC-2 governance' },
+            { Icon: Video, label: 'Tamper-evident video' },
+            { Icon: History, label: 'Configurable retention' },
+          ].map((f) => (
+            <span key={f.label} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.22)', borderRadius: 999, padding: '7px 14px', fontSize: 12.5, fontWeight: 600, color: 'rgba(255,255,255,0.92)' }}>
+              <f.Icon size={14} aria-hidden="true" style={{ flex: 'none' }} />
+              {f.label}
+            </span>
+          ))}
+        </div>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
         <div style={{ width: 420, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 46, width: 'auto', alignSelf: 'flex-start' }} />
+          {/* the page's single logo — large and centred above the form */}
+          <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 100, width: 'auto', maxWidth: '100%', objectFit: 'contain', alignSelf: 'center' }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <span style={{ fontSize: 30, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.01em' }}>Sign in</span>
             <span style={{ fontSize: 15, color: '#4B5563' }}>Enter your credentials to access the console.</span>
