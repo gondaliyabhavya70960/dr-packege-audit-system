@@ -63,8 +63,9 @@ const STATUS_COLORS = {
   flagged: '#DC2626',
 };
 
-// SLA-Health-style ring: arcs sized by value, total in the centre.
-function Donut({ data, total, size = 132, thickness = 16 }) {
+// status-mix ring: arcs sized by value. Purely visual — no count in the centre;
+// the legend beside it carries the numbers.
+function Donut({ data, total, size = 108, thickness = 14 }) {
   const r = (size - thickness) / 2;
   let acc = 0;
   return (
@@ -80,8 +81,6 @@ function Donut({ data, total, size = 132, thickness = 16 }) {
           return seg;
         })}
       </g>
-      <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" style={{ fontFamily: MONO, fontSize: size * 0.22, fontWeight: 600, fill: 'var(--ink-2)' }}>{total}</text>
-      <text x="50%" y="63%" textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 10, letterSpacing: '0.04em', fill: 'var(--mute)' }}>orders</text>
     </svg>
   );
 }
@@ -89,16 +88,16 @@ function Donut({ data, total, size = 132, thickness = 16 }) {
 // one stat line inside the combined summary widget: icon chip · title/sub · big value
 function SummaryStat({ color, bg, title, value, unit, sub, subColor, Icon }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, ...surfaceSubtle, borderRadius: 14, padding: '12px 14px' }}>
-      <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg, color }}>
-        <Icon size={19} aria-hidden="true" />
+    <div style={{ display: 'flex', alignItems: 'center', gap: 11, ...surfaceSubtle, borderRadius: 13, padding: '10px 13px' }}>
+      <span style={{ width: 36, height: 36, flex: 'none', borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg, color }}>
+        <Icon size={18} aria-hidden="true" />
       </span>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
         <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink-2)' }}>{title}</span>
         <span style={{ fontSize: 12, color: subColor || 'var(--mute)' }}>{sub}</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-        <span style={{ fontSize: 24, fontWeight: 800, color: 'var(--ink-2)', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</span>
+        <span style={{ fontSize: 22, fontWeight: 800, color: 'var(--ink-2)', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</span>
         {unit && <span style={{ fontSize: 12, color: 'var(--mute)' }}>{unit}</span>}
       </div>
     </div>
@@ -158,18 +157,19 @@ export default function Home({ ctx }) {
             <ChevronRight size={14} aria-hidden="true" />
           </button>
         </div>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
+        {/* compact body: small ring + two-column status legend keeps the card short */}
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 16, minWidth: 0 }}>
           <Donut data={mix} total={total} />
-          <div style={{ flex: 1, minWidth: 180, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {mix.length === 0 && <span style={{ fontSize: 13, color: MUTE }}>No orders in this list yet.</span>}
+          <div style={{ flex: 1, minWidth: 0, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '2px 8px', alignContent: 'center' }}>
+            {mix.length === 0 && <span style={{ gridColumn: '1 / -1', fontSize: 13, color: MUTE }}>No orders in this list yet.</span>}
             {mix.map((d) => {
               const pct = total ? Math.round((d.value / total) * 100) : 0;
               return (
-                <button key={d.key} onClick={() => openList(kind, d.key, range)} className="hv-white7" style={{ display: 'flex', alignItems: 'center', gap: 10, border: 'none', background: 'transparent', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', textAlign: 'left' }}>
-                  <span style={{ width: 9, height: 9, flex: 'none', borderRadius: '50%', background: d.color }} />
-                  <span style={{ fontSize: 13.5, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 600, color: 'var(--ink-2)' }}>{d.value}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 12, color: MUTE, width: 38, textAlign: 'right' }}>{pct}%</span>
+                <button key={d.key} onClick={() => openList(kind, d.key, range)} title={d.label + ' · ' + d.value + ' (' + pct + '%)'} className="hv-ink04" style={{ display: 'flex', alignItems: 'center', gap: 7, border: 'none', background: 'transparent', borderRadius: 8, padding: '5px 7px', cursor: 'pointer', textAlign: 'left', minWidth: 0 }}>
+                  <span style={{ width: 8, height: 8, flex: 'none', borderRadius: '50%', background: d.color }} />
+                  <span style={{ fontSize: 12.5, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: 'var(--ink-2)' }}>{d.value}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 11, color: MUTE, width: 30, textAlign: 'right', flex: 'none' }}>{pct}%</span>
                 </button>
               );
             })}
