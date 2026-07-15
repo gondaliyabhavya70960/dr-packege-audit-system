@@ -13,8 +13,9 @@
     linear-gradient(160deg, #f4eef1, #e9eaf3);
   --ink: #0f1115;
   --ink-2: #1b1d21;
-  --mute: #6b7280;
-  --mute-2: #5b616b;
+  /* muted text kept dark enough to stay readable on white and glass cards */
+  --mute: #596070;
+  --mute-2: #444a56;
   --surface: #ffffff;
   --surface-border: #ecedf0;
   --surface-soft: #f7f8fa;
@@ -98,7 +99,7 @@ body {
 }
 
 input::placeholder {
-  color: rgba(var(--ink-rgb), 0.35);
+  color: rgba(var(--ink-rgb), 0.48);
 }
 
 button,
@@ -191,6 +192,10 @@ textarea {
 .hv-accent14:hover {
   background: rgba(var(--accent-rgb), 0.14) !important;
 }
+/* row hover for solid-white menus/cards where a white hover would vanish */
+.hv-ink04:hover {
+  background: rgba(var(--ink-rgb), 0.045) !important;
+}
 .hv-red05:hover {
   background: rgba(229, 62, 62, 0.05) !important;
 }
@@ -221,11 +226,28 @@ textarea {
   background: #ffffff !important;
 }
 
+/* the signed-in app shell always fills the screen exactly; inner areas scroll */
+.app-surface {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+@supports (height: 100dvh) {
+  .app-surface {
+    height: 100dvh;
+  }
+}
+
 /* responsive layout grids */
 .login-split {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1.05fr 1fr;
+}
+@supports (min-height: 100dvh) {
+  .login-split {
+    min-height: 100dvh;
+  }
 }
 .pack-grid {
   height: 100%;
@@ -338,6 +360,19 @@ textarea {
 @media (max-width: 900px) {
   .login-split {
     grid-template-columns: 1fr;
+  }
+  /* stacked login: tighter gutters, smaller headline + logo so both halves fit a phone */
+  .login-hero {
+    padding: 30px 22px !important;
+  }
+  .login-headline {
+    font-size: 30px !important;
+  }
+  .login-form-col {
+    padding: 28px 16px !important;
+  }
+  .login-logo {
+    height: 72px !important;
   }
   .kpi-grid {
     grid-template-columns: repeat(2, 1fr);

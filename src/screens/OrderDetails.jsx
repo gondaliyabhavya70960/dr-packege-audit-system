@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck, Gift } from 'lucide-react';
-import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmtMoney, draftItemsValue, ORDER_TYPE_CHANNEL, fmt } from '../data.js';
+import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck, Gift, PackagePlus } from 'lucide-react';
+import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmtMoney, draftItemsValue, ORDER_TYPE_CHANNEL } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import PackRecord from './PackRecord.jsx';
 import Receiving from './Receiving.jsx';
 import ReturnInspection from './ReturnInspection.jsx';
 import RemarkBox from '../components/RemarkBox.jsx';
 import ClipPlayer from '../components/ClipPlayer.jsx';
-import VideoCaptureCard from '../components/VideoCaptureCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
 import StatusBadge from '../components/StatusBadge.jsx';
@@ -136,7 +135,7 @@ function StatusStage({ order, stage }) {
                 <span style={{ position: 'relative', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: active ? 'var(--accent)' : done ? 'rgba(var(--accent-rgb),0.15)' : 'var(--surface)', border: '2px solid ' + (reached ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.2)') }}>
                   {active && <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--surface)', animation: 'pulse 1.4s ease-in-out infinite' }} />}
                 </span>
-                <span style={{ fontSize: 12, fontWeight: active ? 700 : 600, color: reached ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.4)', textAlign: 'center' }}>{m.label}</span>
+                <span style={{ fontSize: 12, fontWeight: active ? 700 : 600, color: reached ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.52)', textAlign: 'center' }}>{m.label}</span>
               </div>
             );
           })}
@@ -180,7 +179,7 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
               display: 'flex', alignItems: 'center', gap: 7, border: 'none', cursor: 'pointer', borderRadius: 999,
               padding: '8px 16px', fontSize: 13.5, fontWeight: 700,
               background: on ? 'var(--accent)' : 'transparent',
-              color: on ? '#FFFFFF' : isEmpty ? 'rgba(var(--ink-rgb),0.4)' : 'rgba(var(--ink-rgb),0.65)',
+              color: on ? '#FFFFFF' : isEmpty ? 'rgba(var(--ink-rgb),0.5)' : 'rgba(var(--ink-rgb),0.7)',
               boxShadow: on ? '0 4px 14px rgba(var(--accent-rgb),0.25)' : 'none',
             }}
           >
@@ -196,10 +195,10 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
 }
 
 const inputStyle = {
-  background: 'rgba(var(--surf-rgb),0.6)',
-  border: '1px solid rgba(0,0,0,0.1)',
-  borderRadius: 10,
-  padding: '9px 13px',
+  background: 'var(--surface)',
+  border: '1px solid #D6DAE1',
+  borderRadius: 12,
+  padding: '10px 13px',
   fontSize: 14,
   color: 'var(--ink-2)',
   outline: 'none',
@@ -235,7 +234,7 @@ function DetectedThumb({ item }) {
 function Field({ label, children }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: 'var(--mute)' }}>{label}</span>
+      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>{label}</span>
       {children}
     </div>
   );
@@ -252,7 +251,7 @@ function CustomEditor({ draft, upd }) {
         <Field label="GIFT WRAP">
           <button
             onClick={() => upd('giftWrap', !draft.giftWrap)}
-            style={{ ...inputStyle, cursor: 'pointer', textAlign: 'left', fontWeight: 700, color: draft.giftWrap ? '#0E8A50' : 'var(--mute)' }}
+            style={{ ...inputStyle, cursor: 'pointer', textAlign: 'left', fontWeight: 700, color: draft.giftWrap ? '#0E8A50' : 'var(--mute-2)' }}
           >
             {draft.giftWrap ? 'Yes · gift wrap' : 'No'}
           </button>
@@ -276,70 +275,6 @@ function CustomEditor({ draft, upd }) {
   );
 }
 
-// Packing video capture for the new custom-order form: a live recording card
-// (start / stop / capture still) plus the list of clips filed so far. Each clip
-// expands to an evidence player. The list lives on the draft, so it saves with
-// the order.
-function PackingCapture({ orderId, videos, setVideos }) {
-  const [openIdx, setOpenIdx] = useState(-1);
-  const list = videos || [];
-
-  const addClip = (clip) => setVideos([...list, clip]);
-  const removeClip = (i) => {
-    setVideos(list.filter((_, idx) => idx !== i));
-    setOpenIdx((cur) => (cur === i ? -1 : cur > i ? cur - 1 : cur));
-  };
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 16, fontWeight: 700, color: INK, letterSpacing: '-0.01em' }}>
-          <Video size={17} aria-hidden="true" style={{ color: 'var(--accent)' }} /> Packaging video capture
-        </span>
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', padding: '3px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{list.length} CLIP{list.length === 1 ? '' : 'S'}</span>
-      </div>
-      <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>Record the pack at the bench — start, capture stills, then stop to file each clip against this order. Filed clips appear in the list below.</span>
-
-      <VideoCaptureCard id={orderId || 'NEW-ORDER'} label="Pack capture" camLabel="CAM-01 · pack bench" feedText="[ live feed — top-view · pack bench ]" onCapture={addClip} minHeight={210} />
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {list.length === 0 ? (
-          <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '14px 16px', fontSize: 13, color: 'var(--mute)' }}>No clips captured yet — press <strong style={{ color: 'var(--accent)' }}>Start recording</strong> above to film the pack.</div>
-        ) : (
-          list.map((v, i) => {
-            const open = openIdx === i;
-            return (
-              <div key={i} style={{ ...surfaceSubtle, borderRadius: 12, overflow: 'hidden' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px' }}>
-                  <button
-                    onClick={() => setOpenIdx(open ? -1 : i)}
-                    aria-label={open ? 'Hide clip' : 'Play clip'}
-                    className="hv-accent14"
-                    style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer' }}
-                  >
-                    <Play size={15} aria-hidden="true" />
-                  </button>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
-                    <span style={{ fontSize: 14, fontWeight: 600 }}>Pack clip {i + 1} · {fmt(v.dur)}{v.stills ? ' · ' + v.stills + ' still' + (v.stills === 1 ? '' : 's') : ''}</span>
-                    <span style={{ fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>{v.time} · sha {v.hash} ✓</span>
-                  </div>
-                  <button onClick={() => removeClip(i)} aria-label="Remove clip" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
-                    <Trash2 size={14} aria-hidden="true" />
-                  </button>
-                </div>
-                {open && (
-                  <div style={{ padding: '0 14px 14px' }}>
-                    <ClipPlayer label={'[ pack clip ' + (i + 1) + ' — filed ]'} id={orderId || 'NEW-ORDER'} ts={v.time} hash={v.hash} height={180} radius={12} />
-                  </div>
-                )}
-              </div>
-            );
-          })
-        )}
-      </div>
-    </div>
-  );
-}
 
 function ReadRow({ label, value, accent }) {
   return (
@@ -352,7 +287,7 @@ function ReadRow({ label, value, accent }) {
 
 // header copy + creative icon per new-order type
 const ORDER_TYPE_META = {
-  ecommerce: { title: 'New e-commerce order', sub: 'An online customer order — add its products, handling and pack video. It joins the orders list under the same ID.', Icon: ShoppingCart, color: '#2563EB' },
+  ecommerce: { title: 'New e-commerce order', sub: 'An online customer order — add its products, handling and audit notes. It joins the orders list, ready for the packaging bench.', Icon: ShoppingCart, color: '#2563EB' },
   bulk: { title: 'New bulk order', sub: 'A wholesale / B2B consignment — add its products, handling and audit notes, then file the pack video.', Icon: Boxes, color: '#9A6A00' },
   transfer: { title: 'New transfer order', sub: 'An inter-branch challan — add its products and notes. It joins the orders list and links to any video filed under the same ID.', Icon: Truck, color: '#0E8A50' },
   custom: { title: 'Custom order details', sub: 'Record a bespoke order with its products, handling and audit notes. It joins the orders list and links to any video filed under the same ID.', Icon: Sparkles, color: 'var(--accent)' },
@@ -412,31 +347,50 @@ export function CreateOrderForm({ ctx, onClose }) {
       showToast('Add at least an order ID and customer to save.');
       return;
     }
-    const newOrder = buildCustomOrder(d, s.userLabel || 'admin'); // captured a pack clip -> Packed, else Draft
-    const packed = newOrder.statusKey === 'packed';
+    const newOrder = buildCustomOrder(d, s.userLabel || 'admin'); // new orders start Ready to Pack; the video is filed from the packaging session
     set({ orders: [newOrder, ...s.orders], orderDraft: null });
-    showToast(packed ? 'Order ' + id + ' filed with pack video — saved to the orders list.' : 'Order ' + id + ' saved to the orders list.');
+    showToast('Order ' + id + ' saved to the orders list.');
     onClose && onClose(id);
   };
 
-  const roField = { ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: 'rgba(0,0,0,0.03)' };
-  const roHint = { fontFamily: MONO, fontSize: 9, letterSpacing: '0.08em', color: '#9AA0A6', flex: 'none' };
+  const roField = { ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: 'var(--surface-soft)', borderColor: '#DDE0E6' };
+  const roHint = { fontFamily: MONO, fontSize: 10, letterSpacing: '0.08em', color: 'var(--mute-2)', flex: 'none' };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* modal heading */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        <span style={{ fontSize: 21, fontWeight: 800, color: INK, letterSpacing: '-0.01em' }}>Create a new order</span>
-        <span style={{ fontSize: 14, color: 'var(--mute-2)' }}>Pick the order type, fill in the details, and a draft order is created for the packaging bench.</span>
+      {/* modal heading — same icon-chip header pattern as the overview widgets */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <PackagePlus size={22} aria-hidden="true" />
+        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1, minWidth: 0 }}>
+          <span style={{ fontSize: 20, fontWeight: 800, color: INK, letterSpacing: '-0.01em' }}>Create a new order</span>
+          <span style={{ fontSize: 13.5, color: 'var(--mute-2)' }}>Pick the order type, fill in the details, and a draft order is created for the packaging bench.</span>
+        </div>
       </div>
 
-      {/* order-type segmented buttons */}
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      {/* order-type picker: the two order kinds as rich selectable tiles */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
         {NEW_ORDER_TYPES.map((t) => {
           const on = t.type === d.orderType;
           return (
-            <button key={t.type} onClick={() => pickType(t.type)} style={{ display: 'flex', alignItems: 'center', gap: 8, borderRadius: 11, padding: '10px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', border: '1px solid ' + (on ? 'rgba(var(--accent-rgb),0.45)' : 'var(--surface-border)'), background: on ? 'rgba(var(--accent-rgb),0.07)' : 'var(--surface)', color: on ? 'var(--accent)' : 'var(--mute-2)' }}>
-              <t.Icon size={16} aria-hidden="true" /> {t.label}
+            <button
+              key={t.type}
+              onClick={() => pickType(t.type)}
+              aria-pressed={on}
+              className={on ? '' : 'hv-border-accent'}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', borderRadius: 14, padding: '12px 14px', cursor: 'pointer', border: '1px solid ' + (on ? 'rgba(var(--accent-rgb),0.5)' : '#D6DAE1'), background: on ? 'rgba(var(--accent-rgb),0.06)' : 'var(--surface)' }}
+            >
+              <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: t.color + '1a', color: t.color }}>
+                <t.Icon size={19} aria-hidden="true" />
+              </span>
+              <span style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+                <span style={{ fontSize: 14.5, fontWeight: 700, color: on ? 'var(--accent)' : 'var(--ink-2)' }}>{t.label}</span>
+                <span style={{ fontSize: 12, color: 'var(--mute)' }}>{t.sub}</span>
+              </span>
+              <span style={{ width: 18, height: 18, flex: 'none', borderRadius: '50%', border: '2px solid ' + (on ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.25)'), background: on ? 'var(--accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {on && <Check size={11} strokeWidth={3.5} aria-hidden="true" style={{ color: '#FFFFFF' }} />}
+              </span>
             </button>
           );
         })}
@@ -479,7 +433,7 @@ export function CreateOrderForm({ ctx, onClose }) {
       {/* items / products editor (+ free gift extras) */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: 'var(--mute)' }}>ITEMS *</span>
+          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>ITEMS *</span>
           <div style={{ display: 'flex', gap: 8 }}>
             <button onClick={addGift} className="hv-border-accent" style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(var(--accent-rgb),0.06)', border: '1px solid rgba(var(--accent-rgb),0.3)', color: 'var(--accent)', borderRadius: 999, padding: '6px 13px', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>
               <Gift size={13} aria-hidden="true" /> Add gift
@@ -489,7 +443,7 @@ export function CreateOrderForm({ ctx, onClose }) {
             </button>
           </div>
         </div>
-        {products.length === 0 && <div style={{ ...surfaceSubtle, borderRadius: 12, padding: '12px 14px', fontSize: 13, color: 'var(--mute)' }}>No items yet — add at least one product.</div>}
+        {products.length === 0 && <div style={{ background: 'var(--surface-soft)', border: '1px solid #DDE0E6', borderRadius: 12, padding: '12px 14px', fontSize: 13, color: 'var(--mute-2)' }}>No items yet — add at least one product.</div>}
         {items.map((it, i) =>
           it.gift ? null : (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -498,7 +452,7 @@ export function CreateOrderForm({ ctx, onClose }) {
               <input className="fc-accent" value={it.name} onChange={(e) => updItem(i, 'name', e.target.value)} placeholder="Item name · detail" style={{ ...inputStyle, flex: 1, minWidth: 0 }} />
               <input className="fc-accent" value={it.qty} onChange={(e) => updItem(i, 'qty', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" aria-label="Quantity" style={{ ...inputStyle, flex: '0 0 52px', textAlign: 'center', padding: '9px 6px' }} />
               <input className="fc-accent" value={it.value} onChange={(e) => updItem(i, 'value', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" placeholder="₹ unit" aria-label="Unit value" style={{ ...inputStyle, flex: '0 0 96px', textAlign: 'right' }} />
-              <button onClick={() => delItem(i)} aria-label="Remove item" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
+              <button onClick={() => delItem(i)} aria-label="Remove item" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(198,43,34,0.35)', color: '#C62B22', cursor: 'pointer' }}>
                 <Trash2 size={14} aria-hidden="true" />
               </button>
             </div>
@@ -516,8 +470,8 @@ export function CreateOrderForm({ ctx, onClose }) {
                   <input className="fc-accent" value={it.sku} onChange={(e) => updItem(i, 'sku', e.target.value)} placeholder="GIFT-SKU" style={{ ...inputStyle, fontFamily: MONO, flex: '0 0 128px', minWidth: 0 }} />
                   <input className="fc-accent" value={it.name} onChange={(e) => updItem(i, 'name', e.target.value)} placeholder="Gift name" style={{ ...inputStyle, flex: 1, minWidth: 0 }} />
                   <input className="fc-accent" value={it.qty} onChange={(e) => updItem(i, 'qty', e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" aria-label="Quantity" style={{ ...inputStyle, flex: '0 0 52px', textAlign: 'center', padding: '9px 6px' }} />
-                  <span style={{ flex: '0 0 96px', textAlign: 'right', fontFamily: MONO, fontSize: 13, color: 'var(--mute)' }}>₹0</span>
-                  <button onClick={() => delItem(i)} aria-label="Remove gift" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(0,0,0,0.08)', color: '#C62B22', cursor: 'pointer' }}>
+                  <span style={{ flex: '0 0 96px', textAlign: 'right', fontFamily: MONO, fontSize: 13, color: 'var(--mute-2)' }}>₹0</span>
+                  <button onClick={() => delItem(i)} aria-label="Remove gift" className="hv-red08" style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 8, background: 'transparent', border: '1px solid rgba(198,43,34,0.35)', color: '#C62B22', cursor: 'pointer' }}>
                     <Trash2 size={14} aria-hidden="true" />
                   </button>
                 </div>
@@ -530,7 +484,7 @@ export function CreateOrderForm({ ctx, onClose }) {
           <span style={{ fontSize: 15, fontWeight: 700, color: INK }}>{fmtMoney(subtotal)}</span>
         </div>
         {boxes && (
-          <div style={{ ...surfaceSubtle, borderRadius: 14, padding: '13px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ background: 'var(--surface-soft)', border: '1px solid #DDE0E6', borderRadius: 14, padding: '13px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
               <span style={{ fontSize: 14.5, fontWeight: 700, color: INK }}>Packaging boxes</span>
               <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute-2)' }}>{boxTotal} boxes total</span>
@@ -545,19 +499,16 @@ export function CreateOrderForm({ ctx, onClose }) {
         )}
       </div>
 
-      <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
+      <div style={{ height: 1, background: 'rgba(var(--ink-rgb),0.12)' }} />
       <CustomEditor draft={d} upd={upd} />
 
-      <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
-      <PackingCapture orderId={d.id} videos={d.packVideos} setVideos={(v) => upd('packVideos', v)} />
-
       <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
-        <button className="hv-white75" onClick={cancel} style={{ background: 'rgba(var(--surf-rgb),0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: 10, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+        <button className="hv-ink04" onClick={cancel} style={{ background: 'var(--surface)', border: '1px solid #E2E4E9', color: 'var(--ink-2)', borderRadius: 12, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
           Cancel
         </button>
         <div style={{ flex: 1 }} />
-        <button className="hv-brighten" onClick={saveCreate} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '12px 24px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
-          Save custom order
+        <button className="hv-brighten" onClick={saveCreate} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 12, padding: '12px 24px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
+          Save order
         </button>
       </div>
     </div>
@@ -800,7 +751,7 @@ export default function OrderDetails({ ctx }) {
                 <span style={{ width: 34, height: 34, flex: 'none', borderRadius: 9, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Play size={15} aria-hidden="true" /></span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                   <span style={{ fontSize: 14, fontWeight: 600 }}>{e.label}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>sha-256 · {order.id.replace(/[^a-z0-9]/gi, '').slice(-4).toLowerCase()}{(i + 7).toString(16)}c1…f{i}2 ✓</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: MONO, fontSize: 10.5, color: '#0E8A50' }}>sha-256 · {order.id.replace(/[^a-z0-9]/gi, '').slice(-4).toLowerCase()}{(i + 7).toString(16)}c1…f{i}2 <Check size={11} strokeWidth={3} aria-hidden="true" style={{ flex: 'none' }} /></span>
                 </div>
                 <ChevronRight size={16} aria-hidden="true" />
               </button>

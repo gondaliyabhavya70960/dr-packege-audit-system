@@ -1,5 +1,5 @@
-import { MONO, glassFloat, glassPopover, cardLight } from '../data.js';
-import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell } from 'lucide-react';
+import { MONO, glassFloat, glassPopover } from '../data.js';
+import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell, WandSparkles } from 'lucide-react';
 
 const barStyle = {
   ...glassFloat,
@@ -50,12 +50,11 @@ export function ProfileMenu({ ctx, roleChip, roleLine }) {
         <span style={{ display: 'flex', color: 'rgba(40,32,38,0.55)' }}>{s.profileMenuOpen ? <ChevronUp size={13} aria-hidden="true" /> : <ChevronDown size={13} aria-hidden="true" />}</span>
       </button>
       {s.profileMenuOpen && (
-        <div style={{ ...glassPopover, position: 'absolute', right: 0, top: 54, width: 264, borderRadius: 22, padding: 8, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
+        <div style={{ ...glassPopover, position: 'absolute', right: 0, top: 54, width: 292, borderRadius: 18, padding: 8, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '8px 12px 10px', borderBottom: '1px solid rgba(var(--ink-rgb),0.1)', marginBottom: 4 }}>
             <span style={{ fontSize: 14, fontWeight: 700 }}>{userLabel}</span>
-            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: 'var(--accent)' }}>{roleLine}</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: 'var(--accent)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{roleLine}</span>
           </div>
-          <div style={{ height: 1, background: 'rgba(var(--ink-rgb),0.08)', margin: '4px 6px' }} />
           <button className="hv-white7" onClick={goProfile} style={itemStyle}>
             <User size={16} aria-hidden="true" />
             My profile
@@ -114,8 +113,8 @@ function NotificationsBell({ ctx }) {
         )}
       </button>
       {s.notifOpen && (
-        <div style={{ ...cardLight, borderRadius: 14, position: 'absolute', right: 0, top: 52, width: 380, maxWidth: '86vw', padding: '14px 6px 8px', display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
-          <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.16em', color: 'var(--mute-2)', padding: '0 14px 8px' }}>NOTIFICATIONS</span>
+        <div style={{ ...glassPopover, borderRadius: 18, position: 'absolute', right: 0, top: 52, width: 380, maxWidth: '86vw', padding: '14px 6px 8px', display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
+          <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', color: 'var(--ink)', padding: '0 14px 8px' }}>NOTIFICATIONS</span>
           {items.length === 0 && <span style={{ fontSize: 13, color: 'var(--mute)', padding: '4px 14px 10px' }}>You're all caught up.</span>}
           {items.map((n) => (
             <button key={n.key} className="hv-white7" onClick={n.go} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', textAlign: 'left', background: 'transparent', border: 'none', borderRadius: 10, padding: '9px 14px', cursor: 'pointer' }}>
@@ -140,7 +139,7 @@ function TourButton({ onClick }) {
       title="App guide"
       style={{ display: 'flex', alignItems: 'center', gap: 7, height: 38, padding: '0 16px', background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: 'var(--accent)', borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
     >
-      <img src="/assets/app-guide.svg" alt="App guide" style={{ width: 18, height: 18 }} />
+      <WandSparkles size={16} aria-hidden="true" style={{ flex: 'none' }} />
       Tour
     </button>
   );

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, Gauge } from 'lucide-react';
-import { MONO, MUTE, glass, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
+import { Fragment, useState } from 'react';
+import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, Gauge, ListChecks, PackagePlus } from 'lucide-react';
+import { MONO, MUTE, cardLight, surfaceSubtle, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import GettingStarted from '../components/GettingStarted.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
@@ -63,8 +63,9 @@ const STATUS_COLORS = {
   flagged: '#DC2626',
 };
 
-// SLA-Health-style ring: arcs sized by value, total in the centre.
-function Donut({ data, total, size = 132, thickness = 16 }) {
+// status-mix ring: arcs sized by value, with the list's total order count in
+// the centre.
+function Donut({ data, total, size = 118, thickness = 14 }) {
   const r = (size - thickness) / 2;
   let acc = 0;
   return (
@@ -80,8 +81,8 @@ function Donut({ data, total, size = 132, thickness = 16 }) {
           return seg;
         })}
       </g>
-      <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" style={{ fontFamily: MONO, fontSize: size * 0.22, fontWeight: 600, fill: 'var(--ink-2)' }}>{total}</text>
-      <text x="50%" y="63%" textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 10, letterSpacing: '0.04em', fill: 'var(--mute)' }}>orders</text>
+      <text x="50%" y="47%" textAnchor="middle" dominantBaseline="middle" style={{ fontFamily: MONO, fontSize: size * 0.22, fontWeight: 700, fill: 'var(--ink-2)' }}>{total}</text>
+      <text x="50%" y="64%" textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 10, letterSpacing: '0.05em', fill: 'var(--mute)' }}>orders</text>
     </svg>
   );
 }
@@ -89,7 +90,7 @@ function Donut({ data, total, size = 132, thickness = 16 }) {
 // one stat line inside the combined summary widget: icon chip · title/sub · big value
 function SummaryStat({ color, bg, title, value, unit, sub, subColor, Icon }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--surf-rgb),0.5)', border: '1px solid rgba(var(--surf-rgb),0.6)', borderRadius: 14, padding: '12px 14px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 11, ...surfaceSubtle, borderRadius: 14, padding: '10px 13px' }}>
       <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg, color }}>
         <Icon size={19} aria-hidden="true" />
       </span>
@@ -143,8 +144,11 @@ export default function Home({ ctx }) {
   const DonutCard = ({ kind, label, sub, Icon, lst }) => {
     const mix = mixOf(lst);
     const total = lst.length;
+    // legend as two explicit columns with a hairline between them
+    const half = Math.ceil(mix.length / 2);
+    const legendCols = [mix.slice(0, half), mix.slice(half)].filter((c) => c.length > 0);
     return (
-      <div style={{ ...glass, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ ...cardLight, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon size={22} aria-hidden="true" />
@@ -158,21 +162,28 @@ export default function Home({ ctx }) {
             <ChevronRight size={14} aria-hidden="true" />
           </button>
         </div>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
+        {/* compact body: small ring + two-column status legend keeps the card short */}
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 16, minWidth: 0 }}>
           <Donut data={mix} total={total} />
-          <div style={{ flex: 1, minWidth: 180, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {mix.length === 0 && <span style={{ fontSize: 13, color: MUTE }}>No orders in this list yet.</span>}
-            {mix.map((d) => {
-              const pct = total ? Math.round((d.value / total) * 100) : 0;
-              return (
-                <button key={d.key} onClick={() => openList(kind, d.key, range)} className="hv-white7" style={{ display: 'flex', alignItems: 'center', gap: 10, border: 'none', background: 'transparent', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', textAlign: 'left' }}>
-                  <span style={{ width: 9, height: 9, flex: 'none', borderRadius: '50%', background: d.color }} />
-                  <span style={{ fontSize: 13.5, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 600, color: 'var(--ink-2)' }}>{d.value}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 12, color: MUTE, width: 38, textAlign: 'right' }}>{pct}%</span>
-                </button>
-              );
-            })}
+          <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'stretch', gap: 12 }}>
+            {mix.length === 0 && <span style={{ fontSize: 13, color: MUTE, alignSelf: 'center' }}>No orders in this list yet.</span>}
+            {legendCols.map((col, ci) => (
+              <Fragment key={ci}>
+                {ci > 0 && <div style={{ width: 1, flex: 'none', background: 'var(--hairline)' }} />}
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3, justifyContent: 'center' }}>
+                  {col.map((d) => {
+                    const pct = total ? Math.round((d.value / total) * 100) : 0;
+                    return (
+                      <button key={d.key} onClick={() => openList(kind, d.key, range)} title={d.label + ' · ' + d.value + ' order' + (d.value === 1 ? '' : 's') + ' (' + pct + '%)'} className="hv-ink04" style={{ display: 'flex', alignItems: 'center', gap: 8, border: 'none', background: 'transparent', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', textAlign: 'left', minWidth: 0 }}>
+                        <span style={{ width: 8, height: 8, flex: 'none', borderRadius: '50%', background: d.color }} />
+                        <span style={{ fontSize: 13, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
+                        <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: 'var(--mute-2)', flex: 'none' }}>{pct}%</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </Fragment>
+            ))}
           </div>
         </div>
       </div>
@@ -202,7 +213,7 @@ export default function Home({ ctx }) {
 
       {/* widget row: the combined order summary + the two working lists, three across */}
       <div className="home-widgets">
-        <div style={{ ...glass, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ ...cardLight, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Gauge size={22} aria-hidden="true" />
@@ -223,10 +234,18 @@ export default function Home({ ctx }) {
       </div>
 
       {/* counts by status — tiles: icon · big count · label · what it means */}
-      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 16, fontWeight: 700 }}>Orders by status</span>
-          <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{orders.length}</span>
+      <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ListChecks size={22} aria-hidden="true" />
+          </span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 17, fontWeight: 700 }}>Orders by status</span>
+              <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{orders.length}</span>
+            </div>
+            <span style={{ fontSize: 12.5, color: MUTE }}>Every stage across packaging &amp; transfers — tap a tile to open that list</span>
+          </div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 12 }}>
           {statuses.map((st) => {
@@ -237,7 +256,7 @@ export default function Home({ ctx }) {
                 key={st.key}
                 onClick={() => openList(st.kind, st.key, range)}
                 className="hv-border-accent"
-                style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', borderRadius: 16, padding: '16px 16px 14px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10, opacity: st.n ? 1 : 0.6 }}
+                style={{ ...surfaceSubtle, borderRadius: 14, padding: '16px 16px 14px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10, opacity: st.n ? 1 : 0.6 }}
               >
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
                   <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: color + '1a', color }}>
@@ -256,18 +275,26 @@ export default function Home({ ctx }) {
       </div>
 
       {/* quick create — typed new-order shortcuts, the last card on the page */}
-      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <span style={{ fontSize: 16, fontWeight: 700 }}>Create a new order</span>
+      <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <PackagePlus size={22} aria-hidden="true" />
+          </span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+            <span style={{ fontSize: 17, fontWeight: 700 }}>Create a new order</span>
+            <span style={{ fontSize: 12.5, color: MUTE }}>Pick a type — the order form opens in a popup</span>
+          </div>
+        </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
           {NEW_ORDER_TYPES.map((o) => (
             <button
               key={o.type}
               onClick={() => newOrder(o.type)}
               className="hv-border-accent"
-              style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, ...surfaceSubtle, borderRadius: 14, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
             >
-              <span style={{ width: 42, height: 42, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
-                <o.Icon size={21} aria-hidden="true" />
+              <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
+                <o.Icon size={19} aria-hidden="true" />
               </span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
                 <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink-2)' }}>{o.label}</span>

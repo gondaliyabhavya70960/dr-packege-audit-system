@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { MONO, glass, cardLight, tabMode, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
-import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, Check } from 'lucide-react';
+import { MONO, cardLight, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
+import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, Check, CalendarDays } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
 import NewOrderMenu from '../components/NewOrderMenu.jsx';
@@ -8,37 +8,21 @@ import StatusBadge from '../components/StatusBadge.jsx';
 
 const PAGE_SIZE = 15;
 
-// one Pk / Rc / Rt stage chip, filled by that stage's per-status mode:
-// recorded (view) → green ✓, live (edit) → amber •, otherwise → grey ·
-function StageBadge({ label, mode }) {
-  const sty =
-    mode === 'view'
-      ? { bg: 'rgba(23,163,95,0.14)', color: '#0E8A50', border: 'rgba(23,163,95,0.32)', mark: '✓' }
-      : mode === 'edit'
-        ? { bg: 'rgba(217,142,4,0.16)', color: '#9A6A00', border: 'rgba(217,142,4,0.34)', mark: '•' }
-        : { bg: 'rgba(var(--ink-rgb),0.05)', color: 'rgba(var(--ink-rgb),0.42)', border: 'rgba(var(--ink-rgb),0.10)', mark: '·' };
-  return (
-    <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, padding: '3px 7px', borderRadius: 7, whiteSpace: 'nowrap', background: sty.bg, color: sty.color, border: '1px solid ' + sty.border }}>
-      {label} {sty.mark}
-    </span>
-  );
-}
-
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
 
-// dropdown option lists for the glass filters
+// dropdown option lists for the toolbar filters
 const STATUS_OPTS = [{ value: 'all', label: 'All statuses' }, ...ORDER_STATUSES.map((st) => ({ value: st.key, label: st.label }))];
-const CHANNEL_OPTS = [{ value: 'all', label: 'All channels' }, ...ORDER_CHANNELS.map((c) => ({ value: c, label: c }))];
+const CHANNEL_OPTS = [{ value: 'all', label: 'All types' }, ...ORDER_CHANNELS.map((c) => ({ value: c, label: c }))];
 const DATE_OPTS = [
-  { value: 'all', label: 'Any time' },
+  { value: 'all', label: 'All dates' },
   { value: 'today', label: 'Today' },
   { value: '7d', label: 'Last 7 days' },
   { value: '30d', label: 'Last 30 days' },
 ];
 const SORT_OPTS = [
-  { value: 'new', label: 'Date · newest first' },
-  { value: 'old', label: 'Date · oldest first' },
+  { value: 'new', label: 'Newest first' },
+  { value: 'old', label: 'Oldest first' },
   { value: 'orderaz', label: 'Order · A → Z' },
   { value: 'orderza', label: 'Order · Z → A' },
   { value: 'valhigh', label: 'Value · high → low' },
@@ -85,7 +69,7 @@ export default function Orders({ ctx }) {
   const page = Math.min(Math.max(0, pageRaw), pages - 1);
   const paged = list.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
-  const COLS = ['30px', '1.4fr', '1.5fr', '0.55fr', ...(showValue ? ['0.75fr'] : []), '0.7fr', '0.75fr', '1.05fr', '1.05fr', '0.85fr'].join(' ');
+  const COLS = ['30px', '1.4fr', '1.5fr', '0.55fr', ...(showValue ? ['0.75fr'] : []), '0.7fr', '0.75fr', '1.05fr', '0.85fr'].join(' ');
 
   // clickable column header that toggles between an asc / desc sort key
   const SortHeader = ({ label, asc, desc }) => {
@@ -97,10 +81,10 @@ export default function Orders({ ctx }) {
       <button
         onClick={() => set({ oSort: isDesc || !active ? asc : desc })}
         title={'Sort by ' + label.toLowerCase()}
-        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', color: active ? 'var(--accent)' : 'var(--mute)' }}
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: active ? 'var(--accent)' : 'var(--ink)' }}
       >
         {label}
-        <Icon size={12} aria-hidden="true" style={{ flex: 'none', opacity: active ? 1 : 0.55 }} />
+        <Icon size={12} aria-hidden="true" style={{ flex: 'none', opacity: active ? 1 : 0.7 }} />
       </button>
     );
   };
@@ -142,12 +126,12 @@ export default function Orders({ ctx }) {
         <NewOrderMenu onPick={newOrder} />
       </div>
 
-      {/* toolbar: search + filters (raised so the glass dropdowns overlay the table) */}
-      <div style={{ ...glass, padding: 14, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
+      {/* toolbar: search + filters on a solid card (raised so the dropdowns overlay the table) */}
+      <div style={{ ...cardLight, padding: 16, display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 30 }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 220 }}>
-          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.1em', color: 'var(--mute)' }}>SEARCH</span>
+          <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>SEARCH</span>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-            <span style={{ position: 'absolute', left: 13, color: 'var(--mute)', display: 'flex' }}>
+            <span style={{ position: 'absolute', left: 14, color: 'var(--mute)', display: 'flex' }}>
               <Search size={16} aria-hidden="true" />
             </span>
             <input
@@ -155,7 +139,7 @@ export default function Orders({ ctx }) {
               value={s.oq}
               onChange={(e) => set({ oq: e.target.value })}
               placeholder="Search by tracking ID, order or delivery challan…"
-              style={{ width: '100%', background: 'rgba(var(--surf-rgb),0.5)', backdropFilter: 'blur(14px)', border: '1px solid rgba(var(--surf-rgb),0.65)', borderRadius: 10, padding: '10px 14px 10px 38px', color: 'var(--ink-2)', fontSize: 14, outline: 'none' }}
+              style={{ width: '100%', background: 'var(--surface-soft)', border: '1px solid var(--surface-soft-border)', borderRadius: 12, padding: '12px 14px 12px 40px', color: 'var(--ink-2)', fontSize: 14.5, outline: 'none' }}
             />
           </div>
         </label>
@@ -164,12 +148,12 @@ export default function Orders({ ctx }) {
 
         <GlassSelect label="TYPE" value={s.oChannel} onChange={(v) => set({ oChannel: v })} options={CHANNEL_OPTS} minWidth={140} />
 
-        <GlassSelect label="PLACED" value={s.oDate} onChange={(v) => set({ oDate: v })} options={DATE_OPTS} minWidth={130} />
+        <GlassSelect label="PLACED" value={s.oDate} onChange={(v) => set({ oDate: v })} options={DATE_OPTS} minWidth={150} Icon={CalendarDays} />
 
         <GlassSelect label="SORT" value={oSort} onChange={(v) => set({ oSort: v })} options={sortOpts} minWidth={150} />
 
         {filtersActive && (
-          <button className="hv-border-accent" onClick={resetFilters} style={{ background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: 10, padding: '10px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+          <button className="hv-ink04" onClick={resetFilters} style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', color: 'var(--ink-2)', borderRadius: 12, padding: '12px 20px', fontSize: 14.5, fontWeight: 700, cursor: 'pointer' }}>
             Clear
           </button>
         )}
@@ -192,9 +176,9 @@ export default function Orders({ ctx }) {
       {/* table — clean white card (no translucent grey), tighter columns */}
       <div style={{ ...cardLight, padding: 0, overflow: 'hidden' }}>
         <div style={{ overflowX: 'auto' }}>
-          <div style={{ minWidth: showValue ? 1060 : 980 }}>
+          <div style={{ minWidth: showValue ? 940 : 860 }}>
             {/* header row */}
-            <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 14, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid var(--surface-border)', fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', color: 'var(--mute)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: 14, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid var(--surface-border)', fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)' }}>
               <input type="checkbox" checked={allSel} onChange={toggleAll} style={{ accentColor: 'var(--accent)', cursor: 'pointer', width: 15, height: 15 }} />
               <SortHeader label="ORDER" asc="orderaz" desc="orderza" />
               <span>ROUTE</span>
@@ -202,7 +186,6 @@ export default function Orders({ ctx }) {
               {showValue && <span>VALUE</span>}
               <span>TYPE</span>
               <SortHeader label="DATE" asc="old" desc="new" />
-              <span>STAGES</span>
               <span>STATUS</span>
               <span style={{ textAlign: 'right' }}>ACTION</span>
             </div>
@@ -226,7 +209,7 @@ export default function Orders({ ctx }) {
                   </div>
                   {/* route: origin above, arrowed destination below */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
-                    <span title={'From ' + route.from} style={{ fontSize: 12.5, color: 'var(--mute)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{route.from}</span>
+                    <span title={'From ' + route.from} style={{ fontSize: 13, color: 'var(--mute-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{route.from}</span>
                     <span title={'To ' + route.to} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: 'var(--ink-2)', minWidth: 0 }}>
                       <ArrowRight size={12} aria-hidden="true" style={{ flex: 'none', color: 'var(--accent)' }} />
                       <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 600 }}>{route.to}</span>
@@ -237,12 +220,7 @@ export default function Orders({ ctx }) {
                   <span style={{ fontSize: 13, color: 'var(--mute-2)' }}>{o.channel}</span>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--ink-2)' }}>{o.placed.split(' · ')[0]}</span>
-                    <span style={{ fontFamily: MONO, fontSize: 10.5, color: 'var(--mute)' }}>{o.placed.split(' · ')[1] || ''}</span>
-                  </div>
-                  <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-                    <StageBadge label="Pk" mode={tabMode(o.statusKey, 'pack')} />
-                    <StageBadge label="Rc" mode={tabMode(o.statusKey, 'recv')} />
-                    <StageBadge label="Rt" mode={tabMode(o.statusKey, 'ret')} />
+                    <span style={{ fontFamily: MONO, fontSize: 11.5, color: 'var(--mute-2)' }}>{o.placed.split(' · ')[1] || ''}</span>
                   </div>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flexWrap: 'wrap' }}>
                     <StatusBadge status={o.status} tone={o.tone} />

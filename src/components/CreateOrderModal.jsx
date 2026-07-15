@@ -13,7 +13,7 @@ export default function CreateOrderModal({ ctx }) {
   const dialogRef = useDialog(() => close(null));
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 95, background: 'rgba(28,20,32,0.32)', backdropFilter: 'blur(14px) saturate(1.4)', WebkitBackdropFilter: 'blur(14px) saturate(1.4)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: 24, overflowY: 'auto' }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 95, background: 'rgba(22,16,28,0.45)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: 24, overflowY: 'auto' }}>
       <div
         ref={dialogRef}
         role="dialog"

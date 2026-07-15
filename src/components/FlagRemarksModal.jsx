@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Flag } from 'lucide-react';
+import { Flag, Check } from 'lucide-react';
 import { MONO, glassSheet } from '../data.js';
 import useDialog from './useDialog.js';
 
@@ -24,7 +24,7 @@ export default function FlagRemarksModal({ items, step, cta, onCancel, onSave })
   };
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(28,20,32,0.32)', backdropFilter: 'blur(14px) saturate(1.4)', WebkitBackdropFilter: 'blur(14px) saturate(1.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(22,16,28,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="flag-remarks-title" tabIndex={-1} style={{ ...glassSheet, borderRadius: 24, width: 560, maxWidth: '100%', maxHeight: '88vh', overflow: 'auto', padding: 22, display: 'flex', flexDirection: 'column', gap: 14, outline: 'none' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <span id="flag-remarks-title" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 18, fontWeight: 700 }}>
@@ -42,7 +42,7 @@ export default function FlagRemarksModal({ items, step, cta, onCancel, onSave })
               <span style={{ fontSize: 14.5, fontWeight: 700 }}>{i.name}</span>
               <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute)' }}>{i.sku}</span>
               {val(i.key) ? (
-                <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, color: '#0E8A50' }}>✓ remark added</span>
+                <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: MONO, fontSize: 10, color: '#0E8A50' }}><Check size={11} strokeWidth={3} aria-hidden="true" style={{ flex: 'none' }} /> remark added</span>
               ) : (
                 <span style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 10, color: '#C62B22' }}>remark required</span>
               )}

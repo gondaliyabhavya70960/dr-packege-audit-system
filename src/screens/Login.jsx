@@ -1,5 +1,5 @@
-import { Check } from 'lucide-react';
-import { MONO } from '../data.js';
+import { Check, ShieldCheck, Video, History } from 'lucide-react';
+import { MONO, cardLight } from '../data.js';
 import { PackageIcon } from '../components/icons.jsx';
 
 export default function Login({ ctx }) {
@@ -27,22 +27,18 @@ export default function Login({ ctx }) {
 
   return (
     <div data-screen-label="01 Login" className="login-split">
-      <div style={{ background: 'radial-gradient(900px 600px at 80% 20%, var(--accent), var(--accent-2) 70%)', color: '#FFFFFF', padding: '44px 48px', display: 'flex', flexDirection: 'column' }}>
-        {/* brand lockup: the Mayavé logo on a light chip so it reads on the deep red */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <span style={{ background: '#FFFFFF', borderRadius: 12, padding: '8px 14px', display: 'inline-flex', alignItems: 'center', boxShadow: '0 8px 24px -10px rgba(0,0,0,0.4)' }}>
-            <img src="/assets/mayave-logo.png" alt="Mayavé Jewellery" style={{ height: 34, width: 'auto', display: 'block' }} />
-          </span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.01em' }}>Packaging Audit</span>
-            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.7)' }}>MAYAVÉ JEWELLERY</span>
-          </div>
+      <div className="login-hero" style={{ background: 'radial-gradient(900px 600px at 80% 20%, var(--accent), var(--accent-2) 70%)', color: '#FFFFFF', padding: '44px 48px', display: 'flex', flexDirection: 'column' }}>
+        {/* wordmark only — the single logo image lives beside the sign-in form */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.01em' }}>Packaging Audit</span>
+          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.72)' }}>MAYAVÉ JEWELLERY</span>
         </div>
         <div style={{ flex: 1 }} />
-        <div style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.18, letterSpacing: '-0.01em', maxWidth: 480, textWrap: 'pretty' }}>
+        <div className="login-headline" style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.18, letterSpacing: '-0.01em', maxWidth: 480, textWrap: 'pretty' }}>
           One ID. Every checkpoint. Video proof you can pull up in seconds.
         </div>
-        <div style={{ marginTop: 30, width: 430, maxWidth: '100%', background: 'rgba(var(--surf-rgb),0.96)', color: 'var(--ink-2)', borderRadius: 22, padding: 18, boxShadow: '0 30px 70px -20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(var(--surf-rgb),0.9)', display: 'flex', flexDirection: 'column', gap: 13 }}>
+        {/* mock tracking card in the app's shared card language (deep shadow lifts it off the red) */}
+        <div style={{ marginTop: 30, width: 430, maxWidth: '100%', ...cardLight, color: 'var(--ink-2)', padding: 18, boxShadow: '0 30px 70px -20px rgba(0,0,0,0.45)', display: 'flex', flexDirection: 'column', gap: 13 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 700 }}>DC-2026-00417</span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FBE5E8', color: '#C8102E', borderRadius: 999, padding: '4px 12px', fontSize: 11, fontWeight: 800, letterSpacing: '0.08em' }}>
@@ -51,7 +47,7 @@ export default function Login({ ctx }) {
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ width: 44, height: 44, borderRadius: 11, background: '#FBE5E8', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+            <span style={{ width: 44, height: 44, borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
               <PackageIcon size={20} color="var(--accent)" />
             </span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -59,7 +55,7 @@ export default function Login({ ctx }) {
               <span style={{ fontSize: 13, color: 'var(--mute)' }}>3 items · Top + Front cameras</span>
             </div>
           </div>
-          <div style={{ height: 1, background: '#F0F1F3' }} />
+          <div style={{ height: 1, background: 'var(--hairline)' }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 11 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               {check}
@@ -80,12 +76,27 @@ export default function Login({ ctx }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#E3F5EC', color: '#11704B', borderRadius: 10, padding: '10px 14px', fontSize: 13.5, fontWeight: 600 }}><Check size={15} strokeWidth={3} aria-hidden="true" /> Detected 3 / 3 SKUs — matches challan</div>
         </div>
         <div style={{ flex: 1 }} />
-        <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.04em', color: 'rgba(255,255,255,0.75)' }}>SOC-2 governance · RBAC · configurable retention</div>
+        {/* trust markers as icon pills instead of a plain mono line */}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {[
+            { Icon: ShieldCheck, label: 'SOC-2 governance' },
+            { Icon: Video, label: 'Tamper-evident video' },
+            { Icon: History, label: 'Configurable retention' },
+          ].map((f) => (
+            <span key={f.label} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.22)', borderRadius: 999, padding: '7px 14px', fontSize: 12.5, fontWeight: 600, color: 'rgba(255,255,255,0.92)' }}>
+              <f.Icon size={14} aria-hidden="true" style={{ flex: 'none' }} />
+              {f.label}
+            </span>
+          ))}
+        </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
-        <div style={{ width: 420, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <img src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 46, width: 'auto', alignSelf: 'flex-start' }} />
+      <div className="login-form-col" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
+        <div style={{ width: 460, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 18 }}>
+          {/* the page's single logo — large and centred above the form card */}
+          <img className="login-logo" src="/assets/mayave-logo.png" alt="Mayavé" style={{ height: 100, width: 'auto', maxWidth: '100%', objectFit: 'contain', alignSelf: 'center' }} />
+          {/* the form itself is unchanged — it just sits on the app's shared white card now */}
+          <div style={{ ...cardLight, padding: 26, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <span style={{ fontSize: 30, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.01em' }}>Sign in</span>
             <span style={{ fontSize: 15, color: '#4B5563' }}>Enter your credentials to access the console.</span>
@@ -143,7 +154,7 @@ export default function Login({ ctx }) {
           >
             Sign in
           </button>
-          <div style={{ height: 1, background: '#E5E7EB', marginTop: 8 }} />
+          <div style={{ height: 1, background: 'var(--hairline)', marginTop: 8 }} />
           <div style={{ textAlign: 'center', fontSize: 13.5, color: 'var(--mute)', lineHeight: 1.6 }}>
             Demo accounts (change before real use):
             <br />
@@ -157,6 +168,7 @@ export default function Login({ ctx }) {
           >
             Take a quick tour
           </button>
+          </div>
         </div>
       </div>
     </div>

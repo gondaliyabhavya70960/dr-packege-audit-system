@@ -914,10 +914,12 @@ export function fillTone(t) {
   return FILL_TONES[t] || FILL_TONES.plain;
 }
 
+// scan-state circle recipe: 'ok' renders a check (consumers use an icon), 'bad'
+// a bold "!", 'wait' an empty outline — matching the pack-session row circles.
 export function dotFor(st) {
-  if (st === 'ok') return { dot: '✓', dotColor: '#0E8A50', dotBorder: 'rgba(23,163,95,0.5)', dotBg: 'rgba(23,163,95,0.08)' };
+  if (st === 'ok') return { dot: 'check', dotColor: '#0E8A50', dotBorder: 'rgba(23,163,95,0.5)', dotBg: 'rgba(23,163,95,0.08)' };
   if (st === 'bad') return { dot: '!', dotColor: '#C62B22', dotBorder: 'rgba(229,62,62,0.5)', dotBg: 'rgba(229,62,62,0.06)' };
-  return { dot: '···', dotColor: 'var(--mute)', dotBorder: 'rgba(var(--ink-rgb),0.2)', dotBg: 'transparent' };
+  return { dot: '', dotColor: 'var(--mute)', dotBorder: 'rgba(var(--ink-rgb),0.2)', dotBg: 'transparent' };
 }
 
 export function fmt(sec) {
@@ -961,21 +963,22 @@ export const glassFloat = {
   boxShadow: '0 16px 44px -8px rgba(40,28,50,0.24), 0 4px 12px rgba(40,28,50,0.08), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 1px rgba(255,255,255,0.25)',
 };
 
-// popovers / dropdown menus — more opaque for legibility over content
+// popovers / dropdown menus — frosted near-white so rows stay readable even
+// where backdrop blur can't sample the page behind them
 export const glassPopover = {
-  background: 'rgba(var(--surf-rgb),0.72)',
+  background: 'rgba(var(--surf-rgb),0.88)',
   backdropFilter: 'var(--glass-blur)',
   WebkitBackdropFilter: 'var(--glass-blur)',
-  border: '1px solid rgba(var(--surf-rgb),0.7)',
+  border: '1px solid rgba(var(--surf-rgb),0.9)',
   boxShadow: '0 24px 60px -12px rgba(40,28,50,0.34), inset 0 1px 0 rgba(255,255,255,0.95)',
 };
 
-// modal sheets / overlays
+// modal sheets / dialogs — frosted white panel over a plain dimmed backdrop
 export const glassSheet = {
-  background: 'rgba(var(--surf-rgb),0.6)',
+  background: 'rgba(var(--surf-rgb),0.92)',
   backdropFilter: 'var(--glass-blur)',
   WebkitBackdropFilter: 'var(--glass-blur)',
-  border: '1px solid rgba(var(--surf-rgb),0.65)',
+  border: '1px solid rgba(var(--surf-rgb),0.95)',
   boxShadow: '0 40px 90px -20px rgba(20,14,28,0.45), inset 0 1px 0 rgba(255,255,255,0.9)',
 };
 

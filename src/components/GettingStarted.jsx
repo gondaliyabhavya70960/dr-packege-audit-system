@@ -1,5 +1,5 @@
 import { Check, X, Plus, Package, MonitorPlay, Compass, ArrowRight } from 'lucide-react';
-import { MONO, glass } from '../data.js';
+import { MONO, cardLight, surfaceSubtle } from '../data.js';
 
 // Dismissible getting-started checklist on the Overview dashboard. Each step
 // navigates somewhere useful and ticks itself off; state persists so it survives
@@ -9,7 +9,7 @@ export default function GettingStarted({ ctx }) {
   if (s.gsDismissed) return null;
 
   const steps = [
-    { key: 'order', label: 'Create your first order', icon: Plus, go: () => newOrder('custom') },
+    { key: 'order', label: 'Create your first order', icon: Plus, go: () => newOrder('ecommerce') },
     { key: 'list', label: 'Explore packaging orders', icon: Package, go: () => openList('packaging') },
     { key: 'station', label: 'Open a live station', icon: MonitorPlay, go: () => set({ screen: 'kiosk' }) },
     { key: 'tour', label: 'Take the guided tour', icon: Compass, go: () => openTour() },
@@ -44,7 +44,7 @@ export default function GettingStarted({ ctx }) {
   const allDone = count === total;
 
   return (
-    <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
+    <div style={{ ...cardLight, padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
         <span style={{ fontSize: 16, fontWeight: 700 }}>{allDone ? "You're all set" : 'Getting started'}</span>
         <span style={{ fontFamily: MONO, fontSize: 11, padding: '3px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)' }}>{count}/{total}</span>
@@ -65,7 +65,7 @@ export default function GettingStarted({ ctx }) {
               key={st.key}
               className="hv-chip"
               onClick={() => doStep(st)}
-              style={{ display: 'flex', alignItems: 'center', gap: 11, textAlign: 'left', cursor: 'pointer', background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid ' + (isDone ? 'rgba(var(--accent-rgb),0.4)' : 'rgba(var(--surf-rgb),0.55)'), borderRadius: 12, padding: '11px 13px' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 11, textAlign: 'left', cursor: 'pointer', ...surfaceSubtle, border: '1px solid ' + (isDone ? 'rgba(var(--accent-rgb),0.4)' : 'var(--surface-soft-border)'), borderRadius: 12, padding: '11px 13px' }}
             >
               <span style={{ width: 26, height: 26, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: isDone ? 'var(--accent)' : 'rgba(var(--accent-rgb),0.1)', color: isDone ? '#FFFFFF' : 'var(--accent)' }}>
                 {isDone ? <Check size={15} strokeWidth={3} aria-hidden="true" /> : <Icon size={15} aria-hidden="true" />}

@@ -12,7 +12,7 @@ function MismatchModal({ missing, unknown, onKeepRecording, onSaveFlag }) {
   const [issue, setIssue] = useState('');
   const dialogRef = useDialog(onKeepRecording);
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(28,20,32,0.32)', backdropFilter: 'blur(14px) saturate(1.4)', WebkitBackdropFilter: 'blur(14px) saturate(1.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(22,16,28,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="mismatch-title" tabIndex={-1} style={{ ...glassSheet, borderRadius: 24, width: 540, maxWidth: '100%', maxHeight: '88vh', overflow: 'auto', padding: 22, display: 'flex', flexDirection: 'column', gap: 14, outline: 'none' }}>
         <div style={{ display: 'flex', gap: 12 }}>
           <span style={{ width: 42, height: 42, flex: 'none', borderRadius: '50%', background: 'rgba(229,62,62,0.1)', color: '#C62B22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -97,7 +97,7 @@ export default function PackRecord({ ctx }) {
   let banner;
   if (unknown) banner = { msg: '⚠ Unknown item on the bench — remove it, or close to save & flag for the manager.', tone: 'red' };
   else if (!allScanned) banner = { msg: '⚠ ' + missing + ' item' + (missing === 1 ? '' : 's') + ' not yet scanned — keep scanning, or close to save & flag for the manager.', tone: 'red' };
-  else if (!condOk) banner = { msg: 'Items match ✓ — verify condition to unlock Close. Show each piece to the camera.', tone: 'amber' };
+  else if (!condOk) banner = { msg: 'Items match — verify condition to unlock Close. Show each piece to the camera.', tone: 'amber' };
   else banner = { msg: 'PASS — item, quantity and condition verified. Seal the box and close the session.', tone: 'green' };
   const bt = bannerTones[banner.tone];
 
@@ -338,7 +338,7 @@ export default function PackRecord({ ctx }) {
             <div style={{ border: '1px solid rgba(217,142,4,0.35)', background: 'rgba(217,142,4,0.06)', borderRadius: 16, padding: 13, display: 'flex', flexDirection: 'column', gap: 8 }}>
               <span style={{ fontSize: 14, color: '#9A6A00', fontWeight: 700 }}>Condition check</span>
               <span style={{ fontSize: 14, color: 'rgba(var(--ink-rgb),0.7)', lineHeight: 1.45, textWrap: 'pretty' }}>
-                Show each piece to the camera, capture a close-up still (stone · hallmark · certificate), then confirm. YOLO count: 3 in frame ✓
+                Show each piece to the camera, capture a close-up still (stone · hallmark · certificate), then confirm. YOLO count: 3 in frame.
               </span>
               <button className="hv-brighten" onClick={() => set({ packCond: 'confirmed' })} style={{ background: '#D98E04', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '10px 18px', fontSize: 14, fontWeight: 700, cursor: 'pointer', alignSelf: 'flex-start' }}>
                 Confirm condition OK

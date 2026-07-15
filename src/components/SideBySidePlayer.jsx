@@ -1,4 +1,4 @@
-import { Rewind, FastForward, Play, Pause, ChevronLeft } from 'lucide-react';
+import { Rewind, FastForward, Play, Pause, ChevronLeft, Check } from 'lucide-react';
 import { MONO, glass, fmt } from '../data.js';
 import PlaybackFrame from './PlaybackFrame.jsx';
 
@@ -103,7 +103,7 @@ export default function SideBySidePlayer({ ctx }) {
         <div style={{ ...glass, display: 'flex', flexDirection: 'column', gap: 12, padding: '14px 20px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, background: 'rgba(var(--surf-rgb),0.45)', border: '1px solid rgba(var(--surf-rgb),0.55)', borderRadius: 12, padding: '11px 14px' }}>
             <span style={{ fontSize: 12, color: 'var(--mute)' }}>File hash — tamper evidence (re-verified on arrival)</span>
-            <span style={{ fontFamily: MONO, fontSize: 13, color: '#0E8A50' }}>sha-256 · {playerRec ? playerRec.hash : '9f2c41aa…6b7a1'} ✓ verified</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: MONO, fontSize: 13, color: '#0E8A50' }}>sha-256 · {playerRec ? playerRec.hash : '9f2c41aa…6b7a1'} <Check size={13} strokeWidth={3} aria-hidden="true" style={{ flex: 'none' }} /> verified</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 14, color: 'var(--mute-2)' }}>{fromFlag ? 'Supervisor decision — releases or keeps the refund hold.' : 'Verdict feeds the accept / flag decision.'}</span>
