@@ -1,6 +1,5 @@
 import { MONO, glassFloat, glassPopover, cardLight } from '../data.js';
 import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell } from 'lucide-react';
-import TabBar from './TabBar.jsx';
 
 const barStyle = {
   ...glassFloat,
@@ -14,7 +13,7 @@ const barStyle = {
   borderRadius: 999,
   // the backdrop-filter creates a stacking context; without an explicit
   // z-index the dropdowns would paint under the screen content — and it must
-  // also beat the top nav band below (zIndex 40) so open menus win
+  // also beat the floating bottom nav (zIndex 40) so open menus win
   position: 'relative',
   zIndex: 50,
 };
@@ -179,9 +178,6 @@ export default function TopBar({ ctx }) {
           <ChevronLeft size={15} aria-hidden="true" /> Back
         </button>
       )}
-      <div style={{ flex: 1 }} />
-      {/* primary navigation lives in the bar itself; the admin menu opens downward */}
-      <TabBar ctx={ctx} />
       <div style={{ flex: 1 }} />
       <NotificationsBell ctx={ctx} />
       <TourButton onClick={openTour} />

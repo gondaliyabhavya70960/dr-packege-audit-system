@@ -55,10 +55,10 @@ export default function TabBar({ ctx }) {
   });
 
   return (
-    // top-level navigation lives INSIDE the top bar (rendered by TopBar,
-    // centred between the logo and the right-side actions). data-tour sits on
-    // the pill itself so the tour spotlights it tightly.
-    <div data-tour="nav" style={{ ...cardLight, display: 'flex', gap: 4, alignItems: 'center', padding: 4, borderRadius: 999 }}>
+    // top-level navigation floats at the bottom centre (the classic position).
+    // data-tour sits on the pill itself so the tour spotlights it tightly.
+    <div style={{ position: 'fixed', left: '50%', bottom: 18, transform: 'translateX(-50%)', zIndex: 40 }}>
+      <div data-tour="nav" style={{ ...cardLight, display: 'flex', gap: 4, alignItems: 'center', padding: 6, borderRadius: 999 }}>
         {navTabs.map((t) => (
           <button key={t.id} onClick={() => navGo(t.id)} style={pillBtn(navActive(t.id))}>
             <t.Icon size={16} aria-hidden="true" style={{ flex: 'none' }} />
@@ -73,23 +73,23 @@ export default function TabBar({ ctx }) {
             <div style={{ position: 'relative' }}>
               <button onClick={() => set({ adminMenuOpen: !s.adminMenuOpen })} style={{ ...pillBtn(adminFilled), display: 'flex', alignItems: 'center', gap: 7 }}>
                 <span>Admin</span>
-                {adminOpen ? <ChevronUp size={13} aria-hidden="true" /> : <ChevronDown size={13} aria-hidden="true" />}
+                {adminOpen ? <ChevronDown size={13} aria-hidden="true" /> : <ChevronUp size={13} aria-hidden="true" />}
               </button>
 
               {adminOpen && (
                 <>
-                  {/* pointer that visually ties the menu to the trigger, centred under the button */}
+                  {/* pointer that visually ties the menu to the trigger, centred over the button */}
                   <div
                     style={{
                       position: 'absolute',
-                      top: 'calc(100% + 5px)',
+                      bottom: 'calc(100% + 5px)',
                       left: '50%',
                       transform: 'translateX(-50%) rotate(45deg)',
                       width: 12,
                       height: 12,
                       background: MENU_BG,
-                      borderLeft: MENU_BORDER,
-                      borderTop: MENU_BORDER,
+                      borderRight: MENU_BORDER,
+                      borderBottom: MENU_BORDER,
                       backdropFilter: 'blur(30px) saturate(1.7)',
                       WebkitBackdropFilter: 'blur(30px) saturate(1.7)',
                       zIndex: 43,
@@ -99,7 +99,7 @@ export default function TabBar({ ctx }) {
                     style={{
                       ...glassPopover,
                       position: 'absolute',
-                      top: 'calc(100% + 11px)',
+                      bottom: 'calc(100% + 11px)',
                       right: 0,
                       width: 280,
                       maxWidth: '78vw',
@@ -141,6 +141,7 @@ export default function TabBar({ ctx }) {
             </div>
           </>
         )}
+      </div>
     </div>
   );
 }

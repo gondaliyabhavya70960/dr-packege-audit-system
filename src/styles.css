@@ -419,7 +419,7 @@ input[type='range'] {
 
 /* ---- mobile pass ---- */
 @media (max-width: 560px) {
-  /* the top nav pill must never exceed the viewport — let it scroll */
+  /* the bottom nav pill must never exceed the viewport — let it scroll */
   [data-tour='nav'] {
     max-width: 96vw;
     overflow-x: auto;

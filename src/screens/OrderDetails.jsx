@@ -163,7 +163,7 @@ const ORDER_TABS = [
 // dimmed (not started). Detail carries no badge.
 function OrderTabs({ tabs, active, onPick, modeOf }) {
   return (
-    <div style={{ ...cardLight, padding: 6, display: 'inline-flex', gap: 4, borderRadius: 14, alignSelf: 'center', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%' }}>
+    <div style={{ background: 'var(--surface-soft)', border: '1px solid var(--surface-soft-border)', padding: 5, display: 'inline-flex', gap: 4, borderRadius: 999, flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%' }}>
       {tabs.map((tb) => {
         const on = tb.id === active;
         const mode = modeOf(tb.id);
@@ -177,8 +177,8 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
             onClick={() => onPick(tb.id)}
             title={isEdit ? tb.label + ' · live · edit' : isView ? tb.label + ' · recorded' : isStatus ? tb.label + ' · in transit' : isEmpty ? tb.label + ' · not started' : tb.label}
             style={{
-              display: 'flex', alignItems: 'center', gap: 7, border: 'none', cursor: 'pointer', borderRadius: 11,
-              padding: '9px 18px', fontSize: 13.5, fontWeight: 700,
+              display: 'flex', alignItems: 'center', gap: 7, border: 'none', cursor: 'pointer', borderRadius: 999,
+              padding: '8px 16px', fontSize: 13.5, fontWeight: 700,
               background: on ? 'var(--accent)' : 'transparent',
               color: on ? '#FFFFFF' : isEmpty ? 'rgba(var(--ink-rgb),0.4)' : 'rgba(var(--ink-rgb),0.65)',
               boxShadow: on ? '0 4px 14px rgba(var(--accent-rgb),0.25)' : 'none',
@@ -637,6 +637,9 @@ export default function OrderDetails({ ctx }) {
           <span style={{ fontSize: 14, color: MUTE }}>{order.customer} · {order.value} · placed {order.placed}</span>
         </div>
         <div style={{ flex: 1 }} />
+        {/* stage navigation lives inside the title card (centred between the id block and the status block) */}
+        <OrderTabs tabs={tabs} active={activeTab} onPick={onTab} modeOf={modeFor} />
+        <div style={{ flex: 1 }} />
         {activeTab === 'detail' && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5, minWidth: 0 }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13.5, fontWeight: 600, color: needsAttention ? '#C62B22' : '#0E8A50', textAlign: 'right' }}>
@@ -654,8 +657,6 @@ export default function OrderDetails({ ctx }) {
           </div>
         )}
       </div>
-
-      <OrderTabs tabs={tabs} active={activeTab} onPick={onTab} modeOf={modeFor} />
 
       {activeTab === 'detail' && (
       <div className="order-grid">

@@ -16,6 +16,7 @@ import OrderDetails from './screens/OrderDetails.jsx';
 import Home from './screens/Home.jsx';
 import { emptyCustomOrder } from './data.js';
 import TopBar from './components/TopBar.jsx';
+import TabBar from './components/TabBar.jsx';
 import BackConfirm from './components/BackConfirm.jsx';
 import LeaveConfirm from './components/LeaveConfirm.jsx';
 import CreateOrderModal from './components/CreateOrderModal.jsx';
@@ -340,7 +341,7 @@ export default function App() {
       {isOpSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="operator" />
-          <div style={{ flex: 1, minHeight: 0, position: 'relative', paddingBottom: 24, overflow: 'auto' }}>
+          <div style={{ flex: 1, minHeight: 0, position: 'relative', paddingBottom: 74, overflow: 'auto' }}>
             {screen === 'kiosk' && <KioskHome ctx={ctx} />}
             {screen === 'pack' && <PackRecord ctx={ctx} />}
             {screen === 'recv' && <Receiving ctx={ctx} />}
@@ -353,7 +354,7 @@ export default function App() {
       {isAdminSurface && (
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <TopBar ctx={ctx} variant="admin" />
-          <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 24 }}>
+          <div style={{ flex: 1, minHeight: 0, overflow: 'auto', paddingBottom: 120 }}>
             {screen === 'search' && <SearchPlayback ctx={ctx} />}
             {DASH_SCREENS.includes(screen) && <Dashboard ctx={ctx} />}
             {screen === 'config' && <UsersConfig ctx={ctx} />}
@@ -362,6 +363,7 @@ export default function App() {
         </div>
       )}
 
+      {screen !== 'login' && <TabBar ctx={ctx} />}
       {s.playerOpen && <SideBySidePlayer ctx={ctx} />}
       {s.backConfirm && <BackConfirm ctx={ctx} />}
       {s.leaveConfirm && <LeaveConfirm ctx={ctx} />}
