@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck, Gift } from 'lucide-react';
+import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck, Gift, PackagePlus } from 'lucide-react';
 import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmtMoney, draftItemsValue, ORDER_TYPE_CHANNEL, fmt } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import PackRecord from './PackRecord.jsx';
@@ -196,10 +196,10 @@ function OrderTabs({ tabs, active, onPick, modeOf }) {
 }
 
 const inputStyle = {
-  background: 'rgba(var(--surf-rgb),0.6)',
-  border: '1px solid rgba(0,0,0,0.1)',
-  borderRadius: 10,
-  padding: '9px 13px',
+  background: 'var(--surface)',
+  border: '1px solid #E2E4E9',
+  borderRadius: 12,
+  padding: '10px 13px',
   fontSize: 14,
   color: 'var(--ink-2)',
   outline: 'none',
@@ -419,24 +419,44 @@ export function CreateOrderForm({ ctx, onClose }) {
     onClose && onClose(id);
   };
 
-  const roField = { ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: 'rgba(0,0,0,0.03)' };
+  const roField = { ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: 'var(--surface-soft)', borderColor: 'var(--surface-soft-border)' };
   const roHint = { fontFamily: MONO, fontSize: 9, letterSpacing: '0.08em', color: '#9AA0A6', flex: 'none' };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* modal heading */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        <span style={{ fontSize: 21, fontWeight: 800, color: INK, letterSpacing: '-0.01em' }}>Create a new order</span>
-        <span style={{ fontSize: 14, color: 'var(--mute-2)' }}>Pick the order type, fill in the details, and a draft order is created for the packaging bench.</span>
+      {/* modal heading — same icon-chip header pattern as the overview widgets */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <PackagePlus size={22} aria-hidden="true" />
+        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1, minWidth: 0 }}>
+          <span style={{ fontSize: 20, fontWeight: 800, color: INK, letterSpacing: '-0.01em' }}>Create a new order</span>
+          <span style={{ fontSize: 13.5, color: 'var(--mute-2)' }}>Pick the order type, fill in the details, and a draft order is created for the packaging bench.</span>
+        </div>
       </div>
 
-      {/* order-type segmented buttons */}
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      {/* order-type picker: the two order kinds as rich selectable tiles */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
         {NEW_ORDER_TYPES.map((t) => {
           const on = t.type === d.orderType;
           return (
-            <button key={t.type} onClick={() => pickType(t.type)} style={{ display: 'flex', alignItems: 'center', gap: 8, borderRadius: 11, padding: '10px 16px', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', border: '1px solid ' + (on ? 'rgba(var(--accent-rgb),0.45)' : 'var(--surface-border)'), background: on ? 'rgba(var(--accent-rgb),0.07)' : 'var(--surface)', color: on ? 'var(--accent)' : 'var(--mute-2)' }}>
-              <t.Icon size={16} aria-hidden="true" /> {t.label}
+            <button
+              key={t.type}
+              onClick={() => pickType(t.type)}
+              aria-pressed={on}
+              className={on ? '' : 'hv-border-accent'}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', borderRadius: 14, padding: '12px 14px', cursor: 'pointer', border: '1px solid ' + (on ? 'rgba(var(--accent-rgb),0.5)' : '#E2E4E9'), background: on ? 'rgba(var(--accent-rgb),0.06)' : 'var(--surface)' }}
+            >
+              <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: t.color + '1a', color: t.color }}>
+                <t.Icon size={19} aria-hidden="true" />
+              </span>
+              <span style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+                <span style={{ fontSize: 14.5, fontWeight: 700, color: on ? 'var(--accent)' : 'var(--ink-2)' }}>{t.label}</span>
+                <span style={{ fontSize: 12, color: 'var(--mute)' }}>{t.sub}</span>
+              </span>
+              <span style={{ width: 18, height: 18, flex: 'none', borderRadius: '50%', border: '2px solid ' + (on ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.25)'), background: on ? 'var(--accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {on && <Check size={11} strokeWidth={3.5} aria-hidden="true" style={{ color: '#FFFFFF' }} />}
+              </span>
             </button>
           );
         })}
@@ -545,19 +565,19 @@ export function CreateOrderForm({ ctx, onClose }) {
         )}
       </div>
 
-      <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
+      <div style={{ height: 1, background: 'rgba(var(--ink-rgb),0.08)' }} />
       <CustomEditor draft={d} upd={upd} />
 
-      <div style={{ height: 1, background: 'rgba(0,0,0,0.06)' }} />
+      <div style={{ height: 1, background: 'rgba(var(--ink-rgb),0.08)' }} />
       <PackingCapture orderId={d.id} videos={d.packVideos} setVideos={(v) => upd('packVideos', v)} />
 
       <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
-        <button className="hv-white75" onClick={cancel} style={{ background: 'rgba(var(--surf-rgb),0.5)', border: '1px solid rgba(0,0,0,0.08)', color: 'rgba(var(--ink-rgb),0.7)', borderRadius: 10, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+        <button className="hv-ink04" onClick={cancel} style={{ background: 'var(--surface)', border: '1px solid #E2E4E9', color: 'var(--ink-2)', borderRadius: 12, padding: '12px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
           Cancel
         </button>
         <div style={{ flex: 1 }} />
-        <button className="hv-brighten" onClick={saveCreate} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 10, padding: '12px 24px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
-          Save custom order
+        <button className="hv-brighten" onClick={saveCreate} style={{ background: 'var(--accent)', color: '#FFFFFF', border: 'none', borderRadius: 12, padding: '12px 24px', fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(var(--accent-rgb),0.25)' }}>
+          Save order
         </button>
       </div>
     </div>

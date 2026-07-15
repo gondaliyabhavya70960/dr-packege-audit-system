@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { MONO } from '../data.js';
+import { MONO, glassPopover } from '../data.js';
 import { ChevronDown, Check } from 'lucide-react';
 
-// Custom dropdown — the native <select> menu can't be styled, so this renders
-// a solid white trigger + menu matching the app's card language. An optional
-// leading `Icon` (e.g. a calendar on date filters) sits before the value.
+// Custom dropdown — the native <select> menu can't be styled. The trigger is a
+// solid white control matching the app's inputs; the floating menu is a blurred
+// glass popover like every other floating surface. An optional leading `Icon`
+// (e.g. a calendar on date filters) sits before the value.
 // options: [{ value, label }]. Closes on outside-click or Esc.
 const triggerStyle = {
   appearance: 'none',
@@ -59,7 +60,7 @@ export default function GlassSelect({ value, onChange, options, label, minWidth 
         {open && (
           <div
             role="listbox"
-            style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', boxShadow: '0 18px 44px -14px rgba(15,17,21,0.28), 0 2px 8px rgba(15,17,21,0.06)', position: 'absolute', top: 'calc(100% + 6px)', left: 0, minWidth: '100%', width: 'max-content', maxWidth: 300, borderRadius: 14, padding: 6, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 80, maxHeight: 300, overflowY: 'auto' }}
+            style={{ ...glassPopover, position: 'absolute', top: 'calc(100% + 6px)', left: 0, minWidth: '100%', width: 'max-content', maxWidth: 300, borderRadius: 14, padding: 6, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 80, maxHeight: 300, overflowY: 'auto' }}
           >
             {options.map((o) => {
               const on = o.value === value;

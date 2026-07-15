@@ -1,4 +1,4 @@
-import { MONO, glassFloat, glassPopover, cardLight } from '../data.js';
+import { MONO, glassFloat, glassPopover } from '../data.js';
 import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell, WandSparkles } from 'lucide-react';
 
 const barStyle = {
@@ -114,7 +114,7 @@ function NotificationsBell({ ctx }) {
         )}
       </button>
       {s.notifOpen && (
-        <div style={{ ...cardLight, borderRadius: 14, position: 'absolute', right: 0, top: 52, width: 380, maxWidth: '86vw', padding: '14px 6px 8px', display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
+        <div style={{ ...glassPopover, borderRadius: 18, position: 'absolute', right: 0, top: 52, width: 380, maxWidth: '86vw', padding: '14px 6px 8px', display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
           <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', color: 'var(--ink)', padding: '0 14px 8px' }}>NOTIFICATIONS</span>
           {items.length === 0 && <span style={{ fontSize: 13, color: 'var(--mute)', padding: '4px 14px 10px' }}>You're all caught up.</span>}
           {items.map((n) => (

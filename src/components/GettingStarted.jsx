@@ -9,7 +9,7 @@ export default function GettingStarted({ ctx }) {
   if (s.gsDismissed) return null;
 
   const steps = [
-    { key: 'order', label: 'Create your first order', icon: Plus, go: () => newOrder('custom') },
+    { key: 'order', label: 'Create your first order', icon: Plus, go: () => newOrder('ecommerce') },
     { key: 'list', label: 'Explore packaging orders', icon: Package, go: () => openList('packaging') },
     { key: 'station', label: 'Open a live station', icon: MonitorPlay, go: () => set({ screen: 'kiosk' }) },
     { key: 'tour', label: 'Take the guided tour', icon: Compass, go: () => openTour() },
