@@ -50,12 +50,11 @@ export function ProfileMenu({ ctx, roleChip, roleLine }) {
         <span style={{ display: 'flex', color: 'rgba(40,32,38,0.55)' }}>{s.profileMenuOpen ? <ChevronUp size={13} aria-hidden="true" /> : <ChevronDown size={13} aria-hidden="true" />}</span>
       </button>
       {s.profileMenuOpen && (
-        <div style={{ ...glassPopover, position: 'absolute', right: 0, top: 54, width: 264, borderRadius: 22, padding: 8, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
+        <div style={{ ...glassPopover, position: 'absolute', right: 0, top: 54, width: 292, borderRadius: 18, padding: 8, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '8px 12px 10px', borderBottom: '1px solid rgba(var(--ink-rgb),0.1)', marginBottom: 4 }}>
             <span style={{ fontSize: 14, fontWeight: 700 }}>{userLabel}</span>
-            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: 'var(--accent)' }}>{roleLine}</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: 'var(--accent)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{roleLine}</span>
           </div>
-          <div style={{ height: 1, background: 'rgba(var(--ink-rgb),0.08)', margin: '4px 6px' }} />
           <button className="hv-white7" onClick={goProfile} style={itemStyle}>
             <User size={16} aria-hidden="true" />
             My profile

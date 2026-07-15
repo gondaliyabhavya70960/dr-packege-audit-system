@@ -12,7 +12,7 @@ function MismatchModal({ missing, unknown, onKeepRecording, onSaveFlag }) {
   const [issue, setIssue] = useState('');
   const dialogRef = useDialog(onKeepRecording);
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(28,20,32,0.32)', backdropFilter: 'blur(14px) saturate(1.4)', WebkitBackdropFilter: 'blur(14px) saturate(1.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(22,16,28,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="mismatch-title" tabIndex={-1} style={{ ...glassSheet, borderRadius: 24, width: 540, maxWidth: '100%', maxHeight: '88vh', overflow: 'auto', padding: 22, display: 'flex', flexDirection: 'column', gap: 14, outline: 'none' }}>
         <div style={{ display: 'flex', gap: 12 }}>
           <span style={{ width: 42, height: 42, flex: 'none', borderRadius: '50%', background: 'rgba(229,62,62,0.1)', color: '#C62B22', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

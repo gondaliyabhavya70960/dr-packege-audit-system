@@ -3,8 +3,8 @@ import { ChevronDown, ChevronUp, LayoutGrid, Package, Truck } from 'lucide-react
 
 const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 
-const MENU_BG = 'rgba(var(--surf-rgb),0.72)';
-const MENU_BORDER = '1px solid rgba(var(--surf-rgb),0.7)';
+const MENU_BG = 'rgba(var(--surf-rgb),0.88)';
+const MENU_BORDER = '1px solid rgba(var(--surf-rgb),0.9)';
 
 export default function TabBar({ ctx }) {
   const { s, set, openPlayer, openList } = ctx;
@@ -103,7 +103,7 @@ export default function TabBar({ ctx }) {
                       right: 0,
                       width: 280,
                       maxWidth: '78vw',
-                      borderRadius: 22,
+                      borderRadius: 18,
                       padding: 8,
                       display: 'flex',
                       flexDirection: 'column',

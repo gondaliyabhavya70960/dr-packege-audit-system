@@ -24,7 +24,7 @@ export default function FlagRemarksModal({ items, step, cta, onCancel, onSave })
   };
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(28,20,32,0.32)', backdropFilter: 'blur(14px) saturate(1.4)', WebkitBackdropFilter: 'blur(14px) saturate(1.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(22,16,28,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="flag-remarks-title" tabIndex={-1} style={{ ...glassSheet, borderRadius: 24, width: 560, maxWidth: '100%', maxHeight: '88vh', overflow: 'auto', padding: 22, display: 'flex', flexDirection: 'column', gap: 14, outline: 'none' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <span id="flag-remarks-title" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 18, fontWeight: 700 }}>
