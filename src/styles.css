@@ -261,6 +261,22 @@ textarea {
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
+/* Overview widget row: order summary + the two working lists, three across.
+   Mid widths keep the two donuts side by side with the summary spanning above. */
+.home-widgets {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr 1.25fr;
+  gap: 16px;
+  align-items: stretch;
+}
+@media (max-width: 1240px) {
+  .home-widgets {
+    grid-template-columns: 1fr 1fr;
+  }
+  .home-widgets > :first-child {
+    grid-column: 1 / -1;
+  }
+}
 .config-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -328,6 +344,12 @@ textarea {
   }
   .config-grid {
     grid-template-columns: 1fr;
+  }
+  .home-widgets {
+    grid-template-columns: 1fr;
+  }
+  .home-widgets > :first-child {
+    grid-column: auto;
   }
   .status-chips {
     display: none !important;

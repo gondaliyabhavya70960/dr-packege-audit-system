@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag } from 'lucide-react';
+import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, Gauge } from 'lucide-react';
 import { MONO, MUTE, glass, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import GettingStarted from '../components/GettingStarted.jsx';
@@ -86,21 +86,21 @@ function Donut({ data, total, size = 132, thickness = 16 }) {
   );
 }
 
-// screenshot-style KPI card: coloured left rule, title + icon, big value, sub-line
-function KpiCard({ accent, title, value, unit, sub, subColor, Icon }) {
+// one stat line inside the combined summary widget: icon chip · title/sub · big value
+function SummaryStat({ color, bg, title, value, unit, sub, subColor, Icon }) {
   return (
-    <div style={{ ...glass, padding: 18, borderLeft: '3px solid ' + accent, display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-        <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--mute-2)' }}>{title}</span>
-        <span style={{ width: 30, height: 30, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: accent + '1a', color: accent }}>
-          <Icon size={16} aria-hidden="true" />
-        </span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--surf-rgb),0.5)', border: '1px solid rgba(var(--surf-rgb),0.6)', borderRadius: 14, padding: '12px 14px' }}>
+      <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg, color }}>
+        <Icon size={19} aria-hidden="true" />
+      </span>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+        <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink-2)' }}>{title}</span>
+        <span style={{ fontSize: 12, color: subColor || 'var(--mute)' }}>{sub}</span>
       </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 7 }}>
-        <span style={{ fontSize: 30, fontWeight: 800, color: 'var(--ink-2)', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</span>
-        {unit && <span style={{ fontSize: 14, color: 'var(--mute)' }}>{unit}</span>}
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+        <span style={{ fontSize: 24, fontWeight: 800, color: 'var(--ink-2)', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</span>
+        {unit && <span style={{ fontSize: 12, color: 'var(--mute)' }}>{unit}</span>}
       </div>
-      {sub && <span style={{ fontSize: 12.5, color: subColor || 'var(--mute)' }}>{sub}</span>}
     </div>
   );
 }
@@ -200,41 +200,26 @@ export default function Home({ ctx }) {
       {/* first-run getting-started checklist (dismissible) */}
       <GettingStarted ctx={ctx} />
 
-      {/* KPI row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
-        <KpiCard accent="var(--accent)" title="Total orders" value={orders.length} unit="orders" sub="Across packaging & transfers" Icon={Package} />
-        <KpiCard accent="#17A35F" title="Completed" value={completedCount} unit="orders" sub="Received & returned" subColor="#0E8A50" Icon={CircleCheck} />
-        <KpiCard accent="#F59E0B" title="In transit" value={transitLabel} sub="Value on the move" Icon={Truck} />
-      </div>
-
-      {/* two working lists with status-mix donuts (stretched to equal height) */}
-      <div className="config-grid" style={{ alignItems: 'stretch' }}>
+      {/* widget row: the combined order summary + the two working lists, three across */}
+      <div className="home-widgets">
+        <div style={{ ...glass, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Gauge size={22} aria-hidden="true" />
+            </span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+              <span style={{ fontSize: 17, fontWeight: 700 }}>Order summary</span>
+              <span style={{ fontSize: 12.5, color: MUTE }}>Totals for the selected period</span>
+            </div>
+          </div>
+          <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, alignContent: 'center' }}>
+            <SummaryStat color="var(--accent)" bg="rgba(var(--accent-rgb),0.1)" title="Total orders" value={orders.length} unit="orders" sub="Across packaging & transfers" Icon={Package} />
+            <SummaryStat color="#17A35F" bg="rgba(23,163,95,0.1)" title="Completed" value={completedCount} unit="orders" sub="Received & returned" subColor="#0E8A50" Icon={CircleCheck} />
+            <SummaryStat color="#F59E0B" bg="rgba(245,158,11,0.12)" title="In transit" value={transitLabel} sub="Value on the move" Icon={Truck} />
+          </div>
+        </div>
         <DonutCard kind="packaging" label="Packaging orders" sub="Customer orders to pack &amp; dispatch" Icon={Package} lst={packaging} />
         <DonutCard kind="transfer" label="Transferring goods" sub="Inter-branch challans &amp; consignments" Icon={Truck} lst={transfer} />
-      </div>
-
-      {/* quick create — typed new-order shortcuts */}
-      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <span style={{ fontSize: 16, fontWeight: 700 }}>Create a new order</span>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
-          {NEW_ORDER_TYPES.map((o) => (
-            <button
-              key={o.type}
-              onClick={() => newOrder(o.type)}
-              className="hv-border-accent"
-              style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
-            >
-              <span style={{ width: 42, height: 42, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
-                <o.Icon size={21} aria-hidden="true" />
-              </span>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
-                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink-2)' }}>{o.label}</span>
-                <span style={{ fontSize: 12.5, color: MUTE }}>{o.sub}</span>
-              </div>
-              <ChevronRight size={18} aria-hidden="true" style={{ color: 'var(--accent)', flex: 'none' }} />
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* counts by status — tiles: icon · big count · label · what it means */}
@@ -267,6 +252,30 @@ export default function Home({ ctx }) {
               </button>
             );
           })}
+        </div>
+      </div>
+
+      {/* quick create — typed new-order shortcuts, the last card on the page */}
+      <div style={{ ...glass, padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <span style={{ fontSize: 16, fontWeight: 700 }}>Create a new order</span>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
+          {NEW_ORDER_TYPES.map((o) => (
+            <button
+              key={o.type}
+              onClick={() => newOrder(o.type)}
+              className="hv-border-accent"
+              style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.6)', borderRadius: 16, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
+            >
+              <span style={{ width: 42, height: 42, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
+                <o.Icon size={21} aria-hidden="true" />
+              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
+                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink-2)' }}>{o.label}</span>
+                <span style={{ fontSize: 12.5, color: MUTE }}>{o.sub}</span>
+              </div>
+              <ChevronRight size={18} aria-hidden="true" style={{ color: 'var(--accent)', flex: 'none' }} />
+            </button>
+          ))}
         </div>
       </div>
     </div>
