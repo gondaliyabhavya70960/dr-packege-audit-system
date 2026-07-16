@@ -1,5 +1,5 @@
 import { MONO, glassFloat, glassPopover } from '../data.js';
-import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell, WandSparkles } from 'lucide-react';
+import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell, WandSparkles, Languages, Check } from 'lucide-react';
 
 const barStyle = {
   ...glassFloat,
@@ -41,7 +41,7 @@ export function ProfileMenu({ ctx, roleChip, roleLine }) {
     <div style={{ position: 'relative' }}>
       <button
         className="hv-white85"
-        onClick={() => set({ profileMenuOpen: !s.profileMenuOpen, notifOpen: false })}
+        onClick={() => set({ profileMenuOpen: !s.profileMenuOpen, notifOpen: false, langOpen: false })}
         style={{ display: 'flex', alignItems: 'center', gap: 9, height: 42, padding: '3px 14px 3px 5px', background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', borderRadius: 999, cursor: 'pointer' }}
       >
         <span style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(var(--accent-rgb),0.14)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700 }}>{userInitial}</span>
@@ -102,7 +102,7 @@ function NotificationsBell({ ctx }) {
     <div style={{ position: 'relative' }}>
       <button
         className="hv-white85"
-        onClick={() => set({ notifOpen: !s.notifOpen, profileMenuOpen: false })}
+        onClick={() => set({ notifOpen: !s.notifOpen, profileMenuOpen: false, langOpen: false })}
         title="Notifications"
         aria-label={'Notifications · ' + items.length + ' new'}
         style={{ position: 'relative', width: 42, height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: 'var(--accent)', borderRadius: '50%', cursor: 'pointer' }}
@@ -125,6 +125,59 @@ function NotificationsBell({ ctx }) {
               </span>
             </button>
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Language selector — English default, with the store's regional languages.
+// Prototype: the choice persists in state; copy stays English for now.
+const LANGS = [
+  { id: 'English', label: 'English' },
+  { id: 'हिन्दी', label: 'हिन्दी · Hindi' },
+  { id: 'ગુજરાતી', label: 'ગુજરાતી · Gujarati' },
+];
+
+function LanguageMenu({ ctx }) {
+  const { s, set, showToast } = ctx;
+  const pick = (l) => {
+    set({ lang: l.id, langOpen: false });
+    if (l.id !== 'English') showToast(l.label + ' selected — full translations are on the roadmap (prototype).');
+  };
+  return (
+    <div style={{ position: 'relative' }}>
+      <button
+        className="hv-white85"
+        onClick={() => set({ langOpen: !s.langOpen, profileMenuOpen: false, notifOpen: false })}
+        aria-haspopup="listbox"
+        aria-expanded={s.langOpen}
+        title="Language"
+        style={{ display: 'flex', alignItems: 'center', gap: 7, height: 38, padding: '0 14px', background: 'rgba(var(--surf-rgb),0.55)', border: '1px solid rgba(var(--surf-rgb),0.75)', color: 'var(--ink-2)', borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+      >
+        <Languages size={15} aria-hidden="true" style={{ color: 'var(--accent)', flex: 'none' }} />
+        {s.lang || 'English'}
+        <span style={{ display: 'flex', color: 'rgba(40,32,38,0.55)' }}>{s.langOpen ? <ChevronUp size={13} aria-hidden="true" /> : <ChevronDown size={13} aria-hidden="true" />}</span>
+      </button>
+      {s.langOpen && (
+        <div role="listbox" style={{ ...glassPopover, position: 'absolute', right: 0, top: 52, width: 220, borderRadius: 18, padding: 8, display: 'flex', flexDirection: 'column', gap: 2, zIndex: 60 }}>
+          <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', color: 'var(--ink)', padding: '8px 12px 6px' }}>LANGUAGE</div>
+          {LANGS.map((l) => {
+            const on = (s.lang || 'English') === l.id;
+            return (
+              <button
+                key={l.id}
+                role="option"
+                aria-selected={on}
+                className="hv-white7"
+                onClick={() => pick(l)}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, textAlign: 'left', border: 'none', cursor: 'pointer', borderRadius: 11, padding: '10px 12px', fontSize: 14, fontWeight: 600, background: on ? 'rgba(var(--accent-rgb),0.1)' : 'transparent', color: on ? 'var(--accent)' : 'var(--ink-2)' }}
+              >
+                <span style={{ flex: 1 }}>{l.label}</span>
+                {on && <Check size={14} aria-hidden="true" />}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
@@ -180,6 +233,7 @@ export default function TopBar({ ctx }) {
       <div style={{ flex: 1 }} />
       <NotificationsBell ctx={ctx} />
       <TourButton onClick={openTour} />
+      <LanguageMenu ctx={ctx} />
       <ProfileMenu ctx={ctx} roleChip={isAdmin ? 'ADMIN' : 'OPERATOR'} roleLine={isAdmin ? 'ADMIN · ALL ACCESS' : 'OPERATOR · PACK · RECEIVE · RETURNS'} />
     </div>
   );
