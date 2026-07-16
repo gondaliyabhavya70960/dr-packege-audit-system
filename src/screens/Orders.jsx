@@ -244,7 +244,6 @@ export default function Orders({ ctx }) {
               const items = o.items.reduce((n, it) => n + it.qty, 0);
               const route = orderRoute(o);
               const sel = s.oSel.includes(o.id);
-              const isDone = ['received', 'delivered', 'returned'].includes(o.statusKey);
               const flagSteps = flagStepsOf(o);
               return (
                 <div
@@ -276,10 +275,7 @@ export default function Orders({ ctx }) {
                   <LastUpdate order={o} openDown={ri < 3} />
                   <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0, flexWrap: 'wrap' }}>
                     <StatusBadge status={o.status} tone={o.tone} />
-                    {/* plain mono side-markers, no icons — DONE and the flag step share one design */}
-                    {isDone && (
-                      <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', color: '#0E8A50', whiteSpace: 'nowrap' }}>DONE</span>
-                    )}
+                    {/* plain mono flag-step marker beside a flagged status — no icon */}
                     {flagSteps.length > 0 && (
                       <span title={'Flagged at ' + flagSteps.join(' & ').toLowerCase()} style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', color: '#C62B22', whiteSpace: 'nowrap' }}>
                         {flagSteps.join(' · ')}
