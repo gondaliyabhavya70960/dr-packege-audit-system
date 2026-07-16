@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MONO, cardLight, glassPopover, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
 import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, CalendarDays, History } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
@@ -11,29 +11,83 @@ const PAGE_SIZE = 15;
 const DAY = 86400000;
 const START_TODAY = Date.parse('2026-06-15T00:00:00');
 
-// Last-change cell: the newest timeline entry's date/time; hovering shows the
-// last two timeline steps in a popover (the full history lives on the order's
-// Detail page). Popover opens downward on the first rows so it never clips.
+// Last-change cell: the newest timeline entry's date/time. Hover (desktop) or
+// tap (touch screens) opens a popover with that order's timeline, newest first.
+// Popover opens downward on the first rows so it never clips the card edge.
 function LastUpdate({ order, openDown }) {
-  const [hov, setHov] = useState(false);
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef(null);
+  // a tap fires mouseenter + click together — this flag stops the click from
+  // instantly toggling the popover closed again
+  const openedByHover = useRef(false);
+  useEffect(() => {
+    if (!open) return undefined;
+    const onDoc = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+    };
+    const onKey = (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('mousedown', onDoc);
+    document.addEventListener('touchstart', onDoc);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDoc);
+      document.removeEventListener('touchstart', onDoc);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
   const tl = order.timeline || [];
   const last = tl[tl.length - 1];
   if (!last) return <span style={{ fontFamily: MONO, fontSize: 12, color: 'var(--mute-2)' }}>—</span>;
   const [datePart, timePart] = (last.time || '').split(' · ');
-  const recent = tl.slice(-2).reverse();
+  const events = [...tl].reverse();
+
+  const onEnter = () => {
+    if (!open) {
+      openedByHover.current = true;
+      setOpen(true);
+    }
+  };
+  const onLeave = () => {
+    openedByHover.current = false;
+    setOpen(false);
+  };
+  const onTap = (e) => {
+    e.stopPropagation(); // the row itself opens the order
+    if (open && openedByHover.current) {
+      openedByHover.current = false; // hover already opened it — keep it open
+      return;
+    }
+    setOpen((v) => !v);
+  };
+
   return (
-    <div style={{ position: 'relative', minWidth: 0 }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 2, cursor: 'default' }}>
+    <div ref={wrapRef} style={{ position: 'relative', minWidth: 0 }} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+      <button
+        type="button"
+        onClick={onTap}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-label={'Show timeline · last change ' + (last.time || '')}
+        style={{ display: 'flex', flexDirection: 'column', gap: 2, background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left', font: 'inherit', minWidth: 0, maxWidth: '100%' }}
+      >
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: MONO, fontSize: 12, color: 'var(--ink-2)' }}>
           <History size={11} aria-hidden="true" style={{ flex: 'none', color: 'var(--mute-2)' }} />
           {datePart}
         </span>
-        <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{timePart || last.who}</span>
-      </div>
-      {hov && (
-        <div style={{ ...glassPopover, position: 'absolute', left: 0, ...(openDown ? { top: 'calc(100% + 6px)' } : { bottom: 'calc(100% + 6px)' }), width: 272, borderRadius: 14, padding: '12px 14px', zIndex: 70, display: 'flex', flexDirection: 'column', gap: 9 }}>
-          <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', color: 'var(--ink)' }}>LATEST ACTIVITY</span>
-          {recent.map((e, i) => (
+        <span style={{ fontFamily: MONO, fontSize: 11, color: 'var(--mute-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>{timePart || last.who}</span>
+      </button>
+      {open && (
+        <div
+          role="dialog"
+          aria-label={'Timeline for ' + order.id}
+          onClick={(e) => e.stopPropagation()}
+          style={{ ...glassPopover, position: 'absolute', left: 0, ...(openDown ? { top: 'calc(100% + 6px)' } : { bottom: 'calc(100% + 6px)' }), width: 280, borderRadius: 14, padding: '12px 14px', zIndex: 70, display: 'flex', flexDirection: 'column', gap: 9, maxHeight: 262, overflowY: 'auto' }}
+        >
+          <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', color: 'var(--ink)' }}>TIMELINE · {order.id}</span>
+          {events.map((e, i) => (
             <div key={i} style={{ display: 'flex', gap: 9 }}>
               <span style={{ width: 8, height: 8, flex: 'none', borderRadius: '50%', marginTop: 4, background: i === 0 ? 'var(--accent)' : 'rgba(var(--ink-rgb),0.25)' }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
@@ -42,7 +96,7 @@ function LastUpdate({ order, openDown }) {
               </div>
             </div>
           ))}
-          <span style={{ fontSize: 11.5, color: 'var(--mute-2)', borderTop: '1px solid rgba(var(--ink-rgb),0.08)', paddingTop: 7 }}>Open the order for the full timeline.</span>
+          <span style={{ fontSize: 11.5, color: 'var(--mute-2)', borderTop: '1px solid rgba(var(--ink-rgb),0.08)', paddingTop: 7 }}>Open the order for clips &amp; full details.</span>
         </div>
       )}
     </div>
