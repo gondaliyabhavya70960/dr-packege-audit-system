@@ -1,6 +1,6 @@
-import { Fragment, useState } from 'react';
-import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, Gauge, ListChecks, PackagePlus } from 'lucide-react';
-import { MONO, MUTE, cardLight, surfaceSubtle, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
+import { useState } from 'react';
+import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, CalendarDays } from 'lucide-react';
+import { MONO, MUTE, cardLight, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import GettingStarted from '../components/GettingStarted.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
@@ -87,21 +87,22 @@ function Donut({ data, total, size = 118, thickness = 14 }) {
   );
 }
 
-// one stat line inside the combined summary widget: icon chip · title/sub · big value
-function SummaryStat({ color, bg, title, value, unit, sub, subColor, Icon }) {
+// one summary stat as its own card: coloured left rule, title · big value · sub,
+// icon chip on the right — the reference dashboard's stat-tile recipe
+function StatTile({ color, bg, title, value, unit, sub, Icon }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 11, ...surfaceSubtle, borderRadius: 14, padding: '10px 13px' }}>
-      <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg, color }}>
+    <div style={{ ...cardLight, borderLeft: '4px solid ' + color, flex: 1, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: 1, minWidth: 0 }}>
+        <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink-2)' }}>{title}</span>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 5 }}>
+          <span style={{ fontSize: 24, fontWeight: 800, color: 'var(--ink-2)', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</span>
+          {unit && <span style={{ fontSize: 12, color: 'var(--mute)' }}>{unit}</span>}
+        </div>
+        <span style={{ fontSize: 12, color: 'var(--mute)' }}>{sub}</span>
+      </div>
+      <span style={{ width: 42, height: 42, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg, color }}>
         <Icon size={19} aria-hidden="true" />
       </span>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
-        <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink-2)' }}>{title}</span>
-        <span style={{ fontSize: 12, color: subColor || 'var(--mute)' }}>{sub}</span>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-        <span style={{ fontSize: 24, fontWeight: 800, color: 'var(--ink-2)', lineHeight: 1, letterSpacing: '-0.01em' }}>{value}</span>
-        {unit && <span style={{ fontSize: 12, color: 'var(--mute)' }}>{unit}</span>}
-      </div>
     </div>
   );
 }
@@ -125,6 +126,7 @@ export default function Home({ ctx }) {
   const transfer = orders.filter(isTransferOrder);
   const packaging = orders.filter((o) => !isTransferOrder(o));
   const completedCount = orders.filter((o) => ['received', 'delivered', 'returned'].includes(o.statusKey)).length;
+  const transitCount = orders.filter((o) => o.statusKey === 'transit').length;
   const transitVal = orders.filter((o) => o.statusKey === 'transit').reduce((n, o) => n + o.valNum, 0);
   const transitLabel = transitVal >= 100000 ? '₹' + (transitVal / 100000).toFixed(2) + 'L' : '₹' + transitVal.toLocaleString('en-IN');
 
@@ -144,9 +146,6 @@ export default function Home({ ctx }) {
   const DonutCard = ({ kind, label, sub, Icon, lst }) => {
     const mix = mixOf(lst);
     const total = lst.length;
-    // legend as two explicit columns with a hairline between them
-    const half = Math.ceil(mix.length / 2);
-    const legendCols = [mix.slice(0, half), mix.slice(half)].filter((c) => c.length > 0);
     return (
       <div style={{ ...cardLight, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -162,28 +161,22 @@ export default function Home({ ctx }) {
             <ChevronRight size={14} aria-hidden="true" />
           </button>
         </div>
-        {/* compact body: small ring + two-column status legend keeps the card short */}
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 16, minWidth: 0 }}>
+        {/* body: ring with the total in the centre + single-column legend (dot · label · count · %) */}
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 18, minWidth: 0 }}>
           <Donut data={mix} total={total} />
-          <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'stretch', gap: 12 }}>
-            {mix.length === 0 && <span style={{ fontSize: 13, color: MUTE, alignSelf: 'center' }}>No orders in this list yet.</span>}
-            {legendCols.map((col, ci) => (
-              <Fragment key={ci}>
-                {ci > 0 && <div style={{ width: 1, flex: 'none', background: 'var(--hairline)' }} />}
-                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3, justifyContent: 'center' }}>
-                  {col.map((d) => {
-                    const pct = total ? Math.round((d.value / total) * 100) : 0;
-                    return (
-                      <button key={d.key} onClick={() => openList(kind, d.key, range)} title={d.label + ' · ' + d.value + ' order' + (d.value === 1 ? '' : 's') + ' (' + pct + '%)'} className="hv-ink04" style={{ display: 'flex', alignItems: 'center', gap: 8, border: 'none', background: 'transparent', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', textAlign: 'left', minWidth: 0 }}>
-                        <span style={{ width: 8, height: 8, flex: 'none', borderRadius: '50%', background: d.color }} />
-                        <span style={{ fontSize: 13, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
-                        <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: 'var(--mute-2)', flex: 'none' }}>{pct}%</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </Fragment>
-            ))}
+          <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2, justifyContent: 'center' }}>
+            {mix.length === 0 && <span style={{ fontSize: 13, color: MUTE }}>No orders in this list yet.</span>}
+            {mix.map((d) => {
+              const pct = total ? Math.round((d.value / total) * 100) : 0;
+              return (
+                <button key={d.key} onClick={() => openList(kind, d.key, range)} title={d.label + ' · ' + d.value + ' order' + (d.value === 1 ? '' : 's') + ' (' + pct + '%)'} className="hv-ink04" style={{ display: 'flex', alignItems: 'center', gap: 9, border: 'none', background: 'transparent', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', textAlign: 'left', minWidth: 0 }}>
+                  <span style={{ width: 8, height: 8, flex: 'none', borderRadius: '50%', background: d.color }} />
+                  <span style={{ fontSize: 13, color: 'var(--ink-2)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.label}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: 'var(--ink-2)', flex: 'none' }}>{d.value}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 11.5, color: MUTE, width: 34, textAlign: 'right', flex: 'none' }}>{pct}%</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -204,94 +197,65 @@ export default function Home({ ctx }) {
         <div style={{ flex: 1 }} />
         {/* time window for every figure on this page */}
         <div style={{ position: 'relative', zIndex: 30 }}>
-          <GlassSelect label="PERIOD" value={range} onChange={setRange} options={RANGE_OPTS} minWidth={150} />
+          <GlassSelect value={range} onChange={setRange} options={RANGE_OPTS} minWidth={150} Icon={CalendarDays} />
         </div>
       </div>
 
       {/* first-run getting-started checklist (dismissible) */}
       <GettingStarted ctx={ctx} />
 
-      {/* widget row: the combined order summary + the two working lists, three across */}
+      {/* widget row (reference layout): the two working lists first, then a compact
+          column of summary stat tiles on the right */}
       <div className="home-widgets">
-        <div style={{ ...cardLight, height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Gauge size={22} aria-hidden="true" />
-            </span>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
-              <span style={{ fontSize: 17, fontWeight: 700 }}>Order summary</span>
-              <span style={{ fontSize: 12.5, color: MUTE }}>Totals for the selected period</span>
-            </div>
-          </div>
-          <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, alignContent: 'center' }}>
-            <SummaryStat color="var(--accent)" bg="rgba(var(--accent-rgb),0.1)" title="Total orders" value={orders.length} unit="orders" sub="Across packaging & transfers" Icon={Package} />
-            <SummaryStat color="#17A35F" bg="rgba(23,163,95,0.1)" title="Completed" value={completedCount} unit="orders" sub="Received & returned" subColor="#0E8A50" Icon={CircleCheck} />
-            <SummaryStat color="#F59E0B" bg="rgba(245,158,11,0.12)" title="In transit" value={transitLabel} sub="Value on the move" Icon={Truck} />
-          </div>
-        </div>
         <DonutCard kind="packaging" label="Packaging orders" sub="Customer orders to pack &amp; dispatch" Icon={Package} lst={packaging} />
         <DonutCard kind="transfer" label="Transferring goods" sub="Inter-branch challans &amp; consignments" Icon={Truck} lst={transfer} />
-      </div>
-
-      {/* counts by status — tiles: icon · big count · label · what it means */}
-      <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <ListChecks size={22} aria-hidden="true" />
-          </span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 17, fontWeight: 700 }}>Orders by status</span>
-              <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{orders.length}</span>
-            </div>
-            <span style={{ fontSize: 12.5, color: MUTE }}>Every stage across packaging &amp; transfers — tap a tile to open that list</span>
-          </div>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 12 }}>
-          {statuses.map((st) => {
-            const Icon = STATUS_ICONS[st.key] || Package;
-            const color = STATUS_COLORS[st.key] || '#94A3B8';
-            return (
-              <button
-                key={st.key}
-                onClick={() => openList(st.kind, st.key, range)}
-                className="hv-border-accent"
-                style={{ ...surfaceSubtle, borderRadius: 14, padding: '16px 16px 14px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10, opacity: st.n ? 1 : 0.6 }}
-              >
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
-                  <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: color + '1a', color }}>
-                    <Icon size={19} aria-hidden="true" />
-                  </span>
-                  <span style={{ fontSize: 28, fontWeight: 700, lineHeight: 1, color: st.n ? 'var(--ink-2)' : 'var(--mute)' }}>{st.n}</span>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                  <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink-2)' }}>{st.label}</span>
-                  <span style={{ fontSize: 12.5, color: 'var(--mute)', lineHeight: 1.4 }}>{STATUS_DESCS[st.key] || ''}</span>
-                </div>
-              </button>
-            );
-          })}
+        <div className="home-stats">
+          <StatTile color="var(--accent)" bg="rgba(var(--accent-rgb),0.1)" title="Total orders" value={orders.length} unit="orders" sub="Across packaging & transfers" Icon={Package} />
+          <StatTile color="#17A35F" bg="rgba(23,163,95,0.1)" title="Completed" value={completedCount} unit="orders" sub="Received & returned" Icon={CircleCheck} />
+          <StatTile color="#F59E0B" bg="rgba(245,158,11,0.12)" title="In transit" value={transitLabel} sub={transitCount + ' order' + (transitCount === 1 ? '' : 's') + ' on the move'} Icon={Truck} />
         </div>
       </div>
 
-      {/* quick create — typed new-order shortcuts, the last card on the page */}
-      <div style={{ ...cardLight, padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ width: 44, height: 44, flex: 'none', borderRadius: 13, background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <PackagePlus size={22} aria-hidden="true" />
-          </span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1, minWidth: 0 }}>
-            <span style={{ fontSize: 17, fontWeight: 700 }}>Create a new order</span>
-            <span style={{ fontSize: 12.5, color: MUTE }}>Pick a type — the order form opens in a popup</span>
-          </div>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
+      {/* counts by status — bare section heading, one white tile per status */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+        <span style={{ fontSize: 17, fontWeight: 700 }}>Orders by status</span>
+        <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 9px', borderRadius: 999, background: 'rgba(var(--accent-rgb),0.08)', color: 'var(--accent)' }}>{orders.length}</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 12 }}>
+        {statuses.map((st) => {
+          const Icon = STATUS_ICONS[st.key] || Package;
+          const color = STATUS_COLORS[st.key] || '#94A3B8';
+          return (
+            <button
+              key={st.key}
+              onClick={() => openList(st.kind, st.key, range)}
+              className="hv-border-accent"
+              style={{ ...cardLight, padding: '16px 16px 14px', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 10, opacity: st.n ? 1 : 0.6 }}
+            >
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
+                <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: color + '1a', color }}>
+                  <Icon size={19} aria-hidden="true" />
+                </span>
+                <span style={{ fontSize: 28, fontWeight: 700, lineHeight: 1, color: st.n ? 'var(--ink-2)' : 'var(--mute)' }}>{st.n}</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink-2)' }}>{st.label}</span>
+                <span style={{ fontSize: 12.5, color: 'var(--mute)', lineHeight: 1.4 }}>{STATUS_DESCS[st.key] || ''}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* quick create — bare section heading + one white card per order type */}
+      <div style={{ fontSize: 17, fontWeight: 700, marginTop: 6 }}>Create a new order</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
           {NEW_ORDER_TYPES.map((o) => (
             <button
               key={o.type}
               onClick={() => newOrder(o.type)}
               className="hv-border-accent"
-              style={{ display: 'flex', alignItems: 'center', gap: 12, ...surfaceSubtle, borderRadius: 14, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, ...cardLight, padding: '14px 16px', cursor: 'pointer', textAlign: 'left' }}
             >
               <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: o.color + '1a', color: o.color }}>
                 <o.Icon size={19} aria-hidden="true" />
@@ -303,7 +267,6 @@ export default function Home({ ctx }) {
               <ChevronRight size={18} aria-hidden="true" style={{ color: 'var(--accent)', flex: 'none' }} />
             </button>
           ))}
-        </div>
       </div>
     </div>
   );

@@ -283,20 +283,27 @@ textarea {
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
-/* Overview widget row: order summary + the two working lists, three across.
-   Mid widths keep the two donuts side by side with the summary spanning above. */
+/* Overview widget row (reference layout): the two working lists side by side
+   with a compact column of summary stat tiles on the right. Below tablet width
+   everything stacks and the stat tiles re-flow into a row grid. */
 .home-widgets {
   display: grid;
-  grid-template-columns: 1fr 1.25fr 1.25fr;
+  grid-template-columns: 1.15fr 1.15fr minmax(250px, 0.85fr);
   gap: 16px;
   align-items: stretch;
 }
-@media (max-width: 1240px) {
+.home-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+@media (max-width: 1080px) {
   .home-widgets {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
-  .home-widgets > :first-child {
-    grid-column: 1 / -1;
+  .home-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   }
 }
 .config-grid {
@@ -379,12 +386,6 @@ textarea {
   }
   .config-grid {
     grid-template-columns: 1fr;
-  }
-  .home-widgets {
-    grid-template-columns: 1fr;
-  }
-  .home-widgets > :first-child {
-    grid-column: auto;
   }
   .status-chips {
     display: none !important;

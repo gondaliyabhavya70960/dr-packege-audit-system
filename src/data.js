@@ -778,6 +778,8 @@ export function withOrderFlags(orders, id, entries) {
 
 export const initialState = {
   screen: 'login',
+  lang: 'English', // UI language (topbar selector; translations are a prototype)
+  langOpen: false, // language dropdown open
   showWelcome: false, // first-run welcome screen (shown once after login)
   gsDone: [], // completed getting-started checklist step keys (persisted)
   gsDismissed: false, // getting-started checklist dismissed (persisted)
