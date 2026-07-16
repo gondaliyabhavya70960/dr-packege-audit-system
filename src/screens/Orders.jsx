@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MONO, cardLight, glassPopover, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
-import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, Check, CalendarDays, Flag, History } from 'lucide-react';
+import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, CalendarDays, History } from 'lucide-react';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
 import NewOrderMenu from '../components/NewOrderMenu.jsx';
@@ -276,14 +276,13 @@ export default function Orders({ ctx }) {
                   <LastUpdate order={o} openDown={ri < 3} />
                   <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0, flexWrap: 'wrap' }}>
                     <StatusBadge status={o.status} tone={o.tone} />
+                    {/* plain mono side-markers, no icons — DONE and the flag step share one design */}
                     {isDone && (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', color: '#0E8A50' }}>
-                        <Check size={11} strokeWidth={3} aria-hidden="true" /> DONE
-                      </span>
+                      <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', color: '#0E8A50', whiteSpace: 'nowrap' }}>DONE</span>
                     )}
                     {flagSteps.length > 0 && (
-                      <span title={'Flagged at ' + flagSteps.join(' & ').toLowerCase()} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: MONO, fontSize: 9.5, fontWeight: 700, letterSpacing: '0.06em', padding: '3px 9px', borderRadius: 999, background: 'rgba(229,62,62,0.08)', border: '1px solid rgba(229,62,62,0.3)', color: '#C62B22', whiteSpace: 'nowrap' }}>
-                        <Flag size={10} aria-hidden="true" style={{ flex: 'none' }} /> {flagSteps.join(' · ')}
+                      <span title={'Flagged at ' + flagSteps.join(' & ').toLowerCase()} style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', color: '#C62B22', whiteSpace: 'nowrap' }}>
+                        {flagSteps.join(' · ')}
                       </span>
                     )}
                   </span>
