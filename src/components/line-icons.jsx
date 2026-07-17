@@ -1,9 +1,9 @@
 // Line-icon layer — the app's single icon source.
 //
 // Collection: Phosphor (https://phosphoricons.com) via @phosphor-icons/react,
-// rendered at the "bold" weight → 2.5px line icons that stay clearly visible
-// at small sizes. Each export keeps the name and prop shape the app has always
-// used (size / style / aria-*), so call sites read the same.
+// rendered at the "regular" weight → 2px line icons. Each export keeps the
+// name and prop shape the app has always used (size / style / aria-*), so
+// call sites read the same.
 //
 // Brand rules (see docs/icons.md):
 //   · featured icons carry the brand red  → color: 'var(--accent)'  (#AA182C)
@@ -30,7 +30,7 @@ import {
 // APIs are accepted and ignored so call sites never break.
 const make = (P, name) => {
   function Icon({ size = 24, tone, style, strokeWidth, fill, ...rest }) {
-    return <P size={size} weight="bold" style={tone === 'brand' ? { color: 'var(--accent)', ...style } : style} {...rest} />;
+    return <P size={size} weight="regular" style={tone === 'brand' ? { color: 'var(--accent)', ...style } : style} {...rest} />;
   }
   Icon.displayName = name;
   return Icon;

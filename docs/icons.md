@@ -1,7 +1,7 @@
 # Icon system — reference & how-to
 
 Every UI icon in this app is a **line icon** from **one collection: [Phosphor](https://phosphoricons.com)**,
-rendered at the **bold** weight (2.5px strokes — clearly visible line icons), plus a single
+rendered at the **regular** weight (2px strokes), plus a single
 in-house brand glyph. This doc covers the collection, the brand colour rules, every icon in use,
 how to use icons in code, and exactly what to do to add a new one.
 
@@ -13,7 +13,7 @@ how to use icons in code, and exactly what to do to add a new one.
 |---|---|
 | Collection | **Phosphor** — open source (MIT), 1,500+ glyphs, every one available as a line icon |
 | Package | `@phosphor-icons/react` — installed (see `package.json`) |
-| Weight | **`bold`** everywhere — 2.5px line icons that stay clearly visible at small sizes, set once in the app layer. (Other weights — thin/light/regular/duotone/fill — exist but are not used; line only.) |
+| Weight | **`regular`** everywhere — 2px line icons, set once in the app layer. (Other weights — thin/light/bold/duotone/fill — exist but are not used; line only.) |
 | Delivery | Tree-shaken SVG React components — only imported icons ship in the bundle. No CDN, no icon font, no stylesheet. |
 | App entry point | **`src/components/line-icons.jsx`** — the single place icons are imported and re-exported as app components. Screens/components import from here, never from Phosphor directly. |
 | Browse / search | <https://phosphoricons.com> — search, note the PascalCase name (`magnifying-glass` → `MagnifyingGlass`) |
@@ -81,7 +81,7 @@ House conventions:
    </span>
    ```
 5. **Line icons only, one collection only** — never mix in filled icons, other sets, or emoji.
-   The `bold` weight is fixed inside `line-icons.jsx`; don't override it per call site.
+   The `regular` (2px) weight is fixed inside `line-icons.jsx`; don't override it per call site.
 
 ---
 
