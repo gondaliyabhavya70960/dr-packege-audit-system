@@ -1,4 +1,4 @@
-import { X } from './fa.jsx';
+import { X } from './line-icons.jsx';
 import { tourDefs, glassPopover } from '../data.js';
 import useDialog from './useDialog.js';
 

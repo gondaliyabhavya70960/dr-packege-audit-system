@@ -1,4 +1,4 @@
-import { Camera } from '../components/fa.jsx';
+import { Camera } from '../components/line-icons.jsx';
 import { MONO, glass, feedBg, fmt, withOrderFlags } from '../data.js';
 import RemarkBox from '../components/RemarkBox.jsx';
 import RecordButton from '../components/RecordButton.jsx';

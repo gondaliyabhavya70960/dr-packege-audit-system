@@ -1,4 +1,4 @@
-import { Play, Square } from './fa.jsx';
+import { Play, Square } from './line-icons.jsx';
 
 // Shared Start / Stop recording toggle. Red "Stop" while live, accent "Start"
 // when idle. Used on every live camera-feed card (Pack / Receive / Return) and

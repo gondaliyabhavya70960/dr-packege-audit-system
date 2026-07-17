@@ -1,9 +1,9 @@
 # Icon system — reference & how-to
 
-Every UI icon in this app comes from **one collection: [Font Awesome 6 Free](https://fontawesome.com/icons)**
-(solid + regular styles), plus a single in-house brand glyph. This doc covers the collection,
-the brand colour rules, every icon in use, how to use icons in code, and exactly what to do
-to add a new one.
+Every UI icon in this app is a **line icon** from **one collection: [Phosphor](https://phosphoricons.com)**,
+rendered at the **light** weight (thin ~1.5px strokes, matching the brand sheet), plus a single
+in-house brand glyph. This doc covers the collection, the brand colour rules, every icon in use,
+how to use icons in code, and exactly what to do to add a new one.
 
 ---
 
@@ -11,59 +11,68 @@ to add a new one.
 
 | | |
 |---|---|
-| Collection | **Font Awesome 6 Free** — solid (filled) + regular (outline) styles |
-| Packages | `@fortawesome/react-fontawesome`, `@fortawesome/fontawesome-svg-core`, `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons` — all installed (see `package.json`) |
-| Delivery | Tree-shaken SVG imports — only imported icons ship in the bundle. No CDN, no icon font, no kit script. The core stylesheet loads once in `app/layout.jsx`. |
-| App entry point | **`src/components/fa.jsx`** — the single place icons are imported and re-exported as app components. Screens/components import from here, never from Font Awesome directly. |
-| Browse / search | <https://fontawesome.com/icons> — filter by **Free**; note the icon name (`truck-fast` → `faTruckFast`) |
+| Collection | **Phosphor** — open source (MIT), 1,500+ glyphs, every one available as a line icon |
+| Package | `@phosphor-icons/react` — installed (see `package.json`) |
+| Weight | **`light`** everywhere — pure thin line icons, set once in the app layer. (Other weights — thin/regular/bold/duotone/fill — exist but are not used; line only.) |
+| Delivery | Tree-shaken SVG React components — only imported icons ship in the bundle. No CDN, no icon font, no stylesheet. |
+| App entry point | **`src/components/line-icons.jsx`** — the single place icons are imported and re-exported as app components. Screens/components import from here, never from Phosphor directly. |
+| Browse / search | <https://phosphoricons.com> — search, note the PascalCase name (`magnifying-glass` → `MagnifyingGlass`) |
 
-**Custom icon:** `PackageIcon` (brand package glyph) in `src/components/icons.jsx` — used on the
-login mock card and the welcome screen. **Brand image (not an icon):** `public/assets/mayave-logo.png`.
+**Custom icon:** `PackageIcon` (brand package glyph) in `src/components/icons.jsx` — login mock card
+and welcome screen. **Brand image (not an icon):** `public/assets/mayave-logo.png`; the favicon is
+the uploaded brand mark with a dark-scheme media query.
 
 ---
 
-## 2 · Brand colours for icons
+## 2 · Icon colours — brand, status & condition
 
-From the brand sheet — use these roles, in app tokens where they exist:
+From the brand sheet, with the app's tokens:
 
-| Role | Hex | App token | Icons that use it |
+| Role | Hex | App token | Applied to |
 |---|---|---|---|
-| **Primary / brand red** | `#AA182C` | `var(--accent)` | **Featured icons** — section-header chips, primary actions, the bell, Tour, nav-active states, anything that identifies a feature |
-| Primary text | `#171717` | `var(--ink)` / `var(--ink-2)` | **Utility icons** that sit with dark text — chevrons, sort arrows, calendar, search-adjacent controls |
-| Secondary text | `#5D5D5D` | `var(--mute)` / `var(--mute-2)` | Quiet/inline utility icons (history marker, muted chevrons) |
-| Backgrounds | `#FFFFFF` / `#EAEAEA` / `#F4F4F4` | `--surface` / `--surface-soft` | Icon chips sit on these; the featured chip tint is `rgba(var(--accent-rgb),0.1)` |
+| **Primary / brand red** | `#AA182C` | `var(--accent)` | **Featured icons** — section-header chips, primary actions, bell, Tour, nav-active states. Shorthand: `tone="brand"`. |
+| Primary text | `#171717` | `var(--ink)` / `var(--ink-2)` | Utility icons beside dark text — chevrons, sort arrows, calendar, toolbar controls |
+| Secondary text | `#5D5D5D` | `var(--mute)` / `var(--mute-2)` | Quiet inline utility icons |
+| Backgrounds | `#FFFFFF` / `#EAEAEA` / `#F4F4F4` | `--surface` / `--surface-soft` | Icon chips sit on these; brand chips use `rgba(var(--accent-rgb),0.1)` |
 
-**The default rule:** a *featured* icon is brand red; a *utility* icon follows its text tone.
-Semantic colours stay semantic (green = verified `#0E8A50`, red = flag/danger `#C62B22`,
-amber = in-flight, per-status hues on the status tiles), and icons on filled/accent buttons
-render white via `currentColor`.
+**Status-wise & condition-wise colours (rule):** an icon that represents a *status* or a
+*condition* always takes **that status' colour**, never a fixed neutral:
 
-In code, icons inherit `currentColor` by default; the wrapper also accepts a shorthand:
-
-```jsx
-<Truck size={16} tone="brand" />   // → color: var(--accent)  (#AA182C)
-```
+- **Overview status tiles** — each icon uses its status colour from `STATUS_COLORS`
+  (`src/screens/Home.jsx`): draft `#94A3B8`, packed `#3B82F6`, transit `#F59E0B`,
+  receiving `#8B5CF6`, received `#10B981`, delivery `#06B6D4`, delivered `#22C55E`,
+  returning `#F97316`, return-transit `#FB923C`, return-received `#A855F7`,
+  returned `#14B8A6`, flagged `#DC2626`.
+- **Order timeline** — every event node is coloured by `timelineTone()`
+  (`src/screens/OrderDetails.jsx`): flag red, refund teal, return orange, delivered green,
+  transit amber, placed blue, received green, draft grey; pack/record events carry the brand red.
+- **Item condition** — the item glyph in detection thumbs takes the condition tone
+  (`condTone`): verified green, damaged/disputed/missing red, pending amber.
+- **Session scan states** — scanned green check, unknown red `!`, waiting outline.
+- Semantic constants stay: verified green `#0E8A50`, danger red `#C62B22`; icons on filled
+  accent buttons render white via `currentColor`.
 
 ---
 
 ## 3 · How to use an icon
 
-Import **from `src/components/fa.jsx`** (not from Font Awesome packages) and render with a size:
+Import **from `src/components/line-icons.jsx`** (never from `@phosphor-icons/react` directly)
+and render with a size:
 
 ```jsx
-import { Truck, Flag } from '../components/fa.jsx';
+import { Truck, Flag } from '../components/line-icons.jsx';
 
 <Truck size={16} aria-hidden="true" style={{ flex: 'none' }} />
+<Truck size={16} tone="brand" />                        // brand red shorthand
 <Flag size={14} aria-hidden="true" style={{ color: '#C62B22' }} />
 ```
 
 House conventions:
 
-1. **`aria-hidden="true"` on decorative icons**; put an `aria-label` on icon-only buttons.
+1. **`aria-hidden="true"` on decorative icons**; `aria-label` on icon-only buttons.
 2. **`style={{ flex: 'none' }}`** in flex rows so the icon never squashes.
 3. **Sizes:** 10–11px inline markers · 13–16px buttons/chips · 19px tile chips · 22px section-header chips.
-   (Sizing is font-size based, so wide glyphs keep their natural aspect ratio.)
-4. **Icon chip pattern** (tinted square behind a featured icon):
+4. **Icon chip pattern** (tinted square behind a featured/status icon):
    ```jsx
    <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -71,94 +80,91 @@ House conventions:
      <Icon size={19} aria-hidden="true" />
    </span>
    ```
-   For brand-red chips: `background: 'rgba(var(--accent-rgb),0.1)', color: 'var(--accent)'`.
-5. **One collection only** — never mix in other icon sets or emoji as UI icons.
+5. **Line icons only, one collection only** — never mix in filled icons, other sets, or emoji.
+   The `light` weight is fixed inside `line-icons.jsx`; don't override it per call site.
 
 ---
 
 ## 4 · What to do to add a new icon to the website
 
-1. **Find it** at <https://fontawesome.com/icons> — filter **Free**, prefer **regular** (outline)
-   when available for utility icons, **solid** otherwise.
-2. **Register it in `src/components/fa.jsx`** — import the `fa*` icon from
-   `@fortawesome/free-solid-svg-icons` or `free-regular-svg-icons` and add one line:
+1. **Find it** at <https://phosphoricons.com> (every glyph has a line form — pick by meaning).
+2. **Register it in `src/components/line-icons.jsx`** — import the Phosphor component and add one line:
    ```jsx
-   export const QrCode = make(faQrcode, 'QrCode');
+   import { QrCode as PQrCode } from '@phosphor-icons/react';
+   export const QrCode = make(PQrCode, 'QrCode');
    ```
-3. **Import it from `fa.jsx`** in your screen/component and render with the conventions above.
-4. **No install step** — the packages are already dependencies. (Pro styles like *light/thin*
-   would need a Font Awesome Pro licence + kit package; Free solid/regular is the standard here.)
-5. **Build to verify:** `npm run build`.
+3. **Import it from `line-icons.jsx`** in your screen/component and render with the conventions above.
+4. **Colour it by role:** featured → `tone="brand"`; status/condition → the status' colour;
+   utility → let it inherit the text colour.
+5. **No install step** — the package is already a dependency. **Build to verify:** `npm run build`.
 
 ### Where icons are registered for common cases
 
 | You want to… | Edit this |
 |---|---|
-| Add/point any icon at a Font Awesome glyph | `src/components/fa.jsx` (single mapping file) |
+| Point any app icon at a Phosphor glyph | `src/components/line-icons.jsx` (single mapping file) |
 | New **order status** icon/colour/description | `STATUS_ICONS` / `STATUS_COLORS` / `STATUS_DESCS` in `src/screens/Home.jsx` |
-| Map a new **timeline event** wording to an icon | `timelineIcon()` in `src/screens/OrderDetails.jsx` |
+| New **timeline event** icon or colour | `timelineIcon()` / `timelineTone()` in `src/screens/OrderDetails.jsx` |
 | **Bottom-nav tab** icon | `navTabs` in `src/components/TabBar.jsx` |
 | **Order type** icon + colour | `NEW_ORDER_TYPES` in `src/components/NewOrderMenu.jsx` |
 | **Top-bar control** | `src/components/TopBar.jsx` (see `TourButton` / `LanguageMenu`) |
 
 ---
 
-## 5 · Every icon in use (app name → Font Awesome glyph → where)
+## 5 · Every icon in use (app name → Phosphor glyph → where)
 
-The app keeps its own stable names in `fa.jsx`; the table shows the Font Awesome glyph behind each.
+The app keeps its own stable names in `line-icons.jsx`; the table shows the Phosphor glyph behind each.
 
-| App name | FA glyph (style) | Used in |
+| App name | Phosphor glyph | Used in |
 |---|---|---|
-| AlertTriangle / TriangleAlert | `triangle-exclamation` (solid) | Dashboard warning banner · packaging mismatch dialog |
-| ArrowDown / ArrowUp / ArrowUpDown | `arrow-down` / `arrow-up` / `arrows-up-down` (solid) | Orders sort headers |
-| ArrowRight | `arrow-right` (solid) | Orders route arrow · dashboard rows · getting-started/welcome CTAs |
-| BadgeCheck | `circle-check` (solid) | Return-Completed status tile · refund timeline icon |
-| Bell | `bell` (regular) | Top bar notifications |
-| Boxes | `boxes-stacked` (solid) | legacy bulk meta (unreachable; removal candidate) |
-| CalendarDays | `calendar-days` (regular) | PLACED filter trigger |
-| Camera | `camera` (solid) | capture still / take photo (3 screens) |
-| Check | `check` (solid) | done/selected marks app-wide (menus, scan circles, hash lines, type radio…) |
-| ChevronDown/Left/Right/Up | `chevron-*` (solid) | menus, back/next, drill-throughs, open/close states |
-| CircleCheck | `circle-check` (regular) | Completed stat · Delivered tile · all-clear line |
-| Compass | `compass` (regular) | getting-started tour step |
-| Download | `download` (solid) | Export CSV |
-| FastForward / Rewind | `forward` / `backward` (solid) | player ±10s |
-| FileSearch | `magnifying-glass-chart` (solid) | welcome search feature · search empty state |
-| FileText | `file-lines` (regular) | Ready-to-Pack tile · draft/challan timeline |
-| Flag | `flag` (solid) | flag markers app-wide |
-| Gauge | `gauge-high` (solid) | Order-summary header chip |
-| Gem | `gem` (regular) | item thumbnails + item rows |
-| Gift | `gift` (solid) | gifts in the create form |
-| History | `clock-rotate-left` (solid) | UPDATED cell · retention pill |
-| Inbox | `inbox` (solid) | Receiving tile · receive timeline/empty state |
-| Languages | `language` (solid) | top-bar language selector |
-| LayoutGrid | `table-cells-large` (solid) | Overview nav tab |
-| ListChecks | `list-check` (solid) | Orders-by-status header chip |
-| Lock | `lock` (solid) | recorded/read-only markers |
-| LogOut / Settings / User | `right-from-bracket` / `gear` (solid) / `user` (regular) | profile menu |
-| MapPin | `location-dot` (solid) | in-transit route line |
-| MonitorPlay | `desktop` (solid) | getting-started live-station step |
-| Package | `box` (solid) | nav Packaging · widget/stat/status icons · pack timeline |
-| PackageCheck | `clipboard-check` (solid) | Received tile |
-| PackageOpen | `box-open` (solid) | Return-Received tile |
-| PackagePlus | `boxes-packing` (solid) | create-order header + popup chips |
-| Pause / Play | `pause` / `play` (solid) | players + sessions |
-| Plus | `plus` (solid) | create triggers, add item, manual add |
-| RefreshCw | `arrows-rotate` (solid) | Pull from Gati |
-| RotateCcw | `rotate-left` (solid) | return tiles/timeline · re-record |
-| ScanLine | `barcode` (solid) | manual SKU input |
-| Search | `magnifying-glass` (solid) | search inputs |
-| SearchX | `magnifying-glass-minus` (solid) | no-match empty state |
-| Send | `paper-plane` (solid) | Out-for-delivery tile |
-| ShieldCheck | `shield-halved` (solid) | SOC-2 pill |
-| ShoppingCart | `cart-shopping` (solid) | e-commerce type · order-placed timeline |
-| Sparkles | `wand-sparkles` (solid) | Test fill |
-| Square | `stop` (solid) | record stop |
-| SquarePen | `pen-to-square` (regular) | pencil edit |
-| Trash2 | `trash-can` (regular) | remove rows |
-| Truck | `truck-fast` (solid — matches the brand sheet) | nav Transfers · transfer/transit everywhere |
-| Undo2 | `reply` (solid) | Return-In-Transit tile · pickup timeline |
-| Video | `video` (solid) | video pills + timeline |
-| WandSparkles | `wand-magic-sparkles` (solid) | Tour button |
-| X | `xmark` (solid) | dismiss/close |
+| AlertTriangle / TriangleAlert | `Warning` | dashboard warning banner · packaging mismatch dialog |
+| ArrowDown / ArrowUp / ArrowUpDown | `ArrowDown` / `ArrowUp` / `ArrowsDownUp` | orders sort headers |
+| ArrowRight | `ArrowRight` | orders route arrow · dashboard rows · getting-started/welcome CTAs |
+| BadgeCheck | `SealCheck` | Return-Completed tile · refund timeline |
+| Bell | `Bell` | top-bar notifications |
+| Boxes | `Stack` | legacy bulk meta (unreachable; removal candidate) |
+| CalendarDays | `CalendarDots` | PLACED filter trigger |
+| Camera | `Camera` | capture still / take photo (3 screens) |
+| Check | `Check` | done/selected marks app-wide |
+| ChevronDown/Left/Right/Up | `CaretDown/Left/Right/Up` | menus, back/next, drill-throughs |
+| CircleCheck | `CheckCircle` | Completed stat · Delivered tile · all-clear line |
+| Compass | `Compass` | getting-started tour step |
+| Download | `DownloadSimple` | Export CSV |
+| FastForward / Rewind | `FastForward` / `Rewind` | player ±10s |
+| FileSearch | `FileMagnifyingGlass` | welcome search feature · search empty state |
+| FileText | `FileText` | Ready-to-Pack tile · draft/challan timeline |
+| Flag | `Flag` | flag markers app-wide |
+| Gauge | `Gauge` | Order-summary header chip |
+| Gem | `Diamond` | item thumbnails + item rows |
+| Gift | `Gift` | gifts in the create form |
+| History | `ClockCounterClockwise` | UPDATED cell · retention pill |
+| Inbox | `Tray` | Receiving tile · receive timeline/empty state |
+| Languages | `Translate` | top-bar language selector |
+| LayoutGrid | `SquaresFour` | Overview nav tab |
+| ListChecks | `ListChecks` | Orders-by-status header chip |
+| Lock | `Lock` | recorded/read-only markers |
+| LogOut / Settings / User | `SignOut` / `GearSix` / `User` | profile menu |
+| MapPin | `MapPin` | in-transit route line |
+| MonitorPlay | `MonitorPlay` | getting-started live-station step |
+| Package | `Package` | nav Packaging · widget/stat/status icons · pack timeline |
+| PackageCheck | `Checks` | Received tile |
+| PackageOpen | `BoxArrowDown` | Return-Received tile |
+| PackagePlus | `BoxArrowUp` | create-order header + popup chips |
+| Pause / Play / Plus | `Pause` / `Play` / `Plus` | players, sessions, create/add actions |
+| RefreshCw | `ArrowsClockwise` | Pull from Gati |
+| RotateCcw | `ArrowCounterClockwise` | return tiles/timeline · re-record |
+| ScanLine | `Barcode` | manual SKU input |
+| Search / SearchX | `MagnifyingGlass` / `MagnifyingGlassMinus` | search inputs · no-match empty state |
+| Send | `PaperPlaneTilt` | Out-for-delivery tile |
+| ShieldCheck | `ShieldCheck` | SOC-2 pill |
+| ShoppingCart | `ShoppingCart` | e-commerce type · order-placed timeline |
+| Sparkles | `Sparkle` | Test fill |
+| Square | `Stop` | record stop |
+| SquarePen | `PencilSimpleLine` | pencil edit |
+| Trash2 | `Trash` | remove rows |
+| Truck | `Truck` | nav Transfers · transfer/transit everywhere |
+| Undo2 | `ArrowUUpLeft` | Return-In-Transit tile · pickup timeline |
+| Video | `VideoCamera` | video pills + timeline |
+| WandSparkles | `MagicWand` | Tour button |
+| X | `X` | dismiss/close |
 | **PackageIcon** *(custom)* | in-house SVG | login mock card · welcome brand circle |

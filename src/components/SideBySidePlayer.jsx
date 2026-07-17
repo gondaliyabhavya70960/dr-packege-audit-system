@@ -1,4 +1,4 @@
-import { Rewind, FastForward, Play, Pause, ChevronLeft, Check } from './fa.jsx';
+import { Rewind, FastForward, Play, Pause, ChevronLeft, Check } from './line-icons.jsx';
 import { MONO, glass, fmt } from '../data.js';
 import PlaybackFrame from './PlaybackFrame.jsx';
 

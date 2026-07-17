@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Flag, Check } from './fa.jsx';
+import { Flag, Check } from './line-icons.jsx';
 import { MONO, glassSheet } from '../data.js';
 import useDialog from './useDialog.js';
 

@@ -1,5 +1,5 @@
-// Brand glyph only. All other UI icons come from Font Awesome via
-// `src/components/fa.jsx` (single source of truth — see docs/icons.md).
+// Brand glyph only. All other UI icons are Phosphor line icons via
+// `src/components/line-icons.jsx` (single source of truth — see docs/icons.md).
 const base = {
   fill: 'none',
   stroke: 'currentColor',
