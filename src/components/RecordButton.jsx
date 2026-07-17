@@ -1,4 +1,4 @@
-import { Play, Square } from 'lucide-react';
+import { Play, Square } from './fa.jsx';
 
 // Shared Start / Stop recording toggle. Red "Stop" while live, accent "Start"
 // when idle. Used on every live camera-feed card (Pack / Receive / Return) and

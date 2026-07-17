@@ -1,4 +1,4 @@
-import { X } from 'lucide-react';
+import { X } from './fa.jsx';
 import { tourDefs, glassPopover } from '../data.js';
 import useDialog from './useDialog.js';
 

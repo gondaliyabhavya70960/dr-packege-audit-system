@@ -1,5 +1,5 @@
 import { MONO, glassFloat, glassPopover } from '../data.js';
-import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell, WandSparkles, Languages, Check } from 'lucide-react';
+import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell, WandSparkles, Languages, Check } from './fa.jsx';
 
 const barStyle = {
   ...glassFloat,

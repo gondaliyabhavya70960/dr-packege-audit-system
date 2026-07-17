@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Camera } from 'lucide-react';
+import { Camera } from './fa.jsx';
 import { MONO, feedBg, fmt, nowStamp } from '../data.js';
 import RecordButton from './RecordButton.jsx';
 

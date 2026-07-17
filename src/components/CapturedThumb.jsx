@@ -1,4 +1,4 @@
-import { Gem } from 'lucide-react';
+import { Gem } from './fa.jsx';
 import { feedBg } from '../data.js';
 
 // Mini "captured frame" shown for a product once it's picked up on the scan

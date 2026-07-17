@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Camera, Flag, Check, Gem, Pause, RotateCcw, TriangleAlert, Play, Plus, ScanLine } from 'lucide-react';
+import { Camera, Flag, Check, Gem, Pause, RotateCcw, TriangleAlert, Play, Plus, ScanLine } from '../components/fa.jsx';
 import { MONO, glass, glassSheet, feedBg, bannerTones, fmt, withOrderFlags } from '../data.js';
 import RemarkBox from '../components/RemarkBox.jsx';
 import RecordButton from '../components/RecordButton.jsx';
