@@ -1,4 +1,4 @@
-import { Check, ShieldCheck, Video, History } from 'lucide-react';
+import { Check, ShieldCheck, Video, History } from '../components/fa.jsx';
 import { MONO, cardLight } from '../data.js';
 import { PackageIcon } from '../components/icons.jsx';
 

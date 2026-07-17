@@ -1,5 +1,5 @@
 import { MONO, glassPopover, cardLight } from '../data.js';
-import { ChevronDown, ChevronUp, LayoutGrid, Package, Truck } from 'lucide-react';
+import { ChevronDown, ChevronUp, LayoutGrid, Package, Truck } from './fa.jsx';
 
 const ADMIN_ONLY_SCREENS = ['search', 'dash-coverage', 'dash-consignment', 'dash-returns', 'dash-flagged', 'dash-stations', 'config'];
 

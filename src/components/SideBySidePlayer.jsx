@@ -1,4 +1,4 @@
-import { Rewind, FastForward, Play, Pause, ChevronLeft, Check } from 'lucide-react';
+import { Rewind, FastForward, Play, Pause, ChevronLeft, Check } from './fa.jsx';
 import { MONO, glass, fmt } from '../data.js';
 import PlaybackFrame from './PlaybackFrame.jsx';
 

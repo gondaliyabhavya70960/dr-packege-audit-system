@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { MONO, cardLight, glassPopover, ORDER_STATUSES, ORDER_CHANNELS, NOW_TS, isTransferOrder, orderRoute } from '../data.js';
-import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, CalendarDays, History } from 'lucide-react';
+import { Search, ChevronRight, ChevronLeft, ArrowRight, ArrowUp, ArrowDown, ArrowUpDown, SearchX, RefreshCw, Download, CalendarDays, History } from '../components/fa.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import GlassSelect from '../components/GlassSelect.jsx';
 import NewOrderMenu from '../components/NewOrderMenu.jsx';

@@ -1,4 +1,4 @@
-import { Check, X, Plus, Package, MonitorPlay, Compass, ArrowRight } from 'lucide-react';
+import { Check, X, Plus, Package, MonitorPlay, Compass, ArrowRight } from './fa.jsx';
 import { MONO, cardLight, surfaceSubtle } from '../data.js';
 
 // Dismissible getting-started checklist on the Overview dashboard. Each step

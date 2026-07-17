@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, ChevronRight, AlertTriangle, Search } from 'lucide-react';
+import { ArrowRight, ChevronRight, AlertTriangle, Search } from '../components/fa.jsx';
 import { MONO, glass, ACCENT, RED, GREEN, PLAIN } from '../data.js';
 import GlassSelect from '../components/GlassSelect.jsx';
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Play, Pause, X, ChevronRight } from 'lucide-react';
+import { Play, Pause, X, ChevronRight } from './fa.jsx';
 import { MONO, feedBg } from '../data.js';
 
 // Inline mini player of the order's previously-recorded step (e.g. the

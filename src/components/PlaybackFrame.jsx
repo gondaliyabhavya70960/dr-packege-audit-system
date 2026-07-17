@@ -1,4 +1,4 @@
-import { Play } from 'lucide-react';
+import { Play } from './fa.jsx';
 import { MONO, feedBg } from '../data.js';
 
 // The dark evidence-video frame shared by Search & playback and the side-by-side

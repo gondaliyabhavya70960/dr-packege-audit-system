@@ -1,5 +1,5 @@
-// Brand glyph only. All other UI icons come from `lucide-react` (single source
-// of truth, matching 24-grid / 2px-stroke / currentColor conventions).
+// Brand glyph only. All other UI icons come from Font Awesome via
+// `src/components/fa.jsx` (single source of truth — see docs/icons.md).
 const base = {
   fill: 'none',
   stroke: 'currentColor',

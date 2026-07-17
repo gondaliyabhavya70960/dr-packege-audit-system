@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck, Gift, PackagePlus } from 'lucide-react';
+import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck, Gift, PackagePlus } from '../components/fa.jsx';
 import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmtMoney, draftItemsValue, ORDER_TYPE_CHANNEL } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import PackRecord from './PackRecord.jsx';
