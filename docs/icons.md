@@ -71,7 +71,24 @@ House conventions:
 
 1. **`aria-hidden="true"` on decorative icons**; `aria-label` on icon-only buttons.
 2. **`style={{ flex: 'none' }}`** in flex rows so the icon never squashes.
-3. **Sizes:** 10–11px inline markers · 13–16px buttons/chips · 19px tile chips · 22px section-header chips.
+3. **Sizes — pick by slot** (these are the sizes actually used; match the slot, don't invent):
+
+   | Slot | Icon size | Container |
+   |---|---|---|
+   | Section-header chips (widget/card headers) | **22px** | 44px rounded square |
+   | Dialog header icon (mismatch alert) | **20px** | 42px circle |
+   | Status / summary / create tile chips | **19px** | 40–44px rounded square |
+   | Empty states (`EmptyState`) | **26px** | 56px circle |
+   | Playback overlay play | **22px** | feed overlay button |
+   | Bell (top bar) | **18px** | 42px round button |
+   | Search-screen input | **17px** | input adornment |
+   | Buttons & menu rows / inputs / nav tabs | **15–16px** | text-height controls |
+   | Timeline event nodes | **14px** | 30px rounded square |
+   | Trust pills / small labels / journey chips | **13–14px** | pill text |
+   | Menu open/close carets, sort arrows, prev-clip controls | **12–13px** | inline |
+   | Inline micro markers (hash ✓, CLIP pill, UPDATED cell, read-only lock) | **11px** | inline mono text |
+   | Record button | **15px** (13px small variant) | round CTA |
+
 4. **Icon chip pattern** (tinted square behind a featured/status icon):
    ```jsx
    <span style={{ width: 40, height: 40, flex: 'none', borderRadius: 12,
@@ -117,54 +134,54 @@ The app keeps its own stable names in `line-icons.jsx`; the table shows the Phos
 
 | App name | Phosphor glyph | Used in |
 |---|---|---|
-| AlertTriangle / TriangleAlert | `Warning` | dashboard warning banner · packaging mismatch dialog |
-| ArrowDown / ArrowUp / ArrowUpDown | `ArrowDown` / `ArrowUp` / `ArrowsDownUp` | orders sort headers |
-| ArrowRight | `ArrowRight` | orders route arrow · dashboard rows · getting-started/welcome CTAs |
-| BadgeCheck | `SealCheck` | Return-Completed tile · refund timeline |
-| Bell | `Bell` | top-bar notifications |
+| AlertTriangle / TriangleAlert | `Warning` | dashboard warning banner **17px** · packaging mismatch dialog header **20px** |
+| ArrowDown / ArrowUp / ArrowUpDown | `ArrowDown` / `ArrowUp` / `ArrowsDownUp` | orders sort headers **12px** |
+| ArrowRight | `ArrowRight` | orders route arrow **12px** · dashboard rows **16px** · getting-started steps **15px** · welcome CTA **16px** |
+| BadgeCheck | `SealCheck` | Return-Completed tile **19px** · refund timeline node **14px** |
+| Bell | `Bell` | top-bar notifications **18px** |
 | Boxes | `Stack` | legacy bulk meta (unreachable; removal candidate) |
-| CalendarDays | `CalendarDots` | PLACED filter trigger |
-| Camera | `Camera` | capture still / take photo (3 screens) |
-| Check | `Check` | done/selected marks app-wide |
-| ChevronDown/Left/Right/Up | `CaretDown/Left/Right/Up` | menus, back/next, drill-throughs |
-| CircleCheck | `CheckCircle` | Completed stat · Delivered tile · all-clear line |
-| Compass | `Compass` | getting-started tour step |
-| Download | `DownloadSimple` | Export CSV |
-| FastForward / Rewind | `FastForward` / `Rewind` | player ±10s |
-| FileSearch | `FileMagnifyingGlass` | welcome search feature · search empty state |
-| FileText | `FileText` | Ready-to-Pack tile · draft/challan timeline |
-| Flag | `Flag` | flag markers app-wide |
-| Gauge | `Gauge` | Order-summary header chip |
-| Gem | `Diamond` | item thumbnails + item rows |
-| Gift | `Gift` | gifts in the create form |
-| History | `ClockCounterClockwise` | UPDATED cell · retention pill |
-| Inbox | `Tray` | Receiving tile · receive timeline/empty state |
-| Languages | `Translate` | top-bar language selector |
-| LayoutGrid | `SquaresFour` | Overview nav tab |
-| ListChecks | `ListChecks` | Orders-by-status header chip |
-| Lock | `Lock` | recorded/read-only markers |
-| LogOut / Settings / User | `SignOut` / `GearSix` / `User` | profile menu |
-| MapPin | `MapPin` | in-transit route line |
-| MonitorPlay | `MonitorPlay` | getting-started live-station step |
-| Package | `Package` | nav Packaging · widget/stat/status icons · pack timeline |
-| PackageCheck | `Checks` | Received tile |
-| PackageOpen | `BoxArrowDown` | Return-Received tile |
-| PackagePlus | `BoxArrowUp` | create-order header + popup chips |
-| Pause / Play / Plus | `Pause` / `Play` / `Plus` | players, sessions, create/add actions |
-| RefreshCw | `ArrowsClockwise` | Pull from Gati |
-| RotateCcw | `ArrowCounterClockwise` | return tiles/timeline · re-record |
-| ScanLine | `Barcode` | manual SKU input |
-| Search / SearchX | `MagnifyingGlass` / `MagnifyingGlassMinus` | search inputs · no-match empty state |
-| Send | `PaperPlaneTilt` | Out-for-delivery tile |
-| ShieldCheck | `ShieldCheck` | SOC-2 pill |
-| ShoppingCart | `ShoppingCart` | e-commerce type · order-placed timeline |
-| Sparkles | `Sparkle` | Test fill |
-| Square | `Stop` | record stop |
-| SquarePen | `PencilSimpleLine` | pencil edit |
-| Trash2 | `Trash` | remove rows |
-| Truck | `Truck` | nav Transfers · transfer/transit everywhere |
-| Undo2 | `ArrowUUpLeft` | Return-In-Transit tile · pickup timeline |
-| Video | `VideoCamera` | video pills + timeline |
-| WandSparkles | `MagicWand` | Tour button |
-| X | `X` | dismiss/close |
-| **PackageIcon** *(custom)* | in-house SVG | login mock card · welcome brand circle |
+| CalendarDays | `CalendarDots` | PLACED filter trigger **17px** |
+| Camera | `Camera` | capture still / take photo (3 screens) **16px** |
+| Check | `Check` | hash-verified lines & remark-added **11px** · login mock ticks & scan circles **13px** · menu/language selected **14px** · login banner & type-tile radio **15px** (11px inside the radio dot) · session "item detected" flash **18px** |
+| ChevronDown/Left/Right/Up | `CaretDown/Left/Right/Up` | open/close carets **13px** · back/next & row chevrons **14–15px** · select triggers **16px** · create tiles **18px** · order-details back circle **19px** |
+| CircleCheck | `CheckCircle` | all-clear line **15px** · Completed stat & Delivered tile **19px** · delivered timeline node **14px** |
+| Compass | `Compass` | getting-started tour step **15px** |
+| Download | `DownloadSimple` | Export CSV **15px** |
+| FastForward / Rewind | `FastForward` / `Rewind` | player ±10s **16px** |
+| FileSearch | `FileMagnifyingGlass` | welcome search feature **16px** · search empty state **26px** |
+| FileText | `FileText` | Ready-to-Pack tile **19px** · draft/challan timeline node **14px** |
+| Flag | `Flag` | session row flag toggles **13px** · needs-attention & save-&-flag **14px** · flagged-items card **15px** · remarks popup title **17px** · Flagged tile **19px** |
+| Gauge | `Gauge` | Order-summary header chip **22px** |
+| Gem | `Diamond` | pack session rows **15px** · create-form item rows **16px** · detection thumbs **19px** (captured thumbs scale at 46% of thumb) |
+| Gift | `Gift` | Add-gift button **13px** · gifts heading **14px** · gift rows **15px** |
+| History | `ClockCounterClockwise` | UPDATED cell **11px** · retention trust pill **14px** |
+| Inbox | `Tray` | Receiving tile **19px** · welcome feature **16px** · receive timeline node **14px** · empty state **26px** |
+| Languages | `Translate` | top-bar language selector **15px** |
+| LayoutGrid | `SquaresFour` | Overview nav tab **16px** |
+| ListChecks | `ListChecks` | Orders-by-status header chip **22px** |
+| Lock | `Lock` | recorded/read-only chip **11px** · recorded tab marker **12px** |
+| LogOut / Settings / User | `SignOut` / `GearSix` / `User` | profile menu rows **16px** |
+| MapPin | `MapPin` | in-transit route line **15px** |
+| MonitorPlay | `MonitorPlay` | getting-started live-station step **15px** |
+| Package | `Package` | nav Packaging tab **16px** · widget header **22px** · Total-orders stat & Packed tile **19px** · pack timeline node **14px** · empty state **26px** |
+| PackageCheck | `Checks` | Received tile **19px** |
+| PackageOpen | `BoxArrowDown` | Return-Received tile **19px** |
+| PackagePlus | `BoxArrowUp` | create-order header + popup chips **22px** |
+| Pause / Play / Plus | `Pause` / `Play` / `Plus` | playback overlay **22px** · record button & clip buttons **15px** (13px small) · keep-recording & add item/manual add **14px** · create trigger **16px** · prev-clip **12–13px** |
+| RefreshCw | `ArrowsClockwise` | Pull from Gati **15px** |
+| RotateCcw | `ArrowCounterClockwise` | Re-record **15px** · return tile **19px** · return timeline node **14px** · empty state **26px** |
+| ScanLine | `Barcode` | manual SKU input **15px** |
+| Search / SearchX | `MagnifyingGlass` / `MagnifyingGlassMinus` | list search inputs **16px** · search screen **17px** · no-match empty state **26px** |
+| Send | `PaperPlaneTilt` | Out-for-delivery tile **19px** |
+| ShieldCheck | `ShieldCheck` | SOC-2 trust pill **14px** |
+| ShoppingCart | `ShoppingCart` | e-commerce type tiles/menu **19px** · order-placed timeline node **14px** |
+| Sparkles | `Sparkle` | Test fill **14px** |
+| Square | `Stop` | record stop **15px** (13px small) |
+| SquarePen | `PencilSimpleLine` | pencil edit **16px** |
+| Trash2 | `Trash` | remove item/gift rows **14px** |
+| Truck | `Truck` | nav Transfers tab **16px** · widget header **22px** · In-transit stat & tile **19px** · transit status chip **11px** · view-tab marker **13px** · journey/dispatch timeline nodes **14px** |
+| Undo2 | `ArrowUUpLeft` | Return-In-Transit tile **19px** · pickup timeline node **14px** |
+| Video | `VideoCamera` | tamper-evident trust pill **14px** · CLIP pills **11px** · recording timeline node **14px** |
+| WandSparkles | `MagicWand` | Tour button **16px** |
+| X | `X` | getting-started dismiss **16px** · tour close **17px** · prev-clip collapse **13px** |
+| **PackageIcon** *(custom)* | in-house SVG | login mock card **20px** · welcome brand circle **30px** |
