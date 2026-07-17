@@ -1,4 +1,4 @@
-import { Package, Inbox, RotateCcw, FileSearch, ArrowRight } from './fa.jsx';
+import { Package, Inbox, RotateCcw, FileSearch, ArrowRight } from './line-icons.jsx';
 import { MONO, glass } from '../data.js';
 import { PackageIcon } from './icons.jsx';
 

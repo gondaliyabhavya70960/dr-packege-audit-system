@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck, Gift, PackagePlus } from '../components/fa.jsx';
+import { Play, SquarePen, ChevronRight, ChevronLeft, Check, Lock, Video, Trash2, Package, Inbox, RotateCcw, Truck, MapPin, Gem, ShoppingCart, Sparkles, Boxes, Plus, Flag, CircleCheck, Undo2, FileText, BadgeCheck, Gift, PackagePlus } from '../components/line-icons.jsx';
 import { MONO, glass, tone, fillTone, synthOrder, PRIORITY_OPTIONS, cardLight, surfaceSubtle, INK, MUTE, HAIRLINE, tabMode, stageClip, orderRoute, feedBg, buildCustomOrder, fmtMoney, draftItemsValue, ORDER_TYPE_CHANNEL } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import PackRecord from './PackRecord.jsx';
@@ -66,6 +66,26 @@ function timelineIcon(label) {
   if (l.includes('challan') || l.includes('draft')) return FileText;
   if (l.includes('capture') || l.includes('record') || l.includes('session')) return Video;
   return Check;
+}
+
+// colour per timeline event, matching the status hues used across the app —
+// icons follow the status/condition they represent, never a fixed neutral
+function timelineTone(label) {
+  const l = (label || '').toLowerCase();
+  const mk = (c) => ({ color: c, bg: c + '1a', border: c + '59' });
+  const brand = { color: 'var(--accent)', bg: 'rgba(var(--accent-rgb),0.12)', border: 'rgba(var(--accent-rgb),0.35)' };
+  if (l.includes('flag')) return mk('#DC2626');
+  if (l.includes('refund') || l.includes('approved')) return mk('#14B8A6');
+  if (l.includes('pickup') || l.includes('picked up')) return mk('#FB923C');
+  if (l.includes('return')) return mk('#F97316');
+  if (l.includes('delivered')) return mk('#22C55E');
+  if (l.includes('dispatch') || l.includes('transit') || l.includes('delivery')) return mk('#F59E0B');
+  if (l.includes('placed')) return mk('#3B82F6');
+  if (l.includes('pack')) return brand; // packing is the brand's hero action
+  if (l.includes('receiv') || l.includes('arrived') || l.includes('shelved')) return mk('#10B981');
+  if (l.includes('challan') || l.includes('draft')) return mk('#94A3B8');
+  if (l.includes('capture') || l.includes('record') || l.includes('session')) return brand;
+  return { color: 'var(--mute-2)', bg: 'var(--surface-soft)', border: 'var(--surface-soft-border)' };
 }
 
 function EmptyStage({ stage }) {
@@ -224,7 +244,8 @@ function DetectedThumb({ item }) {
       title={'Detected on scan video · ' + item.name}
       style={{ position: 'relative', width: 44, height: 44, flex: 'none', borderRadius: 9, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', ...feedBg, boxShadow: 'inset 0 0 0 1px rgba(var(--surf-rgb),0.08)' }}
     >
-      <Gem size={19} aria-hidden="true" style={{ color: 'rgba(255,255,255,0.9)' }} />
+      {/* the item glyph takes the condition colour, matching its detection box */}
+      <Gem size={19} aria-hidden="true" style={{ color: ct.color }} />
       <span style={{ position: 'absolute', inset: 7, border: '1.5px solid ' + ct.color, borderRadius: 4 }} />
       <span style={{ position: 'absolute', top: 4, right: 4, width: 5, height: 5, borderRadius: '50%', background: ct.color, boxShadow: '0 0 0 1.5px rgba(0,0,0,0.35)' }} />
     </div>
@@ -664,11 +685,12 @@ export default function OrderDetails({ ctx }) {
             {order.timeline.map((e, i) => {
               const last = i === order.timeline.length - 1;
               const EvIcon = timelineIcon(e.label);
+              const evTone = timelineTone(e.label);
               return (
                 <div key={i} style={{ display: 'flex', gap: 14 }}>
-                  {/* node: an icon per event type, accent-tinted on the latest one */}
+                  {/* node: an icon per event type, coloured by that event's status */}
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 'none' }}>
-                    <span style={{ width: 30, height: 30, flex: 'none', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', background: last ? 'rgba(var(--accent-rgb),0.12)' : 'var(--surface-soft)', color: last ? 'var(--accent)' : 'var(--mute-2)', border: '1px solid ' + (last ? 'rgba(var(--accent-rgb),0.35)' : 'var(--surface-soft-border)') }}>
+                    <span style={{ width: 30, height: 30, flex: 'none', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', background: evTone.bg, color: evTone.color, border: '1px solid ' + evTone.border, opacity: last ? 1 : 0.88 }}>
                       <EvIcon size={14} aria-hidden="true" />
                     </span>
                     {!last && <span style={{ width: 2, flex: 1, minHeight: 18, margin: '3px 0', borderRadius: 2, background: 'rgba(var(--accent-rgb),0.15)' }} />}

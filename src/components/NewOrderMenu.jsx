@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { glassPopover } from '../data.js';
-import { Plus, ChevronDown, ShoppingCart, Truck } from './fa.jsx';
+import { Plus, ChevronDown, ShoppingCart, Truck } from './line-icons.jsx';
 
 // the only two order types the app creates: customer e-commerce orders and
 // inter-branch transfer orders

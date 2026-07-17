@@ -1,4 +1,4 @@
-import { Search, ChevronRight, FileSearch, Check } from '../components/fa.jsx';
+import { Search, ChevronRight, FileSearch, Check } from '../components/line-icons.jsx';
 import { MONO, glass, tone } from '../data.js';
 import EmptyState from '../components/EmptyState.jsx';
 import PlaybackFrame from '../components/PlaybackFrame.jsx';

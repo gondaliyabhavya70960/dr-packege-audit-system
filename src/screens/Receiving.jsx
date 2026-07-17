@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Flag, Check } from '../components/fa.jsx';
+import { Flag, Check } from '../components/line-icons.jsx';
 import { MONO, glass, feedBg, bannerTones, dotFor, fmt, withOrderFlags } from '../data.js';
 import PrevStepClip from '../components/PrevStepClip.jsx';
 import RemarkBox from '../components/RemarkBox.jsx';

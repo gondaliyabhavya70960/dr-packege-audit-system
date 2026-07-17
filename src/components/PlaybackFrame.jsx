@@ -1,4 +1,4 @@
-import { Play } from './fa.jsx';
+import { Play } from './line-icons.jsx';
 import { MONO, feedBg } from '../data.js';
 
 // The dark evidence-video frame shared by Search & playback and the side-by-side

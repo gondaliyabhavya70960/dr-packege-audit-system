@@ -1,5 +1,5 @@
 import { MONO, glassFloat, glassPopover } from '../data.js';
-import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell, WandSparkles, Languages, Check } from './fa.jsx';
+import { User, Settings, LogOut, ChevronUp, ChevronDown, ChevronLeft, Bell, WandSparkles, Languages, Check } from './line-icons.jsx';
 
 const barStyle = {
   ...glassFloat,

@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, Gauge, ListChecks, PackagePlus } from '../components/fa.jsx';
+import { Package, Truck, ChevronRight, FileText, Inbox, PackageCheck, Send, CircleCheck, RotateCcw, Undo2, PackageOpen, BadgeCheck, Flag, Gauge, ListChecks, PackagePlus } from '../components/line-icons.jsx';
 import { MONO, MUTE, cardLight, surfaceSubtle, ORDER_STATUSES, NOW_TS, isTransferOrder } from '../data.js';
 import { NEW_ORDER_TYPES } from '../components/NewOrderMenu.jsx';
 import GettingStarted from '../components/GettingStarted.jsx';

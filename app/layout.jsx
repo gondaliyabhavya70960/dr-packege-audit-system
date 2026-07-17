@@ -1,4 +1,3 @@
-import '@fortawesome/fontawesome-svg-core/styles.css';
 import '../src/styles.css';
 import App from '../src/App.jsx';
 

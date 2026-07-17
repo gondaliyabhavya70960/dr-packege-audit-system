@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { MONO, glassPopover } from '../data.js';
-import { ChevronDown, Check } from './fa.jsx';
+import { ChevronDown, Check } from './line-icons.jsx';
 
 // Custom dropdown — the native <select> menu can't be styled. The trigger is a
 // solid white control matching the app's inputs; the floating menu is a blurred

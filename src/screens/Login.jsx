@@ -1,4 +1,4 @@
-import { Check, ShieldCheck, Video, History } from '../components/fa.jsx';
+import { Check, ShieldCheck, Video, History } from '../components/line-icons.jsx';
 import { MONO, cardLight } from '../data.js';
 import { PackageIcon } from '../components/icons.jsx';
 
